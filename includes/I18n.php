@@ -1,5 +1,5 @@
 <?php
-namespace BigNinja;
+namespace NjtNotificationBar;
 
 defined('ABSPATH') || exit;
 /**
@@ -22,9 +22,9 @@ class I18n {
 
   public function loadPluginTextdomain() {
     load_plugin_textdomain(
-      BN_DOMAIN,
+      NJT_NOFI_DOMAIN,
       false,
-      BN_PLUGIN_URL . 'i18n/languages/'
+      NJT_NOFI_PLUGIN_URL . 'i18n/languages/'
     );
   }
 }

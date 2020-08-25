@@ -1,27 +1,27 @@
 <?php
 /**
- * Plugin Name: Ninja Team Big Plugin
+ * Plugin Name: Notification Bar Plugin
  * Plugin URI: https://ninjateam.org
  * Description: Internal template for plugin with OOP, namespace, autoload function.
- * Version: 0.1.0
+ * Version: 1.0
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
- * Text Domain: big-ninja
+ * Text Domain: njt-notification-bar
  * Domain Path: /i18n/languages/
  *
  * @package BigPlugin
  */
 
-namespace BigNinja;
+namespace NjtNotificationBar;
 
 defined('ABSPATH') || exit;
 
-define('BN_PREFIX', 'big-ninja');
-define('BN_VERSION', '0.1.0');
-define('BN_DOMAIN', 'big-ninja');
+define('NJT_NOFI_PREFIX', 'njt_nofi');
+define('NJT_NOFI_VERSION', '1.0');
+define('NJT_NOFI_DOMAIN', 'njt-notification-bar');
 
-define('BN_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('BN_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 spl_autoload_register(function ($class) {
   $prefix = __NAMESPACE__; // project-specific namespace prefix
@@ -48,9 +48,9 @@ function init() {
   Plugin::getInstance();
   I18n::getInstance();
 
-  Page\Settings::getInstance();
+  NotificationBar\NotificationBarHandle::getInstance();
 }
-add_action('plugins_loaded', 'BigNinja\\init');
+add_action('plugins_loaded', 'NjtNotificationBar\\init');
 
-register_activation_hook(__FILE__, array('BigNinja\\Plugin', 'activate'));
-register_deactivation_hook(__FILE__, array('BigNinja\\Plugin', 'deactivate'));
+register_activation_hook(__FILE__, array('NjtNotificationBar\\Plugin', 'activate'));
+register_deactivation_hook(__FILE__, array('NjtNotificationBar\\Plugin', 'deactivate'));

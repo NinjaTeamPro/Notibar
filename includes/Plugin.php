@@ -1,5 +1,5 @@
 <?php
-namespace BigNinja;
+namespace NjtNotificationBar;
 
 defined('ABSPATH') || exit;
 /**
