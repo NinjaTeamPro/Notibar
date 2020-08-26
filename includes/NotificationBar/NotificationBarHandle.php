@@ -31,7 +31,7 @@ class NotificationBarHandle
       'bg_color'          => '',
       'text_color'        => '',
       'lb_color'          => '',
-      'font_size'         => '12',
+      'font_size'         => '15',
       'dp_homepage'       => true,
       'dp_pages'          => true,
       'dp_posts'          => true,
@@ -40,31 +40,14 @@ class NotificationBarHandle
 
     add_action('admin_menu', array($this, 'njt_nofi_showMenu'));
 
-    //Register Enqueue
-    add_action('wp_enqueue_scripts', array($this, 'njt_nofi_homeRegisterEnqueue'));
-    //add_action('admin_enqueue_scripts', array($this, 'adminRegisterEnqueue'));
+    
 
     add_action('wp', array( $this, 'njt_nofi_showNotification'));
-		add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'));
-  }
-
-  public function get_settings() {
-    if ( ! empty( $this->settings ) && ! is_customize_preview() ) {
-      return $this->settings;
-    }
-    $this->settings = apply_filters( 'njt_nofi_bar_settings', get_theme_mod( 'njt_nofi_customNoti' ));
-    $this->settings = wp_parse_args( $this->settings, $this->default_settings );
-    return $this->settings;
-  }
-
-  public function get_setting( $name, $fallback = false ) {
-    $this->get_settings();
-    if ( isset( $this->settings[ $name ] ) ) {
-      return $this->settings[ $name ];
-    }
-    if ( $fallback ) {
-      return $this->defaults[ $name ];
-    }
+    add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'));
+    
+    //Register Enqueue
+    add_action('wp_enqueue_scripts', array($this, 'njt_nofi_homeRegisterEnqueue'));
+    add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
   }
 
   public function njt_nofi_showMenu()
@@ -88,14 +71,28 @@ class NotificationBarHandle
 
     wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'));
     wp_enqueue_script('njt-nofi');
+
+    wp_localize_script('njt-nofi', 'wpData', array(
+      'admin_ajax' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce("njt-nofi-notification"),
+      'isPositionFix' => get_theme_mod( 'njt_nofi_position_type' ) == 'fixed' ? true : false
+    ));
   }
 
+  public function njt_nofi_adminRegisterEnqueue() {
+    wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-notification-bar.js', array('jquery'));
+    wp_enqueue_script('njt-nofi');
 
-
+    wp_localize_script('njt-nofi', 'wpData', array(
+      'admin_ajax' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce("njt-nofi-notification"),
+      'isPositionFix' => get_theme_mod( 'njt_nofi_position_type' ) == 'fixed' ? true : false
+    ));
+  }
 
   public function njt_nofi_notificationSettings()
   {
-    echo ('rrrrrrrrrrrrrrrrr');
+
   }
 
   public function njt_nofi_showNotification()
@@ -106,20 +103,87 @@ class NotificationBarHandle
 
   public function display_notification()
   {
+    $contentWidth = get_theme_mod( 'njt_nofi_content_width' ).'px';
+    $isPositionFix = get_theme_mod( 'njt_nofi_position_type' ) == 'fixed' ? true : false;
+    $isLinkStyleButton = get_theme_mod( 'njt_nofi_link_style' ) == 'button' ? true : false;
+    $bgColorNotification = get_theme_mod( 'njt_nofi_bg_color' );
+    $textColorNotification = get_theme_mod( 'njt_nofi_text_color' );
+    $lbColorNotification = get_theme_mod('njt_nofi_lb_color');
+    $notificationFontSize = get_theme_mod('njt_nofi_font_size');
+
+    $typeButton = '';
+    if (get_theme_mod( 'njt_nofi_hide_close_button' ) == 'no_button') {
+      $typeButton = 'njt-nofi-hide-button';
+    }
+
+    if (get_theme_mod( 'njt_nofi_hide_close_button' ) == 'toggle_button') {
+      $typeButton = 'njt-nofi-toggle-button';
+    }
+
+    if (get_theme_mod( 'njt_nofi_hide_close_button' ) == 'close_button') {
+      $typeButton = 'njt-nofi-close-button';
+    }
+
     ?>
+      <style >
+        .njt-nofi-notification-bar .njt-nofi-hide-button{
+          display: none;
+        }
+        .njt-nofi-notification-bar .njt-nofi-content{
+          font-size : <?php echo($notificationFontSize.'px') ?>;
+          width: <?php echo ($contentWidth) ?>;
+        }
+        .njt-nofi-container .njt-nofi-text-color {
+          color: <?php echo ($textColorNotification) ?> !important;
+        }
+
+        .njt-nofi-container .njt-nofi-bgcolor-notification {
+          background: <?php echo ($bgColorNotification) ?>;
+        }
+
+        <?php if($isPositionFix) { ?>
+          .njt-nofi-container {
+            position: fixed;
+            z-index: 999;
+            width: 100%;
+          }
+
+        <?php } ?>
+
+        <?php if($isLinkStyleButton) { ?>
+          .njt-nofi-notification-bar .njt-nofi-button {
+            padding: 5px 10px;
+            background: <?php echo($lbColorNotification)?> ;
+            border-radius: 5px;
+          }
+          .njt-nofi-notification-bar .njt-nofi-button-text {
+            color: #ffff !important;
+          }
+        <?php } else {?>
+          .njt-nofi-notification-bar .njt-nofi-button-text {
+            color: <?php echo($lbColorNotification)?> !important;
+          }
+        <?php } ?>
+
+      </style>
+
       <div class="njt-nofi-container">
-        <div class="njt-nofi-notification-bar">
-          <div class="njt-nofi-content">
+        <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification">
+          <div class="njt-nofi-content njt-nofi-text-color">
             <div class="njt-nofi-text"><?php echo (get_theme_mod( 'njt_nofi_text' ))?></div>
             <div class="njt-nofi-button">
-								<a href="#" class="njt-nofi-button-text">Get started</a>
+								<a href="<?php echo (get_theme_mod( 'njt_nofi_lb_url' ))?>" class="njt-nofi-button-text"><?php echo (get_theme_mod( 'njt_nofi_lb_text' ))?></a>
 						</div>
           </div>
-          <a href="#" class="njt-nofi-hide" style="color:#fffff;"><span>+</span></a>
+          <a href="javascript:void(0)" class="njt-nofi-hide njt-nofi-text-color <?php echo ($typeButton)?>" style="color:#fffff;"><span>+</span></a>
+         
+        </div>
+        <div>
+          <a href="javascript:void(0)" class="njt-nofi-display-toggle njt-nofi-text-color njt-nofi-bgcolor-notification" ><span>+</span></a>
         </div>
       </div>
+
     <?php
-    
   }
 
   public function njt_nofi_customizeNotification($customNoti)
