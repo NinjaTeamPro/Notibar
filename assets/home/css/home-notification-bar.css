@@ -1,0 +1,31 @@
+.njt-nofi-notification-bar {
+  position: relative;
+}
+
+.njt-nofi-notification-bar .njt-nofi-content {
+  text-align: center;
+  padding: 10px 30px;
+}
+
+.njt-nofi-notification-bar .njt-nofi-text {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.njt-nofi-notification-bar .njt-nofi-button {
+  display: inline-block;
+  padding: 5px 10px;
+  background: rgb(92, 160, 206);
+  border-radius: 5px;
+}
+.njt-nofi-notification-bar .njt-nofi-button .njt-nofi-button-text {
+  text-decoration: none;
+}
+.njt-nofi-notification-bar .njt-nofi-hide {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  -webkit-transform: rotate(45deg) translate3d(0,0,0);
+  transform: rotate(45deg) translate3d(0,0,0);
+  text-decoration: none;
+}
