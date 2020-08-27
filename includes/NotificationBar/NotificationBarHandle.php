@@ -26,6 +26,7 @@ class NotificationBarHandle
     $this->valueDefault = $WpCustomNotification->valueDefault;
 
     add_action('admin_menu', array($this, 'njt_nofi_showMenu'));
+ 
     add_action('wp', array( $this, 'njt_nofi_showNotification'));
     
     //Register Enqueue
@@ -35,8 +36,7 @@ class NotificationBarHandle
 
   public function njt_nofi_showMenu()
   {
-
-    global $menu, $submenu;
+    global $menu;
 
     $settings_suffix = add_menu_page(
       __('Notification Bar', NJT_NOFI_DOMAIN),
@@ -47,6 +47,14 @@ class NotificationBarHandle
       '',
       10
     );
+
+    $link = esc_html(admin_url( '/customize.php?autofocus[panel]=njt_nofi_customNoti'));
+    foreach($menu as $k=>$item){
+      if ($item[2] == 'njt_nofi_NotificationBar'){
+        $menu[$k][2] =  $link;
+      }
+    }
+
     $this->hook_suffix = array($settings_suffix);
   }
 
@@ -81,8 +89,7 @@ class NotificationBarHandle
 
   public function njt_nofi_notificationSettings()
   {
-    // wp_redirect( admin_url( '/customize.php?autofocus[panel]=njt_nofi_customNoti'), 301 );
-    exit();
+    exit;
   }
 
   public function njt_nofi_isDisplayNotification() {
