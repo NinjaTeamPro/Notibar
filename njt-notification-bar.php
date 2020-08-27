@@ -48,6 +48,7 @@ function init() {
   Plugin::getInstance();
   I18n::getInstance();
 
+  NotificationBar\WpCustomNotification::getInstance();
   NotificationBar\NotificationBarHandle::getInstance();
 }
 add_action('plugins_loaded', 'NjtNotificationBar\\init');
