@@ -14,5 +14,6 @@ const adminNotificationBar = {
 }
 
 jQuery(document).ready(() => {
+  //jQuery("#toplevel_page_njt_nofi_NotificationBar a.toplevel_page_njt_nofi_NotificationBar").attr('href', 'http://localhost/wp/test2/wp-admin/customize.php?autofocus[panel]=njt_nofi_customNoti')
   adminNotificationBar.setPaddingTop();
 })

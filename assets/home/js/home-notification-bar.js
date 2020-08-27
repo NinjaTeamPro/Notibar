@@ -14,7 +14,7 @@ const homeNotificationBar = {
 
   actionButtonClose() {
     jQuery(".njt-nofi-close-button").on("click", function (e) {
-      jQuery('.njt-nofi-notification-bar').hide()
+      jQuery('.njt-nofi-notification-bar').hide(1000)
       jQuery('body').css('padding-top', 0)
     })
 

@@ -1,5 +1,6 @@
 .njt-nofi-notification-bar {
   position: relative;
+  /* z-index: 999; */
 }
 
 .njt-nofi-notification-bar .njt-nofi-content {
@@ -38,6 +39,9 @@
   display: none;
   text-decoration: none;
 }
-
+.customize-partial-edit-shortcuts-shown .njt-nofi-container .customize-partial-edit-shortcut-button {
+  left: 70px;
+  top: 10px;
+}
 
 
