@@ -31,7 +31,7 @@ class NotificationBarHandle
     
     //Register Enqueue
     add_action('wp_enqueue_scripts', array($this, 'njt_nofi_homeRegisterEnqueue'));
-    add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
+    //add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
   }
 
   public function njt_nofi_showMenu()
@@ -42,15 +42,15 @@ class NotificationBarHandle
       __('Notification Bar', NJT_NOFI_DOMAIN),
       __('Notification Bar', NJT_NOFI_DOMAIN),
       'manage_options',
-      __('njt_nofi_NotificationBar', NJT_NOFI_DOMAIN),
+      'njt_nofi_NotificationBar',
       array($this, 'njt_nofi_notificationSettings'),
       '',
       10
     );
 
-    $link = esc_html(admin_url( '/customize.php?autofocus[panel]=njt_nofi_customNoti'));
+    $link = esc_html(admin_url('/customize.php?autofocus[panel]=njt_nofi_customNoti'));
     foreach($menu as $k=>$item){
-      if ($item[2] == 'njt_nofi_NotificationBar'){
+      if ($item[2] == 'njt_nofi_NotificationBar') {
         $menu[$k][2] =  $link;
       }
     }
@@ -81,8 +81,7 @@ class NotificationBarHandle
       wp_localize_script('njt-nofi', 'wpData', array(
         'admin_ajax' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce("njt-nofi-notification"),
-        'isPositionFix' => get_theme_mod( 'njt_nofi_position_type', $this->valueDefault['position_type'] ) == 'fixed' ? true : false,
-        'linkTonofi_customNoti' =>  admin_url( '/customize.php?autofocus[panel]=njt_nofi_customNoti')
+        'isPositionFix' => get_theme_mod( 'njt_nofi_position_type', $this->valueDefault['position_type'] ) == 'fixed' ? true : false
       ));
     }
   }
