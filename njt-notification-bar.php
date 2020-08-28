@@ -9,7 +9,7 @@
  * Text Domain: njt-notification-bar
  * Domain Path: /i18n/languages/
  *
- * @package BigPlugin
+ * @package NjtNotificationBar
  */
 
 namespace NjtNotificationBar;
