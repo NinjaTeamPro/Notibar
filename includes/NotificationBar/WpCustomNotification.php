@@ -1,7 +1,11 @@
 <?php
 namespace NjtNotificationBar\NotificationBar;
 
-defined('ABSPATH') || exit;
+defined('ABSPATH') || exit; 
+
+use NjtNotificationBar\NotificationBar\WpCustomControlColorBg;
+use NjtNotificationBar\NotificationBar\WpCustomControlColorText;
+use NjtNotificationBar\NotificationBar\WpCustomControlColorLb;
 
 class WpCustomNotification
 {
@@ -36,6 +40,19 @@ class WpCustomNotification
     )) ;
 
     add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'), 10);
+    add_action('customize_controls_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
+  }
+
+   /**
+     * Enqueue script for customizer control
+     */
+  public function njt_nofi_enqueueCustomizeControls()
+  {
+    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'));
+    wp_enqueue_script('njt-nofi-cus-control');
+
+    wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css');
+    wp_enqueue_style('njt-nofi-cus-control');
   }
 
   public function njt_nofi_sanitizeSelect( $input, $setting ){
@@ -54,6 +71,10 @@ class WpCustomNotification
 
   public function njt_nofi_customizeNotification($customNoti)
   {
+
+   //$a = WpCustomControlClass::getInstance();
+   //echo($a->render_content());
+
     $customNoti->add_panel( 'njt_nofi_customNoti', array(
       'title'=>'WordPress Notification Bar',
       'description'=> 'This is panel WordPress Notification Bar',
@@ -62,7 +83,7 @@ class WpCustomNotification
 
     /* Option General */
     $customNoti->add_section( 'njt_nofi_general', array(
-      'title'    => __( 'Option General',NJT_NOFI_DOMAIN),
+      'title'    => __( 'General Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel' => 'njt_nofi_customNoti',
     ) );
@@ -118,7 +139,7 @@ class WpCustomNotification
 
     /*Content*/
     $customNoti->add_section( 'njt_nofi_content', array(
-      'title'    => __( 'Option Content',NJT_NOFI_DOMAIN),
+      'title'    => __( 'Content Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel' => 'njt_nofi_customNoti',
     ));
@@ -186,48 +207,58 @@ class WpCustomNotification
 
     /*Style*/
     $customNoti->add_section( 'njt_nofi_style', array(
-      'title'    => __( 'Option Style',NJT_NOFI_DOMAIN),
+      'title'    => __( 'Style Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel' => 'njt_nofi_customNoti',
     ));
 
     //Background Color
-    $customNoti->add_setting('njt_nofi_bg_color', array(
-      'default'           => $this->valueDefault['bg_color'],
-      'sanitize_callback' => 'sanitize_hex_color'
-    ));
-
-    $customNoti->add_control('njt_nofi_bg_color_control', array(
-      'label'       => __('Background Color', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_style',
-      'settings'    => 'njt_nofi_bg_color',
-      'type'        => 'color',
+    $customNoti->add_setting( 'njt_nofi_bg_color',
+      array(
+          'default' => $this->valueDefault['bg_color'],
+          'sanitize_callback' => 'sanitize_hex_color'
+      )
+    );
+    
+    $customNoti->add_control(
+      new WpCustomControlColorBg( $customNoti, 'njt_nofi_bg_color',
+      array(
+        'label' => __('Background Color', NJT_NOFI_DOMAIN ),
+        'section' => 'njt_nofi_style',
+        'settings' => 'njt_nofi_bg_color'
+      )
     ));
 
     //Text Color
-    $customNoti->add_setting('njt_nofi_text_color', array(
-      'default'           => $this->valueDefault['text_color'],
-      'sanitize_callback' => 'sanitize_hex_color'
+    $customNoti->add_setting( 'njt_nofi_text_color',
+      array(
+          'default' => $this->valueDefault['text_color'],
+          'sanitize_callback' => 'sanitize_hex_color'
+      )
+    );
+  
+    $customNoti->add_control(
+      new WpCustomControlColorText( $customNoti, 'njt_nofi_text_color',
+      array(
+        'label' => __('Text Color', NJT_NOFI_DOMAIN ),
+        'section' => 'njt_nofi_style',
+        'settings' => 'njt_nofi_text_color'
+      )
     ));
 
-    $customNoti->add_control('njt_nofi_text_color_control', array(
-      'label'       => __('Text Color', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_style',
-      'settings'    => 'njt_nofi_text_color',
-      'type'        => 'color',
-    ));
-
-    //Link/Button Color
+    //Link/Button Color 
     $customNoti->add_setting('njt_nofi_lb_color', array(
       'default'           =>$this->valueDefault['lb_color'],
       'sanitize_callback' => 'sanitize_hex_color'
     ));
 
-    $customNoti->add_control('njt_nofi_lb_color_control', array(
-      'label'       => __('Link/Button Color', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_style',
-      'settings'    => 'njt_nofi_lb_color',
-      'type'        => 'color',
+    $customNoti->add_control(
+      new WpCustomControlColorLb( $customNoti, 'njt_nofi_lb_color',
+      array(
+        'label' => __('Link/Button Color', NJT_NOFI_DOMAIN ),
+        'section' => 'njt_nofi_style',
+        'settings' => 'njt_nofi_lb_color'
+      )
     ));
 
     //Font Size (px)
@@ -245,7 +276,7 @@ class WpCustomNotification
 
     /* Display */
     $customNoti->add_section( 'njt_nofi_display', array(
-      'title'    => __( 'Option Display',NJT_NOFI_DOMAIN),
+      'title'    => __( 'Display Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel' => 'njt_nofi_customNoti',
     ));
@@ -303,6 +334,6 @@ class WpCustomNotification
       'settings' => 'njt_nofi_pp_id',
       'type'     => 'text',
       'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
-    ));
+    ));    
   }
 }
