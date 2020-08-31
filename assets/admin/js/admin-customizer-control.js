@@ -1,38 +1,60 @@
 jQuery(document).ready(() => {
 
-  var test1 = new NjColorSelect({
-    dom: document.getElementById('nj_color_select'),
+  var selectBackgroundColor = new NjColorSelect({
+    dom: document.getElementById('nj_color_select_bg'),
+    customColors: {
+      "golden drizzle": "#FCE9D2",
+      "54545454": "#FFB5A4",
+      "opal gardens": "#BA92B0",
+      "lavanda": "#8F687B",
+      "4b609e": "#4B609E"
+    }
   });
-  test1.init();
+  selectBackgroundColor.init();
 
-  var test2 = new NjColorSelect({
-    dom: document.getElementById('nj_color_select_custom'),
+  var selectTextColor = new NjColorSelect({
+    dom: document.getElementById('nj_color_select_text'),
+    customColors: {
+      "golden drizzle": "#FCE9D2",
+      "54545454": "#FFB5A4",
+      "opal gardens": "#BA92B0",
+      "lavanda": "#8F687B",
+      "4b609e": "#4B609E"
+    }
   });
-  test2.init();
+  selectTextColor.init();
 
-  var test3 = new NjColorSelect({
-    dom: document.getElementById('nj_color_select_add_new'),
+  var selectLbColor = new NjColorSelect({
+    dom: document.getElementById('nj_color_select_lb'),
+    customColors: {
+      "golden drizzle": "#FCE9D2",
+      "54545454": "#FFB5A4",
+      "opal gardens": "#BA92B0",
+      "lavanda": "#8F687B",
+      "4b609e": "#4B609E"
+    }
   });
-  test3.init();
+  selectLbColor.init();
+
   //Start custom js
-  jQuery('#nj_color_select .nj_color_select').click(function () {
-    jQuery('#nj_color_select .nj_color_popup__item').each(function () {
+  jQuery('#nj_color_select_bg .nj_color_select').click(function () {
+    jQuery('#nj_color_select_bg .nj_color_popup__item').each(function () {
       if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_bg_color').val()) {
         jQuery(this).addClass('nj_color_popup__item--state-active-first-time')
       }
     });
   });
 
-  jQuery('#nj_color_select_custom .nj_color_select').click(function () {
-    jQuery('#nj_color_select_custom .nj_color_popup__item').each(function () {
+  jQuery('#nj_color_select_text .nj_color_select').click(function () {
+    jQuery('#nj_color_select_text .nj_color_popup__item').each(function () {
       if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_text_color').val()) {
         jQuery(this).addClass('nj_color_popup__item--state-active-first-time')
       }
     });
   });
 
-  jQuery('#nj_color_select_add_new .nj_color_select').click(function () {
-    jQuery('#nj_color_select_add_new .nj_color_popup__item').each(function () {
+  jQuery('#nj_color_select_lb .nj_color_select').click(function () {
+    jQuery('#nj_color_select_lb .nj_color_popup__item').each(function () {
       if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_lb_color').val()) {
         jQuery(this).addClass('nj_color_popup__item--state-active-first-time')
       }
@@ -326,9 +348,9 @@ jQuery(document).ready(() => {
       st.dom.dataset.colorValue = parent.dataset.colorValue;
       st.dom.dataset.colorName = parent.dataset.colorName;
       current_select = parent;
-      var a = jQuery("#_customize-input-njt_nofi_bg_color").parent('#nj_color_select').attr('data-color-value')
-      var b = jQuery("#_customize-input-njt_nofi_text_color").parent('#nj_color_select_custom').attr('data-color-value')
-      var c = jQuery("#_customize-input-njt_nofi_lb_color").parent('#nj_color_select_add_new').attr('data-color-value')
+      var a = jQuery("#_customize-input-njt_nofi_bg_color").parent('#nj_color_select_bg').attr('data-color-value')
+      var b = jQuery("#_customize-input-njt_nofi_text_color").parent('#nj_color_select_text').attr('data-color-value')
+      var c = jQuery("#_customize-input-njt_nofi_lb_color").parent('#nj_color_select_lb').attr('data-color-value')
       if (a) {
         jQuery('#_customize-input-njt_nofi_bg_color').val(a).trigger('change')
       }

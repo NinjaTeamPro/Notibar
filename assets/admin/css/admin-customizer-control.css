@@ -9,6 +9,9 @@
 	font-size: 16px;
 	line-height: 1.6;
 }
+.nj_color_select__wrap .njt_nofi_dp_none{
+	margin-bottom: 5px !important;
+}
 .nj_color_select{
 	width: 32px;
 	height: 32px;

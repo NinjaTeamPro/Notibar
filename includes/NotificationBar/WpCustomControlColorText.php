@@ -11,7 +11,7 @@ defined('ABSPATH') || exit;
         <div class="simple-notice-custom-control">
           <?php if( !empty( $this->label ) ) { ?>
               
-              <span id="nj_color_select_custom">
+              <span id="nj_color_select_text">
                   <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
                   <input id="_customize-input-njt_nofi_text_color" class="njt_nofi_dp_none" type="text" value="<?php echo esc_html($this->settings['default']->default); ?>" data-customize-setting-link="njt_nofi_text_color">
               </span>
