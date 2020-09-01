@@ -1,4 +1,4 @@
-jQuery(document).ready(() => {
+window.onload = function () {
 
   var selectBackgroundColor = new NjColorSelect({
     dom: document.getElementById('nj_color_select_bg'),
@@ -505,4 +505,4 @@ jQuery(document).ready(() => {
     }
     /*---- END PUCLIC ----*/
   }
-})
+}
