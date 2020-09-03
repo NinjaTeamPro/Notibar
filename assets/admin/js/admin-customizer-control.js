@@ -200,7 +200,6 @@ window.onload = function () {
     }
     st.colors = Object.assign(st.colors, st.customColors);
     if (!st.dom) return;
-    //console.log(st);
     /*---- BEGIN INIT ----*/
     var controller = document.createElement('a'),
       picker = document.createElement('div'),
@@ -461,8 +460,6 @@ window.onload = function () {
     }
 
     function convertColor(color, format) {
-      console.log(color)
-      console.log(format)
       switch (format) {
         case 'rgb': return convertHexToRGB(color); break;
         default: return color; break;
@@ -470,8 +467,6 @@ window.onload = function () {
     }
 
     function convertHexToRGB(color) {
-      console.log(color)
-      console.log('a')
       return 'rgb(' + (parseInt(color.slice(1, 3), 16)) + ',' + (parseInt(color.slice(3, 5), 16)) + ',' + (parseInt(color.slice(5, 7), 16)) + ')';
     }
     /*---- END PRIVATE FUNCTION ----*/
@@ -487,15 +482,11 @@ window.onload = function () {
       },
       getColor: function (format) {
         if (format) {
-          console.log('1111111111111')
-          console.log(convertColor(st.dom.dataset.colorValue, format));
           return {
             name: st.dom.dataset.colorName,
             value: convertColor(st.dom.dataset.colorValue, format)
           }
         } else {
-          console.log('22222222222')
-          console.log(st.dom.dataset.colorValue);
           return {
             name: st.dom.dataset.colorName,
             value: st.dom.dataset.colorValue,

@@ -10,7 +10,7 @@ use NjtNotificationBar\NotificationBar\WpCustomControlColorLb;
 class WpCustomNotification
 {
   protected static $instance = null;
-  
+
   public static function getInstance()
   {
     if (null == self::$instance) {
@@ -71,36 +71,31 @@ class WpCustomNotification
 
   public function njt_nofi_customizeNotification($customNoti)
   {
-
-   //$a = WpCustomControlClass::getInstance();
-   //echo($a->render_content());
-
     $customNoti->add_panel( 'njt_nofi_customNoti', array(
-      'title'=>'WordPress Notification Bar',
-      'description'=> 'This is panel WordPress Notification Bar',
-      'priority'=> 10,
+      'title'       => __('WordPress Notification Bar',NJT_NOFI_DOMAIN),
+      'description' => __('This is panel WordPress Notification Bar',NJT_NOFI_DOMAIN),
+      'priority'    => 10,
     ) );
 
     /* Option General */
     $customNoti->add_section( 'njt_nofi_general', array(
       'title'    => __( 'General Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel' => 'njt_nofi_customNoti',
+      'panel'    => 'njt_nofi_customNoti',
     ) );
-
    
     // Hide/Close Button (No button, Toggle button, Close button)
     $customNoti->add_setting('njt_nofi_hide_close_button', array(
       'default'           => $this->valueDefault['hide_close_button'],
       'sanitize_callback' => $this->njt_nofi_sanitizeSelect
     ));
-
+    
     $customNoti->add_control( 'njt_nofi_hide_close_button_control', array(
-      'label'    => __( 'Hide/Close Button', NJT_NOFI_DOMAIN ),
-      'section'  => 'njt_nofi_general',
-      'settings' => 'njt_nofi_hide_close_button',
-      'type'     => 'select',
-      'choices'    => array(
+      'label'           => __( 'Hide/Close Button', NJT_NOFI_DOMAIN ),
+      'section'         => 'njt_nofi_general',
+      'settings'        => 'njt_nofi_hide_close_button',
+      'type'            => 'select',
+      'choices'         => array(
         'no_button'     => esc_html__( 'No button', NJT_NOFI_DOMAIN ),
         'toggle_button' => esc_html__( 'Toggle button', NJT_NOFI_DOMAIN ),
         'close_button'  => esc_html__( 'Close button', NJT_NOFI_DOMAIN ),
@@ -114,10 +109,10 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control( 'njt_nofi_content_width_control', array(
-      'label'       => __( 'Content Width (px)', 'NJT_NOFI_DOMAIN' ),
-      'section'     => 'njt_nofi_general',
-      'settings'    => 'njt_nofi_content_width',
-      'type'        => 'number',
+      'label'    => __( 'Content Width (px)', 'NJT_NOFI_DOMAIN' ),
+      'section'  => 'njt_nofi_general',
+      'settings' => 'njt_nofi_content_width',
+      'type'     => 'number',
     ));
 
     //Position Type
@@ -127,12 +122,12 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control( 'njt_nofi_position_type_control', array(
-      'label'    => __( 'Position Type', NJT_NOFI_DOMAIN ),
-      'section'  => 'njt_nofi_general',
-      'settings' => 'njt_nofi_position_type',
-      'type'     => 'select',
+      'label'      => __( 'Position Type', NJT_NOFI_DOMAIN ),
+      'section'    => 'njt_nofi_general',
+      'settings'   => 'njt_nofi_position_type',
+      'type'       => 'select',
       'choices'    => array(
-        'fixed'     => esc_html__( 'Fixed', NJT_NOFI_DOMAIN ),
+        'fixed'    => esc_html__( 'Fixed', NJT_NOFI_DOMAIN ),
         'absolute' => esc_html__( 'Absolute', NJT_NOFI_DOMAIN ),
       ),
     ));
@@ -141,7 +136,7 @@ class WpCustomNotification
     $customNoti->add_section( 'njt_nofi_content', array(
       'title'    => __( 'Content Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel' => 'njt_nofi_customNoti',
+      'panel'    => 'njt_nofi_customNoti',
     ));
 
     // Link Style
@@ -155,8 +150,8 @@ class WpCustomNotification
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_link_style',
       'type'     => 'select',
-      'choices'    => array(
-        'text'     => esc_html__( 'Text', NJT_NOFI_DOMAIN ),
+      'choices'  => array(
+        'text'   => esc_html__( 'Text', NJT_NOFI_DOMAIN ),
         'button' => esc_html__( 'Button', NJT_NOFI_DOMAIN ),
       ),
     ));
@@ -169,14 +164,14 @@ class WpCustomNotification
     ));
 
     $customNoti->selective_refresh->add_partial('njt_nofi_text', array(
-      'selector'            => '.njt-nofi-container',
-    ) );
+      'selector'          => '.njt-nofi-container',
+    ));
 
     $customNoti->add_control( 'njt_nofi_text_control', array(
-      'label'       => __('Text', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_content',
-      'settings'    => 'njt_nofi_text',
-      'type'        => 'textarea',
+      'label'    => __('Text', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_text',
+      'type'     => 'textarea',
     ));
 
     //Link/Button Text
@@ -186,10 +181,10 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control('njt_nofi_lb_text_control', array(
-      'label'       => __('Link/Button Text', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_content',
-      'settings'    => 'njt_nofi_lb_text',
-      'type'        => 'text',
+      'label'    => __('Link/Button Text', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_lb_text',
+      'type'     => 'text',
     ));
 
     //Link/Button URL
@@ -199,23 +194,23 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control('njt_nofi_lb_url_control', array(
-      'label'       => __('Link/Button URL', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_content',
-      'settings'    => 'njt_nofi_lb_url',
-      'type'        => 'text',
+      'label'    => __('Link/Button URL', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_lb_url',
+      'type'     => 'text',
     ));
 
     /*Style*/
     $customNoti->add_section( 'njt_nofi_style', array(
       'title'    => __( 'Style Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel' => 'njt_nofi_customNoti',
+      'panel'    => 'njt_nofi_customNoti',
     ));
 
     //Background Color
     $customNoti->add_setting( 'njt_nofi_bg_color',
       array(
-          'default' => $this->valueDefault['bg_color'],
+          'default'           => $this->valueDefault['bg_color'],
           'sanitize_callback' => 'sanitize_hex_color'
       )
     );
@@ -223,8 +218,8 @@ class WpCustomNotification
     $customNoti->add_control(
       new WpCustomControlColorBg( $customNoti, 'njt_nofi_bg_color',
       array(
-        'label' => __('Background Color', NJT_NOFI_DOMAIN ),
-        'section' => 'njt_nofi_style',
+        'label'    => __('Background Color', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_style',
         'settings' => 'njt_nofi_bg_color'
       )
     ));
@@ -232,7 +227,7 @@ class WpCustomNotification
     //Text Color
     $customNoti->add_setting( 'njt_nofi_text_color',
       array(
-          'default' => $this->valueDefault['text_color'],
+          'default'           => $this->valueDefault['text_color'],
           'sanitize_callback' => 'sanitize_hex_color'
       )
     );
@@ -240,8 +235,8 @@ class WpCustomNotification
     $customNoti->add_control(
       new WpCustomControlColorText( $customNoti, 'njt_nofi_text_color',
       array(
-        'label' => __('Text Color', NJT_NOFI_DOMAIN ),
-        'section' => 'njt_nofi_style',
+        'label'    => __('Text Color', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_style',
         'settings' => 'njt_nofi_text_color'
       )
     ));
@@ -255,8 +250,8 @@ class WpCustomNotification
     $customNoti->add_control(
       new WpCustomControlColorLb( $customNoti, 'njt_nofi_lb_color',
       array(
-        'label' => __('Link/Button Color', NJT_NOFI_DOMAIN ),
-        'section' => 'njt_nofi_style',
+        'label'    => __('Link/Button Color', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_style',
         'settings' => 'njt_nofi_lb_color'
       )
     ));
@@ -268,17 +263,17 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control('njt_nofi_font_size_control', array(
-      'label'       => __('Font Size (px)', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_style',
-      'settings'    => 'njt_nofi_font_size',
-      'type'        => 'number',
+      'label'    => __('Font Size (px)', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_style',
+      'settings' => 'njt_nofi_font_size',
+      'type'     => 'number',
     ));
 
     /* Display */
     $customNoti->add_section( 'njt_nofi_display', array(
       'title'    => __( 'Display Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel' => 'njt_nofi_customNoti',
+      'panel'    => 'njt_nofi_customNoti',
     ));
 
     //Homepage
@@ -307,7 +302,6 @@ class WpCustomNotification
       'type'     => 'checkbox',
     ));
 
-
     //Posts
     $customNoti->add_setting('njt_nofi_posts', array(
       'default'           => $this->valueDefault['dp_posts'],
@@ -321,7 +315,6 @@ class WpCustomNotification
       'type'     => 'checkbox',
     ));
 
-
     //By Pages/Posts ID
     $customNoti->add_setting('njt_nofi_pp_id', array(
       'default'           => $this->valueDefault['dp_pp_id'],
@@ -329,10 +322,10 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control( 'njt_nofi_pp_id_control', array(
-      'label'    => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
-      'section'  => 'njt_nofi_display',
-      'settings' => 'njt_nofi_pp_id',
-      'type'     => 'text',
+      'label'       => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
+      'section'     => 'njt_nofi_display',
+      'settings'    => 'njt_nofi_pp_id',
+      'type'        => 'text',
       'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
     ));    
   }

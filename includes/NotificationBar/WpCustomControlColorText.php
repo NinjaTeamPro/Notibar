@@ -5,7 +5,7 @@ defined('ABSPATH') || exit;
 
   class WpCustomControlColorText extends \WP_Customize_Control 
   {
-    public $type = 'simple_notice';
+    public $type = 'njtColorText';
     public function render_content() {
       ?>
         <div class="simple-notice-custom-control">

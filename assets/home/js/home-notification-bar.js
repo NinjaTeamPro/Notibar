@@ -1,7 +1,6 @@
 const homeNotificationBar = {
   setPaddingTop() {
     const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-    console.log(barHeight);
     if (wpData.isPositionFix) {
       jQuery('body').css({
         'padding-top': barHeight,

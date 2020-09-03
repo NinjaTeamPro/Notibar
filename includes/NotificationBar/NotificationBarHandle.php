@@ -150,20 +150,18 @@ class NotificationBarHandle
 
     ?>
       <style >
-      
         .njt-nofi-notification-bar .njt-nofi-hide-button{
           display: none;
         }
         .njt-nofi-notification-bar .njt-nofi-content{
-          font-size : <?php echo($notificationFontSize.'px') ?>;
+          font-size : <?php echo esc_html($notificationFontSize.'px') ?>;
           width: <?php echo ($contentWidth) ?>;
         }
         .njt-nofi-container .njt-nofi-text-color {
-          color: <?php echo ($textColorNotification) ?> !important;
+          color: <?php echo esc_html($textColorNotification) ?> !important;
         }
-
         .njt-nofi-container .njt-nofi-bgcolor-notification {
-          background: <?php echo ($bgColorNotification) ?>;
+          background: <?php echo esc_html($bgColorNotification) ?>;
         }
 
         <?php if($isPositionFix) { ?>
@@ -178,7 +176,7 @@ class NotificationBarHandle
         <?php if($isLinkStyleButton) { ?>
           .njt-nofi-notification-bar .njt-nofi-button {
             padding: 5px 10px;
-            background: <?php echo($lbColorNotification)?> ;
+            background: <?php echo esc_html($lbColorNotification)?> ;
             border-radius: 5px;
           }
           .njt-nofi-notification-bar .njt-nofi-button-text {
@@ -186,7 +184,7 @@ class NotificationBarHandle
           }
         <?php } else {?>
           .njt-nofi-notification-bar .njt-nofi-button-text {
-            color: <?php echo($lbColorNotification)?> !important;
+            color: <?php echo esc_html($lbColorNotification)?> !important;
           }
         <?php } ?>
 
