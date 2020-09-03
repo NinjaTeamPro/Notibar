@@ -4,7 +4,7 @@
 <div class="njt-nofi-container">
   <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification">
     <div class="njt-nofi-content njt-nofi-text-color">
-      <div class="njt-nofi-text"><?php echo  esc_html(get_theme_mod( 'njt_nofi_text', $this->valueDefault['text'] ))?></div>
+      <div class="njt-nofi-text"><?php echo get_theme_mod( 'njt_nofi_text', $this->valueDefault['text'] )?></div>
       <div class="njt-nofi-button">
           <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
       </div>

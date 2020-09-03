@@ -48,7 +48,7 @@ class NotificationBarHandle
       10
     );
 
-    $link = esc_html(admin_url('/customize.php?autofocus[panel]=njt_nofi_customNoti'));
+    $link = esc_html(admin_url('/customize.php?autofocus[panel]=njt_notification-bar'));
     foreach($menu as $k=>$item){
       if ($item[2] == 'njt_nofi_NotificationBar') {
         $menu[$k][2] =  $link;

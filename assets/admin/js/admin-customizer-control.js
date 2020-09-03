@@ -37,6 +37,14 @@ window.onload = function () {
   selectLbColor.init();
 
   //Start custom js
+  jQuery('#nj_color_select_preset .nj_color_select').click(function () {
+    jQuery('#nj_color_select_preset .nj_color_popup__item').each(function () {
+      if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_preset_color').val()) {
+        jQuery(this).addClass('nj_color_popup__item--state-active-first-time')
+      }
+    });
+  });
+
   jQuery('#nj_color_select_bg .nj_color_select').click(function () {
     jQuery('#nj_color_select_bg .nj_color_popup__item').each(function () {
       if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_bg_color').val()) {
@@ -60,6 +68,19 @@ window.onload = function () {
       }
     });
   });
+
+  jQuery('.nj-list-prese-color .type-circle').click(function () {
+    jQuery('.nj-list-prese-color .type-circle').removeClass('type-circle-active')
+    jQuery(this).addClass('type-circle-active')
+    const dataColor = jQuery(this).data('value')
+    const dataType = jQuery(this).data('type')
+    const arrColor = dataColor.split(',')
+
+    jQuery('#_customize-input-njt_nofi_preset_color').val(dataType).trigger('change')
+    jQuery('#_customize-input-njt_nofi_bg_color').val(arrColor[0]).trigger('change')
+    jQuery('#_customize-input-njt_nofi_text_color').val('#ffffff').trigger('change')
+    jQuery('#_customize-input-njt_nofi_lb_color').val(arrColor[1]).trigger('change')
+  })
 
   // End custom js
   function NjColorSelect(options) {
@@ -350,6 +371,7 @@ window.onload = function () {
       var a = jQuery("#_customize-input-njt_nofi_bg_color").parent('#nj_color_select_bg').attr('data-color-value')
       var b = jQuery("#_customize-input-njt_nofi_text_color").parent('#nj_color_select_text').attr('data-color-value')
       var c = jQuery("#_customize-input-njt_nofi_lb_color").parent('#nj_color_select_lb').attr('data-color-value')
+
       if (a) {
         jQuery('#_customize-input-njt_nofi_bg_color').val(a).trigger('change')
       }

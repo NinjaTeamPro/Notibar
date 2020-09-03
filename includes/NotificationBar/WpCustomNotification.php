@@ -6,6 +6,7 @@ defined('ABSPATH') || exit;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorBg;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorText;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorLb;
+use NjtNotificationBar\NotificationBar\WpCustomControlColorPreset;
 
 class WpCustomNotification
 {
@@ -29,6 +30,7 @@ class WpCustomNotification
       'text'              => esc_html('This is default text for notification bar'),
       'lb_text'           => esc_html('agree'),
       'lb_url'            => '',
+      'preset_color'      => 1,
       'bg_color'          => '#1e73be',
       'text_color'        => '#000000',
       'lb_color'          => '#dd3333',
@@ -66,7 +68,7 @@ class WpCustomNotification
     ?>
     <script type="text/javascript">
 			jQuery( document ).ready( function( $ ) {
-				wp.customize.panel('njt_nofi_customNoti', function( section ) {
+				wp.customize.panel('njt_notification-bar', function( section ) {
 					section.expanded.bind( function( isExpanded ) {
 						if ( isExpanded ) {
 							wp.customize.previewer.previewUrl.set( '<?php echo NJT_NOFI_SITE_URL ; ?>' );
@@ -94,7 +96,7 @@ class WpCustomNotification
 
   public function njt_nofi_customizeNotification($customNoti)
   {
-    $customNoti->add_panel( 'njt_nofi_customNoti', array(
+    $customNoti->add_panel( 'njt_notification-bar', array(
       'title'       => __('WordPress Notification Bar',NJT_NOFI_DOMAIN),
       'description' => __('This is panel WordPress Notification Bar',NJT_NOFI_DOMAIN),
       'priority'    => 10,
@@ -104,7 +106,7 @@ class WpCustomNotification
     $customNoti->add_section( 'njt_nofi_general', array(
       'title'    => __( 'General Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel'    => 'njt_nofi_customNoti',
+      'panel'    => 'njt_notification-bar',
     ) );
    
     // Hide/Close Button (No button, Toggle button, Close button)
@@ -159,7 +161,7 @@ class WpCustomNotification
     $customNoti->add_section( 'njt_nofi_content', array(
       'title'    => __( 'Content Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel'    => 'njt_nofi_customNoti',
+      'panel'    => 'njt_notification-bar',
     ));
 
     // Link Style
@@ -182,7 +184,7 @@ class WpCustomNotification
     //Text
     $customNoti->add_setting('njt_nofi_text', array(
       'default'           => $this->valueDefault['text'],
-      'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+      'sanitize_callback' => 'wp_kses_post', //keeps only HTML tags that are allowed in post content
       'transport'         => 'postMessage',
     ));
 
@@ -227,7 +229,23 @@ class WpCustomNotification
     $customNoti->add_section( 'njt_nofi_style', array(
       'title'    => __( 'Style Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel'    => 'njt_nofi_customNoti',
+      'panel'    => 'njt_notification-bar',
+    ));
+
+    //Preset Color
+    $customNoti->add_setting( 'njt_nofi_preset_color',
+      array(
+          'default'           => $this->valueDefault['preset_color'],
+      )
+    );
+    
+    $customNoti->add_control(
+      new WpCustomControlColorPreset( $customNoti, 'njt_nofi_preset_color',
+      array(
+        'label'    => __('Preset Color', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_style',
+        'settings' => 'njt_nofi_preset_color'
+      )
     ));
 
     //Background Color
@@ -297,7 +315,7 @@ class WpCustomNotification
     $customNoti->add_section( 'njt_nofi_display', array(
       'title'    => __( 'Display Option',NJT_NOFI_DOMAIN),
       'priority' => 10,
-      'panel'    => 'njt_nofi_customNoti',
+      'panel'    => 'njt_notification-bar',
     ));
 
     //Homepage

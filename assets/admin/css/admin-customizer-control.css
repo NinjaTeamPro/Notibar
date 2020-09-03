@@ -1,6 +1,9 @@
 .njt_nofi_dp_none{
 	display: block;
 }
+.njt_nofi_none{
+	display: none;
+}
 
 .nj_color_select__wrap{
 	position: relative;
@@ -224,4 +227,98 @@
 }
 #customize-theme-controls .customize-pane-child.accordion-section-content {
   height: 100%;
+}
+
+/* notification customize */
+.nj-list-prese-color {
+	display: flex;
+}
+.nj-list-prese-color .type-circle {
+	margin-right: 5px;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+.type-circle-active{
+	border-style: double !important;
+}
+
+.type-circle-1 {
+	border-radius: 50px;
+	border-top-color: #ff0000;
+	border-left-color: #ff0000;
+	border-right-color: #0000ff;
+	border-bottom-color: #0000ff;
+	border-width: 15px;
+	border-style: solid;
+	height: 0px;
+	width: 0px;
+}
+.type-circle-2 {
+	border-radius: 50px;
+	border-left-color: #000000;
+	border-top-color: #000000;
+	border-bottom-color: #0000ff;
+	border-right-color: #0000ff;
+	border-width: 15px;
+	border-style: solid;
+	height: 0px;
+	width: 0px;
+}
+.type-circle-3 {
+	border-radius: 50px;
+	border-right-color: greenyellow;
+	border-top-color: blue;
+	border-bottom-color: greenyellow;
+	border-left-color: blue;
+	border-width: 15px;
+	border-style: solid;
+	height: 0px;
+	width: 0px;
+}
+.type-circle-4 {
+	border-radius: 50px;
+	border-left-color: #1ecc2b;
+	border-top-color: #1ecc2b;
+	border-bottom-color: #000000;
+	border-right-color: #000000;
+	border-width: 15px;
+	border-style: solid;
+	height: 0px;
+	width: 0px;
+}
+
+.type-circle-5 {
+	border-radius: 50px;
+	border-left-color: #d0ad05;
+	border-top-color: #d0ad05;
+	border-bottom-color: #2ad000;
+	border-right-color: #2ad000;
+	border-width: 15px;
+	border-style: solid;
+	height: 0px;
+	width: 0px;
+}
+
+.type-circle-5 {
+	border-radius: 50px;
+	border-left-color: #d0ad05;
+	border-top-color: #d0ad05;
+	border-bottom-color: #2ad000;
+	border-right-color: #2ad000;
+	border-width: 15px;
+	border-style: solid;
+	height: 0px;
+	width: 0px;
+}
+
+.type-circle-6 {
+	border-radius: 50px;
+	border-left-color: #2d6764;
+	border-top-color: #2d6764;
+	border-bottom-color: #ff7878;
+	border-right-color: #ff7878;
+	border-width: 15px;
+	border-style: solid;
+	height: 0px;
+	width: 0px;
 }
