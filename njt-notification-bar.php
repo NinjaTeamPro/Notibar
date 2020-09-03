@@ -22,6 +22,7 @@ define('NJT_NOFI_DOMAIN', 'njt-notification-bar');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('NJT_NOFI_SITE_URL', site_url());
 
 spl_autoload_register(function ($class) {
   $prefix = __NAMESPACE__; // project-specific namespace prefix

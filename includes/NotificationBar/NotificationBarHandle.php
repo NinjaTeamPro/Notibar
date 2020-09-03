@@ -66,6 +66,10 @@ class NotificationBarHandle
     wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'));
     wp_enqueue_script('njt-nofi');
 
+    wp_register_script('njt-nofi-cus', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/mediaelement.min.js', array('jquery'));
+    wp_enqueue_script('njt-nofi-cus');
+
+
     wp_localize_script('njt-nofi', 'wpData', array(
       'admin_ajax' => admin_url('admin-ajax.php'),
       'nonce' => wp_create_nonce("njt-nofi-notification"),
@@ -121,8 +125,29 @@ class NotificationBarHandle
 
     if($isDisplayNotification) {
       add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
+      add_action('wp_head', array($this, 'addCustomizerHeaderCss'));
     }
   }
+
+   public function addCustomizerHeaderCss() {
+    $contentWidth = get_theme_mod('njt_nofi_content_width') != null ? get_theme_mod('njt_nofi_content_width').'px' : '100%';
+    $isPositionFix = get_theme_mod('njt_nofi_position_type', $this->valueDefault['position_type']) == 'fixed' ? true : false;
+    $isLinkStyleButton = get_theme_mod('njt_nofi_link_style', $this->valueDefault['link_style']) == 'button' ? true : false;
+    $bgColorNotification = get_theme_mod('njt_nofi_bg_color', $this->valueDefault['bg_color']);
+    $textColorNotification = get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color']);
+    $lbColorNotification = get_theme_mod('njt_nofi_lb_color', $this->valueDefault['lb_color']);
+    $notificationFontSize = get_theme_mod('njt_nofi_font_size', $this->valueDefault['font_size']);
+
+    ?>
+      <style id="button-hover-color-inline-css">
+         .njt-nofi-container .njt-nofi-text-color {
+          color: <?php echo esc_html($textColorNotification) ?> !important;
+        }
+      </style>
+    <?php
+
+  }
+
 
   public function display_notification()
   {
@@ -149,16 +174,14 @@ class NotificationBarHandle
     }
 
     ?>
-      <style >
+
+      <style>
         .njt-nofi-notification-bar .njt-nofi-hide-button{
           display: none;
         }
         .njt-nofi-notification-bar .njt-nofi-content{
           font-size : <?php echo esc_html($notificationFontSize.'px') ?>;
           width: <?php echo ($contentWidth) ?>;
-        }
-        .njt-nofi-container .njt-nofi-text-color {
-          color: <?php echo esc_html($textColorNotification) ?> !important;
         }
         .njt-nofi-container .njt-nofi-bgcolor-notification {
           background: <?php echo esc_html($bgColorNotification) ?>;
