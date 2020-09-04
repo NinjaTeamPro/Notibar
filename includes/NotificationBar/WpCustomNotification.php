@@ -191,9 +191,12 @@ class WpCustomNotification
       'transport'         => 'postMessage',
     ));
 
-    $customNoti->selective_refresh->add_partial('njt_nofi_text', array(
-      'selector'          => '.njt-nofi-container',
-    ));
+    $customNoti->selective_refresh->add_partial( 'njt_nofi_text', array(
+      'selector'            => '.njt-nofi-notification-bar',
+      'primarySetting'      => 'njt_nofi_text',
+      'container_inclusive' => true,
+      'fallback_refresh'    => false,
+    ) );
 
     $customNoti->add_control( 'njt_nofi_text_control', array(
       'label'    => __('Text', NJT_NOFI_DOMAIN ),
@@ -383,4 +386,6 @@ class WpCustomNotification
       'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
     ));    
   }
+
+ 
 }

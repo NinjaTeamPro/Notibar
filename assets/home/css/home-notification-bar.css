@@ -49,5 +49,9 @@
   left: 70px;
   top: 10px;
 }
-
+.njt-nofi-container .customize-partial-refreshing {
+  opacity: 1;
+  transition: opacity .25s;
+  cursor: progress;
+}
 
