@@ -31,7 +31,7 @@ class NotificationBarHandle
     
     //Register Enqueue
     add_action('wp_enqueue_scripts', array($this, 'njt_nofi_homeRegisterEnqueue'));
-    //add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
+    add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
   }
 
   public function njt_nofi_showMenu()
@@ -63,7 +63,7 @@ class NotificationBarHandle
     wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/css/home-notification-bar.css');
     wp_enqueue_style('njt-nofi');
 
-    wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'));
+    wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'),NJT_NOFI_VERSION, true );
     wp_enqueue_script('njt-nofi');
 
     wp_register_script('njt-nofi-cus', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/mediaelement.min.js', array('jquery'));
@@ -181,21 +181,10 @@ class NotificationBarHandle
         }
         .njt-nofi-notification-bar .njt-nofi-content{
           font-size : <?php echo esc_html($notificationFontSize.'px') ?>;
-          width: <?php echo ($contentWidth) ?>;
         }
         .njt-nofi-container .njt-nofi-bgcolor-notification {
           background: <?php echo esc_html($bgColorNotification) ?>;
         }
-
-        <?php if($isPositionFix) { ?>
-          .njt-nofi-container {
-            position: fixed;
-            z-index: 999;
-            width: 100%;
-          }
-
-        <?php } ?>
-
         <?php if($isLinkStyleButton) { ?>
           .njt-nofi-notification-bar .njt-nofi-button {
             padding: 5px 10px;

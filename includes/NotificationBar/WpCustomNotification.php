@@ -112,7 +112,8 @@ class WpCustomNotification
     // Hide/Close Button (No button, Toggle button, Close button)
     $customNoti->add_setting('njt_nofi_hide_close_button', array(
       'default'           => $this->valueDefault['hide_close_button'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeSelect
+      'sanitize_callback' => $this->njt_nofi_sanitizeSelect,
+      'transport'         => 'postMessage',
     ));
     
     $customNoti->add_control( 'njt_nofi_hide_close_button_control', array(
@@ -131,6 +132,7 @@ class WpCustomNotification
     $customNoti->add_setting('njt_nofi_content_width', array(
       'default'           => $this->valueDefault['content_width'],
       'sanitize_callback' => 'absint', //converts value to a non-negative integer
+      'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control( 'njt_nofi_content_width_control', array(
@@ -143,7 +145,8 @@ class WpCustomNotification
     //Position Type
     $customNoti->add_setting('njt_nofi_position_type', array(
       'default'           => $this->valueDefault['position_type'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeSelect
+      'sanitize_callback' => $this->njt_nofi_sanitizeSelect,
+      'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control( 'njt_nofi_position_type_control', array(

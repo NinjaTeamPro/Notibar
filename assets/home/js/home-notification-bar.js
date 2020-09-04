@@ -1,13 +1,18 @@
 const homeNotificationBar = {
   setPaddingTop() {
     const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-    if (wpData.isPositionFix) {
-      jQuery('body').css({
-        'padding-top': barHeight,
-        '-webkit-transition': 'padding-top 1s',
-        'transition': 'padding-top 1s'
-      })
-    }
+    // if (!wpData.isPositionFix) {
+    //   jQuery('body').css({
+    //     'padding-top': barHeight,
+    //     '-webkit-transition': 'padding-top 1s',
+    //     'transition': 'padding-top 1s'
+    //   })
+    // }
+    jQuery('body').css({
+      'padding-top': barHeight,
+      '-webkit-transition': 'padding-top 1s',
+      'transition': 'padding-top 1s'
+    })
     if (jQuery('#wpadminbar').length > 0) {
       jQuery('.njt-nofi-container').css('top', '32px')
     } else {
@@ -16,7 +21,7 @@ const homeNotificationBar = {
   },
 
   actionButtonClose() {
-    jQuery(".njt-nofi-close-button").on("click", function (e) {
+    jQuery(".njt-nofi-container .njt-nofi-close-button").on("click", function (e) {
       jQuery('.njt-nofi-notification-bar').hide(1000)
       jQuery('body').css({
         'padding-top': 0,
@@ -25,7 +30,7 @@ const homeNotificationBar = {
       })
     })
 
-    jQuery(".njt-nofi-toggle-button").on("click", function (e) {
+    jQuery(".njt-nofi-container .njt-nofi-toggle-button").on("click", function (e) {
       if (wpData.isPositionFix || jQuery('#wpadminbar').length == 0) {
         jQuery('.njt-nofi-notification-bar').hide(1000);
         jQuery('.njt-nofi-display-toggle').css({

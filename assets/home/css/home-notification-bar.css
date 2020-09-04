@@ -1,3 +1,8 @@
+.njt-nofi-container{
+  z-index: 999;
+  width: 100%;
+}
+
 .njt-nofi-notification-bar {
   position: relative;
   /* z-index: 999; */
