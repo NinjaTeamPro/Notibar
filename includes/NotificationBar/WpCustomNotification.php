@@ -170,7 +170,8 @@ class WpCustomNotification
     // Link Style
     $customNoti->add_setting('njt_nofi_link_style', array(
       'default'           => $this->valueDefault['link_style'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeSelect
+      'sanitize_callback' => $this->njt_nofi_sanitizeSelect,
+      'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control( 'njt_nofi_link_style_control', array(

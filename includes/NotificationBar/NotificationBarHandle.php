@@ -185,21 +185,6 @@ class NotificationBarHandle
         .njt-nofi-container .njt-nofi-bgcolor-notification {
           background: <?php echo esc_html($bgColorNotification) ?>;
         }
-        <?php if($isLinkStyleButton) { ?>
-          .njt-nofi-notification-bar .njt-nofi-button {
-            padding: 5px 10px;
-            background: <?php echo esc_html($lbColorNotification)?> ;
-            border-radius: 5px;
-          }
-          .njt-nofi-notification-bar .njt-nofi-button-text {
-            color: #ffff !important;
-          }
-        <?php } else {?>
-          .njt-nofi-notification-bar .njt-nofi-button-text {
-            color: <?php echo esc_html($lbColorNotification)?> !important;
-          }
-        <?php } ?>
-
       </style>
     <?php
 

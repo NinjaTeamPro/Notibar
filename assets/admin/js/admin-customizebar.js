@@ -152,4 +152,32 @@
     });
   });
 
+  /*Content option*/
+  //Link Style
+  wp.customize("njt_nofi_link_style", function (value) {
+    value.bind(function (to) {
+      const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
+      console.log(lbColorNotification);
+      if (to == 'button') {
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+          'color': '#ffffff'
+        })
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
+          'padding': '5px 10px',
+          'border-radius': '5px',
+          'background': lbColorNotification
+        })
+      } else {
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
+          'padding': '',
+          'border-radius': '',
+          'background': ''
+        })
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+          'color': lbColorNotification
+        })
+      }
+    })
+  })
+
 })(jQuery);
