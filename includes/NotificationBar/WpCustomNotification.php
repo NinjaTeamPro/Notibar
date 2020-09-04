@@ -59,10 +59,9 @@ class WpCustomNotification
     wp_enqueue_style('njt-nofi-cus-control');
   }
   public function addScriptsCustomizer(){
-
-
     wp_register_script('njt-nofi-test', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizebar.js', array('jquery'),NJT_NOFI_VERSION,true);
     wp_enqueue_script('njt-nofi-test');
+
   }
   public function addScripts() {
     ?>
@@ -207,6 +206,7 @@ class WpCustomNotification
     $customNoti->add_setting('njt_nofi_lb_text', array(
       'default'           => $this->valueDefault['lb_text'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+      'transport'         => 'postMessage',
     ));
 
     $customNoti->add_control('njt_nofi_lb_text_control', array(
@@ -220,6 +220,7 @@ class WpCustomNotification
     $customNoti->add_setting('njt_nofi_lb_url', array(
       'default'           => $this->valueDefault['lb_url'],
       'sanitize_callback' => 'esc_url_raw', //cleans URL from all invalid characters
+      'transport'         => 'postMessage',
     ));
 
     $customNoti->add_control('njt_nofi_lb_url_control', array(
@@ -237,9 +238,9 @@ class WpCustomNotification
     ));
 
     //Preset Color
-    $customNoti->add_setting( 'njt_nofi_preset_color',
-      array(
-          'default'           => $this->valueDefault['preset_color'],
+    $customNoti->add_setting( 'njt_nofi_preset_color', array(
+        'default' => $this->valueDefault['preset_color'],
+        'transport'         => 'postMessage',
       )
     );
     
@@ -256,7 +257,8 @@ class WpCustomNotification
     $customNoti->add_setting( 'njt_nofi_bg_color',
       array(
           'default'           => $this->valueDefault['bg_color'],
-          'sanitize_callback' => 'sanitize_hex_color'
+          'sanitize_callback' => 'sanitize_hex_color',
+          'transport'         => 'postMessage',
       )
     );
     
@@ -283,14 +285,15 @@ class WpCustomNotification
       array(
         'label'    => __('Text Color', NJT_NOFI_DOMAIN ),
         'section'  => 'njt_nofi_style',
-        'settings' => 'njt_nofi_text_color'
+        'settings' => 'njt_nofi_text_color',
       )
     ));
 
     //Link/Button Color 
     $customNoti->add_setting('njt_nofi_lb_color', array(
       'default'           =>$this->valueDefault['lb_color'],
-      'sanitize_callback' => 'sanitize_hex_color'
+      'sanitize_callback' => 'sanitize_hex_color',
+      'transport'         => 'postMessage',
     ));
 
     $customNoti->add_control(
@@ -306,6 +309,7 @@ class WpCustomNotification
     $customNoti->add_setting('njt_nofi_font_size', array(
       'default'           => $this->valueDefault['font_size'],
       'sanitize_callback' => 'absint', //converts value to a non-negative integer
+      'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control('njt_nofi_font_size_control', array(
@@ -325,7 +329,8 @@ class WpCustomNotification
     //Homepage
     $customNoti->add_setting('njt_nofi_homepage', array(
       'default'           => $this->valueDefault['dp_homepage'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox
+      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox,
+      'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control( 'njt_nofi_homepage_control', array(
@@ -338,7 +343,8 @@ class WpCustomNotification
     //Pages
     $customNoti->add_setting('njt_nofi_pages', array(
       'default'           => $this->valueDefault['dp_pages'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox
+      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox,
+      'transport'         => 'postMessage',
     ));
 
     $customNoti->add_control( 'njt_nofi_pages_control', array(
@@ -351,7 +357,8 @@ class WpCustomNotification
     //Posts
     $customNoti->add_setting('njt_nofi_posts', array(
       'default'           => $this->valueDefault['dp_posts'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox
+      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox,
+      'transport'         => 'postMessage',
     ));
 
     $customNoti->add_control( 'njt_nofi_posts_control', array(
@@ -365,6 +372,7 @@ class WpCustomNotification
     $customNoti->add_setting('njt_nofi_pp_id', array(
       'default'           => $this->valueDefault['dp_pp_id'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+      'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control( 'njt_nofi_pp_id_control', array(

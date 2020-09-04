@@ -32,7 +32,10 @@ class NotificationBarHandle
     //Register Enqueue
     add_action('wp_enqueue_scripts', array($this, 'njt_nofi_homeRegisterEnqueue'));
     add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
+    add_action('wp_ajax_njt_nofi_checkDisplayReview', array($this, 'njt_nofi_checkDisplayReview'));
   }
+
+ 
 
   public function njt_nofi_showMenu()
   {
@@ -182,13 +185,21 @@ class NotificationBarHandle
         .njt-nofi-notification-bar .njt-nofi-content{
           font-size : <?php echo esc_html($notificationFontSize.'px') ?>;
         }
-        .njt-nofi-container .njt-nofi-bgcolor-notification {
-          background: <?php echo esc_html($bgColorNotification) ?>;
-        }
       </style>
     <?php
 
     $viewPath = NJT_NOFI_PLUGIN_PATH . 'views/pages/home/home-notification-bar.php';
     include_once $viewPath;
+  }
+
+  public function njt_nofi_checkDisplayReview()
+  {
+    $dataDisplay = array(
+      'is_home' => is_home(),
+      'is_page' => is_page(),
+      'is_single' => is_single()
+    );
+    wp_send_json_success($dataDisplay);
+    die();
   }
 }

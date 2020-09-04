@@ -21,6 +21,7 @@
 
 .njt-nofi-notification-bar .njt-nofi-button {
   display: inline-block;
+  padding: 5px 10px;
 }
 
 .njt-nofi-notification-bar .njt-nofi-button .njt-nofi-button-text {

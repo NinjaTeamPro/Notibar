@@ -1,14 +1,20 @@
 <?php
   defined('ABSPATH') || exit;
+  $dataDisplay = array(
+    'is_home' => is_home(),
+    'is_page' => is_page(),
+    'is_single' => is_single(),
+    'id_page' => get_the_ID()
+  );
 ?>
+<input type="hidden" id="njt_nofi_checkDisplayReview" name="njt_nofi_checkDisplayReview" value='<?php echo (json_encode( $dataDisplay ))?>'>
 <div class="njt-nofi-container" style="<?php if($isPositionFix) { echo ( 'position: fixed'); } else {  echo ( 'position: absolute'); }?>">
-  <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification">
+  <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification" style="<?php echo('background:'.esc_html($bgColorNotification)) ?>">
     <div class="njt-nofi-content njt-nofi-text-color" style="<?php echo esc_html($contentWidth) ?>">
       <div class="njt-nofi-text"><?php echo get_theme_mod( 'njt_nofi_text', $this->valueDefault['text'] )?></div>
       <div class="njt-nofi-button" 
       style="<?php if($isLinkStyleButton) {
-        echo ('padding: 5px 10px'.
-              ';background:' .esc_html($lbColorNotification).
+        echo ('background:' .esc_html($lbColorNotification).
               ';border-radius:5px'
               );
         }?>">

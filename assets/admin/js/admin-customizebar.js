@@ -1,13 +1,5 @@
 (function ($) {
-  wp.customize("njt_nofi_text_color", function (value) {
-    value.bind(function (to) {
-      var css = "";
-      css +=
-        ".njt-nofi-container .njt-nofi-text-color { color:" +
-        to + '!important;}';
-      jQuery("#button-hover-color-inline-css").text(css);
-    });
-  });
+
 
 
   wp.customize("njt_nofi_hide_close_button", function (value) {
@@ -163,19 +155,217 @@
           'color': '#ffffff'
         })
         jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
-          'padding': '5px 10px',
           'border-radius': '5px',
           'background': lbColorNotification
         })
       } else {
         jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
-          'padding': '',
           'border-radius': '',
           'background': ''
         })
         jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
           'color': lbColorNotification
         })
+      }
+    })
+  })
+
+  //Text
+  wp.customize("njt_nofi_text", function (value) {
+    value.bind(function (to) {
+      jQuery('.njt-nofi-text').html(to);
+    })
+  })
+
+  //Link/Button Text
+  wp.customize("njt_nofi_lb_text", function (value) {
+    value.bind(function (to) {
+      jQuery('.njt-nofi-button-text').text(to);
+    })
+  })
+
+  //Link/Button URL
+  wp.customize("njt_nofi_lb_url", function (value) {
+    value.bind(function (to) {
+      jQuery('.njt-nofi-button-text').attr('href', to);
+    })
+  })
+
+  /*Style Option*/
+  //Text Color
+  wp.customize("njt_nofi_text_color", function (value) {
+    value.bind(function (to) {
+      var css = "";
+      css +=
+        ".njt-nofi-container .njt-nofi-text-color { color:" +
+        to + '!important;}';
+      jQuery("#button-hover-color-inline-css").text(css);
+    });
+  });
+
+  //Background Color
+  wp.customize("njt_nofi_bg_color", function (value) {
+    value.bind(function (to) {
+      jQuery(".njt-nofi-container .njt-nofi-bgcolor-notification").css({
+        'background': to
+      })
+    })
+  })
+
+  //Link/Button Color 
+  wp.customize("njt_nofi_lb_color", function (value) {
+    value.bind(function (to) {
+      const linkStyleButton = wp.customize.value('njt_nofi_link_style')()
+      jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
+        'background': to
+      })
+      if (linkStyleButton == 'button') {
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+          'color': '#ffffff'
+        })
+      } else {
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
+          'border-radius': '',
+          'background': ''
+        })
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+          'color': to
+        })
+      }
+    })
+  })
+  //Font Size (px)
+  wp.customize("njt_nofi_font_size", function (value) {
+    value.bind(function (to) {
+      jQuery(".njt-nofi-notification-bar .njt-nofi-content").css({
+        'font-size': to + 'px'
+      })
+    })
+  })
+  /* Display Option*/
+
+  function checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId) {
+    const strCheckDisplayReview = jQuery('#njt_nofi_checkDisplayReview').attr('value')
+    const arrCheckDisplayReview = JSON.parse(strCheckDisplayReview)
+    const isDisplayHome = displayHome
+    const isDisplayPage = displayPage
+    const isDisplayPosts = displayPosts
+    const isDisplayPageOrPostId = displayPageOrPostId
+    const arrDisplayPageOrPostId = isDisplayPageOrPostId.split(',')
+
+    if (isDisplayHome && arrCheckDisplayReview.is_home) {
+      return true
+    } else if (isDisplayPage && arrCheckDisplayReview.is_page) {
+      return true
+    } else if (isDisplayPosts && arrCheckDisplayReview.is_single) {
+      return true
+    } else if (jQuery.inArray(arrCheckDisplayReview.id_page.toString(), arrDisplayPageOrPostId) != -1) {
+      return true
+    }
+    return false
+  }
+
+
+  wp.customize("njt_nofi_homepage", function (value) {
+    value.bind(function (to) {
+      const displayHome = to
+      const displayPage = wp.customize.value('njt_nofi_pages')()
+      const displayPosts = wp.customize.value('njt_nofi_posts')()
+      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      if (!isDisplay) {
+        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('body').css({
+          'padding-top': 0,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+      } else {
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+        jQuery('.njt-nofi-notification-bar').show(1000);
+      }
+    })
+  })
+
+  wp.customize("njt_nofi_pages", function (value) {
+    value.bind(function (to) {
+      const displayHome = wp.customize.value('njt_nofi_homepage')()
+      const displayPage = to
+      const displayPosts = wp.customize.value('njt_nofi_posts')()
+      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      if (!isDisplay) {
+        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('body').css({
+          'padding-top': 0,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+      } else {
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+        jQuery('.njt-nofi-notification-bar').show(1000);
+      }
+    })
+  })
+
+  wp.customize("njt_nofi_posts", function (value) {
+    value.bind(function (to) {
+      const displayHome = wp.customize.value('njt_nofi_homepage')()
+      const displayPage = wp.customize.value('njt_nofi_pages')()
+      const displayPosts = to
+      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      if (!isDisplay) {
+        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('body').css({
+          'padding-top': 0,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+      } else {
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+        jQuery('.njt-nofi-notification-bar').show(1000);
+      }
+    })
+  })
+
+  wp.customize("njt_nofi_pp_id", function (value) {
+    value.bind(function (to) {
+      const displayHome = wp.customize.value('njt_nofi_homepage')()
+      const displayPage = wp.customize.value('njt_nofi_pages')()
+      const displayPosts = wp.customize.value('njt_nofi_posts')()
+      const displayPageOrPostId = to
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      if (!isDisplay) {
+        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('body').css({
+          'padding-top': 0,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+      } else {
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          '-webkit-transition': 'padding-top 1s',
+          'transition': 'padding-top 1s'
+        })
+        jQuery('.njt-nofi-notification-bar').show(1000);
       }
     })
   })
