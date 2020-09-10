@@ -32,7 +32,6 @@ class NotificationBarHandle
     //Register Enqueue
     add_action('wp_enqueue_scripts', array($this, 'njt_nofi_homeRegisterEnqueue'));
     add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
-    add_action('wp_ajax_njt_nofi_checkDisplayReview', array($this, 'njt_nofi_checkDisplayReview'));
   }
 
  
@@ -132,7 +131,7 @@ class NotificationBarHandle
     }
   }
 
-   public function addCustomizerHeaderCss() {
+  public function addCustomizerHeaderCss() {
     $contentWidth = get_theme_mod('njt_nofi_content_width') != null ? get_theme_mod('njt_nofi_content_width').'px' : '100%';
     $isPositionFix = get_theme_mod('njt_nofi_position_type', $this->valueDefault['position_type']) == 'fixed' ? true : false;
     $isLinkStyleButton = get_theme_mod('njt_nofi_link_style', $this->valueDefault['link_style']) == 'button' ? true : false;
@@ -148,13 +147,10 @@ class NotificationBarHandle
         }
       </style>
     <?php
-
   }
-
 
   public function display_notification()
   {
-    
     $contentWidth = get_theme_mod('njt_nofi_content_width') != null ? get_theme_mod('njt_nofi_content_width').'px' : '100%';
     $isPositionFix = get_theme_mod('njt_nofi_position_type', $this->valueDefault['position_type']) == 'fixed' ? true : false;
     $isLinkStyleButton = get_theme_mod('njt_nofi_link_style', $this->valueDefault['link_style']) == 'button' ? true : false;
@@ -163,26 +159,12 @@ class NotificationBarHandle
     $lbColorNotification = get_theme_mod('njt_nofi_lb_color', $this->valueDefault['lb_color']);
     $notificationFontSize = get_theme_mod('njt_nofi_font_size', $this->valueDefault['font_size']);
 
-    $typeButton = '';
-    if (get_theme_mod( 'njt_nofi_hide_close_button', $this->valueDefault['hide_close_button'] ) == 'no_button') {
-      $typeButton = 'njt-nofi-hide-button';
-    }
-
-    if (get_theme_mod( 'njt_nofi_hide_close_button', $this->valueDefault['hide_close_button'] ) == 'toggle_button') {
-      $typeButton = 'njt-nofi-toggle-button';
-    }
-
-    if (get_theme_mod( 'njt_nofi_hide_close_button', $this->valueDefault['hide_close_button'] ) == 'close_button') {
-      $typeButton = 'njt-nofi-close-button';
-    }
-
     ?>
-
       <style>
-        .njt-nofi-notification-bar .njt-nofi-hide-button{
+        .njt-nofi-notification-bar .njt-nofi-hide-button {
           display: none;
         }
-        .njt-nofi-notification-bar .njt-nofi-content{
+        .njt-nofi-notification-bar .njt-nofi-content {
           font-size : <?php echo esc_html($notificationFontSize.'px') ?>;
         }
       </style>
@@ -190,16 +172,5 @@ class NotificationBarHandle
 
     $viewPath = NJT_NOFI_PLUGIN_PATH . 'views/pages/home/home-notification-bar.php';
     include_once $viewPath;
-  }
-
-  public function njt_nofi_checkDisplayReview()
-  {
-    $dataDisplay = array(
-      'is_home' => is_home(),
-      'is_page' => is_page(),
-      'is_single' => is_single()
-    );
-    wp_send_json_success($dataDisplay);
-    die();
   }
 }

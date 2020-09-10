@@ -46,7 +46,7 @@ const homeNotificationBar = {
         jQuery('.njt-nofi-notification-bar').hide(1000);
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'block',
-          'top': '32px'
+          'top': 0
         })
         jQuery('body').css({
           'padding-top': 0,

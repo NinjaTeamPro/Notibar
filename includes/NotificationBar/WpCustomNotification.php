@@ -111,8 +111,8 @@ class WpCustomNotification
     // Hide/Close Button (No button, Toggle button, Close button)
     $customNoti->add_setting('njt_nofi_hide_close_button', array(
       'default'           => $this->valueDefault['hide_close_button'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeSelect,
-      'transport'         => 'postMessage',
+      //'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
+       'transport'         => 'postMessage',
     ));
     
     $customNoti->add_control( 'njt_nofi_hide_close_button_control', array(
@@ -144,7 +144,7 @@ class WpCustomNotification
     //Position Type
     $customNoti->add_setting('njt_nofi_position_type', array(
       'default'           => $this->valueDefault['position_type'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeSelect,
+      'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
       'transport'         => 'postMessage'
     ));
 
@@ -169,7 +169,7 @@ class WpCustomNotification
     // Link Style
     $customNoti->add_setting('njt_nofi_link_style', array(
       'default'           => $this->valueDefault['link_style'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeSelect,
+      'sanitize_callback' =>  array($this, 'njt_nofi_sanitizeSelect'),
       'transport'         => 'postMessage'
     ));
 
@@ -332,7 +332,7 @@ class WpCustomNotification
     //Homepage
     $customNoti->add_setting('njt_nofi_homepage', array(
       'default'           => $this->valueDefault['dp_homepage'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox,
+      'sanitize_callback' =>  array($this, 'njt_nofi_sanitizeCheckbox'),
       'transport'         => 'postMessage'
     ));
 
@@ -346,7 +346,7 @@ class WpCustomNotification
     //Pages
     $customNoti->add_setting('njt_nofi_pages', array(
       'default'           => $this->valueDefault['dp_pages'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox,
+      'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
       'transport'         => 'postMessage',
     ));
 
@@ -360,7 +360,7 @@ class WpCustomNotification
     //Posts
     $customNoti->add_setting('njt_nofi_posts', array(
       'default'           => $this->valueDefault['dp_posts'],
-      'sanitize_callback' => $this->njt_nofi_sanitizeCheckbox,
+      'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
       'transport'         => 'postMessage',
     ));
 

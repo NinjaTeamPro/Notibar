@@ -1,110 +1,34 @@
 (function ($) {
-
-
-
   wp.customize("njt_nofi_hide_close_button", function (value) {
     value.bind(function (newValue, oldValue) {
-      let newButton = '';
-      let oldButton = ''
       if (newValue == 'no_button') {
-        newButton = 'njt-nofi-hide-button';
+        jQuery(".njt-nofi-toggle-button").css({
+          'display': 'none',
+        })
+        jQuery(".njt-nofi-close-button").css({
+          'display': 'none',
+        })
       }
 
       if (newValue == 'toggle_button') {
-        newButton = 'njt-nofi-toggle-button';
+        jQuery(".njt-nofi-toggle-button").css({
+          'display': 'block',
+        })
+        jQuery(".njt-nofi-close-button").css({
+          'display': 'none',
+        })
       }
 
       if (newValue == 'close_button') {
-        newButton = 'njt-nofi-close-button';
-      }
-      //oldValue
-      if (oldValue == 'no_button') {
-        oldButton = 'njt-nofi-hide-button';
-      }
-
-      if (oldValue == 'toggle_button') {
-        oldButton = 'njt-nofi-toggle-button';
-      }
-
-      if (oldValue == 'close_button') {
-        oldButton = 'njt-nofi-close-button';
-      }
-
-      jQuery('.njt-nofi-hide-admin-custom').removeClass(oldButton)
-      jQuery('.njt-nofi-hide-admin-custom').addClass(newButton)
-      jQuery('.njt-nofi-notification-bar').show(1000);
-      //
-
-      jQuery(".njt-nofi-close-button").on("click", function (e) {
-        console.log('close button');
-        jQuery('.njt-nofi-notification-bar').hide(1000)
-        jQuery('body').css({
-          'padding-top': 0,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+        jQuery(".njt-nofi-close-button").css({
+          'display': 'block',
         })
-      })
+        jQuery(".njt-nofi-toggle-button").css({
+          'display': 'none',
+        })
+      }
 
-      jQuery(".njt-nofi-toggle-button").on("click", function (e) {
-        console.log('toggle button');
-        if (wpData.isPositionFix || jQuery('#wpadminbar').length == 0) {
-          jQuery('.njt-nofi-notification-bar').hide(1000);
-          jQuery('.njt-nofi-display-toggle').css({
-            'display': 'block',
-            'top': 0
-          })
-          jQuery('body').css({
-            'padding-top': 0,
-            '-webkit-transition': 'padding-top 1s',
-            'transition': 'padding-top 1s'
-          })
-        } else {
-          jQuery('.njt-nofi-notification-bar').hide(1000);
-          jQuery('.njt-nofi-display-toggle').css({
-            'display': 'block',
-            'top': '32px'
-          })
-          jQuery('body').css({
-            'padding-top': 0,
-            '-webkit-transition': 'padding-top 1s',
-            'transition': 'padding-top 1s'
-          })
-        }
-      })
-
-      jQuery(".njt-nofi-display-toggle").on("click", function (e) {
-        console.log('open toggle button');
-        if (wpData.isPositionFix) {
-          const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-          jQuery('body').css({
-            'padding-top': barHeight,
-            '-webkit-transition': 'padding-top 1s',
-            'transition': 'padding-top 1s'
-          })
-          jQuery('.njt-nofi-notification-bar').show(1000);
-          jQuery('.njt-nofi-display-toggle').css({
-            'display': 'none',
-            'top': 0,
-          })
-        } else {
-          const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-          jQuery('body').css({
-            'padding-top': barHeight,
-            '-webkit-transition': 'padding-top 1s',
-            'transition': 'padding-top 1s'
-          })
-          jQuery('.njt-nofi-notification-bar').show(1000);
-          jQuery('.njt-nofi-display-toggle').css({
-            'display': 'none',
-            'top': 0
-          })
-          jQuery('body').css({
-            'padding-top': 0,
-            '-webkit-transition': 'padding-top 1s',
-            'transition': 'padding-top 1s'
-          })
-        }
-      })
+      jQuery('.njt-nofi-notification-bar').show(1000);
     });
   });
 
