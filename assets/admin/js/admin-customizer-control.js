@@ -2,37 +2,16 @@ window.onload = function () {
 
   var selectBackgroundColor = new NjColorSelect({
     dom: document.getElementById('nj_color_select_bg'),
-    customColors: {
-      "golden drizzle": "#FCE9D2",
-      "54545454": "#FFB5A4",
-      "opal gardens": "#BA92B0",
-      "lavanda": "#8F687B",
-      "4b609e": "#4B609E"
-    }
   });
   selectBackgroundColor.init();
 
   var selectTextColor = new NjColorSelect({
     dom: document.getElementById('nj_color_select_text'),
-    customColors: {
-      "golden drizzle": "#FCE9D2",
-      "54545454": "#FFB5A4",
-      "opal gardens": "#BA92B0",
-      "lavanda": "#8F687B",
-      "4b609e": "#4B609E"
-    }
   });
   selectTextColor.init();
 
   var selectLbColor = new NjColorSelect({
     dom: document.getElementById('nj_color_select_lb'),
-    customColors: {
-      "golden drizzle": "#FCE9D2",
-      "54545454": "#FFB5A4",
-      "opal gardens": "#BA92B0",
-      "lavanda": "#8F687B",
-      "4b609e": "#4B609E"
-    }
   });
   selectLbColor.init();
 
@@ -189,23 +168,259 @@ window.onload = function () {
             "indigo-a700": "#304ffe",
           }
         },
+        "blue": {
+          default: '#2196F3',
+          list: {
+            "blue-50": "#E3F2FD",
+            "blue-100": "#BBDEFB",
+            "blue-200": "#90CAF9",
+            "blue-300": "#64B5F6",
+            "blue-400": "#42A5F5",
+            "blue-500": "#2196F3",
+            "blue-600": "#1E88E5",
+            "blue-700": "#1976D2",
+            "blue-800": "#1565C0",
+            "blue-900": "#0D47A1",
+            "blue-a100": "#82B1FF",
+            "blue-a200": "#448AFF",
+            "blue-a400": "#2979FF",
+            "blue-a700": "#2962FF",
+          }
+        },
+        "light": {
+          default: '#03A9F4',
+          list: {
+            "light-50": "#E1F5FE",
+            "light-100": "#B3E5FC",
+            "light-200": "#81D4FA",
+            "light-300": "#4FC3F7",
+            "light-400": "#29B6F6",
+            "light-500": "#03A9F4",
+            "light-600": "#039BE5",
+            "light-700": "#0288D1",
+            "light-800": "#0277BD",
+            "light-900": "#01579B",
+            "light-a100": "#80D8FF",
+            "light-a200": "#40C4FF",
+            "light-a400": "#00B0FF",
+            "light-a700": "#0091EA",
+          }
+        },
+        "cyan": {
+          default: '#00BCD4',
+          list: {
+            "cyan-50": "#E0F7FA",
+            "cyan-100": "#B2EBF2",
+            "cyan-200": "#80DEEA",
+            "cyan-300": "#4DD0E1",
+            "cyan-400": "#26C6DA",
+            "cyan-500": "#00BCD4",
+            "cyan-600": "#00ACC1",
+            "cyan-700": "#0097A7",
+            "cyan-800": "#00838F",
+            "cyan-900": "#006064",
+            "cyan-a100": "#84FFFF",
+            "cyan-a200": "#18FFFF",
+            "cyan-a400": "#00E5FF",
+            "cyan-a700": "#00B8D4",
+          }
+        },
+        "teal": {
+          default: '#009688',
+          list: {
+            "teal-50": "#E0F2F1",
+            "teal-100": "#B2DFDB",
+            "teal-200": "#80CBC4",
+            "teal-300": "#4DB6AC",
+            "teal-400": "#26A69A",
+            "teal-500": "#009688",
+            "teal-600": "#00897B",
+            "teal-700": "#00796B",
+            "teal-800": "#00695C",
+            "teal-900": "#004D40",
+            "teal-a100": "#A7FFEB",
+            "teal-a200": "#64FFDA",
+            "teal-a400": "#1DE9B6",
+            "teal-a700": "#00BFA5",
+          }
+        },
         "green": {
           default: '#4caf50',
           list: {
-            "indigo-50": "#e8f5e9",
-            "indigo-100": "#c8e6c9",
-            "indigo-200": "#a5d6a7",
-            "indigo-300": "#81c784",
-            "indigo-400": "#66bb6a",
-            "indigo-500": "#4caf50",
-            "indigo-600": "#43a047",
-            "indigo-700": "#388e3c",
-            "indigo-800": "#2e7d32",
-            "indigo-900": "#1b5e20",
-            "indigo-a100": "#b9f6ca",
-            "indigo-a200": "#69f0ae",
-            "indigo-a400": "#00e676",
-            "indigo-a700": "#00c853",
+            "green-50": "#e8f5e9",
+            "green-100": "#c8e6c9",
+            "green-200": "#a5d6a7",
+            "green-300": "#81c784",
+            "green-400": "#66bb6a",
+            "green-500": "#4caf50",
+            "green-600": "#43a047",
+            "green-700": "#388e3c",
+            "green-800": "#2e7d32",
+            "green-900": "#1b5e20",
+            "green-a100": "#b9f6ca",
+            "green-a200": "#69f0ae",
+            "green-a400": "#00e676",
+            "green-a700": "#00c853",
+          }
+        },
+        "lightgreen": {
+          default: '#4caf50',
+          list: {
+            "lightgreen-50": "#F1F8E9",
+            "lightgreen-100": "#DCEDC8",
+            "lightgreen-200": "#C5E1A5",
+            "lightgreen-300": "#AED581",
+            "lightgreen-400": "#9CCC65",
+            "lightgreen-500": "#8BC34A",
+            "lightgreen-600": "#7CB342",
+            "lightgreen-700": "#689F38",
+            "lightgreen-800": "#558B2F",
+            "lightgreen-900": "#33691E",
+            "lightgreen-a100": "#CCFF90",
+            "lightgreen-a200": "#B2FF59",
+            "lightgreen-a400": "#76FF03",
+            "lightgreen-a700": "#64DD17",
+          }
+        },
+        "lime": {
+          default: '#CDDC39',
+          list: {
+            "lime-50": "#F9FBE7",
+            "lime-100": "#F0F4C3",
+            "lime-200": "#E6EE9C",
+            "lime-300": "#DCE775",
+            "lime-400": "#D4E157",
+            "lime-500": "#CDDC39",
+            "lime-600": "#C0CA33",
+            "lime-700": "#AFB42B",
+            "lime-800": "#9E9D24",
+            "lime-900": "#827717",
+            "lime-a100": "#F4FF81",
+            "lime-a200": "#EEFF41",
+            "lime-a400": "#C6FF00",
+            "lime-a700": "#AEEA00",
+          }
+        },
+        "yellow": {
+          default: '#FFEB3B',
+          list: {
+            "yellow-50": "#FFFDE7",
+            "yellow-100": "#FFF9C4",
+            "yellow-200": "#FFF59D",
+            "yellow-300": "#FFF176",
+            "yellow-400": "#FFEE58",
+            "yellow-500": "#FFEB3B",
+            "yellow-600": "#FDD835",
+            "yellow-700": "#FBC02D",
+            "yellow-800": "#F9A825",
+            "yellow-900": "#F57F17",
+            "yellow-a100": "#FFFF8D",
+            "yellow-a200": "#FFFF00",
+            "yellow-a400": "#FFEA00",
+            "yellow-a700": "#FFD600",
+          }
+        },
+        "amber": {
+          default: '#FFC107',
+          list: {
+            "amber-50": "#FFF8E1",
+            "amber-100": "#FFECB3",
+            "amber-200": "#FFE082",
+            "amber-300": "#FFD54F",
+            "amber-400": "#FFCA28",
+            "amber-500": "#FFC107",
+            "amber-600": "#FFB300",
+            "amber-700": "#FFA000",
+            "amber-800": "#FF8F00",
+            "amber-900": "#FF6F00",
+            "amber-a100": "#FFE57F",
+            "amber-a200": "#FFD740",
+            "amber-a400": "#FFC400",
+            "amber-a700": "#FFAB00",
+          }
+        },
+        "orange": {
+          default: '#FF9800',
+          list: {
+            "orange-50": "#FFF3E0",
+            "orange-100": "#FFE0B2",
+            "orange-200": "#FFCC80",
+            "orange-300": "#FFB74D",
+            "orange-400": "#FFA726",
+            "orange-500": "#FF9800",
+            "orange-600": "#FB8C00",
+            "orange-700": "#F57C00",
+            "orange-800": "#EF6C00",
+            "orange-900": "#E65100",
+            "orange-a100": "#FFD180",
+            "orange-a200": "#FFAB40",
+            "orange-a400": "#FF9100",
+            "orange-a700": "#FF6D00",
+          }
+        },
+        "deeporange": {
+          default: '#FF5722',
+          list: {
+            "deeporange-50": "#FBE9E7",
+            "deeporange-100": "#FFCCBC",
+            "deeporange-200": "#FFAB91",
+            "deeporange-300": "#FF8A65",
+            "deeporange-400": "#FF7043",
+            "deeporange-500": "#FF5722",
+            "deeporange-600": "#F4511E",
+            "deeporange-700": "#E64A19",
+            "deeporange-800": "#D84315",
+            "deeporange-900": "#BF360C",
+            "deeporange-a100": "#FF9E80",
+            "deeporange-a200": "#FF6E40",
+            "deeporange-a400": "#FF3D00",
+            "deeporange-a700": "#DD2C00",
+          }
+        },
+        "brown": {
+          default: '#795548',
+          list: {
+            "brown-50": "#EFEBE9",
+            "brown-100": "#D7CCC8",
+            "brown-200": "#BCAAA4",
+            "brown-300": "#A1887F",
+            "brown-400": "#8D6E63",
+            "brown-500": "#795548",
+            "brown-600": "#6D4C41",
+            "brown-700": "#5D4037",
+            "brown-800": "#4E342E",
+            "brown-900": "#3E2723",
+          }
+        },
+        "grey": {
+          default: '#9E9E9E',
+          list: {
+            "grey-50": "#FAFAFA",
+            "grey-100": "#F5F5F5",
+            "grey-200": "#EEEEEE",
+            "grey-300": "#E0E0E0",
+            "grey-400": "#BDBDBD",
+            "grey-500": "#9E9E9E",
+            "grey-600": "#757575",
+            "grey-700": "#616161",
+            "grey-800": "#424242",
+            "grey-900": "#212121",
+          }
+        },
+        "bluegrey": {
+          default: '#607D8B',
+          list: {
+            "white": '#ffffff',
+            "bluegrey-50": "#ECEFF1",
+            "bluegrey-100": "#CFD8DC",
+            "bluegrey-200": "#B0BEC5",
+            "bluegrey-300": "#90A4AE",
+            "bluegrey-400": "#78909C",
+            "bluegrey-500": "#607D8B",
+            "bluegrey-600": "#546E7A",
+            "bluegrey-700": "#455A64",
+            "bluegrey-800": "#37474F",
+            "bluegrey-900": "#263238",
           }
         },
         "black": '#000000'

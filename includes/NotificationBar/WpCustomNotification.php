@@ -332,7 +332,7 @@ class WpCustomNotification
     //Homepage
     $customNoti->add_setting('njt_nofi_homepage', array(
       'default'           => $this->valueDefault['dp_homepage'],
-      'sanitize_callback' =>  array($this, 'njt_nofi_sanitizeCheckbox'),
+      //'sanitize_callback' =>  array($this, 'njt_nofi_sanitizeCheckbox'),
       'transport'         => 'postMessage'
     ));
 
@@ -346,7 +346,7 @@ class WpCustomNotification
     //Pages
     $customNoti->add_setting('njt_nofi_pages', array(
       'default'           => $this->valueDefault['dp_pages'],
-      'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
+     // 'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
       'transport'         => 'postMessage',
     ));
 
@@ -360,7 +360,7 @@ class WpCustomNotification
     //Posts
     $customNoti->add_setting('njt_nofi_posts', array(
       'default'           => $this->valueDefault['dp_posts'],
-      'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
+      //'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
       'transport'         => 'postMessage',
     ));
 
