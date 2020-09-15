@@ -28,6 +28,12 @@
         })
       }
 
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').css({
+        'padding-top': barHeight,
+        '-webkit-transition': 'padding-top 1s',
+        'transition': 'padding-top 1s'
+      })
       jQuery('.njt-nofi-notification-bar').show(1000);
     });
   });

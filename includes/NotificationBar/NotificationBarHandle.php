@@ -49,8 +49,8 @@ class NotificationBarHandle
       '',
       10
     );
-
-    $link = esc_html(admin_url('/customize.php?autofocus[panel]=njt_notification-bar'));
+    $urlEncode = urlencode('autofocus[panel]=njt_notification-bar') ;
+    $link = esc_html(admin_url('/customize.php?'. $urlEncode));
     foreach($menu as $k=>$item){
       if ($item[2] == 'njt_nofi_NotificationBar') {
         $menu[$k][2] =  $link;
@@ -129,6 +129,7 @@ class NotificationBarHandle
       add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
       add_action('wp_head', array($this, 'addCustomizerHeaderCss'));
     }
+    add_action( 'wp_body_open', array( $this, 'njt_nofi_rederInput' ),10);
   }
 
   public function addCustomizerHeaderCss() {
@@ -172,5 +173,18 @@ class NotificationBarHandle
 
     $viewPath = NJT_NOFI_PLUGIN_PATH . 'views/pages/home/home-notification-bar.php';
     include_once $viewPath;
+  }
+
+  public function njt_nofi_rederInput() {
+    $dataDisplay = array(
+      'is_home' => is_home(),
+      'is_page' => is_page(),
+      'is_single' => is_single(),
+      'id_page' => get_the_ID()
+    );
+
+    ?>
+      <input type="hidden" id="njt_nofi_checkDisplayReview" name="njt_nofi_checkDisplayReview" value='<?php echo (json_encode( $dataDisplay ))?>'>
+    <?php
   }
 }
