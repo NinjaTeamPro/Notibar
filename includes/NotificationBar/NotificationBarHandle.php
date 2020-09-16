@@ -106,7 +106,7 @@ class NotificationBarHandle
     $arrDisplayPageOrPostId = explode(",",$isDisplayPageOrPostId);
     $currentPageOrPostID = get_the_ID();
 
-    if($isDisplayHome && is_home()) {
+    if($isDisplayHome && is_home() || $isDisplayHome && is_front_page()) {
       return true;
     } else if($isDisplayPage && is_page()) {
       return true;

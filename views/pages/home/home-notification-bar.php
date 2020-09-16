@@ -25,7 +25,6 @@
 </div>
 <script> 
   var newValue = '<?php echo get_theme_mod( 'njt_nofi_hide_close_button'); ?>'
-  console.log(newValue)
   if (newValue == 'no_button') {
     jQuery(".njt-nofi-toggle-button").css({
       'display': 'none',
