@@ -81,11 +81,6 @@ const homeNotificationBar = {
           'display': 'none',
           'top': 0
         })
-        jQuery('body').css({
-          'padding-top': 0,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
-        })
       }
     })
   }
