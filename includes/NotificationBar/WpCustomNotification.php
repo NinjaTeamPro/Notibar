@@ -7,6 +7,7 @@ use NjtNotificationBar\NotificationBar\WpCustomControlColorBg;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorText;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorLb;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorPreset;
+use NjtNotificationBar\NotificationBar\WpCustomControlPositionType;
 
 class WpCustomNotification
 {
@@ -144,19 +145,17 @@ class WpCustomNotification
     //Position Type
     $customNoti->add_setting('njt_nofi_position_type', array(
       'default'           => $this->valueDefault['position_type'],
-      'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
+      'sanitize_callback' => 'wp_filter_nohtml_kses',
       'transport'         => 'postMessage'
     ));
 
-    $customNoti->add_control( 'njt_nofi_position_type_control', array(
-      'label'      => __( 'Position Type', NJT_NOFI_DOMAIN ),
-      'section'    => 'njt_nofi_general',
-      'settings'   => 'njt_nofi_position_type',
-      'type'       => 'select',
-      'choices'    => array(
-        'fixed'    => esc_html__( 'Fixed', NJT_NOFI_DOMAIN ),
-        'absolute' => esc_html__( 'Absolute', NJT_NOFI_DOMAIN ),
-      ),
+    $customNoti->add_control(
+      new WpCustomControlPositionType( $customNoti, 'njt_nofi_position_type',
+      array(
+        'label'    => __( 'Position Type', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_general',
+        'settings' => 'njt_nofi_position_type'
+      )
     ));
 
     /*Content*/

@@ -733,4 +733,12 @@ window.onload = function () {
     }
     /*---- END PUCLIC ----*/
   }
+
+  // Custom for some other handling
+  jQuery(".njt-bt-position").on("click", function (e) {
+    jQuery(".njt-bt-position").removeClass('active')
+    jQuery('#_customize-input-njt_nofi_position_type').val(jQuery(this).data('position')).trigger('change')
+    jQuery(this).addClass('active')
+  })
+
 }
