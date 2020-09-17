@@ -166,24 +166,7 @@ class WpCustomNotification
       'panel'    => 'njt_notification-bar',
     ));
 
-    // Link Style
-    $customNoti->add_setting('njt_nofi_link_style', array(
-      'default'           => $this->valueDefault['link_style'],
-      'sanitize_callback' =>  array($this, 'njt_nofi_sanitizeSelect'),
-      'transport'         => 'postMessage'
-    ));
-
-    $customNoti->add_control( 'njt_nofi_link_style_control', array(
-      'label'    => __( 'Link Style ', NJT_NOFI_DOMAIN ),
-      'section'  => 'njt_nofi_content',
-      'settings' => 'njt_nofi_link_style',
-      'type'     => 'select',
-      'choices'  => array(
-        'text'   => esc_html__( 'Text', NJT_NOFI_DOMAIN ),
-        'button' => esc_html__( 'Button', NJT_NOFI_DOMAIN ),
-      ),
-    ));
-
+    
     //Text
     $customNoti->add_setting('njt_nofi_text', array(
       'default'           => $this->valueDefault['text'],
@@ -207,13 +190,14 @@ class WpCustomNotification
 
     //Switch on/off button
     $customNoti->add_setting('njt_nofi_handle_button', array(
-      'default'           => false,
+      'default'           => 0,
+      'transport'         => 'postMessage',
     ));
 
     $customNoti->add_control(
       new WpCustomControlHandleButton( $customNoti, 'njt_nofi_handle_button',
       array(
-        'label'    => __( 'Handle Button', NJT_NOFI_DOMAIN ),
+        'label'    => __( 'On/Off Button', NJT_NOFI_DOMAIN ),
         'section'  => 'njt_nofi_content',
         'settings' => 'njt_nofi_handle_button'
       )
@@ -306,7 +290,7 @@ class WpCustomNotification
       )
     ));
 
-    //Link/Button Color 
+    //Button Color 
     $customNoti->add_setting('njt_nofi_lb_color', array(
       'default'           =>$this->valueDefault['lb_color'],
       'sanitize_callback' => 'sanitize_hex_color',
@@ -316,7 +300,7 @@ class WpCustomNotification
     $customNoti->add_control(
       new WpCustomControlColorLb( $customNoti, 'njt_nofi_lb_color',
       array(
-        'label'    => __('Link/Button Color', NJT_NOFI_DOMAIN ),
+        'label'    => __('Button Color', NJT_NOFI_DOMAIN ),
         'section'  => 'njt_nofi_style',
         'settings' => 'njt_nofi_lb_color'
       )

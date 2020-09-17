@@ -75,36 +75,35 @@
   });
 
   /*Content option*/
-  //Link Style
-  wp.customize("njt_nofi_link_style", function (value) {
-    value.bind(function (to) {
-      const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
-      if (to == 'button') {
-        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-          'color': '#ffffff'
-        })
-        jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
-          'border-radius': '5px',
-          'background': lbColorNotification
-        })
-      } else {
-        jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
-          'border-radius': '',
-          'background': ''
-        })
-        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-          'color': lbColorNotification
-        })
-      }
-    })
-  })
-
   //Text
   wp.customize("njt_nofi_text", function (value) {
     value.bind(function (to) {
       jQuery('.njt-nofi-text').html(to);
     })
   })
+
+  //Customize Button
+  wp.customize("njt_nofi_handle_button", function (value) {
+    value.bind(function (to) {
+      const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
+      if (to == 1) {
+        jQuery('.njt-nofi-button').show()
+        jQuery('.njt-nofi-button').css({
+          'background': lbColorNotification,
+          'border-radius': '5px'
+        })
+        jQuery('.njt-nofi-content').css({
+          'padding': '10px 30px'
+        })
+      } else {
+        jQuery('.njt-nofi-button').hide()
+        jQuery('.njt-nofi-content').css({
+          'padding': '15px 30px'
+        })
+      }
+    })
+  })
+
 
   //Link/Button Text
   wp.customize("njt_nofi_lb_text", function (value) {
@@ -144,23 +143,14 @@
   //Link/Button Color 
   wp.customize("njt_nofi_lb_color", function (value) {
     value.bind(function (to) {
-      const linkStyleButton = wp.customize.value('njt_nofi_link_style')()
       jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
         'background': to
       })
-      if (linkStyleButton == 'button') {
-        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-          'color': '#ffffff'
-        })
-      } else {
-        jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
-          'border-radius': '',
-          'background': ''
-        })
-        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-          'color': to
-        })
-      }
+
+      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+        'color': '#ffffff'
+      })
+
     })
   })
   //Font Size (px)

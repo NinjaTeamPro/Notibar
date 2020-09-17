@@ -744,15 +744,26 @@ window.onload = function () {
   })
 
   //Event Handle Button
-  jQuery('#customize-control-njt_nofi_lb_text_control').hide()
-  jQuery('#customize-control-njt_nofi_lb_url_control').hide()
+
+  if (jQuery('#njt-handle-button').is(":checked")) {
+    jQuery('#customize-control-njt_nofi_lb_text_control').show()
+    jQuery('#customize-control-njt_nofi_lb_url_control').show()
+    jQuery('#_customize-input-njt_nofi_handle_button').val(1).trigger('change')
+  } else {
+    jQuery('#customize-control-njt_nofi_lb_text_control').hide()
+    jQuery('#customize-control-njt_nofi_lb_url_control').hide()
+    jQuery('#_customize-input-njt_nofi_handle_button').val(0).trigger('change')
+  }
+
   jQuery(".njt-handle-button-switch").on("click", function (e) {
     if (jQuery('#njt-handle-button').is(":checked")) {
       jQuery('#customize-control-njt_nofi_lb_text_control').show()
       jQuery('#customize-control-njt_nofi_lb_url_control').show()
+      jQuery('#_customize-input-njt_nofi_handle_button').val(1).trigger('change')
     } else {
       jQuery('#customize-control-njt_nofi_lb_text_control').hide()
       jQuery('#customize-control-njt_nofi_lb_url_control').hide()
+      jQuery('#_customize-input-njt_nofi_handle_button').val(0).trigger('change')
     }
   })
 

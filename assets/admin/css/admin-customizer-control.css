@@ -358,10 +358,14 @@
 
 .njt-bt-position-type .bt-absolute{
 	border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
 }
 
 .njt-bt-position-type .bt-fixed{
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
 	border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
@@ -413,4 +417,7 @@
 
 .njt-handle-button-switch input:checked + .slider {
 	background-color: #66bb6a;
+}
+.njt-bt-position-type .njt-bt-position:focus {
+	outline-color: unset;
 }

@@ -8,12 +8,12 @@
     <div class="njt-nofi-content njt-nofi-text-color" style="<?php echo esc_html($contentWidth) ?>">
       <div class="njt-nofi-text"><?php echo get_theme_mod( 'njt_nofi_text', $this->valueDefault['text'] )?></div>
       <div class="njt-nofi-button" 
-      style="<?php if($isLinkStyleButton) {
+      style="<?php if($isDisplayButton) {
         echo ('background:' .esc_html($lbColorNotification).
               ';border-radius:5px'
               );
-        }?>">
-          <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text" style="<?php if($isLinkStyleButton) {echo('color: #ffff');}else {echo('color:'. esc_html($lbColorNotification));}  ?>"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
+        } else { echo ('display: none');}?>">
+          <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text" style="color: #ffff"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
       </div>
     </div>
     <a href="javascript:void(0)" class="njt-nofi-toggle-button njt-nofi-hide njt-nofi-text-color njt-nofi-hide-admin-custom" style="color:#fffff;"><span>+</span></a>
@@ -49,6 +49,19 @@
     })
     jQuery(".njt-nofi-toggle-button").css({
       'display': 'none',
+    })
+  }
+
+  var isDisplayButton = '<?php echo get_theme_mod( 'njt_nofi_handle_button');?>'
+  if (isDisplayButton == 1) {
+    jQuery('.njt-nofi-button').show()
+    jQuery('.njt-nofi-content').css({
+      'padding': '10px 30px'
+    })
+  } else {
+    jQuery('.njt-nofi-button').hide()
+    jQuery('.njt-nofi-content').css({
+      'padding': '15px 30px'
     })
   }
 </script>

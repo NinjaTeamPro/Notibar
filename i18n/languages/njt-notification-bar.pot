@@ -100,7 +100,7 @@ msgid "Text Color"
 msgstr ""
 
 #: includes/NotificationBar/WpCustomNotification.php:227
-msgid "Link/Button Color"
+msgid "Button Color"
 msgstr ""
 
 #: includes/NotificationBar/WpCustomNotification.php:240
