@@ -62,7 +62,7 @@ class NotificationBarHandle
 
   public function njt_nofi_homeRegisterEnqueue()
   {
-    wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/css/home-notification-bar.css');
+    wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/css/home-notification-bar.css', array(), NJT_NOFI_VERSION);
     wp_enqueue_style('njt-nofi');
 
     wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'),NJT_NOFI_VERSION, true );
@@ -81,7 +81,7 @@ class NotificationBarHandle
 
   public function njt_nofi_adminRegisterEnqueue($suffix) {
     if (in_array($suffix, $this->hook_suffix)) {
-      wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-notification-bar.js', array('jquery'));
+      wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-notification-bar.js', array('jquery'), NJT_NOFI_VERSION);
       wp_enqueue_script('njt-nofi');
 
       wp_localize_script('njt-nofi', 'wpData', array(

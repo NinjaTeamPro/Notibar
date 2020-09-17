@@ -329,7 +329,7 @@
 	border: 1px solid #cccccc;
 	border-bottom: 2px solid #cccccc;
   color: #000000; 
-  padding: 10px 24px;
+  padding: 8px 15px;
   cursor: pointer; 
   float: left; 
 }
@@ -419,5 +419,5 @@
 	background-color: #66bb6a;
 }
 .njt-bt-position-type .njt-bt-position:focus {
-	outline-color: unset;
+	outline-color: #256389;
 }

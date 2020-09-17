@@ -54,10 +54,10 @@ class WpCustomNotification
      */
   public function njt_nofi_enqueueCustomizeControls()
   {
-    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'));
+    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION);
     wp_enqueue_script('njt-nofi-cus-control');
 
-    wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css');
+    wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css', array(), NJT_NOFI_VERSION);
     wp_enqueue_style('njt-nofi-cus-control');
   }
   public function addScriptsCustomizer(){
