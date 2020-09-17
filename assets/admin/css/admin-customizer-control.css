@@ -365,3 +365,52 @@
 	border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
+
+.njt-handle-button-switch {
+	display: inline-block;
+	height: 20px;
+	position: relative;
+	width: 40px;
+}
+
+.njt-handle-button-switch input {
+	display: none;
+}
+
+.njt-handle-button-switch .slider.round {
+	border-radius: 34px;
+}
+
+.njt-handle-button-switch .slider {
+	background-color: #ccc;
+	bottom: 0;
+	cursor: pointer;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	transition: 0.4s;
+}
+
+.njt-handle-button-switch .slider.round:before {
+	border-radius: 50%;
+}
+
+.njt-handle-button-switch .slider:before {
+	background-color: #fff;
+	bottom: 2px;
+	content: "";
+	height: 16px;
+	left: 2px;
+	position: absolute;
+	transition: 0.4s;
+	width: 16px;
+}
+
+.njt-handle-button-switch input:checked + .slider:before {
+	transform: translateX(20px);
+}
+
+.njt-handle-button-switch input:checked + .slider {
+	background-color: #66bb6a;
+}

@@ -734,11 +734,26 @@ window.onload = function () {
     /*---- END PUCLIC ----*/
   }
 
-  // Custom for some other handling
+  /*---- Custom for some other handling----*/
+
+  //Event Position Type
   jQuery(".njt-bt-position").on("click", function (e) {
     jQuery(".njt-bt-position").removeClass('active')
     jQuery('#_customize-input-njt_nofi_position_type').val(jQuery(this).data('position')).trigger('change')
     jQuery(this).addClass('active')
+  })
+
+  //Event Handle Button
+  jQuery('#customize-control-njt_nofi_lb_text_control').hide()
+  jQuery('#customize-control-njt_nofi_lb_url_control').hide()
+  jQuery(".njt-handle-button-switch").on("click", function (e) {
+    if (jQuery('#njt-handle-button').is(":checked")) {
+      jQuery('#customize-control-njt_nofi_lb_text_control').show()
+      jQuery('#customize-control-njt_nofi_lb_url_control').show()
+    } else {
+      jQuery('#customize-control-njt_nofi_lb_text_control').hide()
+      jQuery('#customize-control-njt_nofi_lb_url_control').hide()
+    }
   })
 
 }

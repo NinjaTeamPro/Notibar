@@ -8,6 +8,7 @@ use NjtNotificationBar\NotificationBar\WpCustomControlColorText;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorLb;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorPreset;
 use NjtNotificationBar\NotificationBar\WpCustomControlPositionType;
+use NjtNotificationBar\NotificationBar\WpCustomControlHandleButton;
 
 class WpCustomNotification
 {
@@ -204,6 +205,20 @@ class WpCustomNotification
       'type'     => 'textarea',
     ));
 
+    //Switch on/off button
+    $customNoti->add_setting('njt_nofi_handle_button', array(
+      'default'           => false,
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlHandleButton( $customNoti, 'njt_nofi_handle_button',
+      array(
+        'label'    => __( 'Handle Button', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_content',
+        'settings' => 'njt_nofi_handle_button'
+      )
+    ));
+
     //Link/Button Text
     $customNoti->add_setting('njt_nofi_lb_text', array(
       'default'           => $this->valueDefault['lb_text'],
@@ -212,7 +227,7 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control('njt_nofi_lb_text_control', array(
-      'label'    => __('Link/Button Text', NJT_NOFI_DOMAIN ),
+      'label'    => __('Button Text', NJT_NOFI_DOMAIN ),
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_lb_text',
       'type'     => 'text',
@@ -226,7 +241,7 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control('njt_nofi_lb_url_control', array(
-      'label'    => __('Link/Button URL', NJT_NOFI_DOMAIN ),
+      'label'    => __('Button URL', NJT_NOFI_DOMAIN ),
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_lb_url',
       'type'     => 'text',
