@@ -5,10 +5,10 @@
 
 <div class="njt-nofi-container" style="<?php if($isPositionFix) { echo ( 'position: fixed'); } else {  echo ( 'position: absolute'); }?>">
   <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification" style="<?php echo('background:'.esc_html($bgColorNotification)) ?>">
-    <div class="njt-nofi-content njt-nofi-text-color" style="<?php echo esc_html($contentWidth) ?>">
-      <div class="njt-nofi-text"><?php echo get_theme_mod( 'njt_nofi_text', $this->valueDefault['text'] )?></div>
-      <div class="njt-nofi-button" 
-      style="<?php if($isDisplayButton) {
+    <div class="njt-nofi-content njt-nofi-text-color njt-nofi-align-content" style="<?php echo esc_html($contentWidth) ?>">
+      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo get_theme_mod( 'njt_nofi_text', $this->valueDefault['text'] )?></div>
+      <div class="njt-nofi-button njt-nofi-padding-content" 
+        style="<?php if($isDisplayButton) {
         echo ('background:' .esc_html($lbColorNotification).
               ';border-radius:5px'
               );
@@ -56,7 +56,7 @@
   if (isDisplayButton == 1) {
     jQuery('.njt-nofi-button').show()
     jQuery('.njt-nofi-content').css({
-      'padding': '10px 30px'
+      'padding': '10px 100px'
     })
   } else {
     jQuery('.njt-nofi-button').hide()
@@ -67,18 +67,44 @@
 
   var presetColor = '<?php echo get_theme_mod( 'njt_nofi_preset_color');?>'
   
-    if (presetColor == '6') {
-      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-        'color': '#2962ff'
-      })
-    } else if (presetColor == '7') {
-      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-        'color': '#1919cf'
-      })
-    } else {
-      console.log(presetColor)
-      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-        'color': '#ffffff'
-      })
-    }
+  if (presetColor == '6') {
+    jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+      'color': '#2962ff'
+    })
+  } else if (presetColor == '7') {
+    jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+      'color': '#1919cf'
+    })
+  } else {
+    jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+      'color': '#ffffff'
+    })
+  }
+
+  var alignContent = '<?php echo get_theme_mod( 'njt_nofi_alignment');?>'
+
+  if(alignContent == 'center') {
+    jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+      'justify-content': 'center'
+    })
+  }
+
+  if(alignContent == 'right') {
+    jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+      'justify-content': 'flex-end'
+    })
+  }
+
+  if(alignContent == 'left') {
+    jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+      'justify-content': 'flex-start'
+    })
+  }
+
+  if(alignContent == 'space_around') {
+    jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+      'justify-content': 'space-around'
+    })
+  }
+
 </script>

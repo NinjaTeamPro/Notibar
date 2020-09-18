@@ -25,6 +25,7 @@ class WpCustomNotification
   private function __construct()
   {
     $this->valueDefault = apply_filters( 'njt_nofi_notification_bar_default_values', array(
+      'align_content'     => 'center',
       'hide_close_button' => 'close_button',
       'content_width'     => '900',
       'position_type'     => 'fixed',
@@ -109,7 +110,27 @@ class WpCustomNotification
       'priority' => 10,
       'panel'    => 'njt_notification-bar',
     ) );
-   
+
+    // Option Alignment
+    $customNoti->add_setting('njt_nofi_alignment', array(
+      'default'           => $this->valueDefault['align_content'],
+      'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
+      'transport'         => 'postMessage',
+    ));
+    
+    $customNoti->add_control( 'njt_nofi_alignment_control', array(
+      'label'           => __( 'Alignment Option', NJT_NOFI_DOMAIN ),
+      'section'         => 'njt_nofi_general',
+      'settings'        => 'njt_nofi_alignment',
+      'type'            => 'select',
+      'choices'         => array(
+        'center'        => esc_html__( 'Center', NJT_NOFI_DOMAIN ),
+        'right'         => esc_html__( 'Right', NJT_NOFI_DOMAIN ),
+        'left'          => esc_html__( 'Left', NJT_NOFI_DOMAIN ),
+        'space_around' => esc_html__( 'Space around', NJT_NOFI_DOMAIN ),
+      ),
+    ));
+
     // Hide/Close Button (No button, Toggle button, Close button)
     $customNoti->add_setting('njt_nofi_hide_close_button', array(
       'default'           => $this->valueDefault['hide_close_button'],
@@ -382,7 +403,9 @@ class WpCustomNotification
       'settings'    => 'njt_nofi_pp_id',
       'type'        => 'text',
       'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
-    ));    
+    ));
+
+    
   }
 
  

@@ -22,7 +22,8 @@ const homeNotificationBar = {
 
   actionButtonClose() {
     jQuery(".njt-nofi-container .njt-nofi-close-button").on("click", function (e) {
-      jQuery('.njt-nofi-notification-bar').hide(1000)
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
       jQuery('body').css({
         'padding-top': 0,
         '-webkit-transition': 'padding-top 1s',
@@ -31,8 +32,9 @@ const homeNotificationBar = {
     })
 
     jQuery(".njt-nofi-container .njt-nofi-toggle-button").on("click", function (e) {
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (wpData.isPositionFix || jQuery('#wpadminbar').length == 0) {
-        jQuery('.njt-nofi-notification-bar').hide(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'block',
           'top': 0
@@ -43,7 +45,7 @@ const homeNotificationBar = {
           'transition': 'padding-top 1s'
         })
       } else {
-        jQuery('.njt-nofi-notification-bar').hide(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'block',
           'top': 0
@@ -64,7 +66,7 @@ const homeNotificationBar = {
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
-        jQuery('.njt-nofi-notification-bar').show(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'none',
           'top': 0,
@@ -76,7 +78,7 @@ const homeNotificationBar = {
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
-        jQuery('.njt-nofi-notification-bar').show(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'none',
           'top': 0

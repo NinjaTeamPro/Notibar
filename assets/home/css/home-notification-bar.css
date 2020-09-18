@@ -10,8 +10,8 @@
 
 .njt-nofi-notification-bar .njt-nofi-content {
   text-align: center;
-  padding: 10px 30px;
   margin: auto;
+  padding: 10px 100px
 }
 
 .njt-nofi-notification-bar .njt-nofi-text {
@@ -21,6 +21,9 @@
 
 .njt-nofi-notification-bar .njt-nofi-button {
   display: inline-block;
+}
+
+.njt-nofi-padding-content {
   padding: 5px 10px;
 }
 
@@ -83,13 +86,20 @@
   -webkit-transform: scale(1.2) rotate(45deg) translate3d(0,0,0); /* Safari 3-8 */
   transform: scale(1.2) rotate(45deg) translate3d(0,0,0); 
 }
+
 .customize-partial-edit-shortcuts-shown .njt-nofi-container .customize-partial-edit-shortcut-button {
   left: 70px;
   top: 10px;
 }
+
 .njt-nofi-container .customize-partial-refreshing {
   opacity: 1;
   transition: opacity .25s;
   cursor: progress;
+}
+
+.njt-nofi-align-content {
+  display: flex;
+  justify-content: center;
 }
 

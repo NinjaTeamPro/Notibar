@@ -1,4 +1,36 @@
 (function ($) {
+
+
+
+  // Option Alignment
+  wp.customize("njt_nofi_alignment", function (value) {
+    value.bind(function (to) {
+      if (to == 'center') {
+        jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+          'justify-content': 'center'
+        })
+      }
+
+      if (to == 'right') {
+        jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+          'justify-content': 'flex-end'
+        })
+      }
+
+      if (to == 'left') {
+        jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+          'justify-content': 'flex-start'
+        })
+      }
+
+      if (to == 'space_around') {
+        jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+          'justify-content': 'space-around'
+        })
+      }
+    })
+  })
+  // Hide/Close Button (No button, Toggle button, Close button)
   wp.customize("njt_nofi_hide_close_button", function (value) {
     value.bind(function (newValue, oldValue) {
       if (newValue == 'no_button') {
@@ -34,7 +66,7 @@
         '-webkit-transition': 'padding-top 1s',
         'transition': 'padding-top 1s'
       })
-      jQuery('.njt-nofi-notification-bar').show(1000);
+      jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
     });
   });
 
@@ -211,21 +243,21 @@
       const displayPosts = wp.customize.value('njt_nofi_posts')()
       const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'padding-top': 0,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
       } else {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').css({
           'padding-top': barHeight,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
-        jQuery('.njt-nofi-notification-bar').show(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })
@@ -237,21 +269,21 @@
       const displayPosts = wp.customize.value('njt_nofi_posts')()
       const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'padding-top': 0,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
       } else {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').css({
           'padding-top': barHeight,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
-        jQuery('.njt-nofi-notification-bar').show(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })
@@ -263,21 +295,21 @@
       const displayPosts = to
       const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'padding-top': 0,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
       } else {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').css({
           'padding-top': barHeight,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
-        jQuery('.njt-nofi-notification-bar').show(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })
@@ -289,21 +321,21 @@
       const displayPosts = wp.customize.value('njt_nofi_posts')()
       const displayPageOrPostId = to
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').hide(1000)
+        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'padding-top': 0,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
       } else {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').css({
           'padding-top': barHeight,
           '-webkit-transition': 'padding-top 1s',
           'transition': 'padding-top 1s'
         })
-        jQuery('.njt-nofi-notification-bar').show(1000);
+        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })
