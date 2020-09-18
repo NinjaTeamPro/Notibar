@@ -16,11 +16,11 @@
           <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
       </div>
     </div>
-    <a href="javascript:void(0)" class="njt-nofi-toggle-button njt-nofi-hide njt-nofi-text-color njt-nofi-hide-admin-custom" style="color:#fffff;"><span>+</span></a>
-    <a href="javascript:void(0)" class="njt-nofi-close-button njt-nofi-hide njt-nofi-text-color njt-nofi-hide-admin-custom" style="color:#fffff;"><span>+</span></a>
+    <a href="javascript:void(0)" class="njt-nofi-toggle-button njt-nofi-hide njt-nofi-text-color njt-nofi-hide-admin-custom"><span><img src="<?php echo(NJT_NOFI_PLUGIN_URL . 'assets/home/img/close.svg') ?>" alt="btn-close" class="njt-nofi-close-icon"></span></a>
+    <a href="javascript:void(0)" class="njt-nofi-close-button njt-nofi-hide njt-nofi-text-color njt-nofi-hide-admin-custom"><span><img src="<?php echo(NJT_NOFI_PLUGIN_URL . 'assets/home/img/close.svg') ?>" alt="btn-close" class="njt-nofi-close-icon"></span></a>
   </div>
   <div>
-    <a href="javascript:void(0)" class="njt-nofi-display-toggle njt-nofi-text-color njt-nofi-bgcolor-notification" style="<?php echo('background:'.esc_html($bgColorNotification)) ?>"><span>+</span></a>
+    <a href="javascript:void(0)" class="njt-nofi-display-toggle njt-nofi-text-color njt-nofi-bgcolor-notification" style="<?php echo('background:'.esc_html($bgColorNotification)) ?>"><span><img src="<?php echo(NJT_NOFI_PLUGIN_URL . 'assets/home/img/close.svg') ?>" alt="btn-close" class="njt-nofi-display-toggle-icon"></span></a>
   </div>
 </div>
 <script> 
