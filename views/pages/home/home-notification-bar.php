@@ -7,13 +7,8 @@
   <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification" style="<?php echo('background:'.esc_html($bgColorNotification)) ?>">
     <div class="njt-nofi-content njt-nofi-text-color njt-nofi-align-content" style="<?php echo esc_html($contentWidth) ?>">
       <div class="njt-nofi-text njt-nofi-padding-content"><?php echo get_theme_mod( 'njt_nofi_text', $this->valueDefault['text'] )?></div>
-      <div class="njt-nofi-button njt-nofi-padding-content" 
-        style="<?php if($isDisplayButton) {
-        echo ('background:' .esc_html($lbColorNotification).
-              ';border-radius:5px'
-              );
-        } else { echo ('display: none');}?>">
-          <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
+      <div class="njt-nofi-button njt-nofi-padding-content" style="<?php if(!$isDisplayButton) { echo ('display: none');}?>">
+          <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text njt-nofi-padding-content" style="<?php if($isDisplayButton) { echo ('background:' .esc_html($lbColorNotification).';border-radius:5px');}?>"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
       </div>
       </div>
     <a href="javascript:void(0)" class="njt-nofi-toggle-button njt-nofi-hide njt-nofi-text-color njt-nofi-hide-admin-custom"><span><img src="<?php echo(NJT_NOFI_PLUGIN_URL . 'assets/home/img/close.svg') ?>" alt="btn-close" class="njt-nofi-close-icon"></span></a>
@@ -60,9 +55,9 @@
     })
   } else {
     jQuery('.njt-nofi-button').hide()
-    jQuery('.njt-nofi-content').css({
-      'padding': '15px 30px'
-    })
+    // jQuery('.njt-nofi-content').css({
+    //   'padding': '15px 30px'
+    // })
   }
 
   var presetColor = '<?php echo get_theme_mod( 'njt_nofi_preset_color');?>'

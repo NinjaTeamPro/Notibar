@@ -112,7 +112,7 @@
       const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
       if (to == 1) {
         jQuery('.njt-nofi-button').show()
-        jQuery('.njt-nofi-button').css({
+        jQuery('.njt-nofi-button .njt-nofi-button-text').css({
           'background': lbColorNotification,
           'border-radius': '5px'
         })
@@ -121,9 +121,9 @@
         })
       } else {
         jQuery('.njt-nofi-button').hide()
-        jQuery('.njt-nofi-content').css({
-          'padding': '15px 30px'
-        })
+        // jQuery('.njt-nofi-content').css({
+        //   'padding': '15px 30px'
+        // })
       }
     })
   })
@@ -184,7 +184,7 @@
   wp.customize("njt_nofi_lb_color", function (value) {
     value.bind(function (to) {
       const presetColor = wp.customize.value('njt_nofi_preset_color')()
-      jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
+      jQuery(".njt-nofi-notification-bar .njt-nofi-button .njt-nofi-button-text").css({
         'background': to
       })
 
