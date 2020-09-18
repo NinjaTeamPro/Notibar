@@ -1,7 +1,4 @@
 (function ($) {
-
-
-
   // Option Alignment
   wp.customize("njt_nofi_alignment", function (value) {
     value.bind(function (to) {
@@ -93,11 +90,6 @@
         jQuery(".njt-nofi-container").css({
           'position': 'fixed',
         })
-        // jQuery('body').css({
-        //   'padding-top': barHeight,
-        //   '-webkit-transition': 'padding-top 1s',
-        //   'transition': 'padding-top 1s'
-        // })
       } else {
         jQuery(".njt-nofi-container").css({
           'position': 'absolute',
