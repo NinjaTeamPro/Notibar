@@ -120,6 +120,22 @@
   })
 
   /*Style Option*/
+
+  //Preset Color
+  wp.customize("njt_nofi_preset_color", function (value) {
+    value.bind(function (to) {
+      if (to == '6') {
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+          'color': '#2962ff'
+        })
+      } else if (to == '7') {
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+          'color': '#1919cf'
+        })
+      }
+    })
+  })
+
   //Text Color
   wp.customize("njt_nofi_text_color", function (value) {
     value.bind(function (to) {
@@ -143,14 +159,17 @@
   //Link/Button Color 
   wp.customize("njt_nofi_lb_color", function (value) {
     value.bind(function (to) {
+      const presetColor = wp.customize.value('njt_nofi_preset_color')()
       jQuery(".njt-nofi-notification-bar .njt-nofi-button").css({
         'background': to
       })
 
-      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-        'color': '#ffffff'
-      })
-
+      if (presetColor != '6' && presetColor != '7') {
+        console.log(presetColor)
+        jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+          'color': '#ffffff'
+        })
+      }
     })
   })
   //Font Size (px)

@@ -13,7 +13,7 @@
               ';border-radius:5px'
               );
         } else { echo ('display: none');}?>">
-          <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text" style="color: #ffff"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
+          <a href="<?php echo esc_html(get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url'] ))?>" class="njt-nofi-button-text"><?php echo esc_html(get_theme_mod( 'njt_nofi_lb_text', $this->valueDefault['lb_text']))?></a>
       </div>
     </div>
     <a href="javascript:void(0)" class="njt-nofi-toggle-button njt-nofi-hide njt-nofi-text-color njt-nofi-hide-admin-custom" style="color:#fffff;"><span>+</span></a>
@@ -64,4 +64,21 @@
       'padding': '15px 30px'
     })
   }
+
+  var presetColor = '<?php echo get_theme_mod( 'njt_nofi_preset_color');?>'
+  
+    if (presetColor == '6') {
+      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+        'color': '#2962ff'
+      })
+    } else if (presetColor == '7') {
+      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+        'color': '#1919cf'
+      })
+    } else {
+      console.log(presetColor)
+      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
+        'color': '#ffffff'
+      })
+    }
 </script>

@@ -142,6 +142,7 @@ class NotificationBarHandle
 
     ?>
       <style id="button-hover-color-inline-css">
+        
          .njt-nofi-container .njt-nofi-text-color {
           color: <?php echo esc_html($textColorNotification) ?> !important;
         }

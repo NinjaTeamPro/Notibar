@@ -57,7 +57,7 @@ window.onload = function () {
 
     jQuery('#_customize-input-njt_nofi_preset_color').val(dataType).trigger('change')
     jQuery('#_customize-input-njt_nofi_bg_color').val(arrColor[0]).trigger('change')
-    jQuery('#_customize-input-njt_nofi_text_color').val('#ffffff').trigger('change')
+    jQuery('#_customize-input-njt_nofi_text_color').val(arrColor[2]).trigger('change')
     jQuery('#_customize-input-njt_nofi_lb_color').val(arrColor[1]).trigger('change')
   })
 

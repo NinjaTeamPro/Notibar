@@ -13,12 +13,15 @@ defined('ABSPATH') || exit;
               <span id="nj_color_select_presets">
                   <div class="customize-control-title"><?php echo esc_html( $this->label ); ?></div>
                   <div class="nj-list-prese-color">
-                    <div class="type-circle type-circle-1 <?php if($this->value() == 1) echo('type-circle-active')?>" data-type="1" data-value="#ff0000,#0000ff"></div>
-                    <div class="type-circle type-circle-2 <?php if($this->value() == 2) echo('type-circle-active')?>" data-type="2" data-value="#000000,#0000ff"></div>
-                    <div class="type-circle type-circle-3 <?php if($this->value() == 3) echo('type-circle-active')?>" data-type="3" data-value="#adff2f,#0000ff"></div>
-                    <div class="type-circle type-circle-4 <?php if($this->value() == 4) echo('type-circle-active')?>" data-type="4" data-value="#1ecc2b,#000000"></div>
-                    <div class="type-circle type-circle-5 <?php if($this->value() == 5) echo('type-circle-active')?>" data-type="5" data-value="#d0ad05,#2ad000"></div>
-                    <div class="type-circle type-circle-6 <?php if($this->value() == 6) echo('type-circle-active')?>" data-type="6" data-value="#2d6764,#ff7878"></div>
+                    <!-- data-value: background, button, text background -->
+                    <div class="type-circle type-circle-1 <?php if($this->value() == 1) echo('type-circle-active')?>" data-type="1" data-value="#9af4cf,#1919cf,#1919cf"></div>
+                    <div class="type-circle type-circle-2 <?php if($this->value() == 2) echo('type-circle-active')?>" data-type="2" data-value="#fff799,#1919cf,#e65100"></div>
+                    <div class="type-circle type-circle-3 <?php if($this->value() == 3) echo('type-circle-active')?>" data-type="3" data-value="#212121,#dd2c00,#ffffff"></div>
+                    <div class="type-circle type-circle-4 <?php if($this->value() == 4) echo('type-circle-active')?>" data-type="4" data-value="#ffffff,#212121,#212121"></div>
+                    <div class="type-circle type-circle-5 <?php if($this->value() == 5) echo('type-circle-active')?>" data-type="5" data-value="#d50000,#43a047,#ffffff"></div>
+                    <div class="type-circle type-circle-6 <?php if($this->value() == 6) echo('type-circle-active')?>" data-type="6" data-value="#2962ff,#ffffff,#ffffff"></div>
+                    <div class="type-circle type-circle-7 <?php if($this->value() == 7) echo('type-circle-active')?>" data-type="7" data-value="#18ffff,#ffffff,#1919cf"></div>
+                    <div class="type-circle type-circle-8 <?php if($this->value() == 8) echo('type-circle-active')?>" data-type="8" data-value="#78909c,#ff5722,#ffffff"></div>
                   </div>
                   <input id="_customize-input-njt_nofi_preset_color" class="njt_nofi_none" type="number" value="<?php echo esc_html($this->settings['default']->default); ?>" data-customize-setting-link="njt_nofi_preset_color">
               </span>
