@@ -60,8 +60,8 @@
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       jQuery('body').css({
         'padding-top': barHeight,
-        '-webkit-transition': 'padding-top 1s',
-        'transition': 'padding-top 1s'
+        '-webkit-transition': 'padding-top 2s',
+        'transition': 'padding-top 2s'
       })
       jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
     });
@@ -246,8 +246,8 @@
       } else {
         jQuery('body').css({
           'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          '-webkit-transition': 'padding-top 2s',
+          'transition': 'padding-top 2s'
         })
         jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
@@ -272,8 +272,8 @@
       } else {
         jQuery('body').css({
           'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          '-webkit-transition': 'padding-top 2s',
+          'transition': 'padding-top 2s'
         })
         jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
@@ -298,8 +298,8 @@
       } else {
         jQuery('body').css({
           'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          '-webkit-transition': 'padding-top 2s',
+          'transition': 'padding-top 2s'
         })
         jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
@@ -324,8 +324,8 @@
       } else {
         jQuery('body').css({
           'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          '-webkit-transition': 'padding-top 2s',
+          'transition': 'padding-top 2s'
         })
         jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
