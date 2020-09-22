@@ -127,27 +127,8 @@ class NotificationBarHandle
 
     if($isDisplayNotification) {
       add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
-      add_action('wp_head', array($this, 'addCustomizerHeaderCss'));
     }
     add_action( 'wp_body_open', array( $this, 'njt_nofi_rederInput' ),10);
-  }
-
-  public function addCustomizerHeaderCss() {
-    $contentWidth = get_theme_mod('njt_nofi_content_width') != null ? get_theme_mod('njt_nofi_content_width').'px' : '100%';
-    $isPositionFix = get_theme_mod('njt_nofi_position_type', $this->valueDefault['position_type']) == 'fixed' ? true : false;
-    $bgColorNotification = get_theme_mod('njt_nofi_bg_color', $this->valueDefault['bg_color']);
-    $textColorNotification = get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color']);
-    $lbColorNotification = get_theme_mod('njt_nofi_lb_color', $this->valueDefault['lb_color']);
-    $notificationFontSize = get_theme_mod('njt_nofi_font_size', $this->valueDefault['font_size']);
-
-    ?>
-      <style id="button-hover-color-inline-css">
-        
-         .njt-nofi-container .njt-nofi-text-color {
-          color: <?php echo esc_html($textColorNotification) ?> !important;
-        }
-      </style>
-    <?php
   }
 
   public function display_notification()

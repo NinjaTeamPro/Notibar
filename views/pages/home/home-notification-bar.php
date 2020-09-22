@@ -102,4 +102,9 @@
     })
   }
 
+  var textColorNotification = '<?php echo esc_html(get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color']));?>'
+  jQuery(".njt-nofi-container .njt-nofi-text-color").css({
+    'color': textColorNotification
+  })
+
 </script>
