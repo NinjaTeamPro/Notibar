@@ -61,6 +61,12 @@ window.onload = function () {
     jQuery('#_customize-input-njt_nofi_lb_color').val(arrColor[1]).trigger('change')
   })
 
+
+  jQuery('.nj_color_button_select_bg').click(function () {
+    var a = jQuery(this).parent().parent().attr('id')
+    jQuery("#" + a + " .nj_color_select").click()
+  })
+
   // End custom js
   function NjColorSelect(options) {
     var defaults = {
@@ -437,7 +443,7 @@ window.onload = function () {
     st.colors = Object.assign(st.colors, st.customColors);
     if (!st.dom) return;
     /*---- BEGIN INIT ----*/
-    var controller = document.createElement('a'),
+    var controller = document.createElement('div'),
       picker = document.createElement('div'),
       title = document.createElement('div'),
       color_list = document.createElement('div'),
