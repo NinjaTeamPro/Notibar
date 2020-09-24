@@ -509,12 +509,11 @@ window.onload = function () {
     color_item.appendChild(color_item_child);
     button_wrap.className = 'nj_color_popup__buttons';
     button_ok.type = 'button';
-    button_ok.className = 'nj_color_popup__button nj_color_popup__button--ok';
+    button_ok.className = 'nj_color_popup__button nj_color_popup__button--ok button button-primary';
     button_cancel.type = 'button';
-    button_cancel.className = 'nj_color_popup__button nj_color_popup__button--cancel';
+    button_cancel.className = 'nj_color_popup__button nj_color_popup__button--cancel button button-small';
     button_back.type = 'button';
     button_back.className = 'nj_color_popup__button_back';
-    title.appendChild(document.createTextNode(st.text.title));
     button_ok.innerHTML = st.text.buttonOk;
     button_cancel.innerHTML = st.text.buttonCancel;
     button_back.innerHTML = st.text.buttonBack;
@@ -527,7 +526,6 @@ window.onload = function () {
       if (typeof st.colors[key] == 'string') {
         var item = create_item(key, st.colors[key]);
         item.childNodes[0].addEventListener('click', choose_color);
-        // item.childNodes[0].style.transitionDelay = timing_delay + 's';
         color_list.appendChild(item);
       } else {
         var d_color = (st.colors[key].default) ? st.colors[key].default : '',
@@ -542,13 +540,11 @@ window.onload = function () {
           if (d_color == '') d_color = st.colors[key].list[color_name];
           sub_list.appendChild(item);
           item.childNodes[0].addEventListener('click', choose_color);
-          //item.childNodes[0].style.transitionDelay = sub_timing_delay + 's';
           sub_timing_delay += 0.03;
         });
         var item = create_item(key, d_color);
         color_list.appendChild(item);
         item.childNodes[0].addEventListener('click', function (e) { select_palette(sub_list) });
-        //item.childNodes[0].style.transitionDelay = timing_delay + 's';
         color_list_holder_wrap.appendChild(sub_list);
         if (Object.keys(st.colors[key].list).length + 1 > largest_total_item) largest_total_item = Object.keys(st.colors[key].list).length + 1;
       }
