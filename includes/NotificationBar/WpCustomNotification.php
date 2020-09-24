@@ -406,9 +406,5 @@ class WpCustomNotification
       'type'        => 'textarea',
       'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
     ));
-
-    
   }
-
- 
 }

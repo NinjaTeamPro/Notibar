@@ -527,7 +527,7 @@ window.onload = function () {
       if (typeof st.colors[key] == 'string') {
         var item = create_item(key, st.colors[key]);
         item.childNodes[0].addEventListener('click', choose_color);
-        item.childNodes[0].style.transitionDelay = timing_delay + 's';
+        // item.childNodes[0].style.transitionDelay = timing_delay + 's';
         color_list.appendChild(item);
       } else {
         var d_color = (st.colors[key].default) ? st.colors[key].default : '',
@@ -542,13 +542,13 @@ window.onload = function () {
           if (d_color == '') d_color = st.colors[key].list[color_name];
           sub_list.appendChild(item);
           item.childNodes[0].addEventListener('click', choose_color);
-          item.childNodes[0].style.transitionDelay = sub_timing_delay + 's';
+          //item.childNodes[0].style.transitionDelay = sub_timing_delay + 's';
           sub_timing_delay += 0.03;
         });
         var item = create_item(key, d_color);
         color_list.appendChild(item);
         item.childNodes[0].addEventListener('click', function (e) { select_palette(sub_list) });
-        item.childNodes[0].style.transitionDelay = timing_delay + 's';
+        //item.childNodes[0].style.transitionDelay = timing_delay + 's';
         color_list_holder_wrap.appendChild(sub_list);
         if (Object.keys(st.colors[key].list).length + 1 > largest_total_item) largest_total_item = Object.keys(st.colors[key].list).length + 1;
       }

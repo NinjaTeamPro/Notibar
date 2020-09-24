@@ -34,8 +34,6 @@ class NotificationBarHandle
     add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
   }
 
- 
-
   public function njt_nofi_showMenu()
   {
     global $submenu;

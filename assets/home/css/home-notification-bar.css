@@ -5,7 +5,6 @@
 
 .njt-nofi-notification-bar {
   position: relative;
-  /* z-index: 999; */
 }
 
 .njt-nofi-notification-bar .njt-nofi-content {
@@ -43,8 +42,6 @@
   position: absolute;
   top: 12px;
   right: 20px;
-  /* -webkit-transform: rotate(45deg) translate3d(0,0,0);
-  transform: rotate(45deg) translate3d(0,0,0); */
   text-decoration: none;
 }
 .njt-nofi-notification-bar .njt-nofi-hide .njt-nofi-close-icon {

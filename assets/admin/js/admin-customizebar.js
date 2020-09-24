@@ -121,9 +121,6 @@
         })
       } else {
         jQuery('.njt-nofi-button').hide()
-        // jQuery('.njt-nofi-content').css({
-        //   'padding': '15px 30px'
-        // })
       }
     })
   })
