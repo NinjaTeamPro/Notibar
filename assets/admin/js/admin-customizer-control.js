@@ -56,15 +56,34 @@ window.onload = function () {
     const arrColor = dataColor.split(',')
 
     jQuery('#_customize-input-njt_nofi_preset_color').val(dataType).trigger('change')
+
     jQuery('#_customize-input-njt_nofi_bg_color').val(arrColor[0]).trigger('change')
+    jQuery('#nj_color_select_bg .nj_color_button_select_bg').css({
+      'background-color': arrColor[0]
+    })
+
     jQuery('#_customize-input-njt_nofi_text_color').val(arrColor[2]).trigger('change')
+    jQuery('#nj_color_select_text .nj_color_button_select_bg').css({
+      'background-color': arrColor[2]
+    })
+
     jQuery('#_customize-input-njt_nofi_lb_color').val(arrColor[1]).trigger('change')
+    jQuery('#nj_color_select_lb .nj_color_button_select_bg').css({
+      'background-color': arrColor[1]
+    })
   })
 
 
   jQuery('.nj_color_button_select_bg').click(function () {
     var a = jQuery(this).parent().parent().attr('id')
     jQuery("#" + a + " .nj_color_select").click()
+  })
+
+  jQuery(".nj_color_button_select_default").on("click", function (e) {
+    jQuery(this).parent().parent().find('.nj_color_button_select_bg').css({
+      'background-color': '#ffffff'
+    })
+    jQuery(this).parent().parent().find('#_customize-input-njt_nofi_bg_color').val('#ffffff').trigger('change')
   })
 
   // End custom js
@@ -76,7 +95,7 @@ window.onload = function () {
         title: 'Choose a color:',
         buttonOk: 'Ok',
         buttonCancel: 'Cancel',
-        buttonBack: 'Back'
+        buttonBack: '<span class="dashicons dashicons-arrow-left-alt"></span>'
       },
       colors: {
         "red": {
@@ -478,7 +497,7 @@ window.onload = function () {
     animation.popup.has_appended = false;
 
     controller.href = 'javascript:void(0)';
-    controller.className = 'nj_color_select';
+    controller.className = 'nj_color_select njt_nofi_none';
     picker.className = 'nj_color_popup nj_color_popup--hidden';
     title.className = 'nj_color_popup__title';
     color_list.className = 'nj_color_popup__list';
@@ -566,8 +585,13 @@ window.onload = function () {
     });
     controller.addEventListener('click', function () {
       if (picker.className.split(' ').indexOf('nj_color_popup--hidden') > -1) {
+
+        jQuery(this).parent().find('.nj_color_display_picker').show()
+        jQuery(this).parent().find('.nj_color_display_picker').addClass('nj_color_display_show')
         open_popup();
       } else {
+        jQuery(this).parent().find('.nj_color_display_picker').hide()
+        jQuery(this).parent().find('.nj_color_display_picker').removeClass('nj_color_display_show')
         close_popup();
       }
     });
@@ -589,18 +613,28 @@ window.onload = function () {
       st.dom.dataset.colorValue = parent.dataset.colorValue;
       st.dom.dataset.colorName = parent.dataset.colorName;
       current_select = parent;
-      var a = jQuery("#_customize-input-njt_nofi_bg_color").parent('#nj_color_select_bg').attr('data-color-value')
-      var b = jQuery("#_customize-input-njt_nofi_text_color").parent('#nj_color_select_text').attr('data-color-value')
-      var c = jQuery("#_customize-input-njt_nofi_lb_color").parent('#nj_color_select_lb').attr('data-color-value')
+      var a = jQuery("#_customize-input-njt_nofi_bg_color").parents('#nj_color_select_bg').attr('data-color-value')
+      var b = jQuery("#_customize-input-njt_nofi_text_color").parents('#nj_color_select_text').attr('data-color-value')
+      var c = jQuery("#_customize-input-njt_nofi_lb_color").parents('#nj_color_select_lb').attr('data-color-value')
 
       if (a) {
         jQuery('#_customize-input-njt_nofi_bg_color').val(a).trigger('change')
+
+        jQuery('#nj_color_select_bg .nj_color_button_select_bg').css({
+          'background-color': a
+        })
       }
       if (b) {
         jQuery('#_customize-input-njt_nofi_text_color').val(b).trigger('change')
+        jQuery('#nj_color_select_text .nj_color_button_select_bg').css({
+          'background-color': b
+        })
       }
       if (c) {
         jQuery('#_customize-input-njt_nofi_lb_color').val(c).trigger('change')
+        jQuery('#nj_color_select_lb .nj_color_button_select_bg').css({
+          'background-color': c
+        })
       }
     }
     //When click on the color circle has sub
@@ -774,6 +808,20 @@ window.onload = function () {
       jQuery('#customize-control-njt_nofi_lb_text_control').hide()
       jQuery('#customize-control-njt_nofi_lb_url_control').hide()
       jQuery('#_customize-input-njt_nofi_handle_button').val(0).trigger('change')
+    }
+  })
+
+  document.body.addEventListener('click', function (e) {
+    if (jQuery('#nj_color_select_bg .nj_color_popup.nj_color_popup--hidden').length > 0) {
+      jQuery('#nj_color_select_bg .nj_color_display_picker').hide()
+    }
+
+    if (jQuery('#nj_color_select_lb .nj_color_popup.nj_color_popup--hidden').length > 0) {
+      jQuery('#nj_color_select_lb .nj_color_display_picker').hide()
+    }
+
+    if (jQuery('#nj_color_select_text .nj_color_popup.nj_color_popup--hidden').length > 0) {
+      jQuery('#nj_color_select_text .nj_color_display_picker').hide()
     }
   })
 
