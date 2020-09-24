@@ -38,22 +38,21 @@ class NotificationBarHandle
 
   public function njt_nofi_showMenu()
   {
-    global $menu;
+    global $submenu;
 
-    $settings_suffix = add_menu_page(
+    $settings_suffix = add_submenu_page(
+      'options-general.php',
       __('Notification Bar', NJT_NOFI_DOMAIN),
-      __('Notification Bar', NJT_NOFI_DOMAIN),
+      __('Notibar', NJT_NOFI_DOMAIN),
       'manage_options',
       'njt_nofi_NotificationBar',
-      array($this, 'njt_nofi_notificationSettings'),
-      '',
-      10
+      array($this, 'njt_nofi_notificationSettings')
     );
     $urlEncode = urlencode('autofocus[panel]=njt_notification-bar') ;
     $link = esc_html(admin_url('/customize.php?'. $urlEncode));
-    foreach($menu as $k=>$item){
+    foreach($submenu['options-general.php'] as $k=>$item){
       if ($item[2] == 'njt_nofi_NotificationBar') {
-        $menu[$k][2] =  $link;
+        $submenu['options-general.php'][$k][2] =  $link;
       }
     }
 

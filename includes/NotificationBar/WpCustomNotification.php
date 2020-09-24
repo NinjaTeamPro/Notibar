@@ -31,7 +31,7 @@ class WpCustomNotification
       'position_type'     => 'fixed',
       'link_style'        => 'button',
       'text'              => esc_html('This is default text for notification bar'),
-      'lb_text'           => esc_html('agree'),
+      'lb_text'           => esc_html('Learn more'),
       'lb_url'            => '',
       'new_windown'       => true,
       'preset_color'      => 1,
@@ -87,14 +87,14 @@ class WpCustomNotification
   public function njt_nofi_customizeNotification($customNoti)
   {
     $customNoti->add_panel( 'njt_notification-bar', array(
-      'title'       => __('WordPress Notification Bar',NJT_NOFI_DOMAIN),
+      'title'       => __('Notibar',NJT_NOFI_DOMAIN),
       'description' => __('This is panel WordPress Notification Bar',NJT_NOFI_DOMAIN),
       'priority'    => 10,
     ) );
 
     /* Option General */
     $customNoti->add_section( 'njt_nofi_general', array(
-      'title'    => __( 'General Option',NJT_NOFI_DOMAIN),
+      'title'    => __( 'General Options',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel'    => 'njt_notification-bar',
     ) );
@@ -170,7 +170,7 @@ class WpCustomNotification
 
     /*Content*/
     $customNoti->add_section( 'njt_nofi_content', array(
-      'title'    => __( 'Content Option',NJT_NOFI_DOMAIN),
+      'title'    => __( 'Content Options',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel'    => 'njt_notification-bar',
     ));
@@ -199,7 +199,7 @@ class WpCustomNotification
 
     //Switch on/off button
     $customNoti->add_setting('njt_nofi_handle_button', array(
-      'default'           => 0,
+      'default'           => 1,
       'transport'         => 'postMessage',
     ));
 
@@ -256,7 +256,7 @@ class WpCustomNotification
 
     /*Style*/
     $customNoti->add_section( 'njt_nofi_style', array(
-      'title'    => __( 'Style Option',NJT_NOFI_DOMAIN),
+      'title'    => __( 'Style Options',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel'    => 'njt_notification-bar',
     ));
@@ -345,7 +345,7 @@ class WpCustomNotification
 
     /* Display */
     $customNoti->add_section( 'njt_nofi_display', array(
-      'title'    => __( 'Display Option',NJT_NOFI_DOMAIN),
+      'title'    => __( 'Display Options',NJT_NOFI_DOMAIN),
       'priority' => 10,
       'panel'    => 'njt_notification-bar',
     ));
@@ -403,7 +403,7 @@ class WpCustomNotification
       'label'       => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
       'section'     => 'njt_nofi_display',
       'settings'    => 'njt_nofi_pp_id',
-      'type'        => 'text',
+      'type'        => 'textarea',
       'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
     ));
 

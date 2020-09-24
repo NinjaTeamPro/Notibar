@@ -235,7 +235,7 @@
 	flex-wrap: wrap;
 }
 .nj-list-prese-color .type-circle {
-	margin-right: 30px;
+	margin-right: 10px;
 	margin-bottom: 10px;
 	cursor: pointer;
 }
@@ -358,9 +358,13 @@
 }
 
 .njt-bt-position-type .njt-bt-position:hover {
-	background: #f1f1f1;
 	border-color: #016087;
 	color: #016087;
+}
+
+.njt-bt-position-type .njt-bt-position.active:hover {
+	border-color: #016087;
+	color: #ffffff;
 }
 
 .njt-bt-position-type .active {
@@ -433,4 +437,7 @@
 }
 .njt-bt-position-type .njt-bt-position:focus {
 	outline-color: #256389;
+	background-color: #007cba;
+	border: 1px solid #256389;
+	color: #ffffff;
 }
