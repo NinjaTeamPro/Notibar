@@ -79,12 +79,7 @@ window.onload = function () {
     jQuery("#" + a + " .nj_color_select").click()
   })
 
-  jQuery(".nj_color_button_select_default").on("click", function (e) {
-    jQuery(this).parent().parent().find('.nj_color_button_select_bg').css({
-      'background-color': '#ffffff'
-    })
-    jQuery(this).parent().parent().find('#_customize-input-njt_nofi_bg_color').val('#ffffff').trigger('change')
-  })
+
 
   // End custom js
   function NjColorSelect(options) {
@@ -819,6 +814,54 @@ window.onload = function () {
     if (jQuery('#nj_color_select_text .nj_color_popup.nj_color_popup--hidden').length > 0) {
       jQuery('#nj_color_select_text .nj_color_display_picker').hide()
     }
+  })
+
+  jQuery("#nj_color_select_bg .nj_color_button_select_default").on("click", function (e) {
+    const dataDefault = jQuery('#nj_color_select_bg #_customize-input-njt_nofi_bg_color').data('default')
+    jQuery('#nj_color_select_bg .nj_color_button_select_bg').css({
+      'background-color': dataDefault
+    })
+    jQuery('#nj_color_select_bg #_customize-input-njt_nofi_bg_color').val(dataDefault).trigger('change')
+
+    jQuery('#nj_color_select_bg .nj_color_popup__item').each(function () {
+      if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_bg_color').val()) {
+        jQuery(this).addClass('nj_color_popup__item--state-active')
+      } else {
+        jQuery(this).removeClass('nj_color_popup__item--state-active')
+      }
+    });
+  })
+
+  jQuery("#nj_color_select_text .nj_color_button_select_default").on("click", function (e) {
+    const dataDefault = jQuery('#nj_color_select_text #_customize-input-njt_nofi_text_color').data('default')
+    jQuery('#nj_color_select_text .nj_color_button_select_bg').css({
+      'background-color': dataDefault
+    })
+    jQuery('#nj_color_select_text #_customize-input-njt_nofi_text_color').val(dataDefault).trigger('change')
+
+    jQuery('#nj_color_select_text .nj_color_popup__item').each(function () {
+      if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_text_color').val()) {
+        jQuery(this).addClass('nj_color_popup__item--state-active')
+      } else {
+        jQuery(this).removeClass('nj_color_popup__item--state-active')
+      }
+    });
+  })
+
+  jQuery("#nj_color_select_lb .nj_color_button_select_default").on("click", function (e) {
+    const dataDefault = jQuery('#nj_color_select_lb #_customize-input-njt_nofi_lb_color').data('default')
+    jQuery('#nj_color_select_lb .nj_color_button_select_bg').css({
+      'background-color': dataDefault
+    })
+    jQuery('#nj_color_select_lb #_customize-input-njt_nofi_lb_color').val(dataDefault).trigger('change')
+
+    jQuery('#nj_color_select_lb .nj_color_popup__item').each(function () {
+      if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_lb_color').val()) {
+        jQuery(this).addClass('nj_color_popup__item--state-active')
+      } else {
+        jQuery(this).removeClass('nj_color_popup__item--state-active')
+      }
+    });
   })
 
 }

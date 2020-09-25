@@ -74,8 +74,8 @@ class NotificationBarHandle
 
   public function njt_nofi_adminRegisterEnqueue($suffix) {
     if (in_array($suffix, $this->hook_suffix)) {
-      wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-notification-bar.js', array('jquery'), NJT_NOFI_VERSION);
-      wp_enqueue_script('njt-nofi');
+      // wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-notification-bar.js', array('jquery'), NJT_NOFI_VERSION);
+      // wp_enqueue_script('njt-nofi');
 
       wp_localize_script('njt-nofi', 'wpData', array(
         'admin_ajax' => admin_url('admin-ajax.php'),

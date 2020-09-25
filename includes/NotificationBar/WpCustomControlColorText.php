@@ -17,7 +17,7 @@ defined('ABSPATH') || exit;
                     <span class="wp-picker-input-wrap nj_color_display_picker njt_nofi_none">
                         <label>
                             <span class="screen-reader-text"><?php echo esc_html( $this->label ); ?></span>
-                            <input id="_customize-input-njt_nofi_text_color" class="njt_nofi_dp_none color-picker-hex wp-color-picker" type="text" value="<?php echo esc_html($this->settings['default']->default); ?>" data-customize-setting-link="njt_nofi_text_color">
+                            <input id="_customize-input-njt_nofi_text_color" class="njt_nofi_dp_none color-picker-hex wp-color-picker" type="text"  value="<?php echo esc_html($this->value()); ?>" data-default="<?php echo esc_html($this->value()); ?>" data-customize-setting-link="njt_nofi_text_color">
                           </label>
                         <input type="button" class="button button-small wp-picker-default nj_color_button_select_default" value="<?php echo _e('Default', NJT_NOFI_DOMAIN);?>" aria-label="Select default color" />
                     </span>
