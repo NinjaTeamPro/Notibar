@@ -75,12 +75,9 @@ window.onload = function () {
 
 
   jQuery('.nj_color_button_select_bg').click(function () {
-    var a = jQuery(this).parent().parent().attr('id')
-    jQuery("#" + a + " .nj_color_select").click()
+    const idValue = jQuery(this).parent().parent().attr('id')
+    jQuery("#" + idValue + " .nj_color_select").click()
   })
-
-
-
   // End custom js
   function NjColorSelect(options) {
     var defaults = {
@@ -604,27 +601,27 @@ window.onload = function () {
       st.dom.dataset.colorValue = parent.dataset.colorValue;
       st.dom.dataset.colorName = parent.dataset.colorName;
       current_select = parent;
-      var a = jQuery("#_customize-input-njt_nofi_bg_color").parents('#nj_color_select_bg').attr('data-color-value')
-      var b = jQuery("#_customize-input-njt_nofi_text_color").parents('#nj_color_select_text').attr('data-color-value')
-      var c = jQuery("#_customize-input-njt_nofi_lb_color").parents('#nj_color_select_lb').attr('data-color-value')
+      var selectBg = jQuery("#_customize-input-njt_nofi_bg_color").parents('#nj_color_select_bg').attr('data-color-value')
+      var selectText = jQuery("#_customize-input-njt_nofi_text_color").parents('#nj_color_select_text').attr('data-color-value')
+      var selectLb = jQuery("#_customize-input-njt_nofi_lb_color").parents('#nj_color_select_lb').attr('data-color-value')
 
-      if (a) {
-        jQuery('#_customize-input-njt_nofi_bg_color').val(a).trigger('change')
+      if (selectBg) {
+        jQuery('#_customize-input-njt_nofi_bg_color').val(selectBg).trigger('change')
 
         jQuery('#nj_color_select_bg .nj_color_button_select_bg').css({
-          'background-color': a
+          'background-color': selectBg
         })
       }
-      if (b) {
-        jQuery('#_customize-input-njt_nofi_text_color').val(b).trigger('change')
+      if (selectText) {
+        jQuery('#_customize-input-njt_nofi_text_color').val(selectText).trigger('change')
         jQuery('#nj_color_select_text .nj_color_button_select_bg').css({
-          'background-color': b
+          'background-color': selectText
         })
       }
-      if (c) {
-        jQuery('#_customize-input-njt_nofi_lb_color').val(c).trigger('change')
+      if (selectLb) {
+        jQuery('#_customize-input-njt_nofi_lb_color').val(selectLb).trigger('change')
         jQuery('#nj_color_select_lb .nj_color_button_select_bg').css({
-          'background-color': c
+          'background-color': selectLb
         })
       }
     }
@@ -816,6 +813,7 @@ window.onload = function () {
     }
   })
 
+  //Select default data
   jQuery("#nj_color_select_bg .nj_color_button_select_default").on("click", function (e) {
     const dataDefault = jQuery('#nj_color_select_bg #_customize-input-njt_nofi_bg_color').data('default')
     jQuery('#nj_color_select_bg .nj_color_button_select_bg').css({

@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: Notification Bar Plugin\n"
-"POT-Creation-Date: 2020-08-28 08:42+0700\n"
-"PO-Revision-Date: 2020-08-28 08:42+0700\n"
+"Project-Id-Version: Notibar\n"
+"POT-Creation-Date: 2020-09-25 15:32+0700\n"
+"PO-Revision-Date: 2020-09-25 15:31+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,118 +21,150 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
-#: includes/NotificationBar/NotificationBarHandle.php:42
 #: includes/NotificationBar/NotificationBarHandle.php:43
 msgid "Notification Bar"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:65
-msgid "Option General"
+#. Plugin Name of the plugin/theme
+#: includes/NotificationBar/NotificationBarHandle.php:44
+#: includes/NotificationBar/WpCustomNotification.php:90
+msgid "Notibar"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:78
-msgid "Hide/Close Button"
+#: includes/NotificationBar/WpCustomControlColorBg.php:16
+#: includes/NotificationBar/WpCustomControlColorLb.php:16
+#: includes/NotificationBar/WpCustomControlColorText.php:16
+msgid "Select Color"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:83
-msgid "No button"
+#: includes/NotificationBar/WpCustomControlColorBg.php:22
+#: includes/NotificationBar/WpCustomControlColorLb.php:22
+#: includes/NotificationBar/WpCustomControlColorText.php:22
+msgid "Default"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:84
-msgid "Toggle button"
+#: includes/NotificationBar/WpCustomNotification.php:91
+msgid "This is panel WordPress Notification Bar"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:85
-msgid "Close button"
+#: includes/NotificationBar/WpCustomNotification.php:97
+msgid "General Options"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:96
-msgid "Content Width (px)"
-msgstr ""
-
-#: includes/NotificationBar/WpCustomNotification.php:109
-msgid "Position Type"
-msgstr ""
-
-#: includes/NotificationBar/WpCustomNotification.php:114
-msgid "Fixed"
+#: includes/NotificationBar/WpCustomNotification.php:110
+msgid "Alignment Option"
 msgstr ""
 
 #: includes/NotificationBar/WpCustomNotification.php:115
-msgid "Absolute"
+msgid "Center"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:121
-msgid "Option Content"
+#: includes/NotificationBar/WpCustomNotification.php:116
+msgid "Right"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:133
-msgid "Link Style "
+#: includes/NotificationBar/WpCustomNotification.php:117
+msgid "Left"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:138
-#: includes/NotificationBar/WpCustomNotification.php:155
+#: includes/NotificationBar/WpCustomNotification.php:118
+msgid "Space around"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:130
+msgid "Hide/Close Button"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:135
+msgid "No button"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:136
+msgid "Toggle button"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:137
+msgid "Close button"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:149
+msgid "Content Width (px)"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:165
+msgid "Position Type"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:173
+msgid "Content Options"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:194
 msgid "Text"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:139
-msgid "Button"
+#: includes/NotificationBar/WpCustomNotification.php:209
+msgid "On/Off Button"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:168
-msgid "Link/Button Text"
+#: includes/NotificationBar/WpCustomNotification.php:223
+msgid "Button Text"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:181
-msgid "Link/Button URL"
+#: includes/NotificationBar/WpCustomNotification.php:237
+msgid "Button URL"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:189
-msgid "Option Style"
+#: includes/NotificationBar/WpCustomNotification.php:251
+msgid "Open in new window"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:201
+#: includes/NotificationBar/WpCustomNotification.php:259
+msgid "Style Options"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:274
+msgid "Preset Color"
+msgstr ""
+
+#: includes/NotificationBar/WpCustomNotification.php:292
 msgid "Background Color"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:214
+#: includes/NotificationBar/WpCustomNotification.php:310
 msgid "Text Color"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:227
+#: includes/NotificationBar/WpCustomNotification.php:326
 msgid "Button Color"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:240
+#: includes/NotificationBar/WpCustomNotification.php:340
 msgid "Font Size (px)"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:248
-msgid "Option Display"
+#: includes/NotificationBar/WpCustomNotification.php:348
+msgid "Display Options"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:260
+#: includes/NotificationBar/WpCustomNotification.php:361
 msgid "Homepage"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:273
+#: includes/NotificationBar/WpCustomNotification.php:375
 msgid "Pages"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:287
+#: includes/NotificationBar/WpCustomNotification.php:389
 msgid "Posts"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:301
+#: includes/NotificationBar/WpCustomNotification.php:403
 msgid "By Pages/Posts ID"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:305
+#: includes/NotificationBar/WpCustomNotification.php:407
 msgid "Enter the Pages or Posts ID, Ex: 1,2"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "Notification Bar Plugin"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
