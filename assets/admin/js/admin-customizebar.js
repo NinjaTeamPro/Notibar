@@ -57,13 +57,11 @@
         })
       }
 
-      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      jQuery('body').css({
-        'padding-top': barHeight,
-        '-webkit-transition': 'padding-top 2s',
-        'transition': 'padding-top 2s'
+      jQuery('body').animate({ top: 0 }, 1000)
+      jQuery('.njt-nofi-display-toggle').css({
+        'display': 'none',
+        'top': 0,
       })
-      jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
     });
   });
 
@@ -232,19 +230,21 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
-          'padding-top': 0,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          'position': 'relative',
+        })
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'block',
+          'top': barHeight,
         })
       } else {
-        jQuery('body').css({
-          'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 2s',
-          'transition': 'padding-top 2s'
+        jQuery('body').animate({ top: 0 }, 1000)
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+          'top': 0,
         })
-        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })
@@ -258,19 +258,21 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
-          'padding-top': 0,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          'position': 'relative',
+        })
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'block',
+          'top': barHeight,
         })
       } else {
-        jQuery('body').css({
-          'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 2s',
-          'transition': 'padding-top 2s'
+        jQuery('body').animate({ top: 0 }, 1000)
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+          'top': 0,
         })
-        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })
@@ -284,19 +286,21 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
-          'padding-top': 0,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          'position': 'relative',
+        })
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'block',
+          'top': barHeight,
         })
       } else {
-        jQuery('body').css({
-          'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 2s',
-          'transition': 'padding-top 2s'
+        jQuery('body').animate({ top: 0 }, 1000)
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+          'top': 0,
         })
-        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })
@@ -310,19 +314,21 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        jQuery('.njt-nofi-notification-bar').animate({ top: -barHeight }, 1000)
+        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
-          'padding-top': 0,
-          '-webkit-transition': 'padding-top 1s',
-          'transition': 'padding-top 1s'
+          'position': 'relative',
+        })
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'block',
+          'top': barHeight,
         })
       } else {
-        jQuery('body').css({
-          'padding-top': barHeight,
-          '-webkit-transition': 'padding-top 2s',
-          'transition': 'padding-top 2s'
+        jQuery('body').animate({ top: 0 }, 1000)
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+          'top': 0,
         })
-        jQuery('.njt-nofi-notification-bar').animate({ top: 0 }, 1000)
       }
     })
   })

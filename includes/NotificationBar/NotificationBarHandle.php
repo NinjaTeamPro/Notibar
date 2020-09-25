@@ -116,7 +116,7 @@ class NotificationBarHandle
     $isDisplayNotification = $this->njt_nofi_isDisplayNotification();
 
     if($isDisplayNotification) {
-      add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
+     add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
     }
     add_action( 'wp_body_open', array( $this, 'njt_nofi_rederInput' ),10);
   }
