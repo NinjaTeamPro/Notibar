@@ -31,7 +31,7 @@ class NotificationBarHandle
     
     //Register Enqueue
     add_action('wp_enqueue_scripts', array($this, 'njt_nofi_homeRegisterEnqueue'));
-    add_action('admin_enqueue_scripts', array($this, 'njt_nofi_adminRegisterEnqueue'));
+    add_filter('plugin_action_links_notibar/njt-notification-bar.php', array($this, 'addActionLinks'));
   }
 
   public function njt_nofi_showMenu()
@@ -72,19 +72,16 @@ class NotificationBarHandle
     ));
   }
 
-  public function njt_nofi_adminRegisterEnqueue($suffix) {
-    if (in_array($suffix, $this->hook_suffix)) {
-      // wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-notification-bar.js', array('jquery'), NJT_NOFI_VERSION);
-      // wp_enqueue_script('njt-nofi');
-
-      wp_localize_script('njt-nofi', 'wpData', array(
-        'admin_ajax' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce("njt-nofi-notification"),
-        'isPositionFix' => get_theme_mod( 'njt_nofi_position_type', $this->valueDefault['position_type'] ) == 'fixed' ? true : false
-      ));
-    }
+  public function addActionLinks($links) {
+    $urlEncode = urlencode('autofocus[panel]') ;
+    $linkUrl= esc_html(admin_url('/customize.php?'. $urlEncode.'=njt_notification-bar'));
+    $settingsLinks = array(
+      '<a href="'.$linkUrl.'">Settings</a>',
+    );
+    return array_merge($settingsLinks, $links);
   }
 
+ 
   public function njt_nofi_notificationSettings()
   {
     exit;
