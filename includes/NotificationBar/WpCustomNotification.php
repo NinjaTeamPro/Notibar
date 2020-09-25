@@ -212,20 +212,6 @@ class WpCustomNotification
       )
     ));
 
-    //Open in new window
-    $customNoti->add_setting('njt_nofi_open_new_windown', array(
-      'default'           => $this->valueDefault['new_windown'],
-      'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
-      'transport'         => 'postMessage',
-    ));
-
-    $customNoti->add_control( 'njt_nofi_open_new_windown_control', array(
-      'label'    => __( 'Open in new window', NJT_NOFI_DOMAIN ),
-      'section'  => 'njt_nofi_content',
-      'settings' => 'njt_nofi_open_new_windown',
-      'type'     => 'checkbox',
-    ));
-
     //Link/Button Text
     $customNoti->add_setting('njt_nofi_lb_text', array(
       'default'           => $this->valueDefault['lb_text'],
@@ -252,6 +238,20 @@ class WpCustomNotification
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_lb_url',
       'type'     => 'text',
+    ));
+
+    //Open in new window
+    $customNoti->add_setting('njt_nofi_open_new_windown', array(
+      'default'           => $this->valueDefault['new_windown'],
+      'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control( 'njt_nofi_open_new_windown_control', array(
+      'label'    => __( 'Open in new window', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_open_new_windown',
+      'type'     => 'checkbox',
     ));
 
     /*Style*/

@@ -46,8 +46,8 @@ class NotificationBarHandle
       'njt_nofi_NotificationBar',
       array($this, 'njt_nofi_notificationSettings')
     );
-    $urlEncode = urlencode('autofocus[panel]=njt_notification-bar') ;
-    $link = esc_html(admin_url('/customize.php?'. $urlEncode));
+    $urlEncode = urlencode('autofocus[panel]') ;
+    $link = esc_html(admin_url('/customize.php?'. $urlEncode.'=njt_notification-bar'));
     foreach($submenu['options-general.php'] as $k=>$item){
       if ($item[2] == 'njt_nofi_NotificationBar') {
         $submenu['options-general.php'][$k][2] =  $link;
@@ -64,10 +64,6 @@ class NotificationBarHandle
 
     wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'),NJT_NOFI_VERSION, true );
     wp_enqueue_script('njt-nofi');
-
-    wp_register_script('njt-nofi-cus', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/mediaelement.min.js', array('jquery'));
-    wp_enqueue_script('njt-nofi-cus');
-
 
     wp_localize_script('njt-nofi', 'wpData', array(
       'admin_ajax' => admin_url('admin-ajax.php'),
