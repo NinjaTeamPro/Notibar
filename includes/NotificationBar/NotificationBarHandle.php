@@ -68,7 +68,12 @@ class NotificationBarHandle
     wp_localize_script('njt-nofi', 'wpData', array(
       'admin_ajax' => admin_url('admin-ajax.php'),
       'nonce' => wp_create_nonce("njt-nofi-notification"),
-      'isPositionFix' => get_theme_mod( 'njt_nofi_position_type', $this->valueDefault['position_type'] ) == 'fixed' ? true : false
+      'isPositionFix' => get_theme_mod( 'njt_nofi_position_type', $this->valueDefault['position_type'] ) == 'fixed' ? true : false,
+      'hideCloseButton' => get_theme_mod( 'njt_nofi_hide_close_button',$this->valueDefault['hide_close_button']),
+      'isDisplayButton' => get_theme_mod( 'njt_nofi_handle_button', 1),
+      'presetColor' => get_theme_mod( 'njt_nofi_preset_color', $this->valueDefault['preset_color']),
+      'alignContent' => get_theme_mod( 'njt_nofi_alignment', $this->valueDefault['align_content']),
+      'textColorNotification' => get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color'])
     ));
   }
 
