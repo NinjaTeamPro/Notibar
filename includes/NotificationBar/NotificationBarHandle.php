@@ -4,6 +4,7 @@ namespace NjtNotificationBar\NotificationBar;
 defined('ABSPATH') || exit;
 
 use NjtNotificationBar\NotificationBar\WpCustomNotification;
+use NjtNotificationBar\NotificationBar\WpMobileDetect;
 
 class NotificationBarHandle
 {
@@ -61,8 +62,9 @@ class NotificationBarHandle
   {
     $isDisplayNotification = $this->njt_nofi_isDisplayNotification();
     $isEnableNotification = get_theme_mod('njt_nofi_enable_bar', 1) == 1 ? true : false;
-  
-    if($this->njt_nofi_checkDisplayNotification() ) {
+    $isdevicesDisplay = $this->njt_nofi_devicesDisplay();
+
+    if($this->njt_nofi_checkDisplayNotification() && $isdevicesDisplay) {
       wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/css/home-notification-bar.css', array(), NJT_NOFI_VERSION);
       wp_enqueue_style('njt-nofi');
 
@@ -131,20 +133,36 @@ class NotificationBarHandle
     return false;
   }
 
+  public function njt_nofi_devicesDisplay() {
+    $isdevicesDisplay = get_theme_mod('njt_nofi_devices_display', $this->valueDefault['devices_display']);
+    if($isdevicesDisplay == 'all_devices') {
+      return true;
+    }
+    if ($isdevicesDisplay == 'desktop' && !wp_is_mobile() ) {
+      return true;
+    }
+    if ($isdevicesDisplay == 'mobile' && wp_is_mobile() ) {
+      return true;
+    }
+    return false;
+  }
+
 
   public function njt_nofi_showNotification()
   {
     // Display Notification Bar.
     $isDisplayNotification = $this->njt_nofi_isDisplayNotification();
     $isEnableNotification = get_theme_mod('njt_nofi_enable_bar', 1) == 1 ? true : false;
+    $isdevicesDisplay = $this->njt_nofi_devicesDisplay();
   
-    if($isDisplayNotification && is_customize_preview() ) {
-     add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
+    if($isDisplayNotification && $isdevicesDisplay && is_customize_preview()) {
+     add_action( 'wp_footer', array( $this, 'display_notification' ),10);
     }
-    if($isDisplayNotification && $isEnableNotification && !is_customize_preview()) {
-      add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
+
+    if($isDisplayNotification && $isEnableNotification && $isdevicesDisplay && !is_customize_preview()) {
+      add_action( 'wp_footer', array( $this, 'display_notification' ),10);
      }
-    add_action( 'wp_body_open', array( $this, 'njt_nofi_rederInput' ),10);
+    add_action( 'wp_footer', array( $this, 'njt_nofi_rederInput' ),10);
   }
 
   public function display_notification()
@@ -165,6 +183,9 @@ class NotificationBarHandle
         .njt-nofi-notification-bar .njt-nofi-content {
           font-size : <?php echo esc_html($notificationFontSize.'px') ?>;
         }
+        /* body{
+          padding-top: 49px;
+        } */
       </style>
     <?php
 

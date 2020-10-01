@@ -42,6 +42,7 @@ class WpCustomNotification
       'dp_homepage'       => true,
       'dp_pages'          => true,
       'dp_posts'          => true,
+      'devices_display'   => 'all_devices',
       'dp_pp_id'          => ''
     )) ;
 
@@ -365,6 +366,25 @@ class WpCustomNotification
       'panel'    => 'njt_notification-bar',
     ));
 
+    //Select devices want to display
+    $customNoti->add_setting('njt_nofi_devices_display', array(
+      'default'           => $this->valueDefault['devices_display'],
+      'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
+       'transport'         => 'postMessage',
+    ));
+    
+    $customNoti->add_control( 'njt_nofi_devices_display_control', array(
+      'label'           => __( 'Select devices want to display', NJT_NOFI_DOMAIN ),
+      'section'         => 'njt_nofi_display',
+      'settings'        => 'njt_nofi_devices_display',
+      'type'            => 'select',
+      'choices'         => array(
+        'all_devices'     => esc_html__( 'All devices', NJT_NOFI_DOMAIN ),
+        'desktop' => esc_html__( 'Only desktop', NJT_NOFI_DOMAIN ),
+        'mobile'  => esc_html__( 'Only mobile', NJT_NOFI_DOMAIN ),
+      ),
+    ));
+
     //Homepage
     $customNoti->add_setting('njt_nofi_homepage', array(
       'default'           => $this->valueDefault['dp_homepage'],
@@ -406,6 +426,8 @@ class WpCustomNotification
       'settings' => 'njt_nofi_posts',
       'type'     => 'checkbox',
     ));
+
+    
 
     //By Pages/Posts ID
     $customNoti->add_setting('njt_nofi_pp_id', array(

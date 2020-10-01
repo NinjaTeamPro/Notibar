@@ -1,9 +1,10 @@
 const homeNotificationBar = {
   setPaddingTop() {
     const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-    jQuery('.njt-nofi-container-content').css({
-      'height': barHeight,
-    })
+    // jQuery('.njt-nofi-container-content').css({
+    //   'height': barHeight,
+    // })
+
   },
 
   actionButtonClose() {
@@ -21,11 +22,17 @@ const homeNotificationBar = {
       jQuery('body').css({
         'position': 'relative',
       })
+      if (wpData.isPositionFix) {
+        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+        const a = wpAdminBarHeight - barHeight
+        jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+      }
       jQuery('.njt-nofi-display-toggle').css({
         'display': 'block',
         'top': barHeight,
       })
     })
+
 
     jQuery(".njt-nofi-display-toggle").on("click", function (e) {
       jQuery('body').animate({ top: 0 }, 1000)
@@ -33,6 +40,10 @@ const homeNotificationBar = {
         'display': 'none',
         'top': 0,
       })
+      if (wpData.isPositionFix) {
+        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+        jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+      }
     })
   },
   customStyleBar() {
@@ -120,6 +131,29 @@ const homeNotificationBar = {
     jQuery(".njt-nofi-container .njt-nofi-text-color").css({
       'color': textColorNotification
     })
+
+    const isPositionFix = wpData.isPositionFix
+    const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+    const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+    if (isPositionFix) {
+      jQuery(".njt-nofi-container").css({
+        'position': 'fixed',
+        'top': wpAdminBarHeight || '0px'
+      })
+      jQuery('body').css({
+        'padding-top': barHeight,
+        'position': 'relative'
+      })
+    } else {
+      jQuery(".njt-nofi-container").css({
+        'position': 'absolute',
+        'top': 0
+      })
+      jQuery('body').css({
+        'padding-top': barHeight,
+        'position': 'relative'
+      })
+    }
   }
 }
 
