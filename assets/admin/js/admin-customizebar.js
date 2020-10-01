@@ -114,9 +114,6 @@
           'background': lbColorNotification,
           'border-radius': '5px'
         })
-        jQuery('.njt-nofi-content').css({
-          'padding': '10px 30px'
-        })
       } else {
         jQuery('.njt-nofi-button').hide()
       }

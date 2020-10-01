@@ -1,9 +1,9 @@
 const homeNotificationBar = {
   setPaddingTop() {
     const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-    // jQuery('.njt-nofi-container-content').css({
-    //   'height': barHeight,
-    // })
+    jQuery('#wpadminbar').css({
+      'position': 'fixed'
+    })
 
   },
 
@@ -78,11 +78,9 @@ const homeNotificationBar = {
     const isDisplayButton = wpData.isDisplayButton
     if (isDisplayButton == 1) {
       jQuery('.njt-nofi-button').show()
-      jQuery('.njt-nofi-content').css({
-        'padding': '10px 100px'
-      })
     } else {
       jQuery('.njt-nofi-button').hide()
+
     }
 
     const presetColor = wpData.presetColor
@@ -102,16 +100,21 @@ const homeNotificationBar = {
     }
 
     const alignContent = wpData.alignContent
-
+    const width = jQuery(window).width();
     if (alignContent == 'center') {
       jQuery(".njt-nofi-container .njt-nofi-align-content").css({
         'justify-content': 'center'
       })
+
     }
 
     if (alignContent == 'right') {
       jQuery(".njt-nofi-container .njt-nofi-align-content").css({
         'justify-content': 'flex-end'
+      })
+      jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+        'text-align': 'right',
+        'padding': '10px 30px'
       })
     }
 
@@ -119,6 +122,11 @@ const homeNotificationBar = {
       jQuery(".njt-nofi-container .njt-nofi-align-content").css({
         'justify-content': 'flex-start'
       })
+      if (width <= 480) {
+        jQuery(".njt-nofi-container .njt-nofi-align-content").css({
+          'text-align': 'left'
+        })
+      }
     }
 
     if (alignContent == 'space_around') {

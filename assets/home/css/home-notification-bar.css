@@ -10,7 +10,7 @@
 .njt-nofi-notification-bar .njt-nofi-content {
   text-align: center;
   margin: auto;
-  padding: 10px 100px
+  padding: 10px 50px
 }
 
 .njt-nofi-notification-bar .njt-nofi-text {
@@ -101,8 +101,18 @@
 }
 
 @media only screen and (max-width: 480px){
-  /* .njt-nofi-align-content {
-    display: block;
-    justify-content: center;
-  } */
+  .njt-nofi-align-content {
+    flex-wrap: wrap;
+   
+  }
+  .njt-nofi-notification-bar .njt-nofi-content {
+    padding: 10px 15px;
+  }
+  .njt-nofi-align-content .njt-nofi-text {
+    padding-top: 0;
+  }
+  .njt-nofi-notification-bar .njt-nofi-hide {
+    right: 5px;
+    top: 9px;
+  }
 }
