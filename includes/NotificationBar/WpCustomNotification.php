@@ -47,8 +47,9 @@ class WpCustomNotification
     )) ;
 
     add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'), 10);
-    add_action('wp_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
     add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
+    add_action('wp_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
+  
   }
 
    /**
@@ -56,8 +57,10 @@ class WpCustomNotification
      */
   public function njt_nofi_enqueueCustomizeControls()
   {
-    wp_register_script('njt-nofi-test', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizebar.js', array('jquery'),NJT_NOFI_VERSION,true);
-    wp_enqueue_script('njt-nofi-test');
+    if(is_customize_preview()){
+      wp_register_script('njt-nofi-test', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizebar.js', array('jquery'),NJT_NOFI_VERSION,true);
+      wp_enqueue_script('njt-nofi-test');
+    }
   }
   public function addScriptsCustomizer(){
     wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION, true);
