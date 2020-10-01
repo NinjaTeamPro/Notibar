@@ -88,6 +88,7 @@
         jQuery(".njt-nofi-container").css({
           'position': 'fixed',
         })
+
       } else {
         jQuery(".njt-nofi-container").css({
           'position': 'absolute',
@@ -232,12 +233,24 @@
         jQuery('body').css({
           'position': 'relative',
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const a = wpAdminBarHeight - barHeight
+          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+        }
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+        })
       } else {
         jQuery('body').animate({ top: 0 }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'none',
           'top': 0,
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+        }
       }
     })
   })
@@ -256,12 +269,24 @@
         jQuery('body').css({
           'position': 'relative',
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const a = wpAdminBarHeight - barHeight
+          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+        }
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+        })
       } else {
         jQuery('body').animate({ top: 0 }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'none',
           'top': 0,
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+        }
       }
     })
   })
@@ -280,12 +305,24 @@
         jQuery('body').css({
           'position': 'relative',
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const a = wpAdminBarHeight - barHeight
+          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+        }
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+        })
       } else {
         jQuery('body').animate({ top: 0 }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
           'display': 'none',
           'top': 0,
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+        }
       }
     })
   })
@@ -304,9 +341,13 @@
         jQuery('body').css({
           'position': 'relative',
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const a = wpAdminBarHeight - barHeight
+          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+        }
         jQuery('.njt-nofi-display-toggle').css({
-          'display': 'block',
-          'top': barHeight,
+          'display': 'none',
         })
       } else {
         jQuery('body').animate({ top: 0 }, 1000)
@@ -314,6 +355,10 @@
           'display': 'none',
           'top': 0,
         })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+        }
       }
     })
   })
