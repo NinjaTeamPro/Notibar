@@ -47,8 +47,8 @@ class WpCustomNotification
     )) ;
 
     add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'), 10);
-    add_action('customize_controls_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
-    add_action('customize_preview_init', array($this, 'addScriptsCustomizer'));
+    add_action('wp_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
+    add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
   }
 
    /**
@@ -56,16 +56,14 @@ class WpCustomNotification
      */
   public function njt_nofi_enqueueCustomizeControls()
   {
-    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION, true);
-    wp_enqueue_script('njt-nofi-cus-control');
-
-    wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css', array(), NJT_NOFI_VERSION);
-    wp_enqueue_style('njt-nofi-cus-control');
-  }
-  public function addScriptsCustomizer(){
     wp_register_script('njt-nofi-test', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizebar.js', array('jquery'),NJT_NOFI_VERSION,true);
     wp_enqueue_script('njt-nofi-test');
-
+  }
+  public function addScriptsCustomizer(){
+    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION, true);
+    wp_enqueue_script('njt-nofi-cus-control');
+    wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css', array(), NJT_NOFI_VERSION);
+    wp_enqueue_style('njt-nofi-cus-control');
   }
   
   public function njt_nofi_sanitizeSelect( $input, $setting ){
