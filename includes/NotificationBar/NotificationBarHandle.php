@@ -59,22 +59,27 @@ class NotificationBarHandle
 
   public function njt_nofi_homeRegisterEnqueue()
   {
-    wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/css/home-notification-bar.css', array(), NJT_NOFI_VERSION);
-    wp_enqueue_style('njt-nofi');
+    $isDisplayNotification = $this->njt_nofi_isDisplayNotification();
+    $isEnableNotification = get_theme_mod('njt_nofi_enable_bar', 1) == 1 ? true : false;
+  
+    if($this->njt_nofi_checkDisplayNotification() ) {
+      wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/css/home-notification-bar.css', array(), NJT_NOFI_VERSION);
+      wp_enqueue_style('njt-nofi');
 
-    wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'),NJT_NOFI_VERSION, true );
-    wp_enqueue_script('njt-nofi');
+      wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'),NJT_NOFI_VERSION, true );
+      wp_enqueue_script('njt-nofi');
 
-    wp_localize_script('njt-nofi', 'wpData', array(
-      'admin_ajax' => admin_url('admin-ajax.php'),
-      'nonce' => wp_create_nonce("njt-nofi-notification"),
-      'isPositionFix' => get_theme_mod( 'njt_nofi_position_type', $this->valueDefault['position_type'] ) == 'fixed' ? true : false,
-      'hideCloseButton' => get_theme_mod( 'njt_nofi_hide_close_button',$this->valueDefault['hide_close_button']),
-      'isDisplayButton' => get_theme_mod( 'njt_nofi_handle_button', 1),
-      'presetColor' => get_theme_mod( 'njt_nofi_preset_color', $this->valueDefault['preset_color']),
-      'alignContent' => get_theme_mod( 'njt_nofi_alignment', $this->valueDefault['align_content']),
-      'textColorNotification' => get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color'])
-    ));
+      wp_localize_script('njt-nofi', 'wpData', array(
+        'admin_ajax' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce("njt-nofi-notification"),
+        'isPositionFix' => get_theme_mod( 'njt_nofi_position_type', $this->valueDefault['position_type'] ) == 'fixed' ? true : false,
+        'hideCloseButton' => get_theme_mod( 'njt_nofi_hide_close_button',$this->valueDefault['hide_close_button']),
+        'isDisplayButton' => get_theme_mod( 'njt_nofi_handle_button', 1),
+        'presetColor' => get_theme_mod( 'njt_nofi_preset_color', $this->valueDefault['preset_color']),
+        'alignContent' => get_theme_mod( 'njt_nofi_alignment', $this->valueDefault['align_content']),
+        'textColorNotification' => get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color'])
+      ));
+    }
   }
 
   public function addActionLinks($links) {
@@ -90,6 +95,18 @@ class NotificationBarHandle
   public function njt_nofi_notificationSettings()
   {
     exit;
+  }
+
+  public function njt_nofi_checkDisplayNotification() {
+    $isDisplayNotification = $this->njt_nofi_isDisplayNotification();
+    $isEnableNotification = get_theme_mod('njt_nofi_enable_bar', 1) == 1 ? true : false;
+    if($isDisplayNotification && is_customize_preview() ) {
+      return true;
+     }
+    if($isDisplayNotification && $isEnableNotification && !is_customize_preview()) {
+      return true;
+    }
+    return false;
   }
 
   public function njt_nofi_isDisplayNotification() {
@@ -119,10 +136,14 @@ class NotificationBarHandle
   {
     // Display Notification Bar.
     $isDisplayNotification = $this->njt_nofi_isDisplayNotification();
-
-    if($isDisplayNotification) {
+    $isEnableNotification = get_theme_mod('njt_nofi_enable_bar', 1) == 1 ? true : false;
+  
+    if($isDisplayNotification && is_customize_preview() ) {
      add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
     }
+    if($isDisplayNotification && $isEnableNotification && !is_customize_preview()) {
+      add_action( 'wp_body_open', array( $this, 'display_notification' ),10);
+     }
     add_action( 'wp_body_open', array( $this, 'njt_nofi_rederInput' ),10);
   }
 

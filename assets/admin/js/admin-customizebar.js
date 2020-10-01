@@ -235,10 +235,6 @@
         jQuery('body').css({
           'position': 'relative',
         })
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'block',
-          'top': barHeight,
-        })
       } else {
         jQuery('body').animate({ top: 0 }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
@@ -263,10 +259,6 @@
         jQuery('body').css({
           'position': 'relative',
         })
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'block',
-          'top': barHeight,
-        })
       } else {
         jQuery('body').animate({ top: 0 }, 1000)
         jQuery('.njt-nofi-display-toggle').css({
@@ -290,10 +282,6 @@
         jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'position': 'relative',
-        })
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'block',
-          'top': barHeight,
         })
       } else {
         jQuery('body').animate({ top: 0 }, 1000)

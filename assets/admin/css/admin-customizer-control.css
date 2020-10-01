@@ -408,22 +408,22 @@
   border-bottom-left-radius: 3px;
 }
 
-.njt-handle-button-switch {
+.njt-nofi-button-switch {
 	display: inline-block;
 	height: 20px;
 	position: relative;
 	width: 40px;
 }
 
-.njt-handle-button-switch input {
+.njt-nofi-button-switch input {
 	display: none;
 }
 
-.njt-handle-button-switch .slider.round {
+.njt-nofi-button-switch .slider.round {
 	border-radius: 34px;
 }
 
-.njt-handle-button-switch .slider {
+.njt-nofi-button-switch .slider {
 	background-color: #ccc;
 	bottom: 0;
 	cursor: pointer;
@@ -434,11 +434,11 @@
 	transition: 0.4s;
 }
 
-.njt-handle-button-switch .slider.round:before {
+.njt-nofi-button-switch .slider.round:before {
 	border-radius: 50%;
 }
 
-.njt-handle-button-switch .slider:before {
+.njt-nofi-button-switch .slider:before {
 	background-color: #fff;
 	bottom: 2px;
 	content: "";
@@ -449,11 +449,11 @@
 	width: 16px;
 }
 
-.njt-handle-button-switch input:checked + .slider:before {
+.njt-nofi-button-switch input:checked + .slider:before {
 	transform: translateX(20px);
 }
 
-.njt-handle-button-switch input:checked + .slider {
+.njt-nofi-button-switch input:checked + .slider {
 	background-color: #66bb6a;
 }
 .njt-bt-position-type .njt-bt-position:focus {

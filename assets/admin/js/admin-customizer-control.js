@@ -799,6 +799,14 @@ window.onload = function () {
     }
   })
 
+  jQuery(".njt-enable-bar-switch").on("click", function (e) {
+    if (jQuery('#njt-enable-bar').is(":checked")) {
+      jQuery('#_customize-input-njt_nofi_enable_bar').val(1).trigger('change')
+    } else {
+      jQuery('#_customize-input-njt_nofi_enable_bar').val(0).trigger('change')
+    }
+  })
+
   document.body.addEventListener('click', function (e) {
     if (jQuery('#nj_color_select_bg .nj_color_popup.nj_color_popup--hidden').length > 0) {
       jQuery('#nj_color_select_bg .nj_color_display_picker').hide()

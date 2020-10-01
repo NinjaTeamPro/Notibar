@@ -9,7 +9,7 @@ use NjtNotificationBar\NotificationBar\WpCustomControlColorLb;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorPreset;
 use NjtNotificationBar\NotificationBar\WpCustomControlPositionType;
 use NjtNotificationBar\NotificationBar\WpCustomControlHandleButton;
-
+use NjtNotificationBar\NotificationBar\WpCustomControlEnableBar;
 class WpCustomNotification
 {
   protected static $instance = null;
@@ -55,7 +55,7 @@ class WpCustomNotification
      */
   public function njt_nofi_enqueueCustomizeControls()
   {
-    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION);
+    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION, true);
     wp_enqueue_script('njt-nofi-cus-control');
 
     wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css', array(), NJT_NOFI_VERSION);
@@ -98,6 +98,21 @@ class WpCustomNotification
       'priority' => 10,
       'panel'    => 'njt_notification-bar',
     ) );
+
+    /*Enable/Disable Notibar*/
+    $customNoti->add_setting('njt_nofi_enable_bar', array(
+      'default'           => 1,
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlEnableBar( $customNoti, 'njt_nofi_enable_bar',
+      array(
+        'label'    => __('Enable/Disable Notibar', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_general',
+        'settings' => 'njt_nofi_enable_bar'
+      )
+    ));
 
     // Option Alignment
     $customNoti->add_setting('njt_nofi_alignment', array(
