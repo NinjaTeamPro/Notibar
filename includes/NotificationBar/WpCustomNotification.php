@@ -63,10 +63,12 @@ class WpCustomNotification
     }
   }
   public function addScriptsCustomizer(){
-    wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION, true);
-    wp_enqueue_script('njt-nofi-cus-control');
-    wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css', array(), NJT_NOFI_VERSION);
-    wp_enqueue_style('njt-nofi-cus-control');
+    if(is_customize_preview()){
+      wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION, true);
+      wp_enqueue_script('njt-nofi-cus-control');
+      wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css', array(), NJT_NOFI_VERSION);
+      wp_enqueue_style('njt-nofi-cus-control');
+    }
   }
   
   public function njt_nofi_sanitizeSelect( $input, $setting ){
@@ -130,8 +132,8 @@ class WpCustomNotification
       'type'            => 'select',
       'choices'         => array(
         'center'        => esc_html__( 'Center', NJT_NOFI_DOMAIN ),
-        'right'         => esc_html__( 'Right', NJT_NOFI_DOMAIN ),
         'left'          => esc_html__( 'Left', NJT_NOFI_DOMAIN ),
+        'right'         => esc_html__( 'Right', NJT_NOFI_DOMAIN ),
         'space_around' => esc_html__( 'Space around', NJT_NOFI_DOMAIN ),
       ),
     ));

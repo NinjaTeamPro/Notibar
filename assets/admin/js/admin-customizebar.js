@@ -62,6 +62,10 @@
         'display': 'none',
         'top': 0,
       })
+      if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+        jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+      }
     });
   });
 
