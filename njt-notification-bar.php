@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Notibar
- * Plugin URI: https://ninjateam.org
- * Description: Internal template for plugin with OOP, namespace, autoload function.
- * Version: 1.0
+ * Plugin Name: Notibar - WordPress Notification Bar
+ * Plugin URI: https://ninjateam.org/notibar-wordpress-notification-bar
+ * Description: Custom notification bar for alert, promo code, marketing campaign, top banner
+ * Version: 1.3
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: njt-notification-bar
@@ -17,7 +17,7 @@ namespace NjtNotificationBar;
 defined('ABSPATH') || exit;
 
 define('NJT_NOFI_PREFIX', 'njt_nofi');
-define('NJT_NOFI_VERSION', '1.0');
+define('NJT_NOFI_VERSION', '1.3');
 define('NJT_NOFI_DOMAIN', 'njt-notification-bar');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
