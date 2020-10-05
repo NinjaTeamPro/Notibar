@@ -34,6 +34,10 @@ class WpCustomNotification
       'lb_text'           => esc_html('Learn more'),
       'lb_url'            => '',
       'new_windown'       => true,
+      'text_mobile'       =>'',
+      'lb_text_mobile'    => esc_html('Learn more'),
+      'lb_url_mobile'     => '',
+      'new_windown_mobile'=> true,
       'preset_color'      => 1,
       'bg_color'          => '#9af4cf',
       'text_color'        => '#1919cf',
@@ -270,6 +274,93 @@ class WpCustomNotification
       'label'    => __( 'Open in new window', NJT_NOFI_DOMAIN ),
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_open_new_windown',
+      'type'     => 'checkbox',
+    ));
+
+    //You want different content for mobile
+    $customNoti->add_setting('njt_nofi_content_mobile', array(
+      'default'           => 1,
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlContentMobile( $customNoti, 'njt_nofi_content_mobile',
+      array(
+        'label'    => __( 'You want different content for mobile?', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_content',
+        'settings' => 'njt_nofi_content_mobile'
+      )
+    ));
+    
+
+    //text mobile
+    $customNoti->add_setting('njt_nofi_text_mobile', array(
+      'default'           => $this->valueDefault['text_mobile'],
+      'sanitize_callback' => 'wp_kses_post', //keeps only HTML tags that are allowed in post content
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control( 'njt_nofi_text_mobile_control', array(
+      'label'    => __('Text mobile', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_text_mobile',
+      'type'     => 'textarea',
+    ));
+
+    //Switch on/off button mobiile
+    $customNoti->add_setting('njt_nofi_handle_button_mobile', array(
+      'default'           => 1,
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlHandleButtonMobile( $customNoti, 'njt_nofi_handle_button_mobile',
+      array(
+        'label'    => __( 'On/Off Button mobile', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_content',
+        'settings' => 'njt_nofi_handle_button_mobile'
+      )
+    ));
+
+    //Link/Button Text Mobile
+    $customNoti->add_setting('njt_nofi_lb_text_mobile', array(
+      'default'           => $this->valueDefault['lb_text_mobile'],
+      'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control('njt_nofi_lb_text_mobile_control', array(
+      'label'    => __('Button Text Mobile', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_lb_text_mobile',
+      'type'     => 'text',
+    ));
+
+    //Link/Button URL Mobile
+    $customNoti->add_setting('njt_nofi_lb_url_mobile', array(
+      'default'           => $this->valueDefault['lb_url_mobile'],
+      'sanitize_callback' => 'esc_url_raw', //cleans URL from all invalid characters
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control('njt_nofi_lb_url_mobile_control', array(
+      'label'    => __('Button URL', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_lb_url_mobile',
+      'type'     => 'text',
+    ));
+
+    //Open in new window mobile
+    $customNoti->add_setting('njt_nofi_open_new_windown_mobile', array(
+      'default'           => $this->valueDefault['new_windown_mobile'],
+      'sanitize_callback' => array($this, 'njt_nofi_sanitizeCheckbox'),
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control( 'njt_nofi_open_new_windown_mobile_control', array(
+      'label'    => __( 'Open in new window', NJT_NOFI_DOMAIN ),
+      'section'  => 'njt_nofi_content',
+      'settings' => 'njt_nofi_open_new_windown_mobile',
       'type'     => 'checkbox',
     ));
 

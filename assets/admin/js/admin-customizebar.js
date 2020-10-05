@@ -140,6 +140,18 @@
     })
   })
 
+  //You want different content for mobile
+  // wp.customize("njt_nofi_content_mobile", function (value) {
+  //   value.bind(function (to) {
+  //     if (to) {
+  //       jQuery("#customize-control-njt_nofi_text_mobile_control").show();
+  //     } else {
+  //       jQuery("#customize-control-njt_nofi_text_mobile_control").hide();
+  //     }
+  //   })
+  // })
+
+
   /*Style Option*/
 
   //Preset Color
