@@ -88,7 +88,6 @@
   wp.customize("njt_nofi_position_type", function (value) {
     value.bind(function (to) {
       if (to == 'fixed') {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery(".njt-nofi-container").css({
           'position': 'fixed',
         })
@@ -140,17 +139,50 @@
     })
   })
 
-  //You want different content for mobile
-  // wp.customize("njt_nofi_content_mobile", function (value) {
-  //   value.bind(function (to) {
-  //     if (to) {
-  //       jQuery("#customize-control-njt_nofi_text_mobile_control").show();
-  //     } else {
-  //       jQuery("#customize-control-njt_nofi_text_mobile_control").hide();
-  //     }
-  //   })
-  // })
+  //Link/Button Text mobile 
+  wp.customize("njt_nofi_text_mobile", function (value) {
+    value.bind(function (to) {
+      if (wpData.wp_is_mobile) {
+        jQuery('.njt-nofi-text').html(to);
+      }
+    })
+  })
 
+  //Customize Button mobile
+  wp.customize("njt_nofi_handle_button_mobile", function (value) {
+    value.bind(function (to) {
+      if (wpData.wp_is_mobile) {
+        const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
+        if (to == 1) {
+          jQuery('.njt-nofi-button').show()
+          jQuery('.njt-nofi-button .njt-nofi-button-text').css({
+            'background': lbColorNotification,
+            'border-radius': '5px'
+          })
+        } else {
+          jQuery('.njt-nofi-button').hide()
+        }
+      }
+    })
+  })
+
+  //Link/Button Text mobile
+  wp.customize("njt_nofi_lb_text_mobile", function (value) {
+    value.bind(function (to) {
+      if (wpData.wp_is_mobile) {
+        jQuery('.njt-nofi-button-text').text(to);
+      }
+    })
+  })
+
+  //Link/Button URL
+  wp.customize("njt_nofi_lb_url_mobile", function (value) {
+    value.bind(function (to) {
+      if (wpData.wp_is_mobile) {
+        jQuery('.njt-nofi-button-text').attr('href', to);
+      }
+    })
+  })
 
   /*Style Option*/
 
@@ -244,7 +276,6 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'position': 'relative',
@@ -280,7 +311,6 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'position': 'relative',
@@ -316,7 +346,6 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'position': 'relative',
@@ -352,7 +381,6 @@
       const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').animate({ top: -barHeight }, 1000)
         jQuery('body').css({
           'position': 'relative',

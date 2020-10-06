@@ -837,7 +837,7 @@ window.onload = function () {
   })
 
   // action switch button mobile
-  if (jQuery('#_customize-input-njt_nofi_handle_button_mobile').is(":checked")) {
+  if (jQuery('#_customize-input-njt_nofi_handle_button_mobile').is(":checked") && jQuery('#_customize-input-njt_nofi_content_mobile').is(":checked")) {
     jQuery("#customize-control-njt_nofi_lb_text_mobile_control").show();
     jQuery("#customize-control-njt_nofi_lb_url_mobile_control").show();
     jQuery("#customize-control-njt_nofi_open_new_windown_mobile_control").show();

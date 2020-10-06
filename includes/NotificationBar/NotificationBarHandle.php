@@ -79,7 +79,8 @@ class NotificationBarHandle
         'isDisplayButton' => get_theme_mod( 'njt_nofi_handle_button', 1),
         'presetColor' => get_theme_mod( 'njt_nofi_preset_color', $this->valueDefault['preset_color']),
         'alignContent' => get_theme_mod( 'njt_nofi_alignment', $this->valueDefault['align_content']),
-        'textColorNotification' => get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color'])
+        'textColorNotification' => get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color']),
+        'wp_is_mobile' => wp_is_mobile()
       ));
     }
   }
@@ -169,7 +170,6 @@ class NotificationBarHandle
   {
     $contentWidth = get_theme_mod('njt_nofi_content_width') != null ? get_theme_mod('njt_nofi_content_width').'px' : '100%';
     $isPositionFix = get_theme_mod('njt_nofi_position_type', $this->valueDefault['position_type']) == 'fixed' ? true : false;
-    $isDisplayButton = get_theme_mod('njt_nofi_handle_button', 1) == 1 ? true : false;
     $bgColorNotification = get_theme_mod('njt_nofi_bg_color', $this->valueDefault['bg_color']);
     $textColorNotification = get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color']);
     $lbColorNotification = get_theme_mod('njt_nofi_lb_color', $this->valueDefault['lb_color']);

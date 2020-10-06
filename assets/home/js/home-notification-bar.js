@@ -80,14 +80,6 @@ const homeNotificationBar = {
       })
     }
 
-    const isDisplayButton = wpData.isDisplayButton
-    if (isDisplayButton == 1) {
-      jQuery('.njt-nofi-button').show()
-    } else {
-      jQuery('.njt-nofi-button').hide()
-
-    }
-
     const presetColor = wpData.presetColor
 
     if (presetColor == '6') {
