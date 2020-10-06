@@ -169,7 +169,7 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control( 'njt_nofi_content_width_control', array(
-      'label'    => __( 'Content Width (px)', 'NJT_NOFI_DOMAIN' ),
+      'label'    => __( 'Content Width (px)', NJT_NOFI_DOMAIN ),
       'section'  => 'njt_nofi_general',
       'settings' => 'njt_nofi_content_width',
       'type'     => 'number',
@@ -301,7 +301,7 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control( 'njt_nofi_text_mobile_control', array(
-      'label'    => __('Text mobile', NJT_NOFI_DOMAIN ),
+      'label'    => __('Text', NJT_NOFI_DOMAIN ),
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_text_mobile',
       'type'     => 'textarea',
@@ -316,7 +316,7 @@ class WpCustomNotification
     $customNoti->add_control(
       new WpCustomControlHandleButtonMobile( $customNoti, 'njt_nofi_handle_button_mobile',
       array(
-        'label'    => __( 'On/Off Button mobile', NJT_NOFI_DOMAIN ),
+        'label'    => __( 'On/Off Button', NJT_NOFI_DOMAIN ),
         'section'  => 'njt_nofi_content',
         'settings' => 'njt_nofi_handle_button_mobile'
       )
@@ -330,7 +330,7 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control('njt_nofi_lb_text_mobile_control', array(
-      'label'    => __('Button Text Mobile', NJT_NOFI_DOMAIN ),
+      'label'    => __('Button Text', NJT_NOFI_DOMAIN ),
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_lb_text_mobile',
       'type'     => 'text',
