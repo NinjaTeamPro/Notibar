@@ -104,8 +104,8 @@
   //Text
   wp.customize("njt_nofi_text", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-display-deskop .njt-nofi-text').html(to);
-      jQuery("body").on('DOMSubtreeModified', ".njt-display-deskop .njt-nofi-text", function () {
+      jQuery('.njt-nofi-content-deskop .njt-nofi-text').html(to);
+      jQuery("body").on('DOMSubtreeModified', ".njt-nofi-content-deskop .njt-nofi-text", function () {
         var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').css({
           'padding-top': barHeight,
@@ -120,14 +120,19 @@
     value.bind(function (to) {
       const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
       if (to == 1) {
-        jQuery('.njt-display-deskop .njt-nofi-button').show()
-        jQuery('.njt-display-deskop .njt-nofi-button .njt-nofi-button-text').css({
+        jQuery('.njt-nofi-content-deskop .njt-nofi-button').show()
+        jQuery('.njt-nofi-content-deskop .njt-nofi-button .njt-nofi-button-text').css({
           'background': lbColorNotification,
           'border-radius': '5px'
         })
       } else {
-        jQuery('.njt-display-deskop .njt-nofi-button').hide()
+        jQuery('.njt-nofi-content-deskop .njt-nofi-button').hide()
       }
+      var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').css({
+        'padding-top': barHeight,
+        'position': 'relative'
+      })
     })
   })
 
@@ -135,14 +140,21 @@
   //Link/Button Text
   wp.customize("njt_nofi_lb_text", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-display-deskop .njt-nofi-button-text').text(to);
+      jQuery('.njt-nofi-content-deskop .njt-nofi-button-text').text(to);
+      jQuery("body").on('DOMSubtreeModified', ".njt-nofi-content-deskop .njt-nofi-button-text", function () {
+        var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          'position': 'relative'
+        })
+      });
     })
   })
 
   //Link/Button URL
   wp.customize("njt_nofi_lb_url", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-display-deskop .njt-nofi-button-text').attr('href', to);
+      jQuery('.njt-nofi-content-deskop .njt-nofi-button-text').attr('href', to);
     })
   })
 
@@ -156,6 +168,11 @@
         jQuery('.njt-nofi-content-deskop').removeClass('njt-display-deskop')
         jQuery('.njt-nofi-content-mobile').removeClass('njt-display-mobile')
       }
+      var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').css({
+        'padding-top': barHeight,
+        'position': 'relative'
+      })
     })
   })
 
@@ -184,10 +201,16 @@
           'background': lbColorNotification,
           'border-radius': '5px'
         })
+
       } else {
         jQuery('.njt-nofi-content-mobile .njt-nofi-button').hide()
       }
 
+      var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').css({
+        'padding-top': barHeight,
+        'position': 'relative'
+      })
     })
   })
 
@@ -195,6 +218,13 @@
   wp.customize("njt_nofi_lb_text_mobile", function (value) {
     value.bind(function (to) {
       jQuery('.njt-nofi-content-mobile .njt-nofi-button-text').text(to);
+      jQuery("body").on('DOMSubtreeModified', ".njt-nofi-content-mobile .njt-nofi-button-text", function () {
+        var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          'position': 'relative'
+        })
+      });
     })
   })
 
