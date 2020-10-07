@@ -266,6 +266,27 @@
   })
   /* Display Option*/
 
+  //Select devices want to display
+  wp.customize("njt_nofi_devices_display", function (value) {
+    value.bind(function (to) {
+      if (to == 'desktop') {
+        jQuery(".njt-nofi-container-content").addClass('diplay-device-deskop')
+        jQuery(".njt-nofi-container-content").removeClass('diplay-device-mobile')
+      } else if (to == 'mobile') {
+        jQuery(".njt-nofi-container-content").addClass('diplay-device-mobile')
+        jQuery(".njt-nofi-container-content").removeClass('diplay-device-deskop')
+      } else {
+        jQuery(".njt-nofi-container-content").removeClass('diplay-device-deskop')
+        jQuery(".njt-nofi-container-content").removeClass('diplay-device-mobile')
+      }
+      var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').css({
+        'padding-top': barHeight,
+        'position': 'relative'
+      })
+    })
+  })
+
   function checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId) {
     const strCheckDisplayReview = jQuery('#njt_nofi_checkDisplayReview').attr('value')
     const arrCheckDisplayReview = JSON.parse(strCheckDisplayReview)

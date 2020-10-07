@@ -107,6 +107,14 @@
   display: none;
 }
 
+.diplay-device-deskop {
+  display: block;
+}
+
+.diplay-device-mobile {
+  display: none;
+}
+
 @media only screen and (max-width: 480px){
   .njt-nofi-align-content {
     flex-wrap: wrap;
@@ -130,8 +138,16 @@
   .njt-display-mobile {
     display: block;
   }
-  
+
   .njt-nofi-padding-content {
     padding: 5px 5px;
+  }
+
+  .diplay-device-deskop {
+    display: none;
+  }
+
+  .diplay-device-mobile {
+    display: block;
   }
 }
