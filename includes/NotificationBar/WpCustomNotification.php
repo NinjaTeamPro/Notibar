@@ -279,7 +279,7 @@ class WpCustomNotification
 
     //You want different content for mobile
     $customNoti->add_setting('njt_nofi_content_mobile', array(
-      'default'           => 1,
+      'default'           => 0,
       'transport'         => 'postMessage',
     ));
 
@@ -309,7 +309,7 @@ class WpCustomNotification
 
     //Switch on/off button mobiile
     $customNoti->add_setting('njt_nofi_handle_button_mobile', array(
-      'default'           => 1,
+      'default'           => 0,
       'transport'         => 'postMessage',
     ));
 
