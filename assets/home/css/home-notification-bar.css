@@ -99,6 +99,9 @@
   display: flex;
   justify-content: center;
 }
+.njt-display-none {
+  display: none;
+}
 
 @media only screen and (max-width: 480px){
   .njt-nofi-align-content {
@@ -115,4 +118,13 @@
     right: 5px;
     top: 9px;
   }
+
+  .njt-display-deskop {
+    display: none;
+  }
+
+  .njt-display-mobile {
+    display: block;
+  }
+
 }

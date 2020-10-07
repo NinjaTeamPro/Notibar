@@ -80,7 +80,8 @@ class NotificationBarHandle
         'presetColor' => get_theme_mod( 'njt_nofi_preset_color', $this->valueDefault['preset_color']),
         'alignContent' => get_theme_mod( 'njt_nofi_alignment', $this->valueDefault['align_content']),
         'textColorNotification' => get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color']),
-        'wp_is_mobile' => wp_is_mobile()
+        'wp_is_mobile' => wp_is_mobile(),
+        'is_customize_preview' => is_customize_preview()
       ));
     }
   }

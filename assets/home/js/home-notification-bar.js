@@ -137,6 +137,24 @@ const homeNotificationBar = {
       'color': textColorNotification
     })
 
+    //setPositionBar
+    homeNotificationBar.setPositionBar()
+  },
+  windownResizeforCustomize() {
+    jQuery(window).on('resize', function () {
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').css({
+        'padding-top': barHeight,
+        'position': 'relative'
+      })
+    });
+  },
+  windownResizefordisplay() {
+    jQuery(window).on('resize', function () {
+      homeNotificationBar.setPositionBar()
+    });
+  },
+  setPositionBar() {
     const isPositionFix = wpData.isPositionFix
     const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
     const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
@@ -166,4 +184,10 @@ jQuery(document).ready(() => {
   homeNotificationBar.setPaddingTop();
   homeNotificationBar.actionButtonClose();
   homeNotificationBar.customStyleBar()
+  if (wpData.is_customize_preview) {
+    homeNotificationBar.windownResizeforCustomize()
+  } else {
+    homeNotificationBar.windownResizefordisplay()
+  }
+
 })

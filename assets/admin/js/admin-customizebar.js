@@ -104,7 +104,14 @@
   //Text
   wp.customize("njt_nofi_text", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-nofi-text').html(to);
+      jQuery('.njt-display-deskop .njt-nofi-text').html(to);
+      jQuery("body").on('DOMSubtreeModified', ".njt-display-deskop .njt-nofi-text", function () {
+        var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          'position': 'relative'
+        })
+      });
     })
   })
 
@@ -113,13 +120,13 @@
     value.bind(function (to) {
       const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
       if (to == 1) {
-        jQuery('.njt-nofi-button').show()
-        jQuery('.njt-nofi-button .njt-nofi-button-text').css({
+        jQuery('.njt-display-deskop .njt-nofi-button').show()
+        jQuery('.njt-display-deskop .njt-nofi-button .njt-nofi-button-text').css({
           'background': lbColorNotification,
           'border-radius': '5px'
         })
       } else {
-        jQuery('.njt-nofi-button').hide()
+        jQuery('.njt-display-deskop .njt-nofi-button').hide()
       }
     })
   })
@@ -128,59 +135,73 @@
   //Link/Button Text
   wp.customize("njt_nofi_lb_text", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-nofi-button-text').text(to);
+      jQuery('.njt-display-deskop .njt-nofi-button-text').text(to);
     })
   })
 
   //Link/Button URL
   wp.customize("njt_nofi_lb_url", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-nofi-button-text').attr('href', to);
+      jQuery('.njt-display-deskop .njt-nofi-button-text').attr('href', to);
+    })
+  })
+
+  //You want different content for mobile
+  wp.customize("njt_nofi_content_mobile", function (value) {
+    value.bind(function (to) {
+      if (to) {
+        jQuery('.njt-nofi-content-deskop').addClass('njt-display-deskop')
+        jQuery('.njt-nofi-content-mobile').addClass('njt-display-mobile')
+      } else {
+        jQuery('.njt-nofi-content-deskop').removeClass('njt-display-deskop')
+        jQuery('.njt-nofi-content-mobile').removeClass('njt-display-mobile')
+      }
     })
   })
 
   //Link/Button Text mobile 
   wp.customize("njt_nofi_text_mobile", function (value) {
     value.bind(function (to) {
-      if (wpData.wp_is_mobile) {
-        jQuery('.njt-nofi-text').html(to);
-      }
+      jQuery('.njt-nofi-content-mobile .njt-nofi-text').html(to);
+      jQuery("body").on('DOMSubtreeModified', ".njt-display-mobile .njt-nofi-text", function () {
+        var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+        jQuery('body').css({
+          'padding-top': barHeight,
+          'position': 'relative'
+        })
+      });
     })
   })
 
   //Customize Button mobile
   wp.customize("njt_nofi_handle_button_mobile", function (value) {
     value.bind(function (to) {
-      if (wpData.wp_is_mobile) {
-        const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
-        if (to == 1) {
-          jQuery('.njt-nofi-button').show()
-          jQuery('.njt-nofi-button .njt-nofi-button-text').css({
-            'background': lbColorNotification,
-            'border-radius': '5px'
-          })
-        } else {
-          jQuery('.njt-nofi-button').hide()
-        }
+
+      const lbColorNotification = wp.customize.value('njt_nofi_lb_color')()
+      if (to == 1) {
+        jQuery('.njt-nofi-content-mobile .njt-nofi-button').show()
+        jQuery('.njt-nofi-content-mobile .njt-nofi-button .njt-nofi-button-text').css({
+          'background': lbColorNotification,
+          'border-radius': '5px'
+        })
+      } else {
+        jQuery('.njt-nofi-content-mobile .njt-nofi-button').hide()
       }
+
     })
   })
 
   //Link/Button Text mobile
   wp.customize("njt_nofi_lb_text_mobile", function (value) {
     value.bind(function (to) {
-      if (wpData.wp_is_mobile) {
-        jQuery('.njt-nofi-button-text').text(to);
-      }
+      jQuery('.njt-nofi-content-mobile .njt-nofi-button-text').text(to);
     })
   })
 
   //Link/Button URL
   wp.customize("njt_nofi_lb_url_mobile", function (value) {
     value.bind(function (to) {
-      if (wpData.wp_is_mobile) {
-        jQuery('.njt-nofi-button-text').attr('href', to);
-      }
+      jQuery('.njt-nofi-content-mobile .njt-nofi-button-text').attr('href', to);
     })
   })
 
