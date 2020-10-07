@@ -207,7 +207,7 @@ class WpCustomNotification
     ));
 
     $customNoti->selective_refresh->add_partial( 'njt_nofi_text', array(
-      'selector'            => '.njt-nofi-notification-bar',
+      'selector'            => '.njt-display-deskop',
       'primarySetting'      => 'njt_nofi_text',
       'container_inclusive' => true,
       'fallback_refresh'    => false,
@@ -299,6 +299,13 @@ class WpCustomNotification
       'sanitize_callback' => 'wp_kses_post', //keeps only HTML tags that are allowed in post content
       'transport'         => 'postMessage',
     ));
+
+    $customNoti->selective_refresh->add_partial( 'njt_nofi_text_mobile', array(
+      'selector'            => '.njt-display-mobile',
+      'primarySetting'      => 'njt_nofi_text_mobile',
+      'container_inclusive' => true,
+      'fallback_refresh'    => false,
+    ) );
 
     $customNoti->add_control( 'njt_nofi_text_mobile_control', array(
       'label'    => __('Text', NJT_NOFI_DOMAIN ),
