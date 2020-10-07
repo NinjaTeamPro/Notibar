@@ -130,5 +130,8 @@
   .njt-display-mobile {
     display: block;
   }
-
+  
+  .njt-nofi-padding-content {
+    padding: 5px 5px;
+  }
 }

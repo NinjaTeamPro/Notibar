@@ -13,19 +13,17 @@
     $classMobile = 'njt-display-mobile';
   }
 
-  if(wp_is_mobile() && get_theme_mod('njt_nofi_content_mobile', 0)) {
-    $textContent = get_theme_mod('njt_nofi_text_mobile', $this->valueDefault['text_mobile']);
-    $buttonText = get_theme_mod('njt_nofi_lb_text_mobile', $this->valueDefault['lb_text_mobile']);
-    $buttonUrl = get_theme_mod('njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']);
-    $isNewWindown = get_theme_mod('njt_nofi_open_new_windown_mobile', $this->valueDefault['new_windown_mobile']);
-    $isDisplayButton = get_theme_mod('njt_nofi_handle_button_mobile', 1);
-  } else {
-    $textContent = get_theme_mod('njt_nofi_text', $this->valueDefault['text']);
-    $buttonText = get_theme_mod('njt_nofi_lb_text', $this->valueDefault['lb_text']);
-    $buttonUrl = get_theme_mod('njt_nofi_lb_url', $this->valueDefault['lb_url']);
-    $isNewWindown = get_theme_mod('njt_nofi_open_new_windown', $this->valueDefault['new_windown']);
-    $isDisplayButton = get_theme_mod('njt_nofi_handle_button', 1);
-  }
+  $textContentMobile = get_theme_mod('njt_nofi_text_mobile', $this->valueDefault['text_mobile']);
+  $buttonTextMobile = get_theme_mod('njt_nofi_lb_text_mobile', $this->valueDefault['lb_text_mobile']);
+  $buttonUrlMobile = get_theme_mod('njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']);
+  $isNewWindownMobile = get_theme_mod('njt_nofi_open_new_windown_mobile', $this->valueDefault['new_windown_mobile']);
+  $isDisplayButtonMobile = get_theme_mod('njt_nofi_handle_button_mobile', 1);
+
+  $textContent = get_theme_mod('njt_nofi_text', $this->valueDefault['text']);
+  $buttonText = get_theme_mod('njt_nofi_lb_text', $this->valueDefault['lb_text']);
+  $buttonUrl = get_theme_mod('njt_nofi_lb_url', $this->valueDefault['lb_url']);
+  $isNewWindown = get_theme_mod('njt_nofi_open_new_windown', $this->valueDefault['new_windown']);
+  $isDisplayButton = get_theme_mod('njt_nofi_handle_button', 1);
 ?>
 <div class="njt-nofi-container-content">
 <div class="njt-nofi-container" >
@@ -39,9 +37,9 @@
     </div>
 
     <div class="njt-nofi-content njt-nofi-text-color njt-nofi-align-content njt-display-none njt-nofi-content-mobile <?php echo ($classMobile)?>" style="<?php echo esc_attr($contentWidth) ?>">
-      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo (get_theme_mod('njt_nofi_text_mobile', $this->valueDefault['text_mobile']))?></div>
-      <div class="njt-nofi-button njt-nofi-padding-content " style="<?php if(!get_theme_mod('njt_nofi_handle_button_mobile', 1)) { echo ('display: none');}?>">
-          <a <?php if(get_theme_mod('njt_nofi_open_new_windown_mobile', $this->valueDefault['new_windown_mobile'])) {echo ("target='_blank'");}?>  href="<?php echo esc_url(get_theme_mod('njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']))?>" class="njt-nofi-button-text njt-nofi-padding-content" style="<?php if(get_theme_mod('njt_nofi_handle_button_mobile', 1)) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html(get_theme_mod('njt_nofi_lb_text_mobile', $this->valueDefault['lb_text_mobile']))?></a>
+      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo ($textContentMobile)?></div>
+      <div class="njt-nofi-button njt-nofi-padding-content " style="<?php if(!$isDisplayButtonMobile) { echo ('display: none');}?>">
+          <a <?php if($isNewWindownMobile) {echo ("target='_blank'");}?>  href="<?php echo esc_url($buttonUrlMobile)?>" class="njt-nofi-button-text njt-nofi-padding-content" style="<?php if($isDisplayButtonMobile) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html($buttonTextMobile)?></a>
       </div>
     </div>
 
