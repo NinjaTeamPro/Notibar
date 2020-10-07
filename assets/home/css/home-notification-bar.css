@@ -102,6 +102,7 @@
 .njt-nofi-align-content {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .njt-display-none {
   display: none;
