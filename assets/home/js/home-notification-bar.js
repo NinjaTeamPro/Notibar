@@ -6,7 +6,43 @@ const homeNotificationBar = {
     })
 
   },
-
+  setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  },
+  getCookie(cname) {
+    const name = cname + '=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return '';
+  },
+  hideBarWithCookie() {
+    const valueCookie = homeNotificationBar.getCookie('njt-close-notibar')
+    const hideCloseButton = wpData.hideCloseButton
+    if (valueCookie == 'true' && !wpData.is_customize_preview && hideCloseButton == 'close_button') {
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').css({ top: -barHeight })
+      jQuery('body').css({
+        'position': 'relative',
+      })
+      if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+        const a = wpAdminBarHeight - barHeight
+        jQuery('.njt-nofi-container').css({ top: a + "px" })
+      }
+    }
+  },
   actionButtonClose() {
     jQuery(".njt-nofi-container .njt-nofi-close-button").on("click", function (e) {
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
@@ -19,6 +55,9 @@ const homeNotificationBar = {
         const a = wpAdminBarHeight - barHeight
         jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
       }
+
+      //set cookie
+      homeNotificationBar.setCookie('njt-close-notibar', 'true', 1)
     })
 
     jQuery(".njt-nofi-container .njt-nofi-toggle-button").on("click", function (e) {
@@ -184,6 +223,7 @@ jQuery(document).ready(() => {
   homeNotificationBar.setPaddingTop();
   homeNotificationBar.actionButtonClose();
   homeNotificationBar.customStyleBar()
+  homeNotificationBar.hideBarWithCookie();
   if (wpData.is_customize_preview) {
     homeNotificationBar.windownResizeforCustomize()
   } else {
