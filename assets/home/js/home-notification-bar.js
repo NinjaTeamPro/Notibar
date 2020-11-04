@@ -36,11 +36,7 @@ const homeNotificationBar = {
       jQuery('body').css({
         'position': 'relative',
       })
-      if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
-        const a = wpAdminBarHeight - barHeight
-        jQuery('.njt-nofi-container').css({ top: a + "px" })
-      }
+      jQuery('.njt-nofi-container').remove();
     }
   },
   actionButtonClose() {
