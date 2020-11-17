@@ -115,19 +115,11 @@ const homeNotificationBar = {
       })
     }
 
-    const presetColor = wpData.presetColor
+    const textButtonColor = wpData.textButtonColor
 
-    if (presetColor == '6') {
+    if(textButtonColor) {
       jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-        'color': '#2962ff'
-      })
-    } else if (presetColor == '7') {
-      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-        'color': '#1919cf'
-      })
-    } else {
-      jQuery(".njt-nofi-notification-bar .njt-nofi-button-text").css({
-        'color': '#ffffff'
+        'color': textButtonColor
       })
     }
 

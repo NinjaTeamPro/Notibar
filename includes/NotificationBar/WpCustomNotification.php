@@ -6,6 +6,7 @@ defined('ABSPATH') || exit;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorBg;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorText;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorLb;
+use NjtNotificationBar\NotificationBar\WpCustomControlTextColorLb;
 use NjtNotificationBar\NotificationBar\WpCustomControlColorPreset;
 use NjtNotificationBar\NotificationBar\WpCustomControlPositionType;
 use NjtNotificationBar\NotificationBar\WpCustomControlHandleButton;
@@ -42,6 +43,7 @@ class WpCustomNotification
       'bg_color'          => '#9af4cf',
       'text_color'        => '#1919cf',
       'lb_color'          => '#1919cf',
+      'lb_text_color'     => '#ffffff',
       'font_size'         => '15',
       'dp_homepage'       => true,
       'dp_pages'          => true,
@@ -443,6 +445,22 @@ class WpCustomNotification
         'label'    => __('Button Color', NJT_NOFI_DOMAIN ),
         'section'  => 'njt_nofi_style',
         'settings' => 'njt_nofi_lb_color'
+      )
+    ));
+
+    //Button Text Color
+    $customNoti->add_setting('njt_nofi_lb_text_color', array(
+      'default'           =>$this->valueDefault['lb_text_color'],
+      'sanitize_callback' => 'sanitize_hex_color',
+      'transport'         => 'postMessage',
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlTextColorLb( $customNoti, 'njt_nofi_lb_text_color',
+      array(
+        'label'    => __('Button Text Color', NJT_NOFI_DOMAIN ),
+        'section'  => 'njt_nofi_style',
+        'settings' => 'njt_nofi_lb_text_color'
       )
     ));
 
