@@ -13,14 +13,14 @@
     $classMobile = 'njt-display-mobile';
   }
 
-  $textContentMobile = get_theme_mod('njt_nofi_text_mobile', $this->valueDefault['text_mobile']);
-  $buttonTextMobile = get_theme_mod('njt_nofi_lb_text_mobile', $this->valueDefault['lb_text_mobile']);
+  $textContentMobile = get_option('njt_nofi_text_mobile_wpml_translate');
+  $buttonTextMobile = get_option('njt_nofi_lb_text_mobile_wpml_translate');
   $buttonUrlMobile = get_theme_mod('njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']);
   $isNewWindownMobile = get_theme_mod('njt_nofi_open_new_windown_mobile', $this->valueDefault['new_windown_mobile']);
   $isDisplayButtonMobile = get_theme_mod('njt_nofi_handle_button_mobile', 1);
 
-  $textContent = get_theme_mod('njt_nofi_text', $this->valueDefault['text']);
-  $buttonText = get_theme_mod('njt_nofi_lb_text', $this->valueDefault['lb_text']);
+  $textContent = get_option('njt_nofi_text_wpml_translate');
+  $buttonText = get_option('njt_nofi_lb_text_wpml_translate');
   $buttonUrl = get_theme_mod('njt_nofi_lb_url', $this->valueDefault['lb_url']);
   $isNewWindown = get_theme_mod('njt_nofi_open_new_windown', $this->valueDefault['new_windown']);
   $isDisplayButton = get_theme_mod('njt_nofi_handle_button', 1);
@@ -30,14 +30,14 @@
   <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification" style="<?php echo('background:'.esc_attr($bgColorNotification)) ?>">
     
     <div class="njt-nofi-content njt-nofi-text-color njt-nofi-align-content njt-nofi-content-deskop <?php echo ($classDeskop)?>" style="width:<?php echo esc_attr($contentWidth) ?>">
-      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo ($textContent)?></div>
+      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo wp_kses_post($textContent)?></div>
       <div class="njt-nofi-button njt-nofi-padding-content " style="<?php if(!$isDisplayButton) { echo ('display: none');}?>">
           <a <?php if($isNewWindown) {echo ("target='_blank'");}?>  href="<?php echo esc_url($buttonUrl)?>" class="njt-nofi-button-text njt-nofi-padding-content" style="<?php if($isDisplayButton) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html($buttonText)?></a>
       </div>
     </div>
 
     <div class="njt-nofi-content njt-nofi-text-color njt-nofi-align-content njt-display-none njt-nofi-content-mobile <?php echo ($classMobile)?>" style="width:<?php echo esc_attr($contentWidth) ?>">
-      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo ($textContentMobile)?></div>
+      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo wp_kses_post($textContentMobile)?></div>
       <div class="njt-nofi-button njt-nofi-padding-content " style="<?php if(!$isDisplayButtonMobile) { echo ('display: none');}?>">
           <a <?php if($isNewWindownMobile) {echo ("target='_blank'");}?>  href="<?php echo esc_url($buttonUrlMobile)?>" class="njt-nofi-button-text njt-nofi-padding-content" style="<?php if($isDisplayButtonMobile) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html($buttonTextMobile)?></a>
       </div>
