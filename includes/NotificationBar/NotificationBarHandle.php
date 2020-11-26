@@ -82,7 +82,8 @@ class NotificationBarHandle
         'textColorNotification' => get_theme_mod('njt_nofi_text_color', $this->valueDefault['text_color']),
         'textButtonColor' => get_theme_mod('njt_nofi_lb_text_color',$this->valueDefault['lb_text_color']),
         'wp_is_mobile' => wp_is_mobile(),
-        'is_customize_preview' => is_customize_preview()
+        'is_customize_preview' => is_customize_preview(),
+        'wp_get_theme' => wp_get_theme()->get( 'Name' )
       ));
     }
   }
