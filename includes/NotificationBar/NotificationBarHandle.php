@@ -65,10 +65,10 @@ class NotificationBarHandle
     $isdevicesDisplay = $this->njt_nofi_devicesDisplay();
 
     if($this->njt_nofi_checkDisplayNotification() && $isdevicesDisplay) {
-      wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/css/home-notification-bar.css', array(), NJT_NOFI_VERSION);
+      wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/frontend/css/notibar.css', array(), NJT_NOFI_VERSION);
       wp_enqueue_style('njt-nofi');
 
-      wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/home/js/home-notification-bar.js', array('jquery'),NJT_NOFI_VERSION, true );
+      wp_register_script('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/frontend/js/notibar.js', array('jquery'),NJT_NOFI_VERSION, true );
       wp_enqueue_script('njt-nofi');
 
       wp_localize_script('njt-nofi', 'wpData', array(
