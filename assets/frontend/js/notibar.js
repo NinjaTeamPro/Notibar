@@ -32,7 +32,7 @@ const homeNotificationBar = {
     const hideCloseButton = wpData.hideCloseButton
     if (valueCookie == 'true' && !wpData.is_customize_preview && hideCloseButton == 'close_button') {
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      jQuery('body').css({ top: -barHeight })
+      jQuery('body').css({ 'padding-top': -barHeight })
       jQuery('body').css({
         'position': 'relative',
       })
@@ -40,65 +40,77 @@ const homeNotificationBar = {
     }
   },
   actionButtonClose() {
+    //Option Close
     jQuery(".njt-nofi-container .njt-nofi-close-button").on("click", function (e) {
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      jQuery('body').animate({ top: -barHeight }, 1000)
+      const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+      const a = wpAdminBarHeight - barHeight
+      jQuery('body').animate({ 'padding-top': 0 }, 1000)
       jQuery('body').css({
         'position': 'relative',
       })
       if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
-        const a = wpAdminBarHeight - barHeight
         jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+      }
+      if (jQuery(".njt-nofi-container").css('position') == 'absolute') {
+        jQuery('.njt-nofi-container').animate({ top: -barHeight + "px" }, 1000)
       }
       //set cookie
       homeNotificationBar.setCookie('njt-close-notibar', 'true', 1)
       if(wpData.wp_get_theme == 'Essentials') {
         if (jQuery('.admin-bar').length > 0) {
-          jQuery('body.admin-bar #masthead.pix-header.is-scroll').css({
+          jQuery('body.admin-bar #masthead.pix-header').css({
             'top': '32px'
           })
         } else {
-          jQuery('body #masthead.pix-header.is-scroll').css({
+          jQuery('body #masthead.pix-header').css({
             'top': 0
           })
         }
       }
     })
 
+
+    //Option Toggle Close
     jQuery(".njt-nofi-container .njt-nofi-toggle-button").on("click", function (e) {
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      jQuery('body').animate({ top: -barHeight }, 1000)
+      const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+      const a = wpAdminBarHeight - barHeight
+      jQuery('body').animate({ 'padding-top': 0 }, 1000)
       jQuery('body').css({
         'position': 'relative',
       })
       if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
-        const a = wpAdminBarHeight - barHeight
         jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
 
         //Essentials Theme
         if(wpData.wp_get_theme == 'Essentials') {
           if (jQuery('.admin-bar').length > 0) {
-            jQuery('body.admin-bar #masthead.pix-header.is-scroll').css({
+            jQuery('body.admin-bar #masthead.pix-header').css({
               'top': '32px'
             })
           } else {
-            jQuery('body #masthead.pix-header.is-scroll').css({
+            jQuery('body #masthead.pix-header').css({
               'top': 0
             })
           }
         }
       }
+
+      if (jQuery(".njt-nofi-container").css('position') == 'absolute') {
+        jQuery('.njt-nofi-container').animate({ top: -barHeight + "px" }, 1000)
+      }
+
       jQuery('.njt-nofi-display-toggle').css({
         'display': 'block',
         'top': barHeight,
       })
     })
 
-
+    //Option Toggle Opent
     jQuery(".njt-nofi-display-toggle").on("click", function (e) {
-      jQuery('body').animate({ top: 0 }, 1000)
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      jQuery('body').animate({ 'padding-top': barHeight }, 1000)
       jQuery('.njt-nofi-display-toggle').css({
         'display': 'none',
         'top': 0,
@@ -108,16 +120,19 @@ const homeNotificationBar = {
         jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
 
         //Essentials Theme
-        const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         if (jQuery('.admin-bar').length > 0) {
-          jQuery('body.admin-bar #masthead.pix-header.is-scroll').css({
+          jQuery('body.admin-bar #masthead.pix-header').css({
             'top': barHeight + 32
           })
         } else {
-          jQuery('body #masthead.pix-header.is-scroll').css({
+          jQuery('body #masthead.pix-header').css({
             'top': barHeight
           })
         }
+      }
+
+      if (jQuery(".njt-nofi-container").css('position') == 'absolute') {
+        jQuery('.njt-nofi-container').animate({ top: 0 }, 1000)
       }
     })
   },
@@ -269,10 +284,10 @@ const homeNotificationBar = {
 }
 
 jQuery(document).ready(() => {
+  homeNotificationBar.hideBarWithCookie();
   homeNotificationBar.setPaddingTop();
   homeNotificationBar.actionButtonClose();
   homeNotificationBar.customStyleBar()
-  homeNotificationBar.hideBarWithCookie();
   if (wpData.is_customize_preview) {
     homeNotificationBar.windownResizeforCustomize()
   } else {
@@ -286,13 +301,20 @@ jQuery(document).ready(() => {
       }
     } else {
       if(wpData.isPositionFix) {
-        jQuery('body.admin-bar header#masthead').css({
-          'top': barHeight + 32
-        })
+        console.log(1111)
+        if(jQuery('.admin-bar').length > 0) {
+          jQuery('body.admin-bar header#masthead').css({
+            'top': barHeight + 32
+          })
+        } else {
+          jQuery('body header#masthead').css({
+            'top': barHeight
+          })
+        }
       }
     }
     if(!wpData.isPositionFix) {
-      $(window).bind('mousewheel', function(event) {
+      jQuery(window).bind('mousewheel', function(event) {
         if (event.originalEvent.wheelDelta < 0) {
           jQuery('body.admin-bar #masthead.pix-header.is-scroll').css({
             'top': '32px'
@@ -301,4 +323,19 @@ jQuery(document).ready(() => {
       });
     }
   }
+
+  // jQuery(window).bind('mousewheel', function(event) {
+  //   if (event.originalEvent.wheelDelta < 0) {
+  //     jQuery('body header.header-scrolled').css({
+  //       'top': '32px'
+  //     })
+  //   } else {
+  //     jQuery('body header.av_header_border_disabled').css({
+  //       'top': 'unset'
+  //     })
+  //     jQuery('body header.header-scrolled').css({
+  //       'top': '32px'
+  //     })
+  //   }
+  // });
 })
