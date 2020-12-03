@@ -120,14 +120,16 @@ const homeNotificationBar = {
         jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
 
         //Essentials Theme
-        if (jQuery('.admin-bar').length > 0) {
-          jQuery('body.admin-bar #masthead.pix-header').css({
-            'top': barHeight + 32
-          })
-        } else {
-          jQuery('body #masthead.pix-header').css({
-            'top': barHeight
-          })
+        if(wpData.wp_get_theme == 'Essentials') {
+          if (jQuery('.admin-bar').length > 0) {
+            jQuery('body.admin-bar #masthead.pix-header').css({
+              'top': barHeight + 32
+            })
+          } else {
+            jQuery('body #masthead.pix-header').css({
+              'top': barHeight
+            })
+          }
         }
       }
 
@@ -280,6 +282,37 @@ const homeNotificationBar = {
         }
       }
     });
+  },
+  supportEnfoldTheme() {
+    if(wpData.wp_get_theme == 'Enfold' && jQuery(".njt-nofi-container").css('position') == 'absolute'){
+      jQuery(window).bind('mousewheel', function(event) {
+        console.log(wpData.wp_get_theme);
+        if (event.originalEvent.wheelDelta < 0) {
+          if(jQuery('.admin-bar').length > 0) {
+            jQuery('body header.header-scrolled').css({
+              'top': '32px'
+            })
+          } else {
+            jQuery('body header.header-scrolled').css({
+              'top': 0
+            })
+          }
+        } else {
+          jQuery('body header.av_header_border_disabled').css({
+            'top': 'unset'
+          })
+          if(jQuery('.admin-bar').length > 0) {
+            jQuery('body header.header-scrolled').css({
+              'top': '32px'
+            })
+          } else {
+            jQuery('body header.header-scrolled').css({
+              'top': 0
+            })
+          }
+        }
+      });
+    }
   }
 }
 
@@ -287,7 +320,8 @@ jQuery(document).ready(() => {
   homeNotificationBar.hideBarWithCookie();
   homeNotificationBar.setPaddingTop();
   homeNotificationBar.actionButtonClose();
-  homeNotificationBar.customStyleBar()
+  homeNotificationBar.customStyleBar();
+  homeNotificationBar.supportEnfoldTheme();
   if (wpData.is_customize_preview) {
     homeNotificationBar.windownResizeforCustomize()
   } else {
@@ -323,19 +357,4 @@ jQuery(document).ready(() => {
       });
     }
   }
-
-  // jQuery(window).bind('mousewheel', function(event) {
-  //   if (event.originalEvent.wheelDelta < 0) {
-  //     jQuery('body header.header-scrolled').css({
-  //       'top': '32px'
-  //     })
-  //   } else {
-  //     jQuery('body header.av_header_border_disabled').css({
-  //       'top': 'unset'
-  //     })
-  //     jQuery('body header.header-scrolled').css({
-  //       'top': '32px'
-  //     })
-  //   }
-  // });
 })
