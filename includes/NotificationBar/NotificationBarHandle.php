@@ -172,10 +172,16 @@ class NotificationBarHandle
   public function display_notification()
   {
     
-    if (wp_is_mobile()) {
-      $contentWidth = '100%';
+    if(wp_get_theme()->get( 'Name' ) == 'Nayma') {
+      $widthStyle = 'auto';
     } else {
-      $contentWidth = get_theme_mod('njt_nofi_content_width') != null ? get_theme_mod('njt_nofi_content_width').'px' : '100%';
+      $widthStyle = '100%';
+    }
+
+    if (wp_is_mobile()) {
+      $contentWidth = $widthStyle;
+    } else {
+      $contentWidth = get_theme_mod('njt_nofi_content_width') != null ? get_theme_mod('njt_nofi_content_width').'px' : $widthStyle;
     }
   
     $isPositionFix = get_theme_mod('njt_nofi_position_type', $this->valueDefault['position_type']) == 'fixed' ? true : false;
