@@ -30,16 +30,16 @@
   <div class="njt-nofi-notification-bar njt-nofi-bgcolor-notification" style="<?php echo('background:'.esc_attr($bgColorNotification)) ?>">
     
     <div class="njt-nofi-content njt-nofi-text-color njt-nofi-align-content njt-nofi-content-deskop <?php echo ($classDeskop)?>" style="width:<?php echo esc_attr($contentWidth) ?>">
-      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo wp_kses_post($textContent)?></div>
-      <div class="njt-nofi-button njt-nofi-padding-content " style="<?php if(!$isDisplayButton) { echo ('display: none');}?>">
-          <a <?php if($isNewWindown) {echo ("target='_blank'");}?>  href="<?php echo esc_url($buttonUrl)?>" class="njt-nofi-button-text njt-nofi-padding-content" style="<?php if($isDisplayButton) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html($buttonText)?></a>
+      <div class="njt-nofi-text njt-nofi-padding-text"><?php echo wp_kses_post($textContent)?></div>
+      <div class="njt-nofi-button njt-nofi-padding-text " style="<?php if(!$isDisplayButton) { echo ('display: none');}?>">
+          <a <?php if($isNewWindown) {echo ("target='_blank'");}?>  href="<?php echo esc_url($buttonUrl)?>" class="njt-nofi-button-text njt-nofi-padding-text" style="<?php if($isDisplayButton) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html($buttonText)?></a>
       </div>
     </div>
 
     <div class="njt-nofi-content njt-nofi-text-color njt-nofi-align-content njt-display-none njt-nofi-content-mobile <?php echo ($classMobile)?>" style="width:<?php echo esc_attr($contentWidth) ?>">
-      <div class="njt-nofi-text njt-nofi-padding-content"><?php echo wp_kses_post($textContentMobile)?></div>
-      <div class="njt-nofi-button njt-nofi-padding-content " style="<?php if(!$isDisplayButtonMobile) { echo ('display: none');}?>">
-          <a <?php if($isNewWindownMobile) {echo ("target='_blank'");}?>  href="<?php echo esc_url($buttonUrlMobile)?>" class="njt-nofi-button-text njt-nofi-padding-content" style="<?php if($isDisplayButtonMobile) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html($buttonTextMobile)?></a>
+      <div class="njt-nofi-text njt-nofi-padding-text"><?php echo wp_kses_post($textContentMobile)?></div>
+      <div class="njt-nofi-button njt-nofi-padding-text " style="<?php if(!$isDisplayButtonMobile) { echo ('display: none');}?>">
+          <a <?php if($isNewWindownMobile) {echo ("target='_blank'");}?>  href="<?php echo esc_url($buttonUrlMobile)?>" class="njt-nofi-button-text njt-nofi-padding-text" style="<?php if($isDisplayButtonMobile) { echo ('background:' .esc_attr($lbColorNotification).';border-radius:3px');}?>"><?php echo esc_html($buttonTextMobile)?></a>
       </div>
     </div>
 

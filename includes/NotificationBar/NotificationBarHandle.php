@@ -190,6 +190,20 @@ class NotificationBarHandle
     $lbColorNotification = get_theme_mod('njt_nofi_lb_color', $this->valueDefault['lb_color']);
     $notificationFontSize = get_theme_mod('njt_nofi_font_size', $this->valueDefault['font_size']);
 
+
+
+    if(wp_get_theme()->get( 'Name' ) == 'Nayma') {
+      ?>
+        <style>
+            .njt-nofi-notification-bar .njt-nofi-hide .njt-nofi-close-icon,
+            .njt-nofi-display-toggle .njt-nofi-display-toggle-icon {
+              width: 10px !important;
+              height: 10px !important;
+            }
+        </style>
+      <?php
+    }
+
     ?>
       <style>
         .njt-nofi-notification-bar .njt-nofi-hide-button {

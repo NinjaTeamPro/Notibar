@@ -21,13 +21,12 @@
   display: inline-block;
 }
 
-.njt-nofi-padding-content {
+.njt-nofi-padding-text {
   padding: 5px 10px;
 }
 
 .njt-nofi-notification-bar .njt-nofi-button .njt-nofi-button-text {
   text-decoration: none;
-  display: inline-block;
 }
 .njt-nofi-notification-bar .njt-nofi-button{
   transition: transform .5s;
@@ -139,7 +138,7 @@
     display: block;
   }
 
-  .njt-nofi-padding-content {
+  .njt-nofi-padding-text {
     padding: 5px 5px;
   }
 
