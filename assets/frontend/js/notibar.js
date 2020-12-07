@@ -420,6 +420,13 @@ jQuery(document).ready(() => {
           jQuery('body.admin-bar #masthead.pix-header.is-scroll').css({
             'top': '32px'
           })
+        } else {
+          jQuery('body.admin-bar #masthead.pix-header').css({
+            'top': '0'
+          })
+          jQuery('body.admin-bar #masthead.pix-header.is-scroll').css({
+            'top': '32px'
+          })
         }
       });
     }
