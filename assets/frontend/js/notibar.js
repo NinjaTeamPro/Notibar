@@ -43,7 +43,7 @@ const homeNotificationBar = {
     //Option Close
     jQuery(".njt-nofi-container .njt-nofi-close-button").on("click", function (e) {
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+      const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0 ;
       const a = wpAdminBarHeight - barHeight
       jQuery('body').animate({ 'padding-top': 0 }, 1000)
       jQuery('body').css({
@@ -91,7 +91,7 @@ const homeNotificationBar = {
     jQuery(".njt-nofi-container .njt-nofi-toggle-button").on("click", function (isCloaseBar) {
       
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+      const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0
       const a = wpAdminBarHeight - barHeight
       jQuery('body').animate({ 'padding-top': 0 }, 1000)
       jQuery('body').css({
@@ -147,7 +147,7 @@ const homeNotificationBar = {
         'top': 0,
       })
       if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+        const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0
         jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
 
         //Essentials Theme
@@ -279,7 +279,7 @@ const homeNotificationBar = {
   },
   setPositionBar() {
     const isPositionFix = wpData.isPositionFix
-    const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+    const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0
     const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
     if (isPositionFix) {
       jQuery(".njt-nofi-container").css({
@@ -402,7 +402,6 @@ jQuery(document).ready(() => {
       }
     } else {
       if(wpData.isPositionFix) {
-        console.log(1111)
         if(jQuery('.admin-bar').length > 0) {
           jQuery('body.admin-bar header#masthead').css({
             'top': barHeight + 32

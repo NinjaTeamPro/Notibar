@@ -63,7 +63,7 @@
         'top': 0,
       })
       if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-        const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+        const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
         jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
       }
     });
@@ -343,7 +343,7 @@
           'position': 'relative',
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           const a = wpAdminBarHeight - barHeight
           jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
         }
@@ -357,7 +357,7 @@
           'top': 0,
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
         }
       }
@@ -378,7 +378,7 @@
           'position': 'relative',
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           const a = wpAdminBarHeight - barHeight
           jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
         }
@@ -392,7 +392,7 @@
           'top': 0,
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
         }
       }
@@ -413,7 +413,7 @@
           'position': 'relative',
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           const a = wpAdminBarHeight - barHeight
           jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
         }
@@ -427,7 +427,7 @@
           'top': 0,
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
         }
       }
@@ -448,7 +448,7 @@
           'position': 'relative',
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           const a = wpAdminBarHeight - barHeight
           jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
         }
@@ -462,7 +462,7 @@
           'top': 0,
         })
         if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').outerHeight();
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
           jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
         }
       }
