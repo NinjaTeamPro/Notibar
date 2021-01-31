@@ -49,9 +49,11 @@ class NotificationBarHandle
     );
     $urlEncode = urlencode('autofocus[panel]') ;
     $link = esc_html(admin_url('/customize.php?'. $urlEncode.'=njt_notification-bar'));
-    foreach($submenu['options-general.php'] as $k=>$item){
-      if ($item[2] == 'njt_nofi_NotificationBar') {
-        $submenu['options-general.php'][$k][2] =  $link;
+    if($submenu['options-general.php']) {
+      foreach($submenu['options-general.php'] as $k=>$item){
+        if ($item[2] == 'njt_nofi_NotificationBar') {
+          $submenu['options-general.php'][$k][2] =  $link;
+        }
       }
     }
 
@@ -126,7 +128,7 @@ class NotificationBarHandle
 
     if($isDisplayHome && is_home() || $isDisplayHome && is_front_page()) {
       return true;
-    } else if($isDisplayPage && is_page()) {
+    } else if($isDisplayPage && is_page() || (function_exists("is_shop") && $isDisplayPage && is_shop())) {
       return true;
     } else if($isDisplayPosts && is_single()) {
       return true;
