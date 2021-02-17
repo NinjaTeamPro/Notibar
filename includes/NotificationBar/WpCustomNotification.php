@@ -57,6 +57,8 @@ class WpCustomNotification
     update_option('njt_nofi_text_mobile_wpml_translate', get_theme_mod('njt_nofi_text_mobile', $this->valueDefault['text_mobile']));
     update_option('njt_nofi_lb_text_wpml_translate', get_theme_mod('njt_nofi_lb_text', $this->valueDefault['lb_text']));
     update_option('njt_nofi_lb_text_mobile_wpml_translate', get_theme_mod('njt_nofi_lb_text_mobile', $this->valueDefault['lb_text_mobile']));
+	update_option('njt_nofi_lb_url_wpml_translate', get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url']));
+	update_option('njt_nofi_lb_url_mobile_wpml_translate', get_theme_mod( 'njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']));
 
     add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'), 10);
     add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
@@ -111,7 +113,9 @@ class WpCustomNotification
     update_option('njt_nofi_text_mobile_wpml_translate', get_theme_mod('njt_nofi_text_mobile', $this->valueDefault['text_mobile']));
     update_option('njt_nofi_lb_text_wpml_translate', get_theme_mod('njt_nofi_lb_text', $this->valueDefault['lb_text']));
     update_option('njt_nofi_lb_text_mobile_wpml_translate', get_theme_mod('njt_nofi_lb_text_mobile', $this->valueDefault['lb_text_mobile']));
-  }
+	update_option('njt_nofi_lb_url_wpml_translate', get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url']));
+	update_option('njt_nofi_lb_url_mobile_wpml_translate', get_theme_mod( 'njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']));
+}
   
   public function njt_nofi_sanitizeSelect( $input, $setting ){
           

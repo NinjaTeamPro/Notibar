@@ -15,13 +15,13 @@
 
   $textContentMobile = get_option('njt_nofi_text_mobile_wpml_translate');
   $buttonTextMobile = get_option('njt_nofi_lb_text_mobile_wpml_translate');
-  $buttonUrlMobile = get_theme_mod('njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']);
+  $buttonUrlMobile = get_option('njt_nofi_lb_url_mobile_wpml_translate');
   $isNewWindownMobile = get_theme_mod('njt_nofi_open_new_windown_mobile', $this->valueDefault['new_windown_mobile']);
   $isDisplayButtonMobile = get_theme_mod('njt_nofi_handle_button_mobile', 1);
 
   $textContent = get_option('njt_nofi_text_wpml_translate');
   $buttonText = get_option('njt_nofi_lb_text_wpml_translate');
-  $buttonUrl = get_theme_mod('njt_nofi_lb_url', $this->valueDefault['lb_url']);
+  $buttonUrl = get_option('njt_nofi_lb_url_wpml_translate');
   $isNewWindown = get_theme_mod('njt_nofi_open_new_windown', $this->valueDefault['new_windown']);
   $isDisplayButton = get_theme_mod('njt_nofi_handle_button', 1);
 ?>
