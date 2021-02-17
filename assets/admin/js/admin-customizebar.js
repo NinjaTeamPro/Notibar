@@ -104,7 +104,28 @@
   //Text
   wp.customize("njt_nofi_text", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-nofi-content-deskop .njt-nofi-text').html(to);
+      if (to.match(/\[([a-z0-9_]+)\]/g)) {
+        jQuery.ajax({
+          dataType: 'json',
+          url: wpData.admin_ajax,
+          type: "post",
+          data: {
+            action: "njt_nofi_text",
+            nonce: wpData.nonce,
+            text: to 
+          },
+        })
+        .done(function (result) {
+          console.log(result.data)
+          jQuery('.njt-nofi-content-deskop .njt-nofi-text').html(result.data);
+        })
+        .fail(function (res) {
+          console.log(res.responseText);
+        });
+      } else {
+        jQuery('.njt-nofi-content-deskop .njt-nofi-text').html(to);
+      }
+      
       jQuery("body").on('DOMSubtreeModified', ".njt-nofi-content-deskop .njt-nofi-text", function () {
         var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').css({
@@ -179,7 +200,28 @@
   //Link/Button Text mobile 
   wp.customize("njt_nofi_text_mobile", function (value) {
     value.bind(function (to) {
-      jQuery('.njt-nofi-content-mobile .njt-nofi-text').html(to);
+      if (to.match(/\[([a-z0-9_]+)\]/g)) {
+        jQuery.ajax({
+          dataType: 'json',
+          url: wpData.admin_ajax,
+          type: "post",
+          data: {
+            action: "njt_nofi_text",
+            nonce: wpData.nonce,
+            text: to 
+          },
+        })
+        .done(function (result) {
+          console.log(result.data)
+          jQuery('.njt-nofi-content-mobile .njt-nofi-text').html(result.data);
+        })
+        .fail(function (res) {
+          console.log(res.responseText);
+        });
+      } else {
+        jQuery('.njt-nofi-content-mobile .njt-nofi-text').html(to);
+      }
+
       jQuery("body").on('DOMSubtreeModified', ".njt-display-mobile .njt-nofi-text", function () {
         var barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
         jQuery('body').css({

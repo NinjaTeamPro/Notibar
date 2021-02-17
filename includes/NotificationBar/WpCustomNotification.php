@@ -62,6 +62,27 @@ class WpCustomNotification
     add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
     add_action('wp_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
     add_action('customize_save_after', array( $this, 'njt_nofi_customize_save_after'));
+
+    add_action( 'wp_ajax_njt_nofi_text', array( $this, 'njt_nofi_text_shortcode' ) );
+  }
+
+  public function njt_nofi_text_shortcode()
+  {
+    if ( isset( $_POST ) ) {
+			$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : null;
+
+			if ( ! wp_verify_nonce( $nonce, 'njt-nofi-notification' ) ) {
+				wp_send_json_error( array( 'status' => 'Wrong nonce validate!' ) );
+				exit();
+			}
+    
+      $njt_nofi_text = isset( $_POST['text'] ) ? $_POST['text'] : null;
+      
+      $a = do_shortcode($njt_nofi_text);
+      
+      wp_send_json_success(wp_unslash($a));
+		}
+		wp_send_json_error( array( 'message' => 'Update fail!' ) );
   }
 
    /**
@@ -70,9 +91,10 @@ class WpCustomNotification
   public function njt_nofi_enqueueCustomizeControls()
   {
     if(is_customize_preview()){
-      wp_register_script('njt-nofi-test', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizebar.js', array('jquery'),NJT_NOFI_VERSION,true);
-      wp_enqueue_script('njt-nofi-test');
+      wp_register_script('njt-nofi-admin-customizebar', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizebar.js', array('jquery'),NJT_NOFI_VERSION,true);
+      wp_enqueue_script('njt-nofi-admin-customizebar');
     }
+
   }
   public function addScriptsCustomizer(){
     if(is_customize_preview()){
