@@ -1,5 +1,5 @@
 .njt-nofi-container{
-  z-index: 9999;
+  z-index: 99999;
   width: 100%;
 }
 
@@ -32,11 +32,7 @@
   transition: transform .5s;
   min-width: fit-content;
 }
-.njt-nofi-notification-bar .njt-nofi-button:hover {
-  -ms-transform: scale(1.1); /* IE 9 */
-  -webkit-transform: scale(1.1); /* Safari 3-8 */
-  transform: scale(1.1); 
-}
+
 
 .njt-nofi-notification-bar .njt-nofi-hide {
   position: absolute;
