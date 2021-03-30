@@ -121,6 +121,21 @@ const homeNotificationBar = {
           'position': 'unset',
         })
       }
+
+      if(wpData.wp_get_theme == 'AccessPress Parallax Pro Child'){
+        if (jQuery('.admin-bar').length > 0) {
+          jQuery('header#masthead').css({
+            'top': '32px'
+          })
+        } else {
+          jQuery('header#masthead').css({
+            'top': 0
+          })
+          jQuery('#main-header').css({
+            'top': 0
+          })
+        }
+      }
       
     })
 
@@ -476,19 +491,52 @@ const homeNotificationBar = {
     }
   },
   supportDiviTheme() {
-    const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-    console.log(wpData.wp_get_theme)
-    setTimeout(function(){
-      if(jQuery('.admin-bar').length > 0) {
-        jQuery('header#main-header').css({
-          'top': barHeight + 32
-        })
-      } else {
-        jQuery('header#main-header').css({
-          'top': barHeight
-        })
-      }
-    }, 1000);
+    if(wpData.wp_get_theme == 'Divi'){
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      setTimeout(function(){
+        if(jQuery('.admin-bar').length > 0) {
+          jQuery('header#main-header').css({
+            'top': barHeight + 32
+          })
+        } else {
+          jQuery('header#main-header').css({
+            'top': barHeight
+          })
+        }
+      }, 1000);
+    }
+  },
+  supportAccessPressParallaxTheme() {
+    if(wpData.wp_get_theme == 'AccessPress Parallax Pro Child'){
+      console.log(wpData.wp_get_theme);
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      setTimeout(function(){
+        if(jQuery('.admin-bar').length > 0) {
+          jQuery('header#masthead').css({
+            'top': barHeight + 32
+          })
+        } else {
+          jQuery('header#masthead').css({
+            'top': barHeight
+          })
+        }
+      }, 1000);
+      
+      var lastScrollTop = 0;
+      jQuery(window).on('scroll', function() {
+        if(homeNotificationBar.getCookie('njt-close-notibar') != 'true') {
+          st = jQuery(this).scrollTop();
+          if(st < lastScrollTop) {
+            
+          } else {
+            jQuery('#main-header.menu-fix').css({
+              'top': barHeight
+            })
+          }
+          lastScrollTop = st;
+        }
+      });
+    }
   }
 }
 
@@ -501,6 +549,7 @@ jQuery(document).ready(() => {
   homeNotificationBar.supportNaymaTheme();
   homeNotificationBar.supportKonteTheme();
   homeNotificationBar.supportDiviTheme();
+  homeNotificationBar.supportAccessPressParallaxTheme();
   if (wpData.is_customize_preview) {
     homeNotificationBar.windownResizeforCustomize()
   }
