@@ -537,6 +537,32 @@ const homeNotificationBar = {
         }
       });
     }
+  },
+  supportUncodeTheme() {
+    if(wpData.wp_get_theme == 'Uncode'){
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      setTimeout(function(){
+        jQuery('body').css({
+          'padding-top': barHeight
+        })
+      }, 1500);
+      jQuery(window).bind('mousewheel', function(event) {
+        if (event.originalEvent.wheelDelta < 0) {
+          setTimeout(function(){
+            jQuery('body').css({
+              'padding-top': barHeight
+            })
+          }, 1000);
+         
+        } else {
+          setTimeout(function(){
+            jQuery('body').css({
+              'padding-top': barHeight
+            })
+          }, 1000);
+        }
+      })
+    }
   }
 }
 
@@ -550,6 +576,7 @@ jQuery(document).ready(() => {
   homeNotificationBar.supportKonteTheme();
   homeNotificationBar.supportDiviTheme();
   homeNotificationBar.supportAccessPressParallaxTheme();
+  homeNotificationBar.supportUncodeTheme();
   if (wpData.is_customize_preview) {
     homeNotificationBar.windownResizeforCustomize()
   }
