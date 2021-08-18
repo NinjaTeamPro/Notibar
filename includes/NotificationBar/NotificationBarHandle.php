@@ -209,7 +209,6 @@ class NotificationBarHandle
 	|| (function_exists("is_comment_feed") && $isDisplayPage && is_comment_feed()) 
 	|| (function_exists("is_trackback") && $isDisplayPage && is_trackback()) 
 	|| (function_exists("is_404") && $isDisplayPage && is_404()) 
-	|| (function_exists("is_comments_popup") && $isDisplayPage && is_comments_popup()) 
 	|| (function_exists("is_paged") && $isDisplayPage && is_paged()) 
 	|| (function_exists("is_attachment") && $isDisplayPage && is_attachment()) 
 	|| (function_exists("is_singular") && $isDisplayPage && is_singular()) 
