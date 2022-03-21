@@ -1,6 +1,9 @@
 .njt_nofi_dp_none{
 	display: block;
 }
+#customize-theme-controls #sub-accordion-section-njt_nofi_style{
+	height: 170% !important;
+}
 .njt_nofi_none{
 	display: none;
 }
