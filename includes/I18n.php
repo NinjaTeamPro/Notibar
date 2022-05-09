@@ -27,7 +27,7 @@ class I18n {
 			$locale = is_admin() ? get_user_locale() : get_locale();
 		}
 		unload_textdomain( NJT_NOFI_DOMAIN );
-		load_textdomain( NJT_NOFI_DOMAIN, NJT_NOFI_PLUGIN_PATH . '/i18n/languages/njt-notification-bar-' . $locale . '.mo' );
+		load_textdomain( NJT_NOFI_DOMAIN, NJT_NOFI_PLUGIN_PATH . '/i18n/languages/notibar-' . $locale . '.mo' );
 
     load_plugin_textdomain(
       NJT_NOFI_DOMAIN,

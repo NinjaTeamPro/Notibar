@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Notibar\n"
 "POT-Creation-Date: 2022-05-09 14:25+0700\n"
-"PO-Revision-Date: 2022-05-09 14:27+0700\n"
+"PO-Revision-Date: 2022-05-09 14:57+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -22,23 +22,19 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
 #: includes/NotificationBar/NotificationBarHandle.php:51
-
 msgid "Notification Bar"
 msgstr "Thanh Thông báo"
 
 #: includes/NotificationBar/NotificationBarHandle.php:52
 #: includes/NotificationBar/WpCustomNotification.php:140
-
 msgid "Notibar"
 msgstr "Notibar"
 
 #: includes/NotificationBar/NotificationBarHandle.php:109
-
 msgid "Give Notibar a review"
 msgstr "Cung cấp cho Notibar đánh giá"
 
 #: includes/NotificationBar/NotificationBarHandle.php:111
-
 msgid ""
 "Thank you for choosing Notibar. We hope you love it. Could you take a couple "
 "of seconds posting a nice review to share your happy experience?"
@@ -48,12 +44,10 @@ msgstr ""
 "phúc của bạn?"
 
 #: includes/NotificationBar/NotificationBarHandle.php:114
-
 msgid "We will be forever grateful. Thank you in advance ;)"
 msgstr "Chúng ta sẽ mãi mãi biết ơn. Cảm ơn trước ;)"
 
 #: includes/NotificationBar/NotificationBarHandle.php:117
-
 msgid "Rate now"
 msgstr "Tỷ lệ ngay bây giờ"
 
@@ -62,7 +56,6 @@ msgid "Later"
 msgstr "Để sau"
 
 #: includes/NotificationBar/NotificationBarHandle.php:119
-
 msgid "Already did"
 msgstr "Đã làm"
 
@@ -81,7 +74,6 @@ msgid "Default"
 msgstr "Mặc định"
 
 #: includes/NotificationBar/WpCustomNotification.php:141
-
 msgid "This is panel WordPress Notification Bar"
 msgstr "Đây là bảng điều khiển Thanh thông báo WordPress"
 
@@ -90,12 +82,10 @@ msgid "General Options"
 msgstr "Tùy chọn chung"
 
 #: includes/NotificationBar/WpCustomNotification.php:161
-
 msgid "Enable/Disable Notibar"
 msgstr "Bật/Tắt Notibar"
 
 #: includes/NotificationBar/WpCustomNotification.php:175
-
 msgid "Alignment Option"
 msgstr "Tùy chọn Căn chỉnh"
 
@@ -112,22 +102,18 @@ msgid "Right"
 msgstr "Phải"
 
 #: includes/NotificationBar/WpCustomNotification.php:183
-
 msgid "Space around"
 msgstr "Không gian xung quanh"
 
 #: includes/NotificationBar/WpCustomNotification.php:195
-
 msgid "Hide/Close Button"
 msgstr "Nút Ẩn/Đóng"
 
 #: includes/NotificationBar/WpCustomNotification.php:200
-
 msgid "No button"
 msgstr "Không có nút"
 
 #: includes/NotificationBar/WpCustomNotification.php:201
-
 msgid "Toggle button"
 msgstr "Nút Chuyển đổi"
 
@@ -136,7 +122,6 @@ msgid "Close button"
 msgstr "Hiện nút đóng"
 
 #: includes/NotificationBar/WpCustomNotification.php:214
-
 msgid "Content Width (px)"
 msgstr "Chiều rộng Nội dung (px)"
 
@@ -145,7 +130,6 @@ msgid "Position Type"
 msgstr "Loại chức vụ"
 
 #: includes/NotificationBar/WpCustomNotification.php:238
-
 msgid "Content Options"
 msgstr "Tùy chọn Nội dung"
 
@@ -156,7 +140,6 @@ msgstr "Văn bản"
 
 #: includes/NotificationBar/WpCustomNotification.php:274
 #: includes/NotificationBar/WpCustomNotification.php:368
-
 msgid "On/Off Button"
 msgstr "Nút Bật/Tắt"
 
@@ -176,7 +159,6 @@ msgid "Open in new window"
 msgstr "Mở  cửa sổ mới"
 
 #: includes/NotificationBar/WpCustomNotification.php:331
-
 msgid "You want different content for mobile?"
 msgstr "Bạn muốn nội dung khác nhau cho điện thoại di động?"
 
@@ -185,7 +167,6 @@ msgid "Style Options"
 msgstr "Các tùy chọn kiểu"
 
 #: includes/NotificationBar/WpCustomNotification.php:433
-
 msgid "Preset Color"
 msgstr "Màu cài đặt sẵn"
 
@@ -214,7 +195,6 @@ msgid "Display Options"
 msgstr "Tùy chọn hiển thị"
 
 #: includes/NotificationBar/WpCustomNotification.php:536
-
 msgid "Select devices want to display"
 msgstr "Chọn thiết bị muốn hiển thị"
 
@@ -223,12 +203,10 @@ msgid "All devices"
 msgstr "Tất cả thiết bị"
 
 #: includes/NotificationBar/WpCustomNotification.php:542
-
 msgid "Only desktop"
 msgstr "Chỉ có màn hình nền"
 
 #: includes/NotificationBar/WpCustomNotification.php:543
-
 msgid "Only mobile"
 msgstr "Chỉ có điện thoại di động"
 
@@ -245,12 +223,10 @@ msgid "Posts"
 msgstr "Bài viết"
 
 #: includes/NotificationBar/WpCustomNotification.php:599
-
 msgid "By Pages/Posts ID"
 msgstr "THEO TRANG/ID Bài đăng"
 
 #: includes/NotificationBar/WpCustomNotification.php:603
-
 msgid "Enter the Pages or Posts ID, Ex: 1,2"
 msgstr "Nhập ID Trang hoặc Bài đăng, Ví dụ: 1,2"
 
@@ -259,17 +235,14 @@ msgid "Recommend"
 msgstr "Gợi ý"
 
 #. Plugin Name of the plugin/theme
-
 msgid "Notibar - WordPress Notification Bar"
 msgstr "Notibar - Thanh thông báo WordPress"
 
 #. Plugin URI of the plugin/theme
-
 msgid "https://ninjateam.org/notibar-wordpress-notification-bar"
 msgstr "https://ninjateam.org/notibar-wordpress-notification-bar"
 
 #. Description of the plugin/theme
-
 msgid ""
 "Custom notification bar for alert, promo code, marketing campaign, top banner"
 msgstr ""
@@ -281,6 +254,5 @@ msgid "Ninja Team"
 msgstr "Ninja Team"
 
 #. Author URI of the plugin/theme
-
 msgid "https://ninjateam.org"
 msgstr "https://ninjateam.org"

@@ -6,7 +6,7 @@
  * Version: 1.9.5.1
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
- * Text Domain: njt-notification-bar
+ * Text Domain: notibar
  * Domain Path: /i18n/languages/
  *
  * @package NjtNotificationBar
@@ -18,7 +18,7 @@ defined('ABSPATH') || exit;
 
 define('NJT_NOFI_PREFIX', 'njt_nofi');
 define('NJT_NOFI_VERSION', '1.9.5.1');
-define('NJT_NOFI_DOMAIN', 'njt-notification-bar');
+define('NJT_NOFI_DOMAIN', 'notibar');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
