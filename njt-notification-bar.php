@@ -53,7 +53,7 @@ if (file_exists(dirname(__FILE__) . '/includes/cross.php')) {
 function init() {
   Plugin::activate();
   Plugin::getInstance();
-  I18n::getInstance();
+  I18n::loadPluginTextdomain();
 
   NotificationBar\WpCustomNotification::getInstance();
   NotificationBar\NotificationBarHandle::getInstance();
