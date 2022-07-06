@@ -289,6 +289,13 @@ const homeNotificationBar = {
       })
     }
 
+    if (wpData.wp_get_theme == 'Twenty Twenty-Two') {
+      jQuery(".njt-nofi-notification-bar .njt-nofi-hide .njt-nofi-close-icon").css({
+        'width': '15px',
+        'height': '15px'
+      })
+    }
+
     const textButtonColor = wpData.textButtonColor
 
     if(textButtonColor) {
@@ -353,7 +360,7 @@ const homeNotificationBar = {
   setPositionBar() {
     const isPositionFix = wpData.isPositionFix
     const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0
-    const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+    let barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
     if (isPositionFix) {
       jQuery(".njt-nofi-container").css({
         'position': 'fixed',
@@ -367,6 +374,13 @@ const homeNotificationBar = {
         })
       }
       if(wpData.wp_get_theme == 'Divi Child'){
+        jQuery('body').css({
+          'padding-top': barHeight,
+          'position': 'relative'
+        })
+      }
+      if(wpData.wp_get_theme == 'Hathor Child'){
+        let barHeight = jQuery('.njt-nofi-notification-bar .njt-nofi-content').outerHeight();
         jQuery('body').css({
           'padding-top': barHeight,
           'position': 'relative'
