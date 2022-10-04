@@ -171,9 +171,9 @@ const homeNotificationBar = {
         //Essentials Theme
         if(wpData.wp_get_theme == 'Essentials') {
           if (jQuery('.admin-bar').length > 0) {
-            jQuery('body.admin-bar #masthead.pix-header').css({
-              'top': '32px'
-            })
+            // jQuery('body.admin-bar #masthead.pix-header').css({
+            //   'top': '32px'
+            // })
           } else {
             jQuery('body #masthead.pix-header').css({
               'top': 0
@@ -227,13 +227,13 @@ const homeNotificationBar = {
         //Essentials Theme
         if(wpData.wp_get_theme == 'Essentials') {
           if (jQuery('.admin-bar').length > 0) {
-            jQuery('body.admin-bar #masthead.pix-header').css({
-              'top': barHeight + 32
-            })
+            // jQuery('body.admin-bar #masthead.pix-header').css({
+            //   'top': barHeight + 32
+            // })
           } else {
-            jQuery('body #masthead.pix-header').css({
-              'top': barHeight
-            })
+            // jQuery('body #masthead.pix-header').css({
+            //   'top': barHeight
+            // })
           }
         }
 
@@ -791,13 +791,13 @@ jQuery(document).ready(() => {
     } else {
       if(wpData.isPositionFix) {
         if(jQuery('.admin-bar').length > 0) {
-          jQuery('body.admin-bar header#masthead').css({
-            'top': barHeight + 32
-          })
+          // jQuery('body.admin-bar header#masthead').css({
+          //   'top': barHeight + 32
+          // })
         } else {
-          jQuery('body header#masthead').css({
-            'top': barHeight
-          })
+          // jQuery('body header#masthead').css({
+          //   'top': barHeight
+          // })
         }
       }
     }

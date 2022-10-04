@@ -181,13 +181,13 @@ class NotificationBarHandle
   }
 
   public function njt_nofi_isDisplayNotification() {
-
+    global $wp_query;
     $isDisplayHome = get_theme_mod('njt_nofi_homepage', $this->valueDefault['dp_homepage'] ) ;
     $isDisplayPage = get_theme_mod('njt_nofi_pages', $this->valueDefault['dp_pages'] ) ;
     $isDisplayPosts = get_theme_mod('njt_nofi_posts', $this->valueDefault['dp_posts']) ;
     $isDisplayPageOrPostId = get_theme_mod('njt_nofi_pp_id');
     $arrDisplayPageOrPostId = explode(",",$isDisplayPageOrPostId);
-    $currentPageOrPostID = get_the_ID();
+    $currentPageOrPostID = $wp_query->get_queried_object_id();
 
     if($isDisplayHome && is_home() || $isDisplayHome && is_front_page()) {
       return true;
@@ -312,11 +312,12 @@ class NotificationBarHandle
   }
 
   public function njt_nofi_rederInput() {
+    global $wp_query;
     $dataDisplay = array(
       'is_home' => is_home(),
       'is_page' => is_page(),
       'is_single' => is_single(),
-      'id_page' => get_the_ID()
+      'id_page' => $wp_query->get_queried_object_id()
     );
 
     ?>
