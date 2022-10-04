@@ -149,6 +149,12 @@ const homeNotificationBar = {
           'top': 0
         })
       }
+
+      if(wpData.wp_get_theme == 'Salient'){
+          jQuery('header#top').css({
+            'top': 0
+          })
+      }
       
     })
 
@@ -763,6 +769,16 @@ const homeNotificationBar = {
       }
       
     }
+  },
+  supportSalient() {
+    if(wpData.wp_get_theme == 'Salient'){
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      if(jQuery('.njt-nofi-notification-bar').is(':visible')) {
+        jQuery('header#top').css({
+          'top': barHeight
+        })
+      }
+    }
   }
 }
 
@@ -779,6 +795,7 @@ jQuery(document).ready(() => {
   homeNotificationBar.supportUncodeTheme();
   homeNotificationBar.supportUptimeChildTheme();
   homeNotificationBar.supportThemifyUltraTheme();
+  homeNotificationBar.supportSalient();
   if (wpData.is_customize_preview) {
     homeNotificationBar.windownResizeforCustomize()
   }
