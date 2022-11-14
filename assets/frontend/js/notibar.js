@@ -401,6 +401,12 @@ const homeNotificationBar = {
         'padding-top': barHeight,
         'position': 'relative'
       })
+      if(wpData.wp_get_theme == 'Salient'){
+        jQuery('body').css({
+          'padding-top': '291px',
+          'position': 'relative'
+        })
+      }
     }
   },
   supportEssentialsTheme() {
@@ -772,11 +778,14 @@ const homeNotificationBar = {
   },
   supportSalient() {
     if(wpData.wp_get_theme == 'Salient'){
+     
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if(jQuery('.njt-nofi-notification-bar').is(':visible')) {
-        jQuery('header#top').css({
-          'top': barHeight
-        })
+        
+          jQuery('header#top').css({
+            'top': barHeight
+          })
+       
       }
     }
   }
@@ -795,7 +804,10 @@ jQuery(document).ready(() => {
   homeNotificationBar.supportUncodeTheme();
   homeNotificationBar.supportUptimeChildTheme();
   homeNotificationBar.supportThemifyUltraTheme();
-  homeNotificationBar.supportSalient();
+  setTimeout(
+    homeNotificationBar.supportSalient()
+    , 1500)
+  
   if (wpData.is_customize_preview) {
     homeNotificationBar.windownResizeforCustomize()
   }

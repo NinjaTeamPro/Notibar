@@ -953,6 +953,46 @@ jQuery( document ).ready(function()  {
         }
       });
     })
+
+    jQuery("#nj_text_color_select_lb .nj_color_button_select_default").on("click", function (e) {
+      const dataDefault = jQuery('#nj_text_color_select_lb #_customize-input-njt_nofi_lb_text_color').data('default')
+      jQuery('#nj_text_color_select_lb .nj_color_button_select_bg').css({
+        'background-color': dataDefault
+      })
+      jQuery('#nj_text_color_select_lb #_customize-input-njt_nofi_lb_text_color').val(dataDefault).trigger('change')
+  
+      jQuery('#nj_text_color_select_lb .nj_color_popup__item').each(function () {
+        if (jQuery(this).attr('data-color-value') == jQuery('#_customize-input-njt_nofi_lb_text_color').val()) {
+          jQuery(this).addClass('nj_color_popup__item--state-active')
+        } else {
+          jQuery(this).removeClass('nj_color_popup__item--state-active')
+        }
+      });
+    })
+
+    jQuery("#_customize-input-njt_nofi_bg_color").on('input',function(e){
+      jQuery('#nj_color_select_bg .nj_color_button_select_bg').css({
+        'background-color': jQuery(this).val()
+      })
+    });
+   
+    jQuery("#_customize-input-njt_nofi_text_color").on('input',function(e){
+      jQuery('#nj_color_select_text .nj_color_button_select_bg').css({
+        'background-color': jQuery(this).val()
+      })
+    });
+
+    jQuery("#_customize-input-njt_nofi_lb_color").on('input',function(e){
+      jQuery('#nj_color_select_lb .nj_color_button_select_bg').css({
+        'background-color': jQuery(this).val()
+      })
+    });
+
+    jQuery("#_customize-input-njt_nofi_lb_text_color").on('input',function(e){
+      jQuery('#nj_text_color_select_lb .nj_color_button_select_bg').css({
+        'background-color': jQuery(this).val()
+      })
+    });
   }
   adminCustomizer();
 
