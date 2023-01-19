@@ -471,44 +471,12 @@ const homeNotificationBar = {
               }
             }else {
               jQuery('body header.av_header_border_disabled').css({
-                'top': $("header").hasClass("av_header_transparency") ? barHeight : '0'
+                'top': jQuery("header").hasClass("av_header_transparency") ? barHeight : '0'
               });
             }
           }
       });
     }
-  
-
-    // for on orther theme settings 
-    // if(wpData.wp_get_theme == 'Enfold' && jQuery(".njt-nofi-container").css('position') == 'absolute'){
-    //   jQuery(window).bind('mousewheel', function(event) {
-    //     console.log(wpData.wp_get_theme);
-    //     if (event.originalEvent.wheelDelta < 0) {
-    //       if(jQuery('.admin-bar').length > 0) {
-    //         jQuery('body header.header-scrolled').css({
-    //           'top': '32px'
-    //         })
-    //       } else {
-    //         jQuery('body header.header-scrolled').css({
-    //           'top': 0
-    //         })
-    //       }
-    //     } else {
-    //       jQuery('body header.av_header_border_disabled').css({
-    //         'top': 'unset'
-    //       })
-    //       if(jQuery('.admin-bar').length > 0) {
-    //         jQuery('body header.header-scrolled').css({
-    //           'top': '32px'
-    //         })
-    //       } else {
-    //         jQuery('body header.header-scrolled').css({
-    //           'top': 0
-    //         })
-    //       }
-    //     }
-    //   });
-    // }
   },
   supportNaymaTheme() {
     if(wpData.wp_get_theme == 'Nayma' && jQuery(".njt-nofi-container").css('position') == 'fixed'){
