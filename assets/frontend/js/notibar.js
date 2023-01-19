@@ -444,34 +444,94 @@ const homeNotificationBar = {
   },
   supportEnfoldTheme() {
     if(wpData.wp_get_theme == 'Enfold' && jQuery(".njt-nofi-container").css('position') == 'absolute'){
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+
+      setTimeout(function(){
+        if(!jQuery("header").hasClass("av_header_transparency")) {
+          if(jQuery('.admin-bar').length > 0) {
+            jQuery('body header.av_header_border_disabled').css({
+              'top': '32px'
+            })
+          } else {
+            jQuery('body header.av_header_border_disabled').css({
+              'top': '0'
+            })
+          }
+        }
+      }, 500);
+
       jQuery(window).bind('mousewheel', function(event) {
         console.log(wpData.wp_get_theme);
         if (event.originalEvent.wheelDelta < 0) {
           if(jQuery('.admin-bar').length > 0) {
-            jQuery('body header.header-scrolled').css({
+            jQuery('body header.av_header_border_disabled').css({
               'top': '32px'
             })
           } else {
-            jQuery('body header.header-scrolled').css({
-              'top': 0
+            jQuery('body header.av_header_border_disabled').css({
+              'top': '0'
             })
           }
         } else {
-          jQuery('body header.av_header_border_disabled').css({
-            'top': 'unset'
-          })
           if(jQuery('.admin-bar').length > 0) {
-            jQuery('body header.header-scrolled').css({
-              'top': '32px'
-            })
+            if(jQuery("header").hasClass("av_header_transparency")) {
+              jQuery('body header.av_header_border_disabled').css({
+                'top': 32 + barHeight
+              })
+            } else {
+              jQuery('body header.av_header_border_disabled').css({
+                'top': '32px'
+              })
+            }
           } else {
-            jQuery('body header.header-scrolled').css({
-              'top': 0
+            jQuery('body header.av_header_border_disabled').css({
+              'top': '0'
             })
+
+            if(jQuery("header").hasClass("av_header_transparency")) {
+              jQuery('body header.av_header_border_disabled').css({
+                'top': barHeight
+              })
+            } else {
+              jQuery('body header.av_header_border_disabled').css({
+                'top': '0'
+              })
+            }
           }
         }
       });
     }
+
+    // for on orther theme settings 
+    // if(wpData.wp_get_theme == 'Enfold' && jQuery(".njt-nofi-container").css('position') == 'absolute'){
+    //   jQuery(window).bind('mousewheel', function(event) {
+    //     console.log(wpData.wp_get_theme);
+    //     if (event.originalEvent.wheelDelta < 0) {
+    //       if(jQuery('.admin-bar').length > 0) {
+    //         jQuery('body header.header-scrolled').css({
+    //           'top': '32px'
+    //         })
+    //       } else {
+    //         jQuery('body header.header-scrolled').css({
+    //           'top': 0
+    //         })
+    //       }
+    //     } else {
+    //       jQuery('body header.av_header_border_disabled').css({
+    //         'top': 'unset'
+    //       })
+    //       if(jQuery('.admin-bar').length > 0) {
+    //         jQuery('body header.header-scrolled').css({
+    //           'top': '32px'
+    //         })
+    //       } else {
+    //         jQuery('body header.header-scrolled').css({
+    //           'top': 0
+    //         })
+    //       }
+    //     }
+    //   });
+    // }
   },
   supportNaymaTheme() {
     if(wpData.wp_get_theme == 'Nayma' && jQuery(".njt-nofi-container").css('position') == 'fixed'){
