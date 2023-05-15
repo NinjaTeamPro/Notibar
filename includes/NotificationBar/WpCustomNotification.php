@@ -49,7 +49,8 @@ class WpCustomNotification
       'dp_pages'          => true,
       'dp_posts'          => true,
       'devices_display'   => 'all_devices',
-      'dp_pp_id'          => ''
+      'dp_pp_id'          => '',
+      'font_weight_display' => '400'
     )) ;
 
     //Set default value for each option text ues wpml translate
@@ -305,6 +306,26 @@ class WpCustomNotification
       'type'     => 'text',
     ));
 
+    //Link/Button Font Weight
+    $customNoti->add_setting('njt_nofi_lb_font_weight', array(
+      'default'           => $this->valueDefault['font_weight_display'],
+      'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
+       'transport'         => 'postMessage',
+    ));
+    
+    $customNoti->add_control( 'njt_nofi_lb_font_weight_control', array(
+      'label'           => __( 'Font Weight:', NJT_NOFI_DOMAIN ),
+      'section'         => 'njt_nofi_content',
+      'settings'        => 'njt_nofi_lb_font_weight',
+      'type'            => 'select',
+      'choices'         => array(
+        '400'     => esc_html__( 'Normal', NJT_NOFI_DOMAIN ),
+        '500'     => esc_html__( 'Medium', NJT_NOFI_DOMAIN ),
+        '600'     => esc_html__( 'Semi Bold', NJT_NOFI_DOMAIN ),
+        '700'     => esc_html__( 'Bold', NJT_NOFI_DOMAIN ),
+      ),
+    ));
+
     //Open in new window
     $customNoti->add_setting('njt_nofi_open_new_windown', array(
       'default'           => $this->valueDefault['new_windown'],
@@ -397,6 +418,26 @@ class WpCustomNotification
       'section'  => 'njt_nofi_content',
       'settings' => 'njt_nofi_lb_url_mobile',
       'type'     => 'text',
+    ));
+
+    //Link/Button Font Weight Mobild
+    $customNoti->add_setting('njt_nofi_lb_font_weight_mobile', array(
+      'default'           => $this->valueDefault['font_weight_display'],
+      'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
+       'transport'         => 'postMessage',
+    ));
+    
+    $customNoti->add_control( 'njt_nofi_lb_font_weight_mobile_control', array(
+      'label'           => __( 'Font Weight:', NJT_NOFI_DOMAIN ),
+      'section'         => 'njt_nofi_content',
+      'settings'        => 'njt_nofi_lb_font_weight_mobile',
+      'type'            => 'select',
+      'choices'         => array(
+        '400'     => esc_html__( 'Normal', NJT_NOFI_DOMAIN ),
+        '500'     => esc_html__( 'Medium', NJT_NOFI_DOMAIN ),
+        '600'     => esc_html__( 'Semi Bold', NJT_NOFI_DOMAIN ),
+        '700'     => esc_html__( 'Bold', NJT_NOFI_DOMAIN ),
+      ),
     ));
 
     //Open in new window mobile

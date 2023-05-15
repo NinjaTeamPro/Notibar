@@ -804,11 +804,13 @@ jQuery( document ).ready(function()  {
       jQuery('#customize-control-njt_nofi_open_new_windown_control').show()
       jQuery('#customize-control-njt_nofi_lb_text_control').show()
       jQuery('#customize-control-njt_nofi_lb_url_control').show()
+      jQuery('#customize-control-njt_nofi_lb_font_weight_control').show()
       jQuery('#_customize-input-njt_nofi_handle_button').val(1).trigger('change')
     } else {
       jQuery('#customize-control-njt_nofi_open_new_windown_control').hide()
       jQuery('#customize-control-njt_nofi_lb_text_control').hide()
       jQuery('#customize-control-njt_nofi_lb_url_control').hide()
+      jQuery('#customize-control-njt_nofi_lb_font_weight_control').hide()
       jQuery('#_customize-input-njt_nofi_handle_button').val(0).trigger('change')
     }
   
@@ -817,11 +819,13 @@ jQuery( document ).ready(function()  {
         jQuery('#customize-control-njt_nofi_open_new_windown_control').show()
         jQuery('#customize-control-njt_nofi_lb_text_control').show()
         jQuery('#customize-control-njt_nofi_lb_url_control').show()
+        jQuery('#customize-control-njt_nofi_lb_font_weight_control').show()
         jQuery('#_customize-input-njt_nofi_handle_button').val(1).trigger('change')
       } else {
         jQuery('#customize-control-njt_nofi_open_new_windown_control').hide()
         jQuery('#customize-control-njt_nofi_lb_text_control').hide()
         jQuery('#customize-control-njt_nofi_lb_url_control').hide()
+        jQuery('#customize-control-njt_nofi_lb_font_weight_control').hide()
         jQuery('#_customize-input-njt_nofi_handle_button').val(0).trigger('change')
       }
     })
@@ -838,16 +842,19 @@ jQuery( document ).ready(function()  {
     if (jQuery('#_customize-input-njt_nofi_content_mobile').is(":checked")) {
       jQuery("#customize-control-njt_nofi_text_mobile_control").show();
       jQuery("#customize-control-njt_nofi_handle_button_mobile").show();
+      jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').show()
     } else {
       jQuery("#customize-control-njt_nofi_text_mobile_control").hide();
       jQuery("#customize-control-njt_nofi_handle_button_mobile").hide();
+      jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').hide()
     }
   
     jQuery(".njt-content-mobile-button-switch").on("click", function (e) {
       if (jQuery('#_customize-input-njt_nofi_content_mobile').is(":checked")) {
         jQuery("#customize-control-njt_nofi_text_mobile_control").show();
         jQuery("#customize-control-njt_nofi_handle_button_mobile").show();
-  
+        jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').show()
+        
         if (jQuery('#_customize-input-njt_nofi_handle_button_mobile').is(":checked")) {
           jQuery("#customize-control-njt_nofi_lb_text_mobile_control").show();
           jQuery("#customize-control-njt_nofi_lb_url_mobile_control").show();
@@ -856,7 +863,8 @@ jQuery( document ).ready(function()  {
       } else {
         jQuery("#customize-control-njt_nofi_text_mobile_control").hide();
         jQuery("#customize-control-njt_nofi_handle_button_mobile").hide();
-  
+        jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').hide()
+
         jQuery("#customize-control-njt_nofi_lb_text_mobile_control").hide();
         jQuery("#customize-control-njt_nofi_lb_url_mobile_control").hide();
         jQuery("#customize-control-njt_nofi_open_new_windown_mobile_control").hide();
@@ -868,10 +876,12 @@ jQuery( document ).ready(function()  {
       jQuery("#customize-control-njt_nofi_lb_text_mobile_control").show();
       jQuery("#customize-control-njt_nofi_lb_url_mobile_control").show();
       jQuery("#customize-control-njt_nofi_open_new_windown_mobile_control").show();
+      jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').show()
     } else {
       jQuery("#customize-control-njt_nofi_lb_text_mobile_control").hide();
       jQuery("#customize-control-njt_nofi_lb_url_mobile_control").hide();
       jQuery("#customize-control-njt_nofi_open_new_windown_mobile_control").hide();
+      jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').hide()
     }
   
     jQuery(".njt-handle-button-mobile-switch").on("click", function (e) {
@@ -879,10 +889,12 @@ jQuery( document ).ready(function()  {
         jQuery("#customize-control-njt_nofi_lb_text_mobile_control").show();
         jQuery("#customize-control-njt_nofi_lb_url_mobile_control").show();
         jQuery("#customize-control-njt_nofi_open_new_windown_mobile_control").show();
+        jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').show()
       } else {
         jQuery("#customize-control-njt_nofi_lb_text_mobile_control").hide();
         jQuery("#customize-control-njt_nofi_lb_url_mobile_control").hide();
         jQuery("#customize-control-njt_nofi_open_new_windown_mobile_control").hide();
+        jQuery('#customize-control-njt_nofi_lb_font_weight_mobile_control').hide()
       }
     })
   

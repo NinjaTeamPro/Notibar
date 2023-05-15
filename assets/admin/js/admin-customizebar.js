@@ -179,6 +179,15 @@
     })
   })
 
+  //Link/Button Font Weight
+  wp.customize("njt_nofi_lb_font_weight", function (value) {
+    value.bind(function (to) {
+      jQuery('.njt-nofi-content-deskop .njt-nofi-button-text').css({
+        'font-weight': to,
+      })
+    })
+  })
+
   //You want different content for mobile
   wp.customize("njt_nofi_content_mobile", function (value) {
     value.bind(function (to) {
@@ -277,6 +286,14 @@
     })
   })
 
+  //Link/Button Font Weight
+  wp.customize("njt_nofi_lb_font_weight_mobile", function (value) {
+    value.bind(function (to) {
+      jQuery('.njt-nofi-content-mobile .njt-nofi-button-text').css({
+        'font-weight': to,
+      })
+    })
+  })
   /*Style Option*/
 
   //Text Color

@@ -28,6 +28,11 @@
 .njt-nofi-notification-bar .njt-nofi-button .njt-nofi-button-text {
   text-decoration: none;
 }
+
+.njt-nofi-button-text.njt-nofi-padding-text  {
+  padding: 8px 12px;
+}
+
 .njt-nofi-notification-bar .njt-nofi-button{
   transition: transform .5s;
   min-width: fit-content;
@@ -41,7 +46,7 @@
 
 .njt-nofi-notification-bar .njt-nofi-hide {
   position: absolute;
-  top: 12px;
+  top: 15px;
   right: 20px;
   text-decoration: none;
 }
@@ -55,9 +60,9 @@
 }
 
 .njt-nofi-notification-bar .njt-nofi-hide .njt-nofi-close-icon:hover {
-  -ms-transform: scale(1.2); /* IE 9 */
-  -webkit-transform: scale(1.2); /* Safari 3-8 */
-  transform: scale(1.2); 
+  -ms-transform: scale(1.1); /* IE 9 */
+  -webkit-transform: scale(1.1); /* Safari 3-8 */
+  transform: scale(1.1); 
 }
 .njt-nofi-display-toggle {
   position: absolute;
