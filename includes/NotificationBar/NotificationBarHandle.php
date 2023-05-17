@@ -5,6 +5,7 @@ defined('ABSPATH') || exit;
 
 use NjtNotificationBar\NotificationBar\WpCustomNotification;
 use NjtNotificationBar\NotificationBar\WpMobileDetect;
+use NjtNotificationBar\NotificationBar\WpPosts;
 
 class NotificationBarHandle
 {
@@ -92,7 +93,7 @@ class NotificationBarHandle
         'textButtonColor' => get_theme_mod('njt_nofi_lb_text_color',$this->valueDefault['lb_text_color']),
         'wp_is_mobile' => wp_is_mobile(),
         'is_customize_preview' => is_customize_preview(),
-        'wp_get_theme' => wp_get_theme()->get( 'Name' )
+        'wp_get_theme' => wp_get_theme()->get( 'Name' ),
       ));
     }
 

@@ -11,6 +11,9 @@ use NjtNotificationBar\NotificationBar\WpCustomControlColorPreset;
 use NjtNotificationBar\NotificationBar\WpCustomControlPositionType;
 use NjtNotificationBar\NotificationBar\WpCustomControlHandleButton;
 use NjtNotificationBar\NotificationBar\WpCustomControlEnableBar;
+use NjtNotificationBar\NotificationBar\WpCustomControlMultiselect;
+use NjtNotificationBar\NotificationBar\WpPosts;
+
 class WpCustomNotification
 {
   protected static $instance = null;
@@ -58,8 +61,8 @@ class WpCustomNotification
     update_option('njt_nofi_text_mobile_wpml_translate', get_theme_mod('njt_nofi_text_mobile', $this->valueDefault['text_mobile']));
     update_option('njt_nofi_lb_text_wpml_translate', get_theme_mod('njt_nofi_lb_text', $this->valueDefault['lb_text']));
     update_option('njt_nofi_lb_text_mobile_wpml_translate', get_theme_mod('njt_nofi_lb_text_mobile', $this->valueDefault['lb_text_mobile']));
-	update_option('njt_nofi_lb_url_wpml_translate', get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url']));
-	update_option('njt_nofi_lb_url_mobile_wpml_translate', get_theme_mod( 'njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']));
+    update_option('njt_nofi_lb_url_wpml_translate', get_theme_mod( 'njt_nofi_lb_url', $this->valueDefault['lb_url']));
+    update_option('njt_nofi_lb_url_mobile_wpml_translate', get_theme_mod( 'njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']));
 
     add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'), 10);
     add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
@@ -101,10 +104,21 @@ class WpCustomNotification
   }
   public function addScriptsCustomizer(){
     if(is_customize_preview()){
+      wp_register_script('njt-nofi-cus-control-select2', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/select2.min.js', array('jquery'), NJT_NOFI_VERSION, true);
+      wp_enqueue_script('njt-nofi-cus-control-select2');
+      wp_register_style('njt-nofi-cus-control-select2', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/select2.min.css', array(), NJT_NOFI_VERSION);
+      wp_enqueue_style('njt-nofi-cus-control-select2');
+
       wp_register_script('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/admin-customizer-control.js', array('jquery'), NJT_NOFI_VERSION, true);
       wp_enqueue_script('njt-nofi-cus-control');
       wp_register_style('njt-nofi-cus-control', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/admin-customizer-control.css', array(), NJT_NOFI_VERSION);
       wp_enqueue_style('njt-nofi-cus-control');
+
+      wp_localize_script('njt-nofi-cus-control-select2', 'wpNoFi', array(
+        'admin_ajax' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce("njt-nofi-cus-control-select2"),
+        'list_posts_selected' => WpPosts::get_list_posts_selected()
+      ));
     }
   }
 
@@ -636,12 +650,23 @@ class WpCustomNotification
       'transport'         => 'postMessage'
     ));
 
-    $customNoti->add_control( 'njt_nofi_pp_id_control', array(
-      'label'       => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
-      'section'     => 'njt_nofi_display',
-      'settings'    => 'njt_nofi_pp_id',
-      'type'        => 'textarea',
-      'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
+    // $customNoti->add_control( 'njt_nofi_pp_id_control', array(
+    //   'label'       => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
+    //   'section'     => 'njt_nofi_display',
+    //   'settings'    => 'njt_nofi_pp_id',
+    //   'type'        => 'textarea',
+    //   'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
+    // ));
+
+    $customNoti->add_control(
+      new WpCustomControlMultiselect( $customNoti, 'njt_nofi_pp_id',
+      array(
+        'label'       => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
+        'section'     => 'njt_nofi_display',
+        'settings'    => 'njt_nofi_pp_id',
+        'type'        => 'multiple-select',
+      )
     ));
+
   }
 }

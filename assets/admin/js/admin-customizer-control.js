@@ -1006,6 +1006,49 @@ jQuery( document ).ready(function()  {
       })
     });
   }
-  adminCustomizer();
 
+  var adminCustomizeSelect2Multiple = function(){
+    const listPostSelected = wpNoFi.list_posts_selected
+    listPostSelected.forEach(data => {
+      let newOption = new Option(data.text, data.id, false, true);
+      jQuery(".njt-nofi-select2-multiple").append(newOption).trigger('change');
+    });
+   
+    jQuery(".njt-nofi-select2-multiple").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-modal'),
+      tags: "true",
+      placeholder: "Select an option",
+      allowClear: true,
+      ajax: {
+        method: 'post',
+        url: wpNoFi.admin_ajax,
+        data: function (params) {
+          var query = {
+            action: "njt_nofi_query_post",
+            nonce: wpNoFi.nonce,
+            search: params.term,
+            page: params.page || 1,
+          }
+          return query;
+        },
+        processResults: function (data, params) {
+          params.page = params.page || 1;
+          return {
+              results: data.data.results,
+              pagination: {
+                  more: (params.page * 10) < data.data.count_filtered
+              }
+          };
+      }
+      }
+    });
+
+    jQuery('.njt-nofi-select2-multiple').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-multiple").val();
+      jQuery('#_customize-input-njt_nofi_pp_id').val(data).trigger('change');
+    });
+  }
+  
+  adminCustomizer();
+  adminCustomizeSelect2Multiple()
 })
