@@ -366,7 +366,7 @@
     })
   })
 
-  function checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId) {
+  function checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId) {
     const strCheckDisplayReview = jQuery('#njt_nofi_checkDisplayReview').attr('value')
     const arrCheckDisplayReview = JSON.parse(strCheckDisplayReview)
     const isDisplayHome = displayHome
@@ -374,8 +374,10 @@
     const isDisplayPosts = displayPosts
     const isDisplayPageOrPostId = displayPageOrPostId
     const arrDisplayPageOrPostId = isDisplayPageOrPostId.split(',')
-
-    if (isDisplayHome && arrCheckDisplayReview.is_home) {
+    const arrExcludeDisplayPageOrPostId = excludeDisplayPageOrPostId.split(',')
+    if (jQuery.inArray(arrCheckDisplayReview.id_page.toString(), arrExcludeDisplayPageOrPostId) != -1) {
+      return false
+    } else if (isDisplayHome && arrCheckDisplayReview.is_home) {
       return true
     } else if (isDisplayPage && arrCheckDisplayReview.is_page) {
       return true
@@ -429,7 +431,8 @@
       const displayPage = to
       const displayPosts = wp.customize.value('njt_nofi_posts')()
       const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
         jQuery('body').animate({ top: -barHeight }, 1000)
@@ -464,7 +467,8 @@
       const displayPage = wp.customize.value('njt_nofi_pages')()
       const displayPosts = to
       const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
         jQuery('body').animate({ top: -barHeight }, 1000)
@@ -499,7 +503,44 @@
       const displayPage = wp.customize.value('njt_nofi_pages')()
       const displayPosts = wp.customize.value('njt_nofi_posts')()
       const displayPageOrPostId = to
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
+      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+      if (!isDisplay) {
+        jQuery('body').animate({ top: -barHeight }, 1000)
+        jQuery('body').css({
+          'position': 'relative',
+        })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
+          const a = wpAdminBarHeight - barHeight
+          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+        }
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+        })
+      } else {
+        jQuery('body').animate({ top: 0 }, 1000)
+        jQuery('.njt-nofi-display-toggle').css({
+          'display': 'none',
+          'top': 0,
+        })
+        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
+          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+        }
+      }
+    })
+  })
+
+  wp.customize("njt_nofi_exclude_pp_id", function (value) {
+    value.bind(function (to) {
+      const displayHome = wp.customize.value('njt_nofi_homepage')()
+      const displayPage = wp.customize.value('njt_nofi_pages')()
+      const displayPosts = wp.customize.value('njt_nofi_posts')()
+      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
+      const excludeDisplayPageOrPostId = to
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
         jQuery('body').animate({ top: -barHeight }, 1000)

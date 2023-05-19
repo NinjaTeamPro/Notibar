@@ -117,7 +117,8 @@ class WpCustomNotification
       wp_localize_script('njt-nofi-cus-control-select2', 'wpNoFi', array(
         'admin_ajax' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce("njt-nofi-cus-control-select2"),
-        'list_posts_selected' => WpPosts::get_list_posts_selected()
+        'list_include_posts_selected' => WpPosts::get_list_posts_selected(get_theme_mod('njt_nofi_pp_id')),
+        'list_exclude_posts_selected' => WpPosts::get_list_posts_selected(get_theme_mod('njt_nofi_exclude_pp_id')),
       ));
     }
   }
@@ -643,27 +644,36 @@ class WpCustomNotification
 
     
 
-    //By Pages/Posts ID
+    //include Pages/Posts ID
     $customNoti->add_setting('njt_nofi_pp_id', array(
       'default'           => $this->valueDefault['dp_pp_id'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
       'transport'         => 'postMessage'
     ));
 
-    // $customNoti->add_control( 'njt_nofi_pp_id_control', array(
-    //   'label'       => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
-    //   'section'     => 'njt_nofi_display',
-    //   'settings'    => 'njt_nofi_pp_id',
-    //   'type'        => 'textarea',
-    //   'description' => esc_html__( 'Enter the Pages or Posts ID, Ex: 1,2' ),
-    // ));
-
     $customNoti->add_control(
       new WpCustomControlMultiselect( $customNoti, 'njt_nofi_pp_id',
       array(
-        'label'       => __( 'By Pages/Posts ID', NJT_NOFI_DOMAIN ),
+        'label'       => __( 'Include Pages/Posts', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
         'settings'    => 'njt_nofi_pp_id',
+        'type'        => 'multiple-select',
+      )
+    ));
+    
+    //exclude Pages/Posts
+    $customNoti->add_setting('njt_nofi_exclude_pp_id', array(
+      'default'           => $this->valueDefault['dp_pp_id'],
+      'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+      'transport'         => 'postMessage'
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlMultiselect( $customNoti, 'njt_nofi_exclude_pp_id',
+      array(
+        'label'       => __( 'Exclude Pages/Posts', NJT_NOFI_DOMAIN ),
+        'section'     => 'njt_nofi_display',
+        'settings'    => 'njt_nofi_exclude_pp_id',
         'type'        => 'multiple-select',
       )
     ));

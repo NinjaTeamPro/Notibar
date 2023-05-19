@@ -188,9 +188,13 @@ class NotificationBarHandle
     $isDisplayPosts = get_theme_mod('njt_nofi_posts', $this->valueDefault['dp_posts']) ;
     $isDisplayPageOrPostId = get_theme_mod('njt_nofi_pp_id');
     $arrDisplayPageOrPostId = explode(",",$isDisplayPageOrPostId);
+    $excludeDisplayPageOrPostId = get_theme_mod('njt_nofi_exclude_pp_id');
+    $arrExcludeDisplayPageOrPostId = explode(",",$excludeDisplayPageOrPostId);
     $currentPageOrPostID = $wp_query->get_queried_object_id();
 
-    if($isDisplayHome && is_home() || $isDisplayHome && is_front_page()) {
+    if( in_array($currentPageOrPostID, $arrExcludeDisplayPageOrPostId)){
+      return false;
+    } else if($isDisplayHome && is_home() || $isDisplayHome && is_front_page()) {
       return true;
     } else if($isDisplayPage && is_page() 
     || (function_exists("is_shop") && $isDisplayPage && is_shop()) 
@@ -223,7 +227,6 @@ class NotificationBarHandle
     } else if( in_array($currentPageOrPostID, $arrDisplayPageOrPostId)){
       return true;
     }
-
     return false;
   }
 

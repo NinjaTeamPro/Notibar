@@ -31,11 +31,10 @@ class WpPosts {
         return $list_posts;
     }
 
-    public static function get_list_posts_selected() {
-        $DisplayPageOrPostId = get_theme_mod('njt_nofi_pp_id');
+    public static function get_list_posts_selected($displayPageOrPostId) {
         $args = array(
             'post_type' => array( 'post', 'page' ),
-            'post__in'  => explode(',', $DisplayPageOrPostId),
+            'post__in'  => explode(',', $displayPageOrPostId),
             'orderby'   => 'post__in',
             'posts_per_page' => -1,
         );

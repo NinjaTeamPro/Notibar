@@ -708,7 +708,7 @@ jQuery( document ).ready(function()  {
       }
       function is_in_dom(child, dom) {
         if (child != dom) {
-          if (child.tagName == 'BODY') {
+          if ( child.tagName.length > 0 && child.tagName == 'BODY') {
             return false;
           } else {
             return is_in_dom(child.parentNode, dom);
@@ -1007,15 +1007,15 @@ jQuery( document ).ready(function()  {
     });
   }
 
-  var adminCustomizeSelect2Multiple = function(){
-    const listPostSelected = wpNoFi.list_posts_selected
+  var select2MultipleIncludePageOrPost = function(){
+    const listPostSelected = wpNoFi.list_include_posts_selected
     listPostSelected.forEach(data => {
       let newOption = new Option(data.text, data.id, false, true);
-      jQuery(".njt-nofi-select2-multiple").append(newOption).trigger('change');
+      jQuery(".njt-nofi-select2-multiple-njt_nofi_pp_id").append(newOption).trigger('change');
     });
    
-    jQuery(".njt-nofi-select2-multiple").select2({
-      dropdownParent: jQuery('#njt-nofi-select2-modal'),
+    jQuery(".njt-nofi-select2-multiple-njt_nofi_pp_id").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_pp_id'),
       tags: "true",
       placeholder: "Select an option",
       allowClear: true,
@@ -1043,12 +1043,55 @@ jQuery( document ).ready(function()  {
       }
     });
 
-    jQuery('.njt-nofi-select2-multiple').on('change', function (e) {
-      var data = jQuery(".njt-nofi-select2-multiple").val();
+    jQuery('.njt-nofi-select2-multiple-njt_nofi_pp_id').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-multiple-njt_nofi_pp_id").val();
       jQuery('#_customize-input-njt_nofi_pp_id').val(data).trigger('change');
+    });
+  }
+
+  var select2MultipleExcludePageOrPost = function(){
+    const listPostSelected = wpNoFi.list_exclude_posts_selected
+    listPostSelected.forEach(data => {
+      let newOption = new Option(data.text, data.id, false, true);
+      jQuery(".njt-nofi-select2-multiple-njt_nofi_exclude_pp_id").append(newOption).trigger('change');
+    });
+   
+    jQuery(".njt-nofi-select2-multiple-njt_nofi_exclude_pp_id").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_exclude_pp_id'),
+      tags: "true",
+      placeholder: "Select an option",
+      allowClear: true,
+      ajax: {
+        method: 'post',
+        url: wpNoFi.admin_ajax,
+        data: function (params) {
+          var query = {
+            action: "njt_nofi_query_post",
+            nonce: wpNoFi.nonce,
+            search: params.term,
+            page: params.page || 1,
+          }
+          return query;
+        },
+        processResults: function (data, params) {
+          params.page = params.page || 1;
+          return {
+              results: data.data.results,
+              pagination: {
+                  more: (params.page * 10) < data.data.count_filtered
+              }
+          };
+      }
+      }
+    });
+
+    jQuery('.njt-nofi-select2-multiple-njt_nofi_exclude_pp_id').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-multiple-njt_nofi_exclude_pp_id").val();
+      jQuery('#_customize-input-njt_nofi_exclude_pp_id').val(data).trigger('change');
     });
   }
   
   adminCustomizer();
-  adminCustomizeSelect2Multiple()
+  select2MultipleIncludePageOrPost()
+  select2MultipleExcludePageOrPost()
 })

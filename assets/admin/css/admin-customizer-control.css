@@ -1,8 +1,15 @@
-#njt-nofi-select2-modal .select2-container .select2-search--inline .select2-search__field {
+#njt-nofi-select2-modal-njt_nofi_pp_id .select2-container .select2-search--inline .select2-search__field {
 	margin-top: 5px;
 	height: 25px;
 }
-#njt-nofi-select2-modal .select2-container--default .select2-selection--multiple {
+#njt-nofi-select2-modal-njt_nofi_pp_id .select2-container--default .select2-selection--multiple {
+	padding-bottom: 0;
+}
+#njt-nofi-select2-modal-njt_nofi_exclude_pp_id .select2-container .select2-search--inline .select2-search__field {
+	margin-top: 5px;
+	height: 25px;
+}
+#njt-nofi-select2-modal-njt_nofi_exclude_pp_id .select2-container--default .select2-selection--multiple {
 	padding-bottom: 0;
 }
 #sub-accordion-section-njt_nofi_display{
