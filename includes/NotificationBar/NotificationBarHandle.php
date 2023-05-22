@@ -192,7 +192,7 @@ class NotificationBarHandle
     $arrExcludeDisplayPageOrPostId = explode(",",$excludeDisplayPageOrPostId);
     $currentPageOrPostID = $wp_query->get_queried_object_id();
 
-    if( in_array($currentPageOrPostID, $arrExcludeDisplayPageOrPostId)){
+    if( !empty($excludeDisplayPageOrPostId) && in_array($currentPageOrPostID, $arrExcludeDisplayPageOrPostId)){
       return false;
     } else if($isDisplayHome && is_home() || $isDisplayHome && is_front_page()) {
       return true;

@@ -396,7 +396,8 @@
       const displayPage = wp.customize.value('njt_nofi_pages')()
       const displayPosts = wp.customize.value('njt_nofi_posts')()
       const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId);
+      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
+      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       if (!isDisplay) {
         jQuery('body').animate({ top: -barHeight }, 1000)
