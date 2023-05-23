@@ -1007,15 +1007,15 @@ jQuery( document ).ready(function()  {
     });
   }
 
-  var select2MultipleIncludePageOrPost = function(){
-    const listPostSelected = wpNoFi.list_include_posts_selected
+  var select2MultiplelogicDisplayPost = function(){
+    const listPostSelected = wpNoFi.list_posts_selected
     listPostSelected.forEach(data => {
       let newOption = new Option(data.text, data.id, false, true);
-      jQuery(".njt-nofi-select2-multiple-njt_nofi_pp_id").append(newOption).trigger('change');
+      jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_post").append(newOption).trigger('change');
     });
    
-    jQuery(".njt-nofi-select2-multiple-njt_nofi_pp_id").select2({
-      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_pp_id'),
+    jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_post").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post'),
       tags: "true",
       placeholder: "Select an option",
       allowClear: true,
@@ -1024,10 +1024,11 @@ jQuery( document ).ready(function()  {
         url: wpNoFi.admin_ajax,
         data: function (params) {
           var query = {
-            action: "njt_nofi_query_post",
+            action: "njt_nofi_query_page_post",
             nonce: wpNoFi.nonce,
             search: params.term,
             page: params.page || 1,
+            type_query: 'post'
           }
           return query;
         },
@@ -1043,21 +1044,21 @@ jQuery( document ).ready(function()  {
       }
     });
 
-    jQuery('.njt-nofi-select2-multiple-njt_nofi_pp_id').on('change', function (e) {
-      var data = jQuery(".njt-nofi-select2-multiple-njt_nofi_pp_id").val();
-      jQuery('#_customize-input-njt_nofi_pp_id').val(data).trigger('change');
+    jQuery('.njt-nofi-select2-multiple-njt_nofi_list_display_post').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_post").val();
+      jQuery('#_customize-input-njt_nofi_list_display_post').val(data).trigger('change');
     });
   }
 
-  var select2MultipleExcludePageOrPost = function(){
-    const listPostSelected = wpNoFi.list_exclude_posts_selected
-    listPostSelected.forEach(data => {
+  var select2MultiplelogicDisplayPage= function(){
+    const listPagesSelected = wpNoFi.list_pages_selected
+    listPagesSelected.forEach(data => {
       let newOption = new Option(data.text, data.id, false, true);
-      jQuery(".njt-nofi-select2-multiple-njt_nofi_exclude_pp_id").append(newOption).trigger('change');
+      jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_page").append(newOption).trigger('change');
     });
    
-    jQuery(".njt-nofi-select2-multiple-njt_nofi_exclude_pp_id").select2({
-      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_exclude_pp_id'),
+    jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_page").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page'),
       tags: "true",
       placeholder: "Select an option",
       allowClear: true,
@@ -1066,10 +1067,11 @@ jQuery( document ).ready(function()  {
         url: wpNoFi.admin_ajax,
         data: function (params) {
           var query = {
-            action: "njt_nofi_query_post",
+            action: "njt_nofi_query_page_post",
             nonce: wpNoFi.nonce,
             search: params.term,
             page: params.page || 1,
+            type_query: 'page'
           }
           return query;
         },
@@ -1085,13 +1087,111 @@ jQuery( document ).ready(function()  {
       }
     });
 
-    jQuery('.njt-nofi-select2-multiple-njt_nofi_exclude_pp_id').on('change', function (e) {
-      var data = jQuery(".njt-nofi-select2-multiple-njt_nofi_exclude_pp_id").val();
-      jQuery('#_customize-input-njt_nofi_exclude_pp_id').val(data).trigger('change');
+    jQuery('.njt-nofi-select2-multiple-njt_nofi_list_display_page').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_page").val();
+      jQuery('#_customize-input-njt_nofi_list_display_page').val(data).trigger('change');
     });
   }
+
+  var select2logicDisplayPage = function(){
+    var data = [
+      {
+          id: 'dis_all_page',
+          text: 'Display on all page'
+      },
+      {
+          id: 'dis_selected_page',
+          text: 'Display on selected page'
+      },
+      {
+          id: 'hide_all_page',
+          text: 'Hide on all page'
+      },
+      {
+          id: 'hide_selected_page',
+          text: 'Hide on selected page'
+      }
+    ];
+
+    jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_logic_display_page'),
+      data: data,
+      placeholder: "Select an option",
+    })
+
+    jQuery('.njt-nofi-select2-njt_nofi_logic_display_page').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val()
+
+      jQuery('#_customize-input-njt_nofi_logic_display_page').val(data).trigger('change');
+
+      if (data == 'dis_selected_page' || data == 'hide_selected_page' ) {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').show()
+      } else {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').hide()
+      }
+    });
+
+   const logicDisplayPageVal = jQuery("#_customize-input-njt_nofi_logic_display_page").val()
+   jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val(logicDisplayPageVal).trigger('change')
+    var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val();
+    if (data == 'dis_selected_page' || data == 'hide_selected_page' ) {
+      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').show()
+    } else {
+      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').hide()
+    }
+  }
+
+  var select2logicDisplayPost = function(){
+    var data = [
+      {
+          id: 'dis_all_post',
+          text: 'Display on all post'
+      },
+      {
+          id: 'dis_selected_post',
+          text: 'Display on selected post'
+      },
+      {
+          id: 'hide_all_post',
+          text: 'Hide on all post'
+      },
+      {
+          id: 'hide_selected_post',
+          text: 'Hide on selected post'
+      }
+    ];
+
+    jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_logic_display_post'),
+      data: data,
+      placeholder: "Select an option",
+    })
+
+    jQuery('.njt-nofi-select2-njt_nofi_logic_display_post').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").val()
+      jQuery('#_customize-input-njt_nofi_logic_display_post').val(data).trigger('change');
+      if (data == 'dis_selected_post' || data == 'hide_selected_post' ) {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').show()
+      } else {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').hide()
+      }
+    });
+
+    const logicDisplayPostVal = jQuery("#_customize-input-njt_nofi_logic_display_post").val()
+    jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").val(logicDisplayPostVal).trigger('change')
+
+    var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").val();
+    if (data == 'dis_selected_post' || data == 'hide_selected_post' ) {
+      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').show()
+    } else {
+      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').hide()
+    }
+  }
+
   
   adminCustomizer();
-  select2MultipleIncludePageOrPost()
-  select2MultipleExcludePageOrPost()
+  select2MultiplelogicDisplayPage()
+  select2logicDisplayPage()
+  select2MultiplelogicDisplayPost()
+  select2logicDisplayPost()
 })

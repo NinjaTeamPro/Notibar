@@ -12,6 +12,7 @@ use NjtNotificationBar\NotificationBar\WpCustomControlPositionType;
 use NjtNotificationBar\NotificationBar\WpCustomControlHandleButton;
 use NjtNotificationBar\NotificationBar\WpCustomControlEnableBar;
 use NjtNotificationBar\NotificationBar\WpCustomControlMultiselect;
+use NjtNotificationBar\NotificationBar\WpCustomControlSelect2;
 use NjtNotificationBar\NotificationBar\WpPosts;
 
 class WpCustomNotification
@@ -117,8 +118,8 @@ class WpCustomNotification
       wp_localize_script('njt-nofi-cus-control-select2', 'wpNoFi', array(
         'admin_ajax' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce("njt-nofi-cus-control-select2"),
-        'list_include_posts_selected' => WpPosts::get_list_posts_selected(get_theme_mod('njt_nofi_pp_id')),
-        'list_exclude_posts_selected' => WpPosts::get_list_posts_selected(get_theme_mod('njt_nofi_exclude_pp_id')),
+        'list_posts_selected' => WpPosts::get_list_pages_posts_selected(get_theme_mod('njt_nofi_list_display_post')),
+        'list_pages_selected' => WpPosts::get_list_pages_posts_selected(get_theme_mod('njt_nofi_list_display_page')),
       ));
     }
   }
@@ -644,36 +645,102 @@ class WpCustomNotification
 
     
 
-    //include Pages/Posts ID
-    $customNoti->add_setting('njt_nofi_pp_id', array(
+    // //include Pages/Posts ID
+    // $customNoti->add_setting('njt_nofi_pp_id', array(
+    //   'default'           => $this->valueDefault['dp_pp_id'],
+    //   'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+    //   'transport'         => 'postMessage'
+    // ));
+
+    // $customNoti->add_control(
+    //   new WpCustomControlMultiselect( $customNoti, 'njt_nofi_pp_id',
+    //   array(
+    //     'label'       => __( 'Include Pages/Posts', NJT_NOFI_DOMAIN ),
+    //     'section'     => 'njt_nofi_display',
+    //     'settings'    => 'njt_nofi_pp_id',
+    //     'type'        => 'multiple-select',
+    //   )
+    // ));
+    
+    //Logic display Pages
+    // $customNoti->add_setting('njt_nofi_exclude_pp_id', array(
+    //   'default'           => $this->valueDefault['dp_pp_id'],
+    //   'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+    //   'transport'         => 'postMessage'
+    // ));
+
+    // $customNoti->add_control(
+    //   new WpCustomControlMultiselect( $customNoti, 'njt_nofi_exclude_pp_id',
+    //   array(
+    //     'label'       => __( 'Exclude Pages/Posts', NJT_NOFI_DOMAIN ),
+    //     'section'     => 'njt_nofi_display',
+    //     'settings'    => 'njt_nofi_exclude_pp_id',
+    //     'type'        => 'multiple-select',
+    //   )
+    // ));
+
+    //Logic display Pages
+    $customNoti->add_setting('njt_nofi_logic_display_page', array(
       'default'           => $this->valueDefault['dp_pp_id'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
       'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control(
-      new WpCustomControlMultiselect( $customNoti, 'njt_nofi_pp_id',
+      new WpCustomControlSelect2( $customNoti, 'njt_nofi_logic_display_page',
       array(
-        'label'       => __( 'Include Pages/Posts', NJT_NOFI_DOMAIN ),
+        'label'       => __( 'Option display Pages', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
-        'settings'    => 'njt_nofi_pp_id',
+        'settings'    => 'njt_nofi_logic_display_page',
         'type'        => 'multiple-select',
       )
     ));
-    
-    //exclude Pages/Posts
-    $customNoti->add_setting('njt_nofi_exclude_pp_id', array(
+    //List display Pages
+    $customNoti->add_setting('njt_nofi_list_display_page', array(
       'default'           => $this->valueDefault['dp_pp_id'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
       'transport'         => 'postMessage'
     ));
 
     $customNoti->add_control(
-      new WpCustomControlMultiselect( $customNoti, 'njt_nofi_exclude_pp_id',
+      new WpCustomControlMultiselect( $customNoti, 'njt_nofi_list_display_page',
       array(
-        'label'       => __( 'Exclude Pages/Posts', NJT_NOFI_DOMAIN ),
+        'label'       => __( 'Option display Pages', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
-        'settings'    => 'njt_nofi_exclude_pp_id',
+        'settings'    => 'njt_nofi_list_display_page',
+        'type'        => 'multiple-select',
+      )
+    ));
+
+    //Logic display Post
+    $customNoti->add_setting('njt_nofi_logic_display_post', array(
+      'default'           => $this->valueDefault['dp_pp_id'],
+      'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+      'transport'         => 'postMessage'
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlSelect2( $customNoti, 'njt_nofi_logic_display_post',
+      array(
+        'label'       => __( 'Option display posts', NJT_NOFI_DOMAIN ),
+        'section'     => 'njt_nofi_display',
+        'settings'    => 'njt_nofi_logic_display_post',
+        'type'        => 'multiple-select',
+      )
+    ));
+    //List display Post
+    $customNoti->add_setting('njt_nofi_list_display_post', array(
+      'default'           => $this->valueDefault['dp_pp_id'],
+      'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
+      'transport'         => 'postMessage'
+    ));
+
+    $customNoti->add_control(
+      new WpCustomControlMultiselect( $customNoti, 'njt_nofi_list_display_post',
+      array(
+        'label'       => __( 'Option display Post', NJT_NOFI_DOMAIN ),
+        'section'     => 'njt_nofi_display',
+        'settings'    => 'njt_nofi_list_display_post',
         'type'        => 'multiple-select',
       )
     ));
