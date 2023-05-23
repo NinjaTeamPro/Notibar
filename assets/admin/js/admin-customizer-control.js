@@ -708,10 +708,12 @@ jQuery( document ).ready(function()  {
       }
       function is_in_dom(child, dom) {
         if (child != dom) {
-          if ( child.tagName.length > 0 && child.tagName == 'BODY') {
+          if ( child && child.tagName && child.tagName == 'BODY') {
             return false;
           } else {
-            return is_in_dom(child.parentNode, dom);
+            if ( child && child.parentNode ) {
+              return is_in_dom(child.parentNode, dom);
+            }
           }
         } else {
           return true;

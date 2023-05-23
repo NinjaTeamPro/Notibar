@@ -10,7 +10,6 @@ class WpCustomControlMultiselect extends \WP_Customize_Control
   public function render_content() {
     ?>
       <label >
-      <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
         <div id="njt-nofi-select2-multiple-modal-<?php echo esc_attr( $this->id ); ?>" class="" tabindex="-1" role="dialog" >
           <select multiple="multiple" class="njt-nofi-select2-multiple-<?php echo esc_attr( $this->id ); ?>" data-tags="true" data-placeholder="Select an option">
           </select>

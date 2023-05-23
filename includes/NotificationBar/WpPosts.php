@@ -39,7 +39,14 @@ class WpPosts {
             'posts_per_page' => -1,
         );
         $posts = get_posts( $args );
+       
         $list_posts       = array();
+        if (in_array('home_page', explode(',', $displayPageOrPostId))) {
+            $home_page = new stdClass();
+            $home_page->id   = 'home_page';
+            $home_page->text = 'Home Page';
+            $list_posts[]    = $home_page;
+        }
         foreach ( $posts as $post ) {
             $post_item       = new stdClass();
             $post_item->id   = (string) $post->ID;

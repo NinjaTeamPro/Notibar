@@ -366,207 +366,120 @@
     })
   })
 
-  function checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId) {
+
+  function checkDisplay(logicDisplayPage, arrDisplayPage, logicDisplayPost, arrDisplayPost) {
     const strCheckDisplayReview = jQuery('#njt_nofi_checkDisplayReview').attr('value')
     const arrCheckDisplayReview = JSON.parse(strCheckDisplayReview)
-    const isDisplayHome = displayHome
-    const isDisplayPage = displayPage
-    const isDisplayPosts = displayPosts
-    const isDisplayPageOrPostId = displayPageOrPostId
-    const arrDisplayPageOrPostId = isDisplayPageOrPostId.split(',')
-    const arrExcludeDisplayPageOrPostId = excludeDisplayPageOrPostId.split(',')
-    if (jQuery.inArray(arrCheckDisplayReview.id_page.toString(), arrExcludeDisplayPageOrPostId) != -1) {
-      return false
-    } else if (isDisplayHome && arrCheckDisplayReview.is_home) {
-      return true
-    } else if (isDisplayPage && arrCheckDisplayReview.is_page) {
-      return true
-    } else if (isDisplayPosts && arrCheckDisplayReview.is_single) {
-      return true
-    } else if (jQuery.inArray(arrCheckDisplayReview.id_page.toString(), arrDisplayPageOrPostId) != -1) {
-      return true
+    const listDisplayPage = arrDisplayPage.split(',')
+    const listDisplayPost = arrDisplayPost.split(',')
+
+    if (logicDisplayPage == 'dis_selected_page') {
+      if( (jQuery.inArray('home_page', listDisplayPage) != -1) && arrCheckDisplayReview.is_home ) return true;
     }
-    return false
+
+    if (logicDisplayPage == 'hide_selected_page') {
+      if( (jQuery.inArray('home_page', listDisplayPage) != -1) && arrCheckDisplayReview.is_home ) return false;
+    }
+    
+    if (arrCheckDisplayReview.is_page || arrCheckDisplayReview.is_home ) {
+      if(logicDisplayPage == 'dis_all_page') return true;
+      if(logicDisplayPage == 'hide_all_page') return false;
+      if (logicDisplayPage == 'dis_selected_page') {
+        if(jQuery.inArray(arrCheckDisplayReview.id_page.toString(), listDisplayPage) != -1) return true;
+        return false;
+      }
+      if (logicDisplayPage == 'hide_selected_page') {
+        if(jQuery.inArray(arrCheckDisplayReview.id_page.toString(), listDisplayPage) != -1) return false;
+        return true;
+      }
+    }
+
+    if (arrCheckDisplayReview.is_single) {
+      if(logicDisplayPost == 'dis_all_post') return true;
+      if(logicDisplayPost == 'hide_all_post') return false;
+      if (logicDisplayPost == 'dis_selected_post' ) {
+        if(jQuery.inArray(arrCheckDisplayReview.id_page.toString(), listDisplayPost) != -1) return true;
+        return false;
+      }
+      if (logicDisplayPost == 'hide_selected_post') {
+        if(jQuery.inArray(arrCheckDisplayReview.id_page.toString(), listDisplayPost) != -1) return false;
+        return true;
+      }
+    }
+
+    return false;
   }
 
+ function processDisplay(isDisplay) {
+  const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
+  if (!isDisplay) {
+    jQuery('body').animate({ top: -barHeight }, 1000)
+    jQuery('body').css({
+      'position': 'relative',
+    })
+    if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+      const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
+      const a = wpAdminBarHeight - barHeight
+      jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
+    }
+    jQuery('.njt-nofi-display-toggle').css({
+      'display': 'none',
+    })
+  } else {
+    jQuery('body').animate({ top: 0 }, 1000)
+    jQuery('.njt-nofi-display-toggle').css({
+      'display': 'none',
+      'top': 0,
+    })
+    if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
+      const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
+      jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
+    }
+  }
+ }
 
-  wp.customize("njt_nofi_homepage", function (value) {
+  wp.customize("njt_nofi_logic_display_page", function (value) {
     value.bind(function (to) {
-      const displayHome = to
-      const displayPage = wp.customize.value('njt_nofi_pages')()
-      const displayPosts = wp.customize.value('njt_nofi_posts')()
-      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
-      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
-      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      if (!isDisplay) {
-        jQuery('body').animate({ top: -barHeight }, 1000)
-        jQuery('body').css({
-          'position': 'relative',
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          const a = wpAdminBarHeight - barHeight
-          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
-        }
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-        })
-      } else {
-        jQuery('body').animate({ top: 0 }, 1000)
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-          'top': 0,
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
-        }
-      }
+      const logicDisplayPage = to
+      const listDisplayPage = wp.customize.value('njt_nofi_list_display_page')()
+      const logicDisplayPost = wp.customize.value('njt_nofi_logic_display_post')()
+      const listDisplayPost = wp.customize.value('njt_nofi_list_display_post')()
+      const isDisplay = checkDisplay(logicDisplayPage, listDisplayPage, logicDisplayPost, listDisplayPost);
+      processDisplay(isDisplay)
     })
   })
 
-  wp.customize("njt_nofi_pages", function (value) {
+  wp.customize("njt_nofi_list_display_page", function (value) {
     value.bind(function (to) {
-      const displayHome = wp.customize.value('njt_nofi_homepage')()
-      const displayPage = to
-      const displayPosts = wp.customize.value('njt_nofi_posts')()
-      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
-      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
-      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      if (!isDisplay) {
-        jQuery('body').animate({ top: -barHeight }, 1000)
-        jQuery('body').css({
-          'position': 'relative',
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          const a = wpAdminBarHeight - barHeight
-          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
-        }
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-        })
-      } else {
-        jQuery('body').animate({ top: 0 }, 1000)
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-          'top': 0,
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
-        }
-      }
+      console.log(111222222);
+      const logicDisplayPage = wp.customize.value('njt_nofi_logic_display_page')()
+      const listDisplayPage = to
+      const logicDisplayPost = wp.customize.value('njt_nofi_logic_display_post')()
+      const listDisplayPost = wp.customize.value('njt_nofi_list_display_post')()
+      const isDisplay = checkDisplay(logicDisplayPage, listDisplayPage, logicDisplayPost, listDisplayPost);
+      processDisplay(isDisplay)
     })
   })
 
-  wp.customize("njt_nofi_posts", function (value) {
+  wp.customize("njt_nofi_logic_display_post", function (value) {
     value.bind(function (to) {
-      const displayHome = wp.customize.value('njt_nofi_homepage')()
-      const displayPage = wp.customize.value('njt_nofi_pages')()
-      const displayPosts = to
-      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
-      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
-      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      if (!isDisplay) {
-        jQuery('body').animate({ top: -barHeight }, 1000)
-        jQuery('body').css({
-          'position': 'relative',
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          const a = wpAdminBarHeight - barHeight
-          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
-        }
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-        })
-      } else {
-        jQuery('body').animate({ top: 0 }, 1000)
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-          'top': 0,
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
-        }
-      }
+      const logicDisplayPage = wp.customize.value('njt_nofi_logic_display_page')()
+      const listDisplayPage = wp.customize.value('njt_nofi_list_display_page')()
+      const logicDisplayPost = to
+      const listDisplayPost = wp.customize.value('njt_nofi_list_display_post')()
+      const isDisplay = checkDisplay(logicDisplayPage, listDisplayPage, logicDisplayPost, listDisplayPost);
+      processDisplay(isDisplay)
     })
   })
 
-  wp.customize("njt_nofi_pp_id", function (value) {
+  wp.customize("njt_nofi_list_display_post", function (value) {
     value.bind(function (to) {
-      const displayHome = wp.customize.value('njt_nofi_homepage')()
-      const displayPage = wp.customize.value('njt_nofi_pages')()
-      const displayPosts = wp.customize.value('njt_nofi_posts')()
-      const displayPageOrPostId = to
-      const excludeDisplayPageOrPostId = wp.customize.value('njt_nofi_exclude_pp_id')()
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
-      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      if (!isDisplay) {
-        jQuery('body').animate({ top: -barHeight }, 1000)
-        jQuery('body').css({
-          'position': 'relative',
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          const a = wpAdminBarHeight - barHeight
-          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
-        }
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-        })
-      } else {
-        jQuery('body').animate({ top: 0 }, 1000)
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-          'top': 0,
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
-        }
-      }
-    })
-  })
-
-  wp.customize("njt_nofi_exclude_pp_id", function (value) {
-    value.bind(function (to) {
-      const displayHome = wp.customize.value('njt_nofi_homepage')()
-      const displayPage = wp.customize.value('njt_nofi_pages')()
-      const displayPosts = wp.customize.value('njt_nofi_posts')()
-      const displayPageOrPostId = wp.customize.value('njt_nofi_pp_id')()
-      const excludeDisplayPageOrPostId = to
-      const isDisplay = checkDisplay(displayHome, displayPage, displayPosts, displayPageOrPostId, excludeDisplayPageOrPostId);
-      const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      if (!isDisplay) {
-        jQuery('body').animate({ top: -barHeight }, 1000)
-        jQuery('body').css({
-          'position': 'relative',
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          const a = wpAdminBarHeight - barHeight
-          jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000)
-        }
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-        })
-      } else {
-        jQuery('body').animate({ top: 0 }, 1000)
-        jQuery('.njt-nofi-display-toggle').css({
-          'display': 'none',
-          'top': 0,
-        })
-        if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
-          const wpAdminBarHeight = jQuery('#wpadminbar').length > 0  ? jQuery('#wpadminbar').outerHeight() : 0;
-          jQuery('.njt-nofi-container').animate({ top: wpAdminBarHeight }, 1000)
-        }
-      }
+      const logicDisplayPage = wp.customize.value('njt_nofi_logic_display_page')()
+      const listDisplayPage = wp.customize.value('njt_nofi_list_display_page')()
+      const logicDisplayPost = wp.customize.value('njt_nofi_logic_display_post')()
+      const listDisplayPost = to
+      const isDisplay = checkDisplay(logicDisplayPage, listDisplayPage, logicDisplayPost, listDisplayPost);
+      processDisplay(isDisplay)
     })
   })
 
