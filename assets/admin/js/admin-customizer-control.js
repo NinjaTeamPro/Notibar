@@ -1127,9 +1127,9 @@ jQuery( document ).ready(function()  {
       jQuery('#_customize-input-njt_nofi_logic_display_page').val(data).trigger('change');
 
       if (data == 'dis_selected_page' || data == 'hide_selected_page' ) {
-        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').show()
+        jQuery('#customize-control-njt_nofi_list_display_page').show()
       } else {
-        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').hide()
+        jQuery('#customize-control-njt_nofi_list_display_page').hide()
       }
     });
 
@@ -1137,9 +1137,9 @@ jQuery( document ).ready(function()  {
    jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val(logicDisplayPageVal).trigger('change')
     var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val();
     if (data == 'dis_selected_page' || data == 'hide_selected_page' ) {
-      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').show()
+      jQuery('#customize-control-njt_nofi_list_display_page').show()
     } else {
-      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page').hide()
+      jQuery('#customize-control-njt_nofi_list_display_page').hide()
     }
   }
 
@@ -1190,10 +1190,63 @@ jQuery( document ).ready(function()  {
     }
   }
 
+  var select2devicesDisplay = function(){
+    var data = [
+      {
+          id: 'all_devices',
+          text: 'All devices'
+      },
+      {
+          id: 'desktop',
+          text: 'Only desktop'
+      },
+      {
+          id: 'mobile',
+          text: 'Only mobile'
+      }
+    ];
+
+    jQuery(".njt-nofi-select2-njt_nofi_devices_display").select2({
+      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_devices_display'),
+      data: data,
+      placeholder: "Select an option",
+    })
+
+    jQuery('.njt-nofi-select2-njt_nofi_devices_display').on('change', function (e) {
+      var data = jQuery(".njt-nofi-select2-njt_nofi_devices_display").val()
+      jQuery('#_customize-input-njt_nofi_devices_display').val(data).trigger('change');
+    });
+
+    const logicDevicesDisplay = jQuery("#_customize-input-njt_nofi_devices_display").val()
+    jQuery(".njt-nofi-select2-njt_nofi_devices_display").val(logicDevicesDisplay).trigger('change')
+
+  }
+
+  var select2IconDropdown = function(){
+    jQuery('body').on('click', function (e) {
+      if (!jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page .select2-container--default').hasClass('select2-container--open')) {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page .select2-container--default').addClass('njt-container-icon')
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page .select2-container--default').append('<span aria-hidden="true" class="njt-icon-dropdown"></span>')
+      } else {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page .select2-container--default').removeClass('njt-container-icon')
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page .njt-icon-dropdown').remove()
+      }
+
+      if (!jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post .select2-container--default').hasClass('select2-container--open')) {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post .select2-container--default').addClass('njt-container-icon')
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post .select2-container--default').append('<span aria-hidden="true" class="njt-icon-dropdown"></span>')
+      } else {
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post .select2-container--default').removeClass('njt-container-icon')
+        jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post .njt-icon-dropdown').remove()
+      }
+    });
+  }
   
   adminCustomizer();
   select2MultiplelogicDisplayPage()
   select2logicDisplayPage()
   select2MultiplelogicDisplayPost()
   select2logicDisplayPost()
+  select2devicesDisplay()
+  select2IconDropdown()
 })

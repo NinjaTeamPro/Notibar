@@ -585,21 +585,20 @@ class WpCustomNotification
     //Select devices want to display
     $customNoti->add_setting('njt_nofi_devices_display', array(
       'default'           => $this->valueDefault['devices_display'],
-      'sanitize_callback' => array($this,'njt_nofi_sanitizeSelect'),
+      'sanitize_callback' => 'wp_filter_nohtml_kses',
        'transport'         => 'postMessage',
     ));
     
-    $customNoti->add_control( 'njt_nofi_devices_display_control', array(
-      'label'           => __( 'Select devices want to display', NJT_NOFI_DOMAIN ),
-      'section'         => 'njt_nofi_display',
-      'settings'        => 'njt_nofi_devices_display',
-      'type'            => 'select',
-      'choices'         => array(
-        'all_devices'     => esc_html__( 'All devices', NJT_NOFI_DOMAIN ),
-        'desktop' => esc_html__( 'Only desktop', NJT_NOFI_DOMAIN ),
-        'mobile'  => esc_html__( 'Only mobile', NJT_NOFI_DOMAIN ),
-      ),
+    $customNoti->add_control( 
+      new WpCustomControlSelect2( $customNoti, 'njt_nofi_devices_display',
+      array(
+        'label'           => __( 'Select devices want to display', NJT_NOFI_DOMAIN ),
+        'section'         => 'njt_nofi_display',
+        'settings'        => 'njt_nofi_devices_display',
+        'type'            => 'select2'
+      )
     ));
+
     //Logic display Pages
     $customNoti->add_setting('njt_nofi_logic_display_page', array(
       'default'           => $this->valueDefault['dp_pp_id'],
@@ -610,10 +609,10 @@ class WpCustomNotification
     $customNoti->add_control(
       new WpCustomControlSelect2( $customNoti, 'njt_nofi_logic_display_page',
       array(
-        'label'       => __( 'Option display Pages', NJT_NOFI_DOMAIN ),
+        'label'       => __( 'Option display pages', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
         'settings'    => 'njt_nofi_logic_display_page',
-        'type'        => 'multiple-select',
+        'type'        => 'select2',
       )
     ));
     //List display Pages
@@ -626,7 +625,7 @@ class WpCustomNotification
     $customNoti->add_control(
       new WpCustomControlMultiselect( $customNoti, 'njt_nofi_list_display_page',
       array(
-        'label'       => __( 'Option display Pages', NJT_NOFI_DOMAIN ),
+        'label'       => __( 'Option display pages', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
         'settings'    => 'njt_nofi_list_display_page',
         'type'        => 'multiple-select',
@@ -646,7 +645,7 @@ class WpCustomNotification
         'label'       => __( 'Option display posts', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
         'settings'    => 'njt_nofi_logic_display_post',
-        'type'        => 'multiple-select',
+        'type'        => 'select2',
       )
     ));
     //List display Post

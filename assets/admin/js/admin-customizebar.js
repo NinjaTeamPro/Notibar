@@ -451,7 +451,6 @@
 
   wp.customize("njt_nofi_list_display_page", function (value) {
     value.bind(function (to) {
-      console.log(111222222);
       const logicDisplayPage = wp.customize.value('njt_nofi_logic_display_page')()
       const listDisplayPage = to
       const logicDisplayPost = wp.customize.value('njt_nofi_logic_display_post')()
