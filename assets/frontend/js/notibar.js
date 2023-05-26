@@ -33,7 +33,7 @@ const homeNotificationBar = {
     if (valueCookie == 'true' && !wpData.is_customize_preview && hideCloseButton == 'close_button') {
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       jQuery('body').css({ 'padding-top': -barHeight })
-      if(wpData.wp_get_theme !== 'Divi'){
+      if(wpData.wp_get_theme !== 'Divi' ||  wpData.wp_get_theme !== 'Divi Child Theme for CDW Studios'){
         jQuery('body').css({
           'position': 'relative',
         })
@@ -113,7 +113,7 @@ const homeNotificationBar = {
         }
       }
 
-      if(wpData.wp_get_theme == 'Divi'){
+      if(wpData.wp_get_theme == 'Divi' ||  wpData.wp_get_theme == 'Divi Child Theme for CDW Studios'){
         if (jQuery('.admin-bar').length > 0) {
           jQuery('body #main-header').css({
             'top': '32px'
@@ -373,7 +373,7 @@ const homeNotificationBar = {
         'top': wpAdminBarHeight || '0px'
       })
       
-      if(wpData.wp_get_theme !== 'Divi'){
+      if(wpData.wp_get_theme !== 'Divi' ||  wpData.wp_get_theme !== 'Divi Child Theme for CDW Studios'){
         jQuery('body').css({
           'padding-top': barHeight,
           'position': 'relative'
@@ -554,7 +554,7 @@ const homeNotificationBar = {
     }
   },
   supportDiviTheme() {
-    if(wpData.wp_get_theme == 'Divi'){
+    if(wpData.wp_get_theme == 'Divi' ||  wpData.wp_get_theme !== 'Divi Child Theme for CDW Studios'){
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
       setTimeout(function(){
         if(jQuery('.admin-bar').length > 0) {
