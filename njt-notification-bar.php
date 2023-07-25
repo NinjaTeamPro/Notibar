@@ -58,6 +58,7 @@ function init() {
   NotificationBar\WpCustomNotification::getInstance();
   NotificationBar\NotificationBarHandle::getInstance();
   NotificationBar\WpPosts::getInstance();
+  NotificationBar\overrideOldVer::overrideThemeMod();
 }
 add_action('plugins_loaded', 'NjtNotificationBar\\init');
 
