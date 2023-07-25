@@ -57,6 +57,9 @@ class overrideOldVer {
         if (count($oldVerListDisplayPage) > 0) {
             $logicDisplayPage = 'dis_selected_page';
             $mergeDisplayPage = count($oldVerListDisplayPage) > 0 ? $listDisplayPage . ',' .implode($oldVerListDisplayPage) : $listDisplayPage;
+            if ($isDisplayHome == 'true') {
+                $mergeDisplayPage = $mergeDisplayPage . ',home_page';
+            }
         }
 
         if (count($oldVerListDisplayPost) > 0) {
@@ -67,6 +70,9 @@ class overrideOldVer {
         if (count($oldVerListExcludePage) > 0) {
             $logicDisplayPage = 'hide_selected_page';
             $mergeDisplayPage = count($oldVerListExcludePage) > 0 ? $listDisplayPage . ',' .implode($oldVerListExcludePage) : $listDisplayPage;
+            if ($isDisplayHome !== 'true') {
+                $mergeDisplayPage = $mergeDisplayPage . ',home_page';
+            }
         }
 
         if (count($oldVerListExcludePost) > 0) {
