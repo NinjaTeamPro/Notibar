@@ -1015,12 +1015,10 @@ jQuery( document ).ready(function()  {
       let newOption = new Option(data.text, data.id, false, true);
       jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_post").append(newOption).trigger('change');
     });
-   
+
     jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_post").select2({
       dropdownParent: jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post'),
-      tags: "true",
       placeholder: "Select an option",
-      allowClear: true,
       ajax: {
         method: 'post',
         url: wpNoFi.admin_ajax,
@@ -1043,7 +1041,7 @@ jQuery( document ).ready(function()  {
               }
           };
       }
-      }
+      },
     });
 
     jQuery('.njt-nofi-select2-multiple-njt_nofi_list_display_post').on('change', function (e) {
@@ -1061,9 +1059,7 @@ jQuery( document ).ready(function()  {
    
     jQuery(".njt-nofi-select2-multiple-njt_nofi_list_display_page").select2({
       dropdownParent: jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_page'),
-      tags: "true",
       placeholder: "Select an option",
-      allowClear: true,
       ajax: {
         method: 'post',
         url: wpNoFi.admin_ajax,
@@ -1079,8 +1075,12 @@ jQuery( document ).ready(function()  {
         },
         processResults: function (data, params) {
           params.page = params.page || 1;
+          let results = data.data.results;
+          if (data.data.count_posts <= 0) {
+            results = [];
+          }
           return {
-              results: data.data.results,
+              results: results,
               pagination: {
                   more: (params.page * 10) < data.data.count_filtered
               }

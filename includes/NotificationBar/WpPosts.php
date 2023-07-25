@@ -50,7 +50,7 @@ class WpPosts {
         foreach ( $posts as $post ) {
             $post_item       = new stdClass();
             $post_item->id   = (string) $post->ID;
-            $post_item->text = get_the_title( $post );
+            $post_item->text = $post->post_title;
             $list_posts[]    = $post_item;
         }
         return $list_posts;
@@ -69,14 +69,15 @@ class WpPosts {
 		$offset        = ( +$page - 1 ) * $size;
         $search_string = isset( $_POST['search'] ) ? sanitize_text_field( $_POST['search'] ) : null;
         $type_query = isset( $_POST['type_query'] ) ? sanitize_text_field( $_POST['type_query'] ) : 'post';
-
         $args = array(
             'post_type' => array( $type_query ),
             's'              => $search_string,
             'posts_per_page' => $size + 1,
 			'offset'         => $offset,
             'orderby'        => 'post_title',
-			'order'          => 'ASC',
+			'order'          => 'DESC',
+            'sentence'       => true,
+            'post_status'    => 'publish',
         );
         $posts = get_posts( $args );
         $list_posts       = array();
@@ -91,14 +92,15 @@ class WpPosts {
         foreach ( $posts as $post ) {
             $post_item       = new stdClass();
             $post_item->id   = (string) $post->ID;
-            $post_item->text = get_the_title( $post );
+            $post_item->text = $post->post_title;
             $list_posts[]    = $post_item;
         }
 
         wp_send_json_success(
             array( 
                 'results' => $list_posts,
-                'count_filtered' => count($list_posts)
+                'count_filtered' => count($list_posts),
+                'count_posts' => count($posts)
             )
         );
       }

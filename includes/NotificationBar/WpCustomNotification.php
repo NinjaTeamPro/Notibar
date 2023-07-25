@@ -54,7 +54,9 @@ class WpCustomNotification
       'dp_posts'          => true,
       'devices_display'   => 'all_devices',
       'dp_pp_id'          => '',
-      'font_weight_display' => '400'
+      'font_weight_display' => '400',
+      'logic_display_page' => 'dis_all_page',
+      'logic_display_post' => 'dis_all_post'
     )) ;
 
     //Set default value for each option text ues wpml translate
@@ -601,7 +603,7 @@ class WpCustomNotification
 
     //Logic display Pages
     $customNoti->add_setting('njt_nofi_logic_display_page', array(
-      'default'           => $this->valueDefault['dp_pp_id'],
+      'default'           => $this->valueDefault['logic_display_page'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
       'transport'         => 'postMessage'
     ));
@@ -617,7 +619,7 @@ class WpCustomNotification
     ));
     //List display Pages
     $customNoti->add_setting('njt_nofi_list_display_page', array(
-      'default'           => $this->valueDefault['dp_pp_id'],
+      'default'           => $this->valueDefault['logic_display_page'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
       'transport'         => 'postMessage'
     ));

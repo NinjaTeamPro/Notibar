@@ -1,13 +1,29 @@
+#sub-accordion-section-njt_nofi_display .select2-selection__choice__remove {
+	height: 100%;
+}
+#sub-accordion-section-njt_nofi_display .select2-selection__choice__display {
+	white-space: normal;
+}
+#sub-accordion-section-njt_nofi_display .select2-search__field {
+	white-space: break-spaces;
+	max-width: 20em !important;
+	line-height: 1;
+}
+#sub-accordion-section-njt_nofi_display .select2-selection--multiple {
+	padding-right: 20px;
+}
 #njt-nofi-select2-multiple-modal-njt_nofi_list_display_page .select2-container .select2-search--inline .select2-search__field {
-	margin-top: 5px;
+	margin-top: 7px;
 	height: 25px;
+    padding-top: 2px;
 }
 #njt-nofi-select2-multiple-modal-njt_nofi_list_display_page .select2-container--default .select2-selection--multiple {
 	padding-bottom: 0;
 }
 #njt-nofi-select2-multiple-modal-njt_nofi_list_display_post .select2-container .select2-search--inline .select2-search__field {
-	margin-top: 5px;
+	margin-top: 7px;
 	height: 25px;
+	padding-top: 2px;
 }
 #njt-nofi-select2-multiple-modal-njt_nofi_list_display_post .select2-container--default .select2-selection--multiple {
 	padding-bottom: 0;
