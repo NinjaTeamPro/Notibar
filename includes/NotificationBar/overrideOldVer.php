@@ -7,9 +7,9 @@ class overrideOldVer {
     protected static $instance = null;
 
     public static function overrideThemeMod() {
-        $is_override_theme_mod =  get_option('njt_is_override_theme_mod', false);
+       $is_override_theme_mod =  get_option('njt_is_override_theme_mod', 'false');
 
-        if(!$is_override_theme_mod) {
+        if($is_override_theme_mod === 'false') {
             $logicDisplayPage = get_theme_mod('njt_nofi_logic_display_page');
             $listDisplayPage = get_theme_mod('njt_nofi_list_display_page');
             $logicDisplayPost = get_theme_mod('njt_nofi_logic_display_post');
@@ -19,9 +19,9 @@ class overrideOldVer {
             $isDisplayPage = get_theme_mod('njt_nofi_pages') ;
             $isDisplayPosts = get_theme_mod('njt_nofi_posts') ;
             $isDisplayPageOrPostId = get_theme_mod('njt_nofi_pp_id');
-            $arrDisplayPageOrPostId = explode(",",$isDisplayPageOrPostId);
+            $arrDisplayPageOrPostId = $isDisplayPageOrPostId ? explode(",",$isDisplayPageOrPostId) : [];
             $excludeDisplayPageOrPostId = get_theme_mod('njt_nofi_exclude_pp_id');
-            $arrExcludeDisplayPageOrPostId = explode(",",$excludeDisplayPageOrPostId);
+            $arrExcludeDisplayPageOrPostId = $excludeDisplayPageOrPostId ? explode(",",$excludeDisplayPageOrPostId) : [];
     
             $oldVerListDisplayPage = array();
             $oldVerListDisplayPost = array();
@@ -59,7 +59,7 @@ class overrideOldVer {
     
             if (count($oldVerListDisplayPage) > 0) {
                 $logicDisplayPage = 'dis_selected_page';
-                $mergeDisplayPage = count($oldVerListDisplayPage) > 0 ? $listDisplayPage . ',' .implode($oldVerListDisplayPage) : $listDisplayPage;
+                $mergeDisplayPage = count($oldVerListDisplayPage) > 0 ? $listDisplayPage . ',' .implode(',',$oldVerListDisplayPage) : $listDisplayPage;
                 if ($isDisplayHome == 'true') {
                     $mergeDisplayPage = $mergeDisplayPage . ',home_page';
                 }
@@ -67,12 +67,12 @@ class overrideOldVer {
     
             if (count($oldVerListDisplayPost) > 0) {
                 $logicDisplayPost = 'dis_selected_post';
-                $mergeDisplayPost = count($oldVerListDisplayPost) > 0 ? $listDisplayPost . ',' .implode($oldVerListDisplayPost) : $listDisplayPost;
+                $mergeDisplayPost = count($oldVerListDisplayPost) > 0 ? $listDisplayPost . ',' .implode(',',$oldVerListDisplayPost) : $listDisplayPost;
             }
     
             if (count($oldVerListExcludePage) > 0) {
                 $logicDisplayPage = 'hide_selected_page';
-                $mergeDisplayPage = count($oldVerListExcludePage) > 0 ? $listDisplayPage . ',' .implode($oldVerListExcludePage) : $listDisplayPage;
+                $mergeDisplayPage = count($oldVerListExcludePage) > 0 ? $listDisplayPage . ',' .implode(',',$oldVerListExcludePage) : $listDisplayPage;
                 if ($isDisplayHome !== 'true') {
                     $mergeDisplayPage = $mergeDisplayPage . ',home_page';
                 }
@@ -80,7 +80,7 @@ class overrideOldVer {
     
             if (count($oldVerListExcludePost) > 0) {
                 $logicDisplayPost = 'hide_selected_post';
-                $mergeDisplayPost = count($oldVerListExcludePost) > 0 ? $listDisplayPage . ',' .implode($oldVerListExcludePost) : $listDisplayPage;
+                $mergeDisplayPost = count($oldVerListExcludePost) > 0 ? $listDisplayPost . ',' .implode(',',$oldVerListExcludePost) : $listDisplayPost;
             }
     
             $arrUniqueDisplayPage = implode(',', array_unique(explode(',', $mergeDisplayPage)));
@@ -92,7 +92,7 @@ class overrideOldVer {
             set_theme_mod('njt_nofi_logic_display_post', $logicDisplayPost);
             set_theme_mod('njt_nofi_list_display_post', $arrUniqueDisplayPost);
 
-            update_option('njt_is_override_theme_mod', true);
+            update_option('njt_is_override_theme_mod', 'true');
         }
     }
 }

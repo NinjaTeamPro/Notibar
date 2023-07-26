@@ -1,5 +1,6 @@
 #sub-accordion-section-njt_nofi_display .select2-selection__choice__remove {
 	height: 100%;
+	top: -1px !important;
 }
 #sub-accordion-section-njt_nofi_display .select2-selection__choice__display {
 	white-space: normal;

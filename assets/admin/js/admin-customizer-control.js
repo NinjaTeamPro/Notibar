@@ -1022,6 +1022,7 @@ jQuery( document ).ready(function()  {
       ajax: {
         method: 'post',
         url: wpNoFi.admin_ajax,
+        delay: 400,
         data: function (params) {
           var query = {
             action: "njt_nofi_query_page_post",
@@ -1063,6 +1064,7 @@ jQuery( document ).ready(function()  {
       ajax: {
         method: 'post',
         url: wpNoFi.admin_ajax,
+        delay: 400,
         data: function (params) {
           var query = {
             action: "njt_nofi_query_page_post",

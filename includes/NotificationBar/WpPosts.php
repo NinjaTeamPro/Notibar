@@ -75,7 +75,7 @@ class WpPosts {
             'posts_per_page' => $size + 1,
 			'offset'         => $offset,
             'orderby'        => 'post_title',
-			'order'          => 'DESC',
+			'order'          => 'ASC',
             'sentence'       => true,
             'post_status'    => 'publish',
         );
