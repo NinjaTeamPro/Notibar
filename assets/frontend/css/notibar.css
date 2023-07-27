@@ -5,6 +5,9 @@
 
 .njt-nofi-notification-bar {
   position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
 }
 
 .njt-nofi-notification-bar .njt-nofi-content {
@@ -45,11 +48,15 @@
 }
 
 .njt-nofi-notification-bar .njt-nofi-hide {
-  position: absolute;
-  top: 15px;
-  right: 20px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
 }
+.njt-nofi-notification-bar .njt-nofi-hide  span{
+  display: flex;
+  align-items: center;
+}
+
 .njt-nofi-notification-bar .njt-nofi-hide .njt-nofi-close-icon {
   width: 25px;
   height: 25px;
