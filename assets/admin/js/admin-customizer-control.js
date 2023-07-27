@@ -1117,16 +1117,16 @@ jQuery( document ).ready(function()  {
       }
     ];
 
-    jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").select2({
-      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_logic_display_page'),
-      data: data,
-      placeholder: "Select an option",
-    })
+    // jQuery("#_customize-input-njt_nofi_logic_display_page").select2({
+    //   dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_logic_display_page'),
+    //   data: data,
+    //   placeholder: "Select an option",
+    // })
 
-    jQuery('.njt-nofi-select2-njt_nofi_logic_display_page').on('change', function (e) {
-      var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val()
+    jQuery('#_customize-input-njt_nofi_logic_display_page').on('change', function (e) {
+      var data = jQuery("#_customize-input-njt_nofi_logic_display_page").val()
 
-      jQuery('#_customize-input-njt_nofi_logic_display_page').val(data).trigger('change');
+      // jQuery('#_customize-input-njt_nofi_logic_display_page').val(data).trigger('change');
 
       if (data == 'dis_selected_page' || data == 'hide_selected_page' ) {
         jQuery('#customize-control-njt_nofi_list_display_page').show()
@@ -1135,14 +1135,14 @@ jQuery( document ).ready(function()  {
       }
     });
 
-   const logicDisplayPageVal = jQuery("#_customize-input-njt_nofi_logic_display_page").val()
-   jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val(logicDisplayPageVal).trigger('change')
-    var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_page").val();
-    if (data == 'dis_selected_page' || data == 'hide_selected_page' ) {
-      jQuery('#customize-control-njt_nofi_list_display_page').show()
-    } else {
-      jQuery('#customize-control-njt_nofi_list_display_page').hide()
-    }
+  //  const logicDisplayPageVal = jQuery("#_customize-input-njt_nofi_logic_display_page").val()
+  //  jQuery("#_customize-input-njt_nofi_logic_display_page").val(logicDisplayPageVal).trigger('change')
+  //   var data = jQuery("#_customize-input-njt_nofi_logic_display_page").val();
+  //   if (data == 'dis_selected_page' || data == 'hide_selected_page' ) {
+  //     jQuery('#customize-control-njt_nofi_list_display_page').show()
+  //   } else {
+  //     jQuery('#customize-control-njt_nofi_list_display_page').hide()
+  //   }
   }
 
   var select2logicDisplayPost = function(){
@@ -1165,15 +1165,8 @@ jQuery( document ).ready(function()  {
       }
     ];
 
-    jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").select2({
-      dropdownParent: jQuery('#njt-nofi-select2-modal-njt_nofi_logic_display_post'),
-      data: data,
-      placeholder: "Select an option",
-    })
-
-    jQuery('.njt-nofi-select2-njt_nofi_logic_display_post').on('change', function (e) {
-      var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").val()
-      jQuery('#_customize-input-njt_nofi_logic_display_post').val(data).trigger('change');
+    jQuery('#_customize-input-njt_nofi_logic_display_post').on('change', function (e) {
+      var data = jQuery("#_customize-input-njt_nofi_logic_display_post").val()
       if (data == 'dis_selected_post' || data == 'hide_selected_post' ) {
         jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').show()
       } else {
@@ -1181,15 +1174,15 @@ jQuery( document ).ready(function()  {
       }
     });
 
-    const logicDisplayPostVal = jQuery("#_customize-input-njt_nofi_logic_display_post").val()
-    jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").val(logicDisplayPostVal).trigger('change')
+    // const logicDisplayPostVal = jQuery("#_customize-input-njt_nofi_logic_display_post").val()
+    // jQuery("#_customize-input-njt_nofi_logic_display_post").val(logicDisplayPostVal).trigger('change')
 
-    var data = jQuery(".njt-nofi-select2-njt_nofi_logic_display_post").val();
-    if (data == 'dis_selected_post' || data == 'hide_selected_post' ) {
-      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').show()
-    } else {
-      jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').hide()
-    }
+    // var data = jQuery("#_customize-input-njt_nofi_logic_display_post").val();
+    // if (data == 'dis_selected_post' || data == 'hide_selected_post' ) {
+    //   jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').show()
+    // } else {
+    //   jQuery('#njt-nofi-select2-multiple-modal-njt_nofi_list_display_post').hide()
+    // }
   }
 
   var select2devicesDisplay = function(){

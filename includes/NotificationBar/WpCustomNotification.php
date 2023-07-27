@@ -591,14 +591,16 @@ class WpCustomNotification
        'transport'         => 'postMessage',
     ));
     
-    $customNoti->add_control( 
-      new WpCustomControlSelect2( $customNoti, 'njt_nofi_devices_display',
-      array(
+    $customNoti->add_control( 'njt_nofi_devices_display_control', array(
         'label'           => __( 'Select devices want to display', NJT_NOFI_DOMAIN ),
         'section'         => 'njt_nofi_display',
         'settings'        => 'njt_nofi_devices_display',
-        'type'            => 'select2'
-      )
+        'type'            => 'select',
+        'choices'         => array(
+          'all_devices'   => esc_html__( 'All devices', NJT_NOFI_DOMAIN ),
+          'desktop'       => esc_html__( 'Only desktop', NJT_NOFI_DOMAIN ),
+          'mobile'        => esc_html__( 'Only mobile', NJT_NOFI_DOMAIN ),
+        )
     ));
 
     //Logic display Pages
@@ -608,14 +610,18 @@ class WpCustomNotification
       'transport'         => 'postMessage'
     ));
 
-    $customNoti->add_control(
-      new WpCustomControlSelect2( $customNoti, 'njt_nofi_logic_display_page',
+    $customNoti->add_control( 'njt_nofi_logic_display_page',
       array(
         'label'       => __( 'Option display pages', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
         'settings'    => 'njt_nofi_logic_display_page',
-        'type'        => 'select2',
-      )
+        'type'        => 'select',
+        'choices'         => array(
+          'dis_all_page'     => esc_html__( 'Display on all page', NJT_NOFI_DOMAIN ),
+          'dis_selected_page'     => esc_html__( 'Display on selected page', NJT_NOFI_DOMAIN ),
+          'hide_all_page'     => esc_html__( 'Hide on all page', NJT_NOFI_DOMAIN ),
+          'hide_selected_page'     => esc_html__( 'Hide on selected page', NJT_NOFI_DOMAIN ),
+        ),
     ));
     //List display Pages
     $customNoti->add_setting('njt_nofi_list_display_page', array(
@@ -641,14 +647,17 @@ class WpCustomNotification
       'transport'         => 'postMessage'
     ));
 
-    $customNoti->add_control(
-      new WpCustomControlSelect2( $customNoti, 'njt_nofi_logic_display_post',
-      array(
+    $customNoti->add_control( 'njt_nofi_logic_display_post', array(
         'label'       => __( 'Option display posts', NJT_NOFI_DOMAIN ),
         'section'     => 'njt_nofi_display',
         'settings'    => 'njt_nofi_logic_display_post',
-        'type'        => 'select2',
-      )
+        'type'        => 'select',
+        'choices'               => array(
+          'dis_all_post'        => esc_html__( 'Display on all post', NJT_NOFI_DOMAIN ),
+          'dis_selected_post'   => esc_html__( 'Display on selected post', NJT_NOFI_DOMAIN ),
+          'hide_all_post'       => esc_html__( 'Hide on all post', NJT_NOFI_DOMAIN ),
+          'hide_selected_post'  => esc_html__( 'Hide on selected post', NJT_NOFI_DOMAIN ),
+        ),
     ));
     //List display Post
     $customNoti->add_setting('njt_nofi_list_display_post', array(
