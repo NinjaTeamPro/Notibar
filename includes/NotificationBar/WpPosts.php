@@ -50,7 +50,7 @@ class WpPosts {
         foreach ( $posts as $post ) {
             $post_item       = new stdClass();
             $post_item->id   = (string) $post->ID;
-            $post_item->text = $post->post_title;
+            $post_item->text = html_entity_decode(get_the_title( $post ), ENT_COMPAT | ENT_HTML401, 'UTF-8');;
             $list_posts[]    = $post_item;
         }
         return $list_posts;
@@ -92,7 +92,7 @@ class WpPosts {
         foreach ( $posts as $post ) {
             $post_item       = new stdClass();
             $post_item->id   = (string) $post->ID;
-            $post_item->text = $post->post_title;
+            $post_item->text = html_entity_decode(get_the_title( $post ), ENT_COMPAT | ENT_HTML401, 'UTF-8');;
             $list_posts[]    = $post_item;
         }
 
