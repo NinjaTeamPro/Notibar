@@ -636,7 +636,7 @@ class WpCustomNotification
 
     //Logic display Post
     $customNoti->add_setting('njt_nofi_logic_display_post', array(
-      'default'           => $this->valueDefault['dp_pp_id'],
+      'default'           => $this->valueDefault['logic_display_post'],
       'sanitize_callback' => 'wp_filter_nohtml_kses', //removes all HTML from content
       'transport'         => 'postMessage'
     ));

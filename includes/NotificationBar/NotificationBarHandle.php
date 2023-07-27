@@ -214,20 +214,11 @@ class NotificationBarHandle
 
   public function njt_nofi_isDisplayNotification() {
     global $wp_query;
-    $logicDisplayPage = get_theme_mod('njt_nofi_logic_display_page');
+    $logicDisplayPage = get_theme_mod('njt_nofi_logic_display_page', $this->valueDefault['logic_display_page']);
     $listDisplayPage = explode(',',get_theme_mod('njt_nofi_list_display_page'));
-    $logicDisplayPost = get_theme_mod('njt_nofi_logic_display_post');
+    $logicDisplayPost = get_theme_mod('njt_nofi_logic_display_post', $this->valueDefault['logic_display_post']);
     $listDisplayPost = explode(',',get_theme_mod('njt_nofi_list_display_post'));
     $currentPageOrPostID = $wp_query->get_queried_object_id();
-
-    $isDisplayHome = get_theme_mod('njt_nofi_homepage', $this->valueDefault['dp_homepage'] ) ;
-    $isDisplayPage = get_theme_mod('njt_nofi_pages', $this->valueDefault['dp_pages'] ) ;
-    $isDisplayPosts = get_theme_mod('njt_nofi_posts', $this->valueDefault['dp_posts']) ;
-    $isDisplayPageOrPostId = get_theme_mod('njt_nofi_pp_id');
-    $arrDisplayPageOrPostId = explode(",",$isDisplayPageOrPostId);
-    $excludeDisplayPageOrPostId = get_theme_mod('njt_nofi_exclude_pp_id');
-    $arrExcludeDisplayPageOrPostId = explode(",",$excludeDisplayPageOrPostId);
-
 
     if ($logicDisplayPage == 'dis_selected_page' ) {
       if(in_array('home_page', $listDisplayPost) && is_home() || in_array('home_page', $listDisplayPost) && is_front_page()) return true;
