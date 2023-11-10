@@ -762,6 +762,10 @@ const homeNotificationBar = {
         jQuery('body .header-wrap').css({
           'top': paddingOffset + 'px'
         })
+  
+        jQuery('body').css({
+          'padding-top': 0
+        });
       }, 1000);
 
       jQuery(window).on('wheel', function (event) {
