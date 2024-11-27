@@ -68,7 +68,9 @@ class WpCustomNotification
     update_option('njt_nofi_lb_url_mobile_wpml_translate', get_theme_mod( 'njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']));
 
     add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'), 10);
-    add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
+    if( is_admin() ){
+      add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
+    }
     add_action('wp_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
     add_action('customize_save_after', array( $this, 'njt_nofi_customize_save_after'));
 
