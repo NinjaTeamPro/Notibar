@@ -30,6 +30,7 @@
   // Hide/Close Button (No button, Toggle button, Close button)
   wp.customize("njt_nofi_hide_close_button", function (value) {
     value.bind(function (newValue, oldValue) {
+      console.log(newValue);
       if (newValue == 'no_button') {
         jQuery(".njt-nofi-toggle-button").css({
           'display': 'none',
@@ -107,11 +108,11 @@
       if (to.match(/\[([a-z0-9_]+)\]/g)) {
         jQuery.ajax({
           dataType: 'json',
-          url: wpData.admin_ajax,
+          url: njt_wp_data.admin_ajax,
           type: "post",
           data: {
             action: "njt_nofi_text",
-            nonce: wpData.nonce,
+            nonce: njt_wp_data.nonce,
             text: to 
           },
         })
@@ -212,11 +213,11 @@
       if (to.match(/\[([a-z0-9_]+)\]/g)) {
         jQuery.ajax({
           dataType: 'json',
-          url: wpData.admin_ajax,
+          url: njt_wp_data.admin_ajax,
           type: "post",
           data: {
             action: "njt_nofi_text",
-            nonce: wpData.nonce,
+            nonce: njt_wp_data.nonce,
             text: to 
           },
         })
