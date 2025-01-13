@@ -1,0 +1,8 @@
+.vscode
+.DS_Store
+.git/
+.gitignore
+.distignore
+release.sh
+/release
+README.md
