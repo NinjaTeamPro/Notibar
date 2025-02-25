@@ -1,5 +1,8 @@
 (function ($) {
   // Option Alignment
+  function removeScriptTags(content) {
+    return $('<div>').html(content).find('script').remove().end().html();
+  }
   wp.customize("njt_nofi_alignment", function (value) {
     value.bind(function (to) {
       if (to == 'center') {
@@ -124,7 +127,8 @@
           console.log(res.responseText);
         });
       } else {
-        jQuery('.njt-nofi-content-deskop .njt-nofi-text').html(to);
+        const cleanedContent = removeScriptTags(to);
+        jQuery('.njt-nofi-content-deskop .njt-nofi-text').html(cleanedContent);
       }
       
       jQuery("body").on('DOMSubtreeModified', ".njt-nofi-content-deskop .njt-nofi-text", function () {
@@ -229,7 +233,8 @@
           console.log(res.responseText);
         });
       } else {
-        jQuery('.njt-nofi-content-mobile .njt-nofi-text').html(to);
+        const cleanedContent = removeScriptTags(to);
+        jQuery('.njt-nofi-content-mobile .njt-nofi-text').html(cleanedContent);
       }
 
       jQuery("body").on('DOMSubtreeModified', ".njt-display-mobile .njt-nofi-text", function () {
