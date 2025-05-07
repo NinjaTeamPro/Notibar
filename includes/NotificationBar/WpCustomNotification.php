@@ -156,7 +156,7 @@ class WpCustomNotification
       $cookie_close_notibar=  $_COOKIE['njt-close-notibar'] ?? null;
       $cookie_toggle_close_notibar=  $_COOKIE['njt-toggle-close-notibar'] ?? null;
 
-      if($cookie_close_notibar == 'true') {
+      if($cookie_close_notibar == 'true' || $open_after_day == 0) {
         setcookie(
           'njt-close-notibar',
           'true',                  
@@ -165,25 +165,7 @@ class WpCustomNotification
         );
       }
 
-      if($cookie_toggle_close_notibar == 'true') {
-        setcookie(
-          'njt-toggle-close-notibar',
-          'true',                  
-          time() + ($open_after_day * DAY_IN_SECONDS),
-          '/'                      
-        );
-      }
-
-      if($open_after_day == 0) {
-        setcookie(
-          'njt-close-notibar',
-          'true',                  
-          time() + ($open_after_day * DAY_IN_SECONDS),
-          '/'                      
-        );
-      }
-
-      if($open_after_day == 0) {
+      if($cookie_toggle_close_notibar == 'true' || $open_after_day == 0) {
         setcookie(
           'njt-toggle-close-notibar',
           'true',                  
