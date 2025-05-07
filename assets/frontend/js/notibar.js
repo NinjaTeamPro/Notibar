@@ -60,12 +60,12 @@ const homeNotificationBar = {
       })
       if (jQuery(".njt-nofi-container").css('position') == 'fixed') {
         jQuery('.njt-nofi-container').animate({ top: a + "px" }, 1000, function() {
-          jQuery('.njt-nofi-container .njt-nofi-notification-bar').hide();
+          jQuery('.njt-nofi-container-content').remove();
         })
       }
       if (jQuery(".njt-nofi-container").css('position') == 'absolute') {
         jQuery('.njt-nofi-container').animate({ top: -barHeight + "px" }, 1000, function() {
-          jQuery('.njt-nofi-container .njt-nofi-notification-bar').hide();
+          jQuery('.njt-nofi-container-content').remove();
         })
       }
       //set cookie
