@@ -6,6 +6,7 @@ defined('ABSPATH') || exit;
 use NjtNotificationBar\NotificationBar\WpCustomNotification;
 use NjtNotificationBar\NotificationBar\WpMobileDetect;
 use NjtNotificationBar\NotificationBar\WpPosts;
+use NjtNotificationBar\NotiHelper;
 
 class NotificationBarHandle
 {
@@ -74,7 +75,7 @@ class NotificationBarHandle
     $isEnableNotification = get_theme_mod('njt_nofi_enable_bar', 1) == 1 ? true : false;
     $isdevicesDisplay = $this->njt_nofi_devicesDisplay();
 
-    if($this->njt_nofi_checkDisplayNotification() && $isdevicesDisplay) {
+    if($this->njt_nofi_checkDisplayNotification() && $isdevicesDisplay && !NotiHelper::is_hide_notibar_with_cookie()) {
       wp_register_style('njt-nofi', NJT_NOFI_PLUGIN_URL . 'assets/frontend/css/notibar.css', array(), NJT_NOFI_VERSION);
       wp_enqueue_style('njt-nofi');
 
@@ -285,12 +286,15 @@ class NotificationBarHandle
 
     if($isDisplayNotification && $isEnableNotification && $isdevicesDisplay && !is_customize_preview()) {
       add_action( 'wp_footer', array( $this, 'display_notification' ),10);
+      add_action( 'wp_footer', array( $this, 'njt_nofi_rederInput' ),10);
      }
-    add_action( 'wp_footer', array( $this, 'njt_nofi_rederInput' ),10);
   }
 
   public function display_notification()
   {
+    if (NotiHelper::is_hide_notibar_with_cookie()) {
+      return;
+    }
     
     if(wp_get_theme()->get( 'Name' ) == 'Nayma') {
       $widthStyle = 'auto';
@@ -343,6 +347,7 @@ class NotificationBarHandle
   }
 
   public function njt_nofi_rederInput() {
+    
     global $wp_query;
     $dataDisplay = array(
       'is_home' => is_home(),
