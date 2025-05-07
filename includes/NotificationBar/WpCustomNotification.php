@@ -270,10 +270,14 @@ class WpCustomNotification
     ));
 
     $customNoti->add_control( 'njt_nofi_open_after_day_control', array(
-      'label'    => __( 'Open notibar after day', NJT_NOFI_DOMAIN ),
+      'label'    => __( 'Show Notibar again after close (days)', NJT_NOFI_DOMAIN ),
       'section'  => 'njt_nofi_general',
       'settings' => 'njt_nofi_open_after_day',
       'type'     => 'number',
+      'input_attrs' => array(
+        'min' => 0,
+        'step' => 1
+      )
     ));
 
     // Content Width (px)
