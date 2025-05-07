@@ -69,7 +69,7 @@ const homeNotificationBar = {
         })
       }
       //set cookie
-      homeNotificationBar.setCookie('njt-close-notibar', 'true', 1)
+      homeNotificationBar.setCookie('njt-close-notibar', 'true', njt_wp_data.open_after_day.value)
 
       //Custom js for theme
       if(njt_wp_data.wp_get_theme == 'Essentials') {
@@ -214,7 +214,7 @@ const homeNotificationBar = {
       })
 
       //Set Cookie toggle close
-      homeNotificationBar.setCookie('njt-toggle-close-notibar', 'true', 1)
+      homeNotificationBar.setCookie('njt-toggle-close-notibar', 'true', njt_wp_data.open_after_day.value)
     })
 
     //Option Toggle Opent

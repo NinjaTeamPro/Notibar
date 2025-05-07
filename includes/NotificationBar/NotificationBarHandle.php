@@ -95,6 +95,10 @@ class NotificationBarHandle
         'wp_is_mobile' => wp_is_mobile(),
         'is_customize_preview' => is_customize_preview(),
         'wp_get_theme' => wp_get_theme()->get( 'Name' ),
+        'open_after_day' => [
+          'value' => get_theme_mod('njt_nofi_open_after_day', $this->valueDefault['open_after_day']),
+          'is_new_update' => get_option('njt_nofi_open_after_day') != get_theme_mod('njt_nofi_open_after_day', $this->valueDefault['open_after_day']) ? true : false,
+        ],
       ));
     }
 
