@@ -38,7 +38,6 @@ const homeNotificationBar = {
           'position': 'relative',
         })
       }
-      //jQuery('.njt-nofi-container').remove();
     }
 
     const toggleCookie = homeNotificationBar.getCookie('njt-toggle-close-notibar')
