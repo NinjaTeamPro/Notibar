@@ -70,9 +70,7 @@ class WpCustomNotification
     update_option('njt_nofi_lb_url_mobile_wpml_translate', get_theme_mod( 'njt_nofi_lb_url_mobile', $this->valueDefault['lb_url_mobile']));
 
     add_action('customize_register', array( $this, 'njt_nofi_customizeNotification'), 10);
-    if( is_admin() ){
-      add_action('admin_enqueue_scripts', array($this, 'addScriptsCustomizer'));
-    }
+    add_action('customize_controls_enqueue_scripts', array($this, 'addScriptsCustomizer'));
     add_action('wp_enqueue_scripts', array( $this, 'njt_nofi_enqueueCustomizeControls'));
     add_action('customize_save_after', array( $this, 'njt_nofi_customize_save_after'));
 
@@ -118,7 +116,6 @@ class WpCustomNotification
 
   }
   public function addScriptsCustomizer(){
-    if(is_customize_preview()){
       wp_register_script('njt-nofi-cus-control-select2', NJT_NOFI_PLUGIN_URL . 'assets/admin/js/select2.min.js', array('jquery'), NJT_NOFI_VERSION, true);
       wp_enqueue_script('njt-nofi-cus-control-select2');
       wp_register_style('njt-nofi-cus-control-select2', NJT_NOFI_PLUGIN_URL . 'assets/admin/css/select2.min.css', array(), NJT_NOFI_VERSION);
@@ -135,7 +132,6 @@ class WpCustomNotification
         'list_posts_selected' => WpPosts::get_list_pages_posts_selected(get_theme_mod('njt_nofi_list_display_post')),
         'list_pages_selected' => WpPosts::get_list_pages_posts_selected(get_theme_mod('njt_nofi_list_display_page')),
       ));
-    }
   }
 
   public function njt_nofi_customize_save_after()
