@@ -223,14 +223,19 @@ class NotificationBarHandle
     $listDisplayPage = explode(',',get_theme_mod('njt_nofi_list_display_page'));
     $logicDisplayPost = get_theme_mod('njt_nofi_logic_display_post', $this->valueDefault['logic_display_post']);
     $listDisplayPost = explode(',',get_theme_mod('njt_nofi_list_display_post'));
-    $currentPageOrPostID = $wp_query->get_queried_object_id();
+
+    if(function_exists( 'is_shop' ) && is_shop()) {
+      $currentPageOrPostID = wc_get_page_id( 'shop' );
+    } else {
+      $currentPageOrPostID = $wp_query->get_queried_object_id();
+    }
 
     if ($logicDisplayPage == 'dis_selected_page' ) {
-      if(in_array('home_page', $listDisplayPost) && is_home() || in_array('home_page', $listDisplayPost) && is_front_page()) return true;
+      if(in_array('home_page', $listDisplayPost) && is_home() || in_array('home_page', $listDisplayPage) && is_front_page()) return true;
     }
 
     if ($logicDisplayPage == 'hide_selected_page' ) {
-      if(in_array('home_page', $listDisplayPost) && is_home() || in_array('home_page', $listDisplayPost) && is_front_page()) return false;
+      if(in_array('home_page', $listDisplayPost) && is_home() || in_array('home_page', $listDisplayPage) && is_front_page()) return false;
     }
 
     if ( $this->njt_nofi_is_page()) {
