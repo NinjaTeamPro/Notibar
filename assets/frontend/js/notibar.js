@@ -27,12 +27,55 @@ const homeNotificationBar = {
     }
     return '';
   },
+  initCLSOptimization() {
+    if (njt_wp_data.isPositionFix) {
+      jQuery('body').addClass('njt-nofi-reserve-space');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        this.showNotificationBar();
+      });
+    } else {
+      setTimeout(() => {
+        this.showNotificationBar();
+      }, 100);
+    }
+  },
+  showNotificationBar() {
+    if (this.shouldShowNotificationBar()) {
+      jQuery('.njt-nofi-container-content').addClass('njt-nofi-visible');
+      
+      setTimeout(() => {
+        jQuery('body').removeClass('njt-nofi-reserve-space');
+      }, 300);
+    } else {
+      jQuery('body').removeClass('njt-nofi-reserve-space');
+    }
+  },
+  shouldShowNotificationBar() {
+    const valueCookie = this.getCookie('njt-close-notibar');
+    const toggleCookie = this.getCookie('njt-toggle-close-notibar');
+    
+    if (valueCookie === 'true' && !njt_wp_data.is_customize_preview && njt_wp_data.hideCloseButton === 'close_button') {
+      return false;
+    }
+    
+    if (toggleCookie === 'true' && !njt_wp_data.is_customize_preview && njt_wp_data.hideCloseButton === 'toggle_button') {
+      return false;
+    }
+    
+    return true;
+  },
   hideBarWithCookie() {
     const valueCookie = homeNotificationBar.getCookie('njt-close-notibar')
     const hideCloseButton = njt_wp_data.hideCloseButton
     if (valueCookie == 'true' && !njt_wp_data.is_customize_preview && hideCloseButton == 'close_button') {
+      jQuery('.njt-nofi-container-content').removeClass('njt-nofi-visible');
+      jQuery('body').removeClass('njt-nofi-reserve-space');
+      
       const barHeight = jQuery('.njt-nofi-notification-bar').outerHeight();
-      jQuery('body').css({ 'padding-top': -barHeight })
+      jQuery('body').css({ 'padding-top': 0 })
       if(njt_wp_data.wp_get_theme !== 'Divi' ||  njt_wp_data.wp_get_theme !== 'Divi Child Theme for CDW Studios'){
         jQuery('body').css({
           'position': 'relative',
@@ -784,6 +827,9 @@ const homeNotificationBar = {
 }
 
 jQuery(document).ready(() => {
+  // Initialize CLS optimization first
+  homeNotificationBar.initCLSOptimization();
+  
   homeNotificationBar.hideBarWithCookie();
   homeNotificationBar.setPaddingTop();
   homeNotificationBar.actionButtonClose();
