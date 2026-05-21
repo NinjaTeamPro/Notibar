@@ -9,3 +9,4 @@ node_modules/
 
 # Local-only stray file from earlier sync
 /1504
+package-lock.json
