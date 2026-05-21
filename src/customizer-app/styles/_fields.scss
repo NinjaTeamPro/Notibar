@@ -1,0 +1,289 @@
+/**
+ * Notibar — Field component styles (phase 05).
+ * Imported from index.scss.
+ */
+
+// ------------------------------------------------------------------
+// Color preset swatches
+// ------------------------------------------------------------------
+
+.njt-notibar-presets {
+	&__label {
+		margin: 0 0 6px;
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #666;
+		letter-spacing: 0.05em;
+	}
+
+	&__grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+
+	&__swatch {
+		width: 32px;
+		height: 32px;
+		border-radius: 4px;
+		border: 2px solid transparent;
+		cursor: pointer;
+		padding: 0;
+		transition: border-color 0.1s ease, transform 0.1s ease;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+
+		&:hover {
+			border-color: #2271b1;
+			transform: scale(1.1);
+		}
+
+		&:focus-visible {
+			outline: 2px solid #2271b1;
+			outline-offset: 2px;
+		}
+	}
+}
+
+// ------------------------------------------------------------------
+// ColorFieldWithReset
+// ------------------------------------------------------------------
+
+.njt-notibar-color-fields {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.njt-notibar-color-field {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 8px 10px;
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&__label {
+		font-size: 12px;
+		font-weight: 500;
+		color: #1d2327;
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	&__swatch {
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		border: 2px solid rgba(0, 0, 0, 0.15);
+		cursor: pointer;
+		padding: 0;
+		flex-shrink: 0;
+		transition: transform 0.1s ease;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+
+		&:focus-visible {
+			outline: 2px solid #2271b1;
+			outline-offset: 2px;
+		}
+	}
+
+	&__picker {
+		margin-top: 10px;
+
+		// Constrain WP ColorPicker width
+		.components-color-picker {
+			max-width: 100%;
+		}
+	}
+}
+
+// ------------------------------------------------------------------
+// ContrastWarning
+// ------------------------------------------------------------------
+
+.njt-notibar-contrast-warning {
+	margin: 4px 0;
+
+	.components-notice__content {
+		font-size: 12px;
+	}
+}
+
+// ------------------------------------------------------------------
+// ButtonSubForm
+// ------------------------------------------------------------------
+
+.njt-notibar-button-subform {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px 12px 8px;
+	margin: 0;
+
+	&__legend {
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #666;
+		letter-spacing: 0.05em;
+		padding: 0 4px;
+	}
+
+	&__fields {
+		margin-top: 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		.components-base-control {
+			margin-bottom: 0;
+		}
+	}
+}
+
+// ------------------------------------------------------------------
+// AsyncPostPicker
+// ------------------------------------------------------------------
+
+.njt-notibar-post-picker {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	&__chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+	}
+
+	&__chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 2px 8px;
+		background: #e8f0fe;
+		border-radius: 12px;
+		font-size: 12px;
+		color: #1d2327;
+		border: 1px solid #c5d6f5;
+	}
+
+	&__chip-remove {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		line-height: 1;
+		color: #555;
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+
+		&:hover {
+			color: #d63638;
+		}
+	}
+}
+
+// BehaviorTab uses a native <input type="number"> because the
+// __experimentalNumberControl from @wordpress/components is blocked by
+// the no-unsafe-wp-apis lint rule. Style it to match wp-admin inputs.
+.njt-notibar-number-input {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 120px;
+	padding: 6px 8px;
+	border: 1px solid #8c8f94;
+	border-radius: 2px;
+	background: #fff;
+	color: #2c3338;
+	font-size: 13px;
+	line-height: 1.4;
+
+	&:focus {
+		border-color: #2271b1;
+		outline: 2px solid transparent;
+		box-shadow: 0 0 0 1px #2271b1;
+	}
+
+	&:disabled {
+		background: #f0f0f1;
+		color: #a7aaad;
+		cursor: not-allowed;
+	}
+}
+
+// datetime-local + time inputs reuse the same visual treatment as the
+// native number input for consistency with WP admin form controls.
+.njt-notibar-datetime-input,
+.njt-notibar-time-input {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 240px;
+	padding: 6px 8px;
+	border: 1px solid #8c8f94;
+	border-radius: 2px;
+	background: #fff;
+	color: #2c3338;
+	font-size: 13px;
+	line-height: 1.4;
+
+	&:focus {
+		border-color: #2271b1;
+		outline: 2px solid transparent;
+		box-shadow: 0 0 0 1px #2271b1;
+	}
+}
+
+.njt-notibar-time-input {
+	max-width: 120px;
+}
+
+// Schedule sub-form — visually grouped with subtle indent + border so the
+// nested datetime / day-of-week / daily-window fields feel like a block.
+.njt-notibar-schedule {
+	&__body {
+		margin-top: 12px;
+		padding: 12px;
+		border: 1px solid #e0e0e0;
+		border-radius: 4px;
+		background: #fafafa;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	&__days {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 12px;
+
+		.components-checkbox-control__input-container {
+			margin-right: 4px;
+		}
+
+		.components-base-control {
+			margin: 0;
+		}
+	}
+
+	&__window {
+		display: flex;
+		gap: 16px;
+		flex-wrap: wrap;
+
+		.components-base-control {
+			margin: 0;
+		}
+	}
+}

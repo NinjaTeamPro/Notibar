@@ -1,0 +1,45 @@
+/**
+ * Notibar — Tracking pane (aggregate view inside list-mode SPA).
+ * Imported from index.scss.
+ */
+
+.njt-notibar-tracking-pane {
+	&__table {
+		width:           100%;
+		border-collapse: collapse;
+		font-size:       13px;
+		margin:          0 0 10px;
+
+		th, td {
+			padding:       6px 8px;
+			border-bottom: 1px solid #e0e0e0;
+			text-align:    left;
+		}
+
+		th {
+			font-weight: 600;
+			color:       #1d2327;
+			background:  #f6f7f7;
+		}
+
+		.num {
+			text-align:           right;
+			white-space:          nowrap;
+			font-variant-numeric: tabular-nums;
+		}
+	}
+
+	&__hint {
+		margin:     0;
+		font-size:  12px;
+		color:      #757575;
+		font-style: italic;
+		line-height: 1.5;
+	}
+
+	&__status {
+		margin:    8px 0;
+		font-size: 13px;
+		color:     #757575;
+	}
+}

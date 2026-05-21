@@ -1,0 +1,208 @@
+/**
+ * Notibar shared render module.
+ *
+ * Pure function: bar + global config → HTML string.
+ * No DOM mutations, no global reads, no side-effects.
+ *
+ * MARKUP CONTRACT: The structure produced here is the authoritative v3 markup.
+ * Phase 07 frontend JS and PHP SSR MUST emit identical class names, data
+ * attributes, and CSS custom properties. Do not change structure without
+ * updating phase 07 simultaneously.
+ *
+ * Escape policy:
+ *  - bar.content.text / bar.content.textMobile → safe innerHTML (wp_kses_post on server).
+ *  - Everything else (button text, URL, color values, IDs…) → escapeAttr / escapeText.
+ *
+ * @since 3.0.0
+ */
+
+import { escapeAttr, escapeText, decodeBasicEntities } from './escape-utils.js';
+
+// Alignment value → CSS justify-content mapping (flex child positioning).
+const ALIGNMENT_MAP = {
+	center: 'center',
+	left: 'flex-start',
+	right: 'flex-end',
+	'space-around': 'space-around',
+};
+
+// Parallel mapping for text-align — applied so multi-line text inside
+// .njt-nofi-text follows the bar's alignment setting (not just the
+// horizontal position of the text+button row).
+const TEXT_ALIGN_MAP = {
+	center: 'center',
+	left: 'left',
+	right: 'right',
+	'space-around': 'center',
+};
+
+// ------------------------------------------------------------------
+// Internal helpers
+// ------------------------------------------------------------------
+
+/**
+ * Render a CTA button anchor element.
+ *
+ * @param {Object} button Button config from bar.content.
+ * @param {Object} style  Bar style config (for btnBgColor, btnTextColor, fontWeight).
+ * @param {string} kind   'desktop' | 'mobile' — affects aria-label suffix.
+ *
+ * @return {string} HTML string or empty string when button disabled.
+ */
+function renderButton( button, style, kind ) {
+	if ( ! button || ! button.enabled ) {
+		return '';
+	}
+
+	// Decode any pre-existing HTML entities in the stored text before the
+	// render layer re-escapes them. Defensive against legacy v2.x data
+	// migrated via wp_filter_nohtml_kses, which stored "&" as "&amp;".
+	const text = decodeBasicEntities( button.text || 'Learn more' );
+	const url = button.url || '#';
+	const newWindow = button.newWindow
+		? ' target="_blank" rel="noopener noreferrer"'
+		: '';
+	const ariaLabel = text.trim()
+		? escapeAttr( text )
+		: `Learn more about this notification (${ kind })`;
+
+	const btnStyle = [
+		`background:${ escapeAttr( style.btnBgColor || '#1919cf' ) }`,
+		`color:${ escapeAttr( style.btnTextColor || '#ffffff' ) }`,
+		`font-weight:${ escapeAttr( button.fontWeight || 400 ) }`,
+		'border-radius:3px',
+	].join( ';' );
+
+	return (
+		`<div class="njt-nofi-button">` +
+		`<a href="${ escapeAttr( url ) }"${ newWindow } ` +
+		`class="njt-nofi-button-text" ` +
+		`aria-label="${ ariaLabel }" ` +
+		`style="${ btnStyle }">` +
+		escapeText( text ) +
+		`</a></div>`
+	);
+}
+
+/**
+ * Render the dismissal / toggle control.
+ * hideCloseButton: 'close' | 'toggle' | 'disable'
+ *
+ * @param {string} mode hideCloseButton enum value.
+ *
+ * @return {string} HTML string or empty string for 'disable'.
+ */
+function renderCloseControl( mode ) {
+	// SVG × path used for both close and toggle icons.
+	const svgPath =
+		'm386.667 45.564-45.564-45.564-147.77 147.769-147.769-147.769' +
+		'-45.564 45.564 147.769 147.769-147.769 147.77 45.564 45.564' +
+		' 147.769-147.769 147.769 147.769 45.564-45.564-147.768-147.77z';
+
+	const svgIcon =
+		`<svg class="njt-nofi-close-icon" xmlns="http://www.w3.org/2000/svg" ` +
+		`viewBox="0 0 386.667 386.667" width="14" height="14" aria-hidden="true">` +
+		`<path d="${ svgPath }" fill="currentColor"/></svg>`;
+
+	if ( mode === 'close' ) {
+		return (
+			`<button class="njt-nofi-close" type="button" aria-label="Close">` +
+			svgIcon +
+			`</button>`
+		);
+	}
+
+	if ( mode === 'toggle' ) {
+		return (
+			`<button class="njt-nofi-toggle" type="button" aria-label="Collapse/expand">` +
+			svgIcon +
+			`</button>`
+		);
+	}
+
+	// 'disable' — no control rendered.
+	return '';
+}
+
+// ------------------------------------------------------------------
+// Public API
+// ------------------------------------------------------------------
+
+/**
+ * Render a notification bar to an HTML string.
+ *
+ * Resilient mobile rendering (resolved decision #3): both desktop AND mobile
+ * content blocks are always emitted. CSS media query reveals one at runtime.
+ * JS never makes a device choice based on window.innerWidth.
+ *
+ * The `global` parameter is accepted for API consistency with phase 07 usage
+ * (e.g. rotation caller passes global through). Currently unused here since
+ * bar-level style is self-contained, but retained for forward compatibility.
+ *
+ * @param {Object} bar    Bar object conforming to Schema::defaultBar() shape.
+ * @param {Object} global Global config conforming to Schema::defaultGlobal() shape.
+ *
+ * @return {string} Complete bar HTML string.
+ */
+// eslint-disable-next-line no-unused-vars -- global is part of the API contract (phase 07 callers pass it through rotation)
+export function renderBarHTML( bar, global ) {
+	const style = bar.style || {};
+	const content = bar.content || {};
+	const behavior = bar.behavior || {};
+
+	const bgColor = escapeAttr( style.bgColor || '#9af4cf' );
+	const textColor = escapeAttr( style.textColor || '#1919cf' );
+	const fontSize = escapeAttr( Number( style.fontSize ) || 15 );
+	const contentWidth = escapeAttr( Number( style.contentWidth ) || 900 );
+	const positionType = escapeAttr( style.positionType || 'fixed' );
+	const alignment = ALIGNMENT_MAP[ style.alignment ] || 'center';
+	const textAlign = TEXT_ALIGN_MAP[ style.alignment ] || 'center';
+	const barId = escapeAttr( bar.id || '' );
+
+	// Desktop content block — always emitted.
+	const desktopBlock =
+		`<div class="njt-nofi-content njt-nofi-content-desktop" ` +
+		`style="max-width:${ contentWidth }px;justify-content:${ escapeAttr(
+			alignment
+		) };text-align:${ escapeAttr( textAlign ) };font-size:${ fontSize }px;">` +
+		`<div class="njt-nofi-text">${ content.text || '' }</div>` +
+		renderButton( content.button, style, 'desktop' ) +
+		`</div>`;
+
+	// Mobile content block — only emitted when mobileSeparate is true.
+	// When false, CSS media query simply continues showing the desktop block.
+	// Text and button are both device-specific in this branch; falls back to
+	// the desktop button only if buttonMobile is somehow missing (defensive —
+	// Schema::defaultContent populates both by default).
+	const mobileBlock = content.mobileSeparate
+		? `<div class="njt-nofi-content njt-nofi-content-mobile" ` +
+		  `style="justify-content:${ escapeAttr( alignment ) };text-align:${ escapeAttr( textAlign ) };font-size:${ fontSize }px;">` +
+		  `<div class="njt-nofi-text">${ content.textMobile || '' }</div>` +
+		  renderButton( content.buttonMobile || content.button, style, 'mobile' ) +
+		  `</div>`
+		: '';
+
+	const closeControl = renderCloseControl(
+		behavior.hideCloseButton || 'close'
+	);
+
+	// Marker class — present only when a mobile block was emitted. CSS uses
+	// this to decide whether to hide the desktop block on mobile; without it,
+	// the desktop block must stay visible (otherwise the bar is blank when
+	// content.mobileSeparate is false).
+	const barClass = 'njt-nofi-notification-bar' +
+		( content.mobileSeparate ? ' njt-nofi-has-mobile' : '' );
+
+	return (
+		`<div class="njt-nofi-container-content" role="status" aria-live="polite" data-bar-id="${ barId }">` +
+		`<div class="njt-nofi-container" data-position="${ positionType }">` +
+		`<div class="${ barClass }" ` +
+		`style="--njt-bar-bg:${ bgColor };--njt-bar-color:${ textColor };">` +
+		desktopBlock +
+		mobileBlock +
+		closeControl +
+		`</div>` +
+		`</div>` +
+		`</div>`
+	);
+}

@@ -1,0 +1,320 @@
+/**
+ * Notibar — Customizer SPA scoped styles.
+ * Single-column layout — WP Customizer panel is narrow (~280-580px wide).
+ * All sections stack vertically inside a single <Panel> with collapsible
+ * <PanelBody> sections (matches WP's native Customizer visual language).
+ */
+
+@import './styles/tabs';
+@import './styles/fields';
+
+// ------------------------------------------------------------------
+// App shell
+// ------------------------------------------------------------------
+
+.njt-notibar-app {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	font-size: 13px;
+	color: #1d2327;
+
+	// Match WP Customizer section spacing.
+	.components-panel {
+		border: 0;
+		background: transparent;
+		margin: 0;
+	}
+
+	// Native-feeling PanelBody headers — consistent with WP Customizer
+	// section/control look.
+	.components-panel__body {
+		border-top: 1px solid #e0e0e0;
+		border-bottom: 0;
+		padding: 0;
+
+		&:first-child {
+			border-top: 0;
+		}
+	}
+
+	// Body title — neutralise WP's default negative margin
+	// (.components-panel__body.is-opened > .components-panel__body-title
+	// ships with `margin: -16px -16px 5px` which collapses spacing inside
+	// our panels). Match WP's specificity so our zero margin wins.
+	.components-panel__body .components-panel__body-title,
+	.components-panel__body.is-opened > .components-panel__body-title {
+		margin: 0;
+		border-bottom: 0;
+
+		button.components-panel__body-toggle {
+			padding: 14px 16px;
+			font-size: 13px;
+			font-weight: 600;
+			color: #1d2327;
+		}
+	}
+
+	// Body content padding (when expanded).
+	.components-panel__body.is-opened > *:not(.components-panel__body-title) {
+		padding: 0 16px 16px;
+	}
+}
+
+// ------------------------------------------------------------------
+// Global settings (Display mode + rotation controls)
+// ------------------------------------------------------------------
+
+.njt-notibar-global-settings {
+	.components-radio-control__option {
+		margin-bottom: 4px;
+	}
+
+	.components-base-control + .components-base-control,
+	.components-base-control + .components-toggle-control {
+		margin-top: 14px;
+	}
+
+	// WP 7.0+ refactor moved some controls out of .components-base-control,
+	// breaking the adjacent-sibling spacing above for the rotation-order
+	// RadioControl (sits below the Pause-on-hover ToggleControl). Target it
+	// directly via the radio-control class for resilience to that change.
+	.components-radio-control:not(:first-child) {
+		margin-top: 12px;
+	}
+}
+
+// ------------------------------------------------------------------
+// Bar list
+// ------------------------------------------------------------------
+
+.njt-notibar-bar-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	&__empty {
+		margin: 4px 0 8px;
+		color: #757575;
+		font-style: italic;
+		font-size: 12px;
+	}
+
+	&__footer {
+		margin-top: 10px;
+	}
+
+	&__add {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+// ------------------------------------------------------------------
+// Bar list item — compact horizontal row for narrow Customizer panel
+// ------------------------------------------------------------------
+
+.njt-notibar-bar-item {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 6px;
+	border: 1px solid #e0e0e0;
+	border-radius: 3px;
+	background: #fff;
+	transition: background 0.1s ease, border-color 0.1s ease;
+
+	&:hover {
+		background: #f6f7f7;
+		border-color: #c3c4c7;
+	}
+
+	&--selected {
+		background: #e8f0fe;
+		border-color: #2271b1;
+		box-shadow: inset 0 0 0 1px #2271b1;
+	}
+
+	// Drag handle ---------------------------------------------------------
+	&__handle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 28px;
+		flex: 0 0 20px;
+		cursor: grab;
+		color: #8c8f94;
+		font-size: 14px;
+		user-select: none;
+		touch-action: none;
+
+		&:active { cursor: grabbing; }
+		&:hover { color: #2c3338; }
+	}
+
+	// Clickable name — flex-grow so it eats remaining space ---------------
+	&__name {
+		flex: 1 1 auto;
+		min-width: 0;
+		background: transparent !important;
+		border: 0 !important;
+		box-shadow: none !important;
+		padding: 4px 4px;
+		margin: 0;
+		font-size: 13px;
+		font-weight: 500;
+		line-height: 1.4;
+		text-align: left;
+		cursor: pointer;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: #1d2327;
+
+		&:hover { color: #2271b1; }
+		&:focus-visible {
+			outline: 2px solid #2271b1;
+			outline-offset: -2px;
+			border-radius: 2px;
+		}
+	}
+
+	// Toggle wrapper — defeat wp-components block-level wrappers ----------
+	&__toggle {
+		flex: 0 0 auto;
+		display: inline-flex;
+		align-items: center;
+		margin: 0 !important;
+		padding: 0 !important;
+
+		// .components-base-control (outermost wp-components shell)
+		&.components-base-control,
+		.components-base-control {
+			margin: 0 !important;
+			padding: 0 !important;
+			width: auto !important;
+		}
+
+		// inner row that holds the switch + (hidden) label
+		.components-base-control__field,
+		.components-flex,
+		.components-h-stack {
+			margin: 0 !important;
+			padding: 0 !important;
+			width: auto !important;
+			min-width: 0;
+		}
+
+		.components-form-toggle {
+			margin: 0;
+		}
+
+		// Visually hidden label — make sure it doesn't claim layout space.
+		.components-toggle-control__label,
+		label {
+			margin: 0;
+			padding: 0;
+		}
+	}
+
+	// Overflow menu (⋯) ---------------------------------------------------
+	&__menu {
+		flex: 0 0 28px;
+		display: inline-flex;
+		align-items: center;
+
+		// .components-dropdown is the popover anchor wrapper.
+		&.components-dropdown,
+		.components-dropdown {
+			display: inline-flex;
+		}
+
+		.components-button {
+			min-width: 28px;
+			width: 28px;
+			height: 28px;
+			padding: 0;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			color: #50575e;
+		}
+	}
+}
+
+// ------------------------------------------------------------------
+// Empty state (no bars or none selected)
+// ------------------------------------------------------------------
+
+.njt-notibar-empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 120px;
+	text-align: center;
+	color: #757575;
+	padding: 24px 16px;
+
+	&__message {
+		margin: 0 0 14px;
+		font-size: 13px;
+		line-height: 1.6;
+	}
+}
+
+// ------------------------------------------------------------------
+// Editor drill-down view
+// ------------------------------------------------------------------
+
+.njt-notibar-app--editing {
+	display: flex;
+	flex-direction: column;
+}
+
+.njt-notibar-editor-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-bottom: 1px solid #e0e0e0;
+	background: #fff;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+
+	&__back {
+		flex: 0 0 auto;
+
+		&.components-button {
+			min-width: 32px;
+			width: 32px;
+			height: 32px;
+			padding: 0;
+			color: #2271b1;
+
+			&:hover {
+				color: #135e96;
+				background: #f0f6fc;
+			}
+		}
+	}
+
+	&__title {
+		flex: 1 1 auto;
+		min-width: 0;
+		font-size: 14px;
+		font-weight: 600;
+		color: #1d2327;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+.njt-notibar-editor-body {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+}

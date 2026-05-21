@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+.vscode/
+.claude/
+*.log
+
+# Macro/IDE artifacts
+.idea/
+
+# Local-only stray file from earlier sync
+/1504

@@ -1,0 +1,129 @@
+/**
+ * Notibar — Tab panel styles (phase 05).
+ * Imported from index.scss.
+ */
+
+// ------------------------------------------------------------------
+// BarEditor wrapper
+// ------------------------------------------------------------------
+
+.njt-notibar-bar-editor {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+// ------------------------------------------------------------------
+// TabPanel shell
+// ------------------------------------------------------------------
+
+.njt-notibar-editor-tabs {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+
+	// WP core tab nav
+	.components-tab-panel__tabs {
+		display: flex;
+		border-bottom: 1px solid #ddd;
+		margin-bottom: 0;
+	}
+
+	.components-tab-panel__tabs-item {
+		padding: 8px 14px;
+		font-size: 12px;
+		font-weight: 500;
+		color: #555;
+		border-bottom: 2px solid transparent;
+		cursor: pointer;
+		background: none;
+		border-top: none;
+		border-left: none;
+		border-right: none;
+		transition: color 0.1s ease, border-color 0.1s ease;
+
+		&:hover {
+			color: #2271b1;
+		}
+
+		&.is-active {
+			color: #2271b1;
+			border-bottom-color: #2271b1;
+			font-weight: 600;
+		}
+	}
+
+	.components-tab-panel__tab-content {
+		flex: 1;
+		overflow-y: auto;
+	}
+}
+
+// ------------------------------------------------------------------
+// Tab content inner wrapper
+// ------------------------------------------------------------------
+
+.njt-notibar-tab-content {
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	.components-base-control {
+		margin-bottom: 0;
+	}
+}
+
+// ------------------------------------------------------------------
+// Fieldset (device checkboxes, button sub-form)
+// ------------------------------------------------------------------
+
+.njt-notibar-fieldset {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px 12px 8px;
+	margin: 0;
+
+	&__legend {
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #666;
+		letter-spacing: 0.05em;
+		padding: 0 4px;
+	}
+
+	// Stacked checkboxes inside the fieldset (e.g. Show-on-devices Desktop/
+	// Mobile). The parent .njt-notibar-tab-content rule zeros base-control
+	// margins to lean on flex gap — but the gap doesn't reach into nested
+	// fieldset children, so without this they hug each other.
+	.components-base-control + .components-base-control {
+		margin-top: 4px;
+	}
+}
+
+// ------------------------------------------------------------------
+// ButtonGroup field (alignment, position)
+// ------------------------------------------------------------------
+
+.njt-notibar-button-group-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	&__label {
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #1d2327;
+		letter-spacing: 0.05em;
+	}
+}
+
+// ------------------------------------------------------------------
+// Inline notice
+// ------------------------------------------------------------------
+
+.njt-notibar-inline-notice {
+	margin: 0;
+}

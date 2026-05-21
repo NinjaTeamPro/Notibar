@@ -1,0 +1,87 @@
+/**
+ * Notibar Settings page — minimal layout.
+ * Sits inside the <div class="wrap"> WP admin standard container.
+ */
+
+@import '../shared/tracking-pane';
+
+.njt-notibar-export-import {
+	&__card {
+		margin: 0 0 20px;
+		padding: 16px 20px;
+		background: #fff;
+		border: 1px solid #c3c4c7;
+
+		h2 {
+			margin-top: 0;
+		}
+
+		// Stack CheckboxControls with breathing room.
+		.components-base-control {
+			margin-bottom: 6px;
+		}
+
+		// Space between the checkbox group and the action button below it.
+		.components-base-control + .components-button,
+		.components-base-control + .njt-notibar-export-import__preview {
+			margin-top: 16px;
+		}
+
+		// Generic top margin for any Button or file input that follows text.
+		> .components-button,
+		> p + .components-button,
+		> p + input[type='file'] {
+			margin-top: 8px;
+		}
+	}
+
+	&__backup {
+		background: #f6f7f7;
+	}
+
+	&__preview {
+		margin-top: 12px;
+		padding: 12px;
+		background: #f6f7f7;
+		border-left: 4px solid #2271b1;
+
+		// Same spacing inside the preview block so the Replace button doesn't
+		// hug the last checkbox.
+		.components-base-control {
+			margin-bottom: 6px;
+		}
+
+		.components-base-control + .components-button,
+		p + .components-base-control,
+		.components-base-control + .components-button {
+			margin-top: 12px;
+		}
+
+		> .components-button {
+			margin-top: 12px;
+		}
+	}
+
+	&__modal-actions {
+		display: flex;
+		gap: 8px;
+		justify-content: flex-end;
+		margin-top: 16px;
+	}
+}
+
+.njt-notibar-settings {
+	max-width: 1080px;
+
+	&__panel {
+		margin-top: 16px;
+		padding: 16px 20px;
+		background: #fff;
+		border: 1px solid #c3c4c7;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	}
+
+	.nav-tab-wrapper {
+		margin-top: 16px;
+	}
+}

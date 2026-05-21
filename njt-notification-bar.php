@@ -1,0 +1,113 @@
+<?php
+/**
+ * Plugin Name: Notibar - WordPress Notification Bar
+ * Plugin URI: https://ninjateam.org/notibar-wordpress-notification-bar
+ * Description: Multiple notification bars with React-powered Customizer editor, live preview, rotation mode, and per-bar display rules.
+ * Version: 3.0.0
+ * Author: Ninja Team
+ * Author URI: https://ninjateam.org
+ * Text Domain: notibar
+ * Domain Path: /i18n/languages/
+ *
+ * @package NjtNotificationBar
+ */
+
+namespace NjtNotificationBar;
+
+defined('ABSPATH') || exit;
+
+define('NJT_NOFI_PREFIX', 'njt_nofi');
+define('NJT_NOFI_VERSION', '3.0.0');
+define('NJT_NOFI_DOMAIN', 'notibar');
+
+define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('NJT_NOFI_SITE_URL', site_url());
+
+spl_autoload_register(function ($class) {
+  $prefix = __NAMESPACE__; // project-specific namespace prefix
+  $base_dir = __DIR__ . '/includes'; // base directory for the namespace prefix
+
+  $len = strlen($prefix);
+  if (strncmp($prefix, $class, $len) !== 0) { // does the class use the namespace prefix?
+    return; // no, move to the next registered autoloader
+  }
+
+  $relative_class_name = substr($class, $len);
+
+  // replace the namespace prefix with the base directory, replace namespace
+  // separators with directory separators in the relative class name, append
+  // with .php
+  $file = $base_dir . str_replace('\\', '/', $relative_class_name) . '.php';
+
+  if (file_exists($file)) {
+    require $file;
+  }
+});
+
+// Cross-sell module loader (gracefully no-op if cross-sell/ hasn't been synced yet).
+if ( file_exists( __DIR__ . '/cross-sell/loader.php' ) ) {
+	require_once __DIR__ . '/cross-sell/loader.php';
+}
+
+function init() {
+  Plugin::getInstance();
+  I18n::loadPluginTextdomain();
+
+  // v3.1 — self-heal counter store on auto-upgrade (activation hook does not
+  // re-fire on auto-update). Free steady-state cost via autoloaded marker.
+  NotificationBar\EventCounter::maybeInstall();
+
+  // v3.0 asset enqueue helper.
+  NotificationBar\AssetLoader::get_instance();
+
+  // v3.0 Customizer panel/section/settings/control registration.
+  NotificationBar\WpCustomNotification::getInstance();
+
+  // v3.0 front-end render gating + admin menu.
+  NotificationBar\NotificationBarHandle::getInstance();
+
+  // Phase 08: WPML String Translation bridge — registers/unregisters per-bar
+  // strings on save and resolves translations at render via filter hooks.
+  // Silent no-op when WPML + ST addon are not active (resolved decision #4).
+  // Note: WpmlBridge instantiation point — do not remove this line (phase-08 marker).
+  NotificationBar\WpmlBridge::getInstance();
+}
+add_action('plugins_loaded', 'NjtNotificationBar\\init');
+
+// v3.0 REST API — posts/page search endpoint for Customizer SPA.
+add_action( 'rest_api_init', function () {
+  ( new NotificationBar\RestPostsController() )->register();
+} );
+
+// v3.1 REST API — per-bar event tracking (POST /track, GET /stats/{id}).
+add_action( 'rest_api_init', function () {
+  ( new NotificationBar\TrackingRestController() )->register();
+} );
+
+// v3.2 REST API — Settings page Export/Import (GET /export, POST /import).
+add_action( 'rest_api_init', function () {
+  ( new NotificationBar\RestSettingsController() )->register();
+} );
+
+// v3.1 — prune orphan counter keys when Customizer publish removes bars.
+// Mirrors WpmlBridge::onSave diff pattern; bars are saved en bloc, no
+// incremental delete hook exists in the plugin.
+add_action( 'customize_save_after', function () {
+  NotificationBar\EventCounter::pruneAgainst(
+    NotificationBar\TrackingRestController::valid_bar_ids()
+  );
+} );
+
+// Migrations — runs at priority 5, BEFORE the main init at priority 10.
+// ORDER MATTERS: maybeRun() (v2→v3 legacy) must execute BEFORE
+// maybeMigrateThemeModToOption() (v3.1→v3.2 storage flip) so v2 data lands
+// in theme_mod first and is then copied into wp_options.
+add_action('plugins_loaded', function () {
+  $migration = NotificationBar\Migration::getInstance();
+  $migration->maybeRun();
+  $migration->maybeMigrateThemeModToOption();
+}, 5);
+
+register_activation_hook(__FILE__, array('NjtNotificationBar\\Plugin', 'activate'));
+register_deactivation_hook(__FILE__, array('NjtNotificationBar\\Plugin', 'deactivate'));

@@ -1,0 +1,21 @@
+{
+  "name": "notibar",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Notibar — WordPress Notification Bar plugin build configuration",
+  "scripts": {
+    "build": "wp-scripts build customizer-app=./src/customizer-app/index.js customizer-preview=./src/customizer-preview/index.js frontend=./src/frontend/index.js settings-app=./src/settings-app/index.js --output-path=build",
+    "start": "wp-scripts start customizer-app=./src/customizer-app/index.js customizer-preview=./src/customizer-preview/index.js frontend=./src/frontend/index.js settings-app=./src/settings-app/index.js --output-path=build",
+    "lint:js": "wp-scripts lint-js src/",
+    "format": "wp-scripts format src/"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^27.0.0"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "uuid": "^9.0.0"
+  }
+}
