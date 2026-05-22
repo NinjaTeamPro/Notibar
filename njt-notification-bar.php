@@ -45,9 +45,9 @@ spl_autoload_register(function ($class) {
   }
 });
 
-// Cross-sell module loader (gracefully no-op if cross-sell/ hasn't been synced yet).
-if ( file_exists( __DIR__ . '/cross-sell/loader.php' ) ) {
-	require_once __DIR__ . '/cross-sell/loader.php';
+// Cross-modules module loader (gracefully no-op if cross-modules/ hasn't been synced yet).
+if ( file_exists( __DIR__ . '/cross-modules/loader.php' ) ) {
+	require_once __DIR__ . '/cross-modules/loader.php';
 }
 
 function init() {

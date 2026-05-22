@@ -1,0 +1,19 @@
+{
+  "source": {
+    "repo": "YayCommerce/cross-sell-manager",
+    "ref": "main"
+  },
+  "include": [
+    "filebird-dashboard-widget",
+    "filebird-plugins-page-notification",
+    "filebird-sidebar-popup"
+  ],
+  "exclude_globs": [
+    ".github",
+    "tests",
+    "*.md",
+    "phpunit.xml",
+    "composer.lock"
+  ],
+  "target_dir": "cross-modules"
+}
