@@ -92,6 +92,9 @@ export function TrackingPane( { bars } ) {
 						<th scope="col" className="num">
 							{ __( 'Dismissals', 'notibar' ) }
 						</th>
+						<th scope="col" className="num">
+							{ __( 'Total', 'notibar' ) }
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -100,6 +103,7 @@ export function TrackingPane( { bars } ) {
 						const engagements = Number( row.engagements ) || 0;
 						const clicks = Number( row.clicks ) || 0;
 						const dismissals = Number( row.dismissals ) || 0;
+						const total = engagements + clicks + dismissals;
 						const name =
 							bar.name && bar.name.trim().length
 								? bar.name
@@ -116,6 +120,9 @@ export function TrackingPane( { bars } ) {
 								<td className="num">
 									{ dismissals.toLocaleString() }
 								</td>
+								<td className="num">
+									{ total.toLocaleString() }
+								</td>
 							</tr>
 						);
 					} ) }
@@ -125,18 +132,6 @@ export function TrackingPane( { bars } ) {
 				<p>
 					{ __(
 						'Engagements = clicks or text copies inside the bar that are NOT on the CTA button or the close button (background clicks, text clicks, embedded link clicks, copying coupon codes, etc.).',
-						'notibar'
-					) }
-				</p>
-				<p>
-					{ __(
-						'Button Clicks = the CTA button only.',
-						'notibar'
-					) }
-				</p>
-				<p>
-					{ __(
-						'Dismissals = close-button clicks only.',
 						'notibar'
 					) }
 				</p>

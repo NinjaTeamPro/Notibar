@@ -1,1 +1,113 @@
-.njt-notibar-tracking-pane__table{border-collapse:collapse;font-size:13px;margin:0 0 10px;width:100%}.njt-notibar-tracking-pane__table td,.njt-notibar-tracking-pane__table th{border-bottom:1px solid #e0e0e0;padding:6px 8px;text-align:left}.njt-notibar-tracking-pane__table th{background:#f6f7f7;color:#1d2327;font-weight:600}.njt-notibar-tracking-pane__table .num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}.njt-notibar-tracking-pane__hint{color:#757575;font-size:12px;font-style:italic;line-height:1.5;margin:0}.njt-notibar-tracking-pane__status{color:#757575;font-size:13px;margin:8px 0}.njt-notibar-export-import__card{background:#fff;border:1px solid #c3c4c7;margin:0 0 20px;padding:16px 20px}.njt-notibar-export-import__card h2{margin-top:0}.njt-notibar-export-import__card .components-base-control{margin-bottom:6px}.njt-notibar-export-import__card .components-base-control+.components-button,.njt-notibar-export-import__card .components-base-control+.njt-notibar-export-import__preview{margin-top:16px}.njt-notibar-export-import__card>.components-button,.njt-notibar-export-import__card>p+.components-button,.njt-notibar-export-import__card>p+input[type=file]{margin-top:8px}.njt-notibar-export-import__backup{background:#f6f7f7}.njt-notibar-export-import__preview{background:#f6f7f7;border-left:4px solid #2271b1;margin-top:12px;padding:12px}.njt-notibar-export-import__preview .components-base-control{margin-bottom:6px}.njt-notibar-export-import__preview .components-base-control+.components-button,.njt-notibar-export-import__preview p+.components-base-control,.njt-notibar-export-import__preview>.components-button{margin-top:12px}.njt-notibar-export-import__modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}.njt-notibar-settings{max-width:1080px}.njt-notibar-settings__panel{background:#fff;border:1px solid #c3c4c7;box-shadow:0 1px 1px rgba(0,0,0,.04);margin-top:16px;padding:16px 20px}.njt-notibar-settings .nav-tab-wrapper{margin-top:16px}
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/settings-app/index.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+@charset "UTF-8";
+/**
+ * Notibar Settings page — minimal layout.
+ * Sits inside the <div class="wrap"> WP admin standard container.
+ */
+/**
+ * Notibar — Tracking pane (aggregate view inside list-mode SPA).
+ * Imported from index.scss.
+ */
+.njt-notibar-tracking-pane__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+.njt-notibar-tracking-pane__table th, .njt-notibar-tracking-pane__table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+.njt-notibar-tracking-pane__table th {
+  font-weight: 600;
+  color: #1d2327;
+  background: #f6f7f7;
+}
+.njt-notibar-tracking-pane__table .num {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.njt-notibar-tracking-pane__table th:last-child,
+.njt-notibar-tracking-pane__table td:last-child {
+  font-weight: 600;
+}
+.njt-notibar-tracking-pane__hint {
+  margin: 0;
+  font-size: 12px;
+  color: #757575;
+  font-style: italic;
+  line-height: 1.5;
+}
+.njt-notibar-tracking-pane__status {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #757575;
+}
+
+.njt-notibar-export-import__card {
+  margin: 0 0 20px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+}
+.njt-notibar-export-import__card h2 {
+  margin-top: 0;
+}
+.njt-notibar-export-import__card .components-base-control {
+  margin-bottom: 6px;
+}
+.njt-notibar-export-import__card .components-base-control + .components-button,
+.njt-notibar-export-import__card .components-base-control + .njt-notibar-export-import__preview {
+  margin-top: 16px;
+}
+.njt-notibar-export-import__card > .components-button,
+.njt-notibar-export-import__card > p + .components-button,
+.njt-notibar-export-import__card > p + input[type=file] {
+  margin-top: 8px;
+}
+.njt-notibar-export-import__backup {
+  background: #f6f7f7;
+}
+.njt-notibar-export-import__preview {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f6f7f7;
+  border-left: 4px solid #2271b1;
+}
+.njt-notibar-export-import__preview .components-base-control {
+  margin-bottom: 6px;
+}
+.njt-notibar-export-import__preview .components-base-control + .components-button,
+.njt-notibar-export-import__preview p + .components-base-control,
+.njt-notibar-export-import__preview .components-base-control + .components-button {
+  margin-top: 12px;
+}
+.njt-notibar-export-import__preview > .components-button {
+  margin-top: 12px;
+}
+.njt-notibar-export-import__modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.njt-notibar-settings {
+  max-width: 1080px;
+}
+.njt-notibar-settings__panel {
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+.njt-notibar-settings .nav-tab-wrapper {
+  margin-top: 16px;
+}
+
+/*# sourceMappingURL=settings-app.css.map*/

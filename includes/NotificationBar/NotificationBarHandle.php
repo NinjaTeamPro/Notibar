@@ -164,12 +164,24 @@ class NotificationBarHandle {
 	/**
 	 * Build the render context from the current WP query.
 	 *
-	 * @return array{pageId: int, postId: int, isHome: bool, theme: string}
+	 * @return array{pageId:int,postId:int,isHome:bool,isSingleProduct:bool,theme:string,serverNow:int,serverWeekday:int,serverHHMM:string,currentCptType:string,currentObjectId:int}
 	 */
 	private function getRenderContext(): array {
 		$object_id = (int) get_queried_object_id();
 
 		$page_id = is_singular( 'page' ) ? $object_id : 0;
+
+		// CPT branch context: populated only on single CPT instances (not page,
+		// not post). Powers the "Other post types" display gate in filter-bars.js.
+		// Empty string when not a single CPT instance — filter-bars treats that
+		// as "branch inert" so legacy bars (cptTypes=[]) never enter the branch.
+		$current_cpt_type = '';
+		if ( is_singular() && ! is_singular( 'page' ) && ! is_singular( 'post' ) ) {
+			$pt = get_post_type();
+			if ( is_string( $pt ) && '' !== $pt ) {
+				$current_cpt_type = $pt;
+			}
+		}
 
 		// "Blog" Page assigned as the WP Posts page (Settings → Reading →
 		// "Posts page"). On /blog/ (or whatever URL the assigned Page has)
@@ -224,6 +236,8 @@ class NotificationBarHandle {
 			'serverNow'        => (int) current_time( 'timestamp' ),
 			'serverWeekday'    => (int) current_time( 'w' ),
 			'serverHHMM'       => current_time( 'H:i' ),
+			'currentCptType'   => $current_cpt_type,
+			'currentObjectId'  => $object_id,
 		];
 	}
 

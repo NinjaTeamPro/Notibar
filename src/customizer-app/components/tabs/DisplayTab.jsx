@@ -7,11 +7,13 @@
  *   - Page picker: AsyncPostPicker shown only when logic ∈ {include, exclude}
  *   - Post logic: 4-state RadioControl (all|none|include|exclude)
  *   - Post picker: AsyncPostPicker shown only when logic ∈ {include, exclude}
+ *   - Other post types (CPT) block: see DisplayTabCptBlock.
  */
 import { CheckboxControl, RadioControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { updatePath } from '../../utils/update-path';
 import { AsyncPostPicker } from '../fields/AsyncPostPicker';
+import { DisplayTabCptBlock } from './DisplayTabCptBlock';
 
 const PAGE_LOGIC_OPTIONS = [
 	{
@@ -122,6 +124,8 @@ export function DisplayTab( { bar, onChange } ) {
 					onChange={ ( ids ) => set( 'display.postIds', ids ) }
 				/>
 			) }
+
+			<DisplayTabCptBlock bar={ bar } onChange={ onChange } />
 		</div>
 	);
 }

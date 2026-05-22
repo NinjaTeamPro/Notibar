@@ -9,10 +9,12 @@ import apiFetch from '@wordpress/api-fetch';
 
 /**
  * @param {Object} opts
- * @param {string} opts.type         Post type: 'page' | 'post'
+ * @param {string} opts.type         Post type. Single slug ('page' | 'post' | CPT)
+ *                                   or comma-separated list for multi-CPT search.
  * @param {string} opts.query        Search query string.
  * @param {number} [opts.debounceMs] Debounce delay in ms (default 300).
- * @return {Object} { items, isLoading }
+ * @return {Object} { items, isLoading } — items are { value, label, type } so
+ *                                          callers can disambiguate cross-CPT.
  */
 export function useRestSearch( { type, query, debounceMs = 300 } ) {
 	const [ items, setItems ] = useState( [] );
@@ -40,13 +42,13 @@ export function useRestSearch( { type, query, debounceMs = 300 } ) {
 					// REST returns { items, hasMore } — unwrap. Old code did
 					// Array.isArray(data) which was always false, so search
 					// never populated.
-					const list = data && Array.isArray( data.items )
-						? data.items
-						: [];
+					const list =
+						data && Array.isArray( data.items ) ? data.items : [];
 					setItems(
 						list.map( ( item ) => ( {
 							value: item.id,
 							label: item.title,
+							type: item.type,
 						} ) )
 					);
 					setIsLoading( false );
@@ -112,6 +114,7 @@ export async function fetchItemsByIds( type, ids ) {
 		return list.map( ( item ) => ( {
 			value: item.id,
 			label: item.title,
+			type: item.type,
 		} ) );
 	} catch {
 		// Swallow — return empty so UI still loads.

@@ -1,12 +1,13 @@
 <?php
 /**
- * REST API controller for post/page search used by the Customizer SPA.
+ * REST API controller for post/page/CPT search used by the Customizer SPA.
  *
  * Replaces the legacy wp_ajax_njt_nofi_query_page_post handler (WpPosts).
  * Namespace: notibar/v1
  * Routes:
  *   GET /posts          — paginated search, returns { items, hasMore }
  *   GET /posts/by-ids   — hydrate selected chips by IDs
+ *   GET /cpts           — public CPT list (excludes page/post/attachment)
  *
  * Permission: edit_theme_options (matches WP Customizer cap).
  *
@@ -29,8 +30,8 @@ class RestPostsController {
 	/** @var int Results per page. */
 	const PER_PAGE = 20;
 
-	/** @var string[] Allowed post types. */
-	const ALLOWED_TYPES = [ 'page', 'post' ];
+	/** @var string[] CPTs that always belong to dedicated pickers, never CPT bucket. */
+	const RESERVED_TYPES = [ 'page', 'post', 'attachment' ];
 
 	/**
 	 * Register REST routes on rest_api_init.
@@ -52,7 +53,7 @@ class RestPostsController {
 					],
 					'type' => [
 						'default'           => 'page',
-						'sanitize_callback' => 'sanitize_key',
+						'sanitize_callback' => 'sanitize_text_field',
 					],
 					'page' => [
 						'default'           => 1,
@@ -76,9 +77,19 @@ class RestPostsController {
 					],
 					'type' => [
 						'default'           => 'page',
-						'sanitize_callback' => 'sanitize_key',
+						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
+			]
+		);
+
+		register_rest_route(
+			self::NAMESPACE,
+			'/cpts',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'handle_cpts' ],
+				'permission_callback' => [ $this, 'check_permission' ],
 			]
 		);
 	}
@@ -102,12 +113,13 @@ class RestPostsController {
 	 * @return \WP_REST_Response
 	 */
 	public function handle_search( \WP_REST_Request $request ): \WP_REST_Response {
-		$type  = $this->resolve_type( $request['type'] );
+		$types = $this->resolve_types( $request['type'] );
 		$q     = $request['q'];
 		$paged = max( 1, (int) $request['page'] );
 
+		// Singleton fast-path keeps WP_Query post_type as string (legacy behavior).
 		$query_args = [
-			'post_type'      => $type,
+			'post_type'      => count( $types ) === 1 ? $types[0] : $types,
 			'post_status'    => 'publish',
 			'posts_per_page' => self::PER_PAGE,
 			'paged'          => $paged,
@@ -120,16 +132,14 @@ class RestPostsController {
 
 		$wp_query = new \WP_Query( $query_args );
 
-		$items = array_map(
-			static function ( \WP_Post $post ) use ( $type ): array {
-				return [
-					'id'    => $post->ID,
-					'title' => $post->post_title,
-					'type'  => $type,
-				];
-			},
-			$wp_query->posts
-		);
+		// Per-item type reflects each post's actual post_type so the SPA
+		// can label mixed-CPT results correctly.
+		$items = array_map( [ self::class, 'map_post' ], $wp_query->posts );
+
+		// Synthetic items (home_page, wc_single_product, tpl:*) are bound to
+		// the single-page picker context only — they make no sense for posts
+		// or for the multi-CPT bucket.
+		$is_page_only = $types === [ 'page' ];
 
 		// Prepend the synthetic "(Front page URL)" ONLY when WP is serving
 		// the blog index at / (Settings → Reading: "Your latest posts") OR
@@ -139,7 +149,7 @@ class RestPostsController {
 		// appears in the search results naturally, so prepending here would
 		// create a duplicate row (one real, one synthetic).
 		if (
-			'page' === $type
+			$is_page_only
 			&& 1 === $paged
 			&& ( 'posts' === get_option( 'show_on_front' )
 				|| 0 === (int) get_option( 'page_on_front' ) )
@@ -159,7 +169,7 @@ class RestPostsController {
 		// Synthetic "Single Product page" token — only offered when WC is
 		// active and the search query is empty or matches "product"/"single".
 		if (
-			'page' === $type
+			$is_page_only
 			&& 1 === $paged
 			&& function_exists( 'is_product' )
 		) {
@@ -180,7 +190,7 @@ class RestPostsController {
 		// they belong to. Token format: "tpl:<filename>" (matches the
 		// _wp_page_template meta value WP itself stores per page). Filtered
 		// by the same search query the WP_Query received.
-		if ( 'page' === $type && 1 === $paged ) {
+		if ( $is_page_only && 1 === $paged ) {
 			$templates = wp_get_theme()->get_page_templates( null, 'page' );
 			if ( is_array( $templates ) && ! empty( $templates ) ) {
 				foreach ( $templates as $file => $name ) {
@@ -218,13 +228,14 @@ class RestPostsController {
 	 * @return \WP_REST_Response
 	 */
 	public function handle_by_ids( \WP_REST_Request $request ): \WP_REST_Response {
-		$type    = $this->resolve_type( $request['type'] );
+		$types   = $this->resolve_types( $request['type'] );
 		$raw_ids = $request['ids'];
 
 		if ( '' === $raw_ids ) {
 			return rest_ensure_response( [ 'items' => [] ] );
 		}
 
+		$is_page_only       = $types === [ 'page' ];
 		$parts              = array_filter( array_map( 'trim', explode( ',', $raw_ids ) ) );
 		$items              = [];
 		$numeric            = [];
@@ -244,9 +255,8 @@ class RestPostsController {
 			}
 		}
 
-		// Resolve template tokens against the active theme's registered page
-		// templates so chip labels survive a reload.
-		if ( ! empty( $template_files ) && 'page' === $type ) {
+		// Synthetic tokens belong to the single-page picker only.
+		if ( ! empty( $template_files ) && $is_page_only ) {
 			$templates = wp_get_theme()->get_page_templates( null, 'page' );
 			foreach ( $template_files as $file ) {
 				if ( isset( $templates[ $file ] ) ) {
@@ -260,7 +270,7 @@ class RestPostsController {
 			}
 		}
 
-		if ( $has_single_product && 'page' === $type ) {
+		if ( $has_single_product && $is_page_only ) {
 			$items[] = [
 				'id'    => 'wc_single_product',
 				'title' => __( 'Single Product page', 'notibar' ),
@@ -268,7 +278,7 @@ class RestPostsController {
 			];
 		}
 
-		if ( $has_home && 'page' === $type ) {
+		if ( $has_home && $is_page_only ) {
 			$items[] = [
 				'id'    => 'home_page',
 				'title' => __( 'Front Page', 'notibar' ),
@@ -281,7 +291,7 @@ class RestPostsController {
 
 		if ( ! empty( $numeric ) ) {
 			$wp_query = new \WP_Query( [
-				'post_type'      => $type,
+				'post_type'      => count( $types ) === 1 ? $types[0] : $types,
 				'post_status'    => 'publish',
 				'post__in'       => $numeric,
 				'posts_per_page' => count( $numeric ),
@@ -290,11 +300,7 @@ class RestPostsController {
 			] );
 
 			foreach ( $wp_query->posts as $post ) {
-				$items[] = [
-					'id'    => $post->ID,
-					'title' => $post->post_title,
-					'type'  => $type,
-				];
+				$items[] = self::map_post( $post );
 			}
 		}
 
@@ -302,12 +308,96 @@ class RestPostsController {
 	}
 
 	/**
-	 * Resolve and whitelist the post type parameter.
+	 * Handle GET /cpts — list of public CPTs for the multi-CPT selector.
 	 *
-	 * @param string $type Raw type value.
-	 * @return string      Validated type — 'page' or 'post'.
+	 * Excludes page/post/attachment (page/post have dedicated pickers,
+	 * attachment is never a target for a notification bar).
+	 *
+	 * @return \WP_REST_Response
 	 */
-	private function resolve_type( string $type ): string {
-		return in_array( $type, self::ALLOWED_TYPES, true ) ? $type : 'page';
+	public function handle_cpts(): \WP_REST_Response {
+		$objects = get_post_types( [ 'public' => true ], 'objects' );
+		$items   = [];
+
+		foreach ( $objects as $slug => $obj ) {
+			if ( in_array( $slug, self::RESERVED_TYPES, true ) ) {
+				continue;
+			}
+			$label    = isset( $obj->labels->singular_name ) && '' !== $obj->labels->singular_name
+				? $obj->labels->singular_name
+				: $slug;
+			$items[]  = [
+				'slug'  => $slug,
+				'label' => $label,
+			];
+		}
+
+		usort( $items, static fn( $a, $b ) => strcasecmp( $a['label'], $b['label'] ) );
+
+		return rest_ensure_response( [ 'items' => $items ] );
+	}
+
+	/**
+	 * Parse the request `type` param into a whitelisted post-type list.
+	 *
+	 * Accepts comma-separated CPT slugs. Singletons 'page' / 'post' pass
+	 * through fast for backward compat. Multi-type calls drop the legacy
+	 * 'page'/'post' slugs (those have dedicated pickers) — only true CPTs
+	 * survive. Unknown slugs are dropped; empty result falls back to
+	 * ['page'] so legacy clients keep working.
+	 *
+	 * @param string $type Raw type value (possibly comma-separated).
+	 * @return string[]     Whitelisted CPT slug list (always non-empty).
+	 */
+	private function resolve_types( string $type ): array {
+		$parts = array_values( array_filter( array_map(
+			'sanitize_key',
+			array_map( 'trim', explode( ',', $type ) )
+		) ) );
+
+		if ( empty( $parts ) ) {
+			return [ 'page' ];
+		}
+
+		// Backward-compat: single 'page' or 'post' bypasses CPT whitelist
+		// so legacy callers never depend on get_post_types ordering.
+		if ( 1 === count( $parts ) && in_array( $parts[0], [ 'page', 'post' ], true ) ) {
+			return [ $parts[0] ];
+		}
+
+		// Multi-type context belongs to the CPT bucket — strip page/post
+		// (they have their own pickers) so the trust boundary is explicit.
+		$whitelist = array_diff( $this->public_type_whitelist(), [ 'page', 'post' ] );
+		$valid     = array_values( array_intersect( $parts, $whitelist ) );
+
+		return empty( $valid ) ? [ 'page' ] : $valid;
+	}
+
+	/**
+	 * Whitelist of post types queryable through this controller.
+	 *
+	 * All public types minus attachment. `resolve_types()` further filters
+	 * page/post out when multi-type context is detected.
+	 *
+	 * @return string[]
+	 */
+	private function public_type_whitelist(): array {
+		$types = get_post_types( [ 'public' => true ], 'names' );
+		unset( $types['attachment'] );
+		return array_values( $types );
+	}
+
+	/**
+	 * Shape a WP_Post into the REST item dict used by both /posts endpoints.
+	 *
+	 * @param \WP_Post $post Post object from WP_Query.
+	 * @return array{id:int,title:string,type:string}
+	 */
+	private static function map_post( \WP_Post $post ): array {
+		return [
+			'id'    => $post->ID,
+			'title' => $post->post_title,
+			'type'  => $post->post_type,
+		];
 	}
 }

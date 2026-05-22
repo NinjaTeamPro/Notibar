@@ -1,8 +1,15 @@
 /**
- * AsyncPostPicker — multi-select post/page picker backed by REST search.
+ * AsyncPostPicker — multi-select post/page/CPT picker backed by REST search.
  *
  * Uses ComboboxControl for single-pick + maintains a chips array internally.
- * Supports the 'home_page' pseudo-id for page type.
+ * Supports synthetic tokens (home_page, wc_single_product, tpl:*) for the
+ * 'page' single-type context only.
+ *
+ * postType accepts:
+ *   - string ('page' | 'post' | CPT slug) — legacy single-CPT mode.
+ *   - string[] (multi-CPT) — merged search across the listed CPTs. Chip
+ *     labels become "title (type)" so admin can disambiguate items from
+ *     different CPTs.
  */
 import { useState, useEffect, useMemo } from '@wordpress/element';
 import { ComboboxControl } from '@wordpress/components';
@@ -24,22 +31,39 @@ const SINGLE_PRODUCT_OPTION = {
 };
 
 /**
- * @param {Object}   props
- * @param {string}   props.postType 'page' | 'post'
- * @param {Array}    props.value    Array of selected IDs (int or 'home_page').
- * @param {Function} props.onChange Called with updated IDs array.
+ * @param {Object}          props
+ * @param {string|string[]} props.postType Single CPT slug or list of slugs.
+ * @param {Array}           props.value    Selected IDs (int or synthetic).
+ * @param {Function}        props.onChange Called with updated IDs array.
  */
 export function AsyncPostPicker( { postType, value = [], onChange } ) {
 	const [ query, setQuery ] = useState( '' );
 	const [ selectedLabels, setSelectedLabels ] = useState( {} );
 
+	// Normalize postType into a stable comma-separated key. Sorting keeps the
+	// key stable across array reorderings so REST cache + useEffect deps
+	// don't churn when the source array reorders without changing membership.
+	const isMulti = Array.isArray( postType ) && postType.length > 1;
+	const postTypeKey = useMemo( () => {
+		if ( Array.isArray( postType ) ) {
+			return [ ...postType ].sort().join( ',' );
+		}
+		return postType;
+	}, [ postType ] );
+
+	// Clear cached labels when the bound CPT set changes — old labels may
+	// reference items from a different CPT context and would otherwise drift.
+	// Empty cache forces a fresh hydrate against the new postTypeKey.
+	useEffect( () => {
+		setSelectedLabels( {} );
+	}, [ postTypeKey ] );
+
 	// Hydrate labels for any pre-existing IDs on mount.
-	// IMPORTANT: the `id !== 'home_page'` filter is load-bearing — the REST
-	// /posts/by-ids endpoint only accepts numeric IDs. The home_page token
-	// gets its label from the static HOME_PAGE_OPTION constant below. If
-	// this filter is ever removed, the REST request will drop home_page
-	// silently (ctype_digit check on the server), but the SPA may also
-	// briefly show a broken chip — keep it.
+	// IMPORTANT: synthetic-token filter is load-bearing — the REST
+	// /posts/by-ids endpoint only accepts numeric IDs. Tokens get their
+	// labels from constants below or the cached selectedLabels map.
+	// Deps use '|' delimiter (not ',') so future synthetic tokens that may
+	// contain commas can't collide into a single cache key.
 	useEffect( () => {
 		const idsToFetch = value.filter(
 			( id ) =>
@@ -51,46 +75,48 @@ export function AsyncPostPicker( { postType, value = [], onChange } ) {
 			return;
 		}
 
-		fetchItemsByIds( postType, idsToFetch ).then( ( items ) => {
+		fetchItemsByIds( postTypeKey, idsToFetch ).then( ( items ) => {
 			setSelectedLabels( ( prev ) => {
 				const next = { ...prev };
 				items.forEach( ( item ) => {
-					next[ item.value ] = item.label;
+					next[ item.value ] = {
+						title: item.label,
+						type: item.type || '',
+					};
 				} );
 				return next;
 			} );
 		} );
-		// Only run when value array composition changes.
+		// Only run when value array composition or CPT context changes.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ postType, value.join( ',' ) ] );
+	}, [ postTypeKey, value.join( '|' ) ] );
 
 	const { items: searchItems, isLoading } = useRestSearch( {
-		type: postType,
+		type: postTypeKey,
 		query,
 		debounceMs: 300,
 	} );
 
 	const options = useMemo( () => {
-		// Server-side RestPostsController::handle_search prepends the
-		// home_page synthetic item when appropriate (i.e. when no static
-		// front page is configured). Letting the client also prepend it
-		// caused two "Front Page" rows in the dropdown. Server is the
-		// single source of truth; HOME_PAGE_OPTION below is kept only for
-		// instant chip labelling after select / before by-ids hydration.
+		// Server-side handle_search prepends home_page synthetic when
+		// appropriate; client must not double-prepend.
 		return searchItems
 			.filter( ( item ) => ! value.includes( item.value ) )
 			.map( ( item ) => ( {
 				value: String( item.value ),
-				label: item.label,
+				label:
+					isMulti && item.type
+						? `${ item.label } (${ item.type })`
+						: item.label,
 			} ) );
-	}, [ searchItems, value ] );
+	}, [ searchItems, value, isMulti ] );
 
 	function handleSelect( selectedValue ) {
 		if ( ! selectedValue ) {
 			return;
 		}
 		// Synthetic string tokens stay as strings; everything else becomes
-		// a numeric WP post/page ID. Templates use a "tpl:" prefix and must
+		// a numeric WP post ID. Templates use a "tpl:" prefix and must
 		// also be preserved as strings.
 		const isSyntheticToken =
 			selectedValue === 'home_page' ||
@@ -101,22 +127,21 @@ export function AsyncPostPicker( { postType, value = [], onChange } ) {
 			return;
 		}
 
-		// Cache label for the newly selected item.
-		let found = null;
+		let entry = null;
 		if ( selectedValue === 'home_page' ) {
-			found = HOME_PAGE_OPTION;
+			entry = { title: HOME_PAGE_OPTION.label, type: 'page' };
 		} else if ( selectedValue === 'wc_single_product' ) {
-			found = SINGLE_PRODUCT_OPTION;
+			entry = { title: SINGLE_PRODUCT_OPTION.label, type: 'page' };
 		} else {
-			found = searchItems.find(
+			const found = searchItems.find(
 				( i ) => String( i.value ) === selectedValue
 			);
+			if ( found ) {
+				entry = { title: found.label, type: found.type || '' };
+			}
 		}
-		if ( found ) {
-			setSelectedLabels( ( prev ) => ( {
-				...prev,
-				[ id ]: found.label,
-			} ) );
+		if ( entry ) {
+			setSelectedLabels( ( prev ) => ( { ...prev, [ id ]: entry } ) );
 		}
 
 		onChange( [ ...value, id ] );
@@ -134,7 +159,13 @@ export function AsyncPostPicker( { postType, value = [], onChange } ) {
 		if ( id === 'wc_single_product' ) {
 			return SINGLE_PRODUCT_OPTION.label;
 		}
-		return selectedLabels[ id ] || String( id );
+		const cached = selectedLabels[ id ];
+		if ( ! cached ) {
+			return String( id );
+		}
+		return isMulti && cached.type
+			? `${ cached.title } (${ cached.type })`
+			: cached.title;
 	}
 
 	return (

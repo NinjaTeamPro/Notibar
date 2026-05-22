@@ -158,6 +158,11 @@ function rerender() {
 	}
 
 	// Build preview context: permissive (isPreview skips device + dismissal gates).
+	// Inherit currentCptType + currentObjectId from the server-emitted data so
+	// CPT-targeted bars evaluate correctly in the preview iframe (the iframe
+	// IS the previewed URL — its PHP render context reflects the actual page).
+	const serverCtx =
+		( window.njtNotibarData && window.njtNotibarData.ctx ) || {};
 	const ctx = {
 		pageId: 0,
 		postId: 0,
@@ -165,6 +170,8 @@ function rerender() {
 		device: resolveDevice(),
 		dismissed: [],
 		isPreview: true,
+		currentCptType: serverCtx.currentCptType || '',
+		currentObjectId: serverCtx.currentObjectId || 0,
 	};
 
 	const visible = filterBars( bars, ctx );

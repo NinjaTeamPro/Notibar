@@ -285,12 +285,30 @@ trait SchemaSanitizers {
 			? $d['postLogic']
 			: $default['postLogic'];
 
+		$cpt_logic = isset( $d['cptLogic'] ) && in_array( $d['cptLogic'], self::ALLOWED_LOGIC, true )
+			? $d['cptLogic']
+			: $default['cptLogic'];
+
+		// CPT slug list — strings only, sanitize_key matches WP CPT slug rules
+		// ([a-z0-9_-]). Unregistered slugs kept in storage (filtered at runtime)
+		// so re-activating a CPT-providing plugin restores admin intent.
+		$raw_cpt_types = isset( $d['cptTypes'] ) && is_array( $d['cptTypes'] )
+			? $d['cptTypes']
+			: $default['cptTypes'];
+		$cpt_types = array_values( array_unique( array_filter(
+			array_map( fn( $v ) => is_string( $v ) ? sanitize_key( $v ) : '', $raw_cpt_types ),
+			fn( $v ) => '' !== $v
+		) ) );
+
 		return [
 			'devices'   => $devices,
 			'pageLogic' => $page_logic,
 			'pageIds'   => self::sanitizeIdList( $d['pageIds'] ?? $default['pageIds'] ),
 			'postLogic' => $post_logic,
 			'postIds'   => self::sanitizeIdList( $d['postIds'] ?? $default['postIds'] ),
+			'cptTypes'  => $cpt_types,
+			'cptLogic'  => $cpt_logic,
+			'cptIds'    => self::sanitizeIdList( $d['cptIds'] ?? $default['cptIds'] ),
 		];
 	}
 

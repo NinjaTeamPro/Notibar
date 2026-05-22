@@ -9,12 +9,17 @@
  *
  * Context shape:
  *   {
- *     pageId:    number,   // current WP page ID (0 if not a page)
- *     postId:    number,   // current WP post ID (0 if not a single post)
- *     isHome:    boolean,  // true when is_home() || is_front_page()
- *     device:    'desktop' | 'mobile',
- *     dismissed: string[], // bar IDs the visitor already dismissed (cookie-sourced)
- *     isPreview: boolean,  // true inside Customizer preview iframe
+ *     pageId:          number,   // current WP page ID (0 if not a page)
+ *     postId:          number,   // current WP post ID (0 if not a single post)
+ *     isHome:          boolean,  // true when is_home() || is_front_page()
+ *     isSingleProduct: boolean,  // true on single WC product
+ *     device:          'desktop' | 'mobile',
+ *     dismissed:       string[], // bar IDs the visitor already dismissed (cookie-sourced)
+ *     isPreview:       boolean,  // true inside Customizer preview iframe
+ *     currentCptType:  string,   // CPT slug on single CPT (excl. page/post);
+ *                                // '' on page/post/archive/home/non-singular.
+ *     currentObjectId: number,   // get_queried_object_id() — populated on any
+ *                                // singular; CPT branch is the only consumer.
  *   }
  *
  * @since 3.0.0
@@ -221,6 +226,8 @@ export function filterBars( bars, ctx ) {
 		device = 'desktop',
 		dismissed = [],
 		isPreview = false,
+		currentCptType = '',
+		currentObjectId = 0,
 	} = ctx;
 
 	return bars.filter( ( bar ) => {
@@ -239,51 +246,73 @@ export function filterBars( bars, ctx ) {
 			}
 		}
 
-		// Page logic
-		// `pageLogic` governs every NON-single-post context: pages, home,
-		// archives (categories, tags, author, date), WC product, search, 404.
-		// `postLogic` (below) governs single posts only — the two are
-		// mutually exclusive by context.
-		//
-		// `none` (hide on all pages) must fire across all those non-single-post
-		// contexts unconditionally — including archives where the
-		// `pageId > 0 || isHome || isSingleProduct` gate would otherwise skip
-		// it. The `postId === 0` guard ensures it does NOT clobber a single
-		// post; that context belongs to postLogic.
-		const pageLogic = display.pageLogic || 'all';
-		if ( 'none' === pageLogic && postId === 0 ) {
-			return false;
-		}
-		if ( pageId > 0 || isHome || isSingleProduct ) {
+		// CPT branch ("Other post types") — owns single CPT instances
+		// exclusively. When the visitor is on a single CPT page AND admin
+		// opted that CPT into `cptTypes`, this branch evaluates cptLogic and
+		// SKIPS pageLogic + postLogic entirely. Legacy bars (cptTypes=[]) and
+		// non-CPT contexts (page/post/archive/home) fall through to the
+		// existing else branch with byte-identical behavior.
+		const cptTypes = Array.isArray( display.cptTypes )
+			? display.cptTypes
+			: [];
+		const cptClaimed =
+			'' !== currentCptType && cptTypes.includes( currentCptType );
+
+		if ( cptClaimed ) {
+			const cptLogic = display.cptLogic || 'all';
+			const cptIds = display.cptIds || [];
 			if (
-				! passesLogic(
-					pageLogic,
-					display.pageIds || [],
-					pageId,
-					isHome,
-					isSingleProduct
-				)
+				! passesLogic( cptLogic, cptIds, currentObjectId, false, false )
 			) {
 				return false;
 			}
-		}
-
-		// Post logic — only applies to single-post contexts. Unlike pageLogic
-		// (which is the catch-all for non-post contexts including archives),
-		// postLogic='none' means "hide on all single POSTS" — it should NOT
-		// fire on pages, the shop, archives, etc. So the postId>0 gate
-		// stays around the whole block.
-		if ( postId > 0 ) {
-			if (
-				! passesLogic(
-					display.postLogic || 'all',
-					display.postIds || [],
-					postId,
-					false,
-					false
-				)
-			) {
+		} else {
+			// Page logic
+			// `pageLogic` governs every NON-single-post context: pages, home,
+			// archives (categories, tags, author, date), WC product, search, 404.
+			// `postLogic` (below) governs single posts only — the two are
+			// mutually exclusive by context.
+			//
+			// `none` (hide on all pages) must fire across all those non-single-post
+			// contexts unconditionally — including archives where the
+			// `pageId > 0 || isHome || isSingleProduct` gate would otherwise skip
+			// it. The `postId === 0` guard ensures it does NOT clobber a single
+			// post; that context belongs to postLogic.
+			const pageLogic = display.pageLogic || 'all';
+			if ( 'none' === pageLogic && postId === 0 ) {
 				return false;
+			}
+			if ( pageId > 0 || isHome || isSingleProduct ) {
+				if (
+					! passesLogic(
+						pageLogic,
+						display.pageIds || [],
+						pageId,
+						isHome,
+						isSingleProduct
+					)
+				) {
+					return false;
+				}
+			}
+
+			// Post logic — only applies to single-post contexts. Unlike pageLogic
+			// (which is the catch-all for non-post contexts including archives),
+			// postLogic='none' means "hide on all single POSTS" — it should NOT
+			// fire on pages, the shop, archives, etc. So the postId>0 gate
+			// stays around the whole block.
+			if ( postId > 0 ) {
+				if (
+					! passesLogic(
+						display.postLogic || 'all',
+						display.postIds || [],
+						postId,
+						false,
+						false
+					)
+				) {
+					return false;
+				}
 			}
 		}
 

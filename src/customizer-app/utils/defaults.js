@@ -53,6 +53,9 @@ export const DEFAULT_BAR = {
 		pageIds: [],
 		postLogic: 'all',
 		postIds: [],
+		cptTypes: [],
+		cptLogic: 'all',
+		cptIds: [],
 	},
 	behavior: {
 		hideCloseButton: 'close',

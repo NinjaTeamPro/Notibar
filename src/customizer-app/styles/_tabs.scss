@@ -100,6 +100,13 @@
 	.components-base-control + .components-base-control {
 		margin-top: 4px;
 	}
+
+	&.njt-notibar-cpt-block {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+    	padding: 16px;
+	}
 }
 
 // ------------------------------------------------------------------
@@ -125,5 +132,9 @@
 // ------------------------------------------------------------------
 
 .njt-notibar-inline-notice {
+	margin: 0;
+}
+
+.njt-notibar-help {
 	margin: 0;
 }

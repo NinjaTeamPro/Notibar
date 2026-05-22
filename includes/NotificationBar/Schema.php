@@ -81,6 +81,9 @@ class Schema {
 				'pageIds'   => [],
 				'postLogic' => 'all',
 				'postIds'   => [],
+				'cptTypes'  => [],
+				'cptLogic'  => 'all',
+				'cptIds'    => [],
 			],
 			'behavior' => [
 				'hideCloseButton' => 'close',
