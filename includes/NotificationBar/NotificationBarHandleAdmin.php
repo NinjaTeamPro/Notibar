@@ -39,8 +39,8 @@ trait NotificationBarHandleAdmin {
 		global $submenu;
 
 		add_menu_page(
-			__( 'Notibar', NJT_NOFI_DOMAIN ),
-			__( 'Notibar', NJT_NOFI_DOMAIN ),
+			__( 'Notibar', 'notibar' ),
+			__( 'Notibar', 'notibar' ),
 			'manage_options',
 			'notibar-customize',
 			[ $this, 'njt_nofi_renderCustomizeStub' ],
@@ -50,8 +50,8 @@ trait NotificationBarHandleAdmin {
 
 		add_submenu_page(
 			'notibar-customize',
-			__( 'Customize', NJT_NOFI_DOMAIN ),
-			__( 'Customize', NJT_NOFI_DOMAIN ),
+			__( 'Customize', 'notibar' ),
+			__( 'Customize', 'notibar' ),
 			'manage_options',
 			'notibar-customize',
 			[ $this, 'njt_nofi_renderCustomizeStub' ]
@@ -59,8 +59,8 @@ trait NotificationBarHandleAdmin {
 
 		$settings_suffix = add_submenu_page(
 			'notibar-customize',
-			__( 'Settings', NJT_NOFI_DOMAIN ),
-			__( 'Settings', NJT_NOFI_DOMAIN ),
+			__( 'Settings', 'notibar' ),
+			__( 'Settings', 'notibar' ),
 			'manage_options',
 			'notibar-settings',
 			[ $this, 'njt_nofi_renderSettings' ]
@@ -97,7 +97,7 @@ trait NotificationBarHandleAdmin {
 		$link_url   = esc_url( admin_url( '/customize.php?' . $url_encode . '=njt_nofi_bars_section' ) );
 
 		return array_merge(
-			[ '<a href="' . $link_url . '">' . __( 'Settings', NJT_NOFI_DOMAIN ) . '</a>' ],
+			[ '<a href="' . $link_url . '">' . __( 'Settings', 'notibar' ) . '</a>' ],
 			$links
 		);
 	}

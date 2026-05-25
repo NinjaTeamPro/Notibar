@@ -18,7 +18,6 @@ defined('ABSPATH') || exit;
 
 define('NJT_NOFI_PREFIX', 'njt_nofi');
 define('NJT_NOFI_VERSION', '3.0.0');
-define('NJT_NOFI_DOMAIN', 'notibar');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
@@ -55,7 +54,7 @@ $GLOBALS['yay_reviews_plugins'][] = [
 	'name' => 'Notibar - WordPress Notification Bar',
 	'option_name' => 'notibar_review',
 	'textdomain' => 'notibar',
-	'display_time' => 3, // after 3 days
+	'display_time' => 1, // after 3 days
 	'review_link' => 'https://wordpress.org/support/plugin/notibar/reviews/#new-post',
 	'display_pages' => function (){
     if ( ! function_exists('get_current_screen') ) {
