@@ -67,13 +67,6 @@ class NotificationBarHandle {
 		// Evaluate render eligibility after WP query is set up.
 		add_action( 'wp', [ $this, 'maybeRender' ] );
 
-		// Review notice (admin only).
-		$option_review = get_option( 'njt_nofi_review' );
-		if ( time() >= (int) $option_review && $option_review !== '0' ) {
-			add_action( 'admin_notices', [ $this, 'njt_nofi_give_review' ] );
-		}
-		add_action( 'wp_ajax_njt_nofi_save_review', [ $this, 'njt_nofi_save_review' ] );
-
 		add_action( 'wp_enqueue_scripts', [ $this, 'njt_nofi_homeRegisterEnqueue' ] );
 
 		add_filter(

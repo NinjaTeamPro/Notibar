@@ -6,7 +6,8 @@
   "include": [
     "filebird-dashboard-widget",
     "filebird-plugins-page-notification",
-    "filebird-sidebar-popup"
+    "filebird-sidebar-popup",
+    "review"
   ],
   "exclude_globs": [
     ".github",
@@ -15,5 +16,5 @@
     "phpunit.xml",
     "composer.lock"
   ],
-  "target_dir": "cross-modules"
+  "target_dir": "recommended-modules"
 }

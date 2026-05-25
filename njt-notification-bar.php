@@ -45,10 +45,28 @@ spl_autoload_register(function ($class) {
   }
 });
 
-// Cross-modules module loader (gracefully no-op if cross-modules/ hasn't been synced yet).
-if ( file_exists( __DIR__ . '/cross-modules/loader.php' ) ) {
-	require_once __DIR__ . '/cross-modules/loader.php';
+// Recommeneded-modules module loader (gracefully no-op if recommeneded-modules/ hasn't been synced yet).
+if ( file_exists( __DIR__ . '/recommended-modules/loader.php' ) ) {
+	require_once __DIR__ . '/recommended-modules/loader.php';
 }
+
+$GLOBALS['yay_reviews_plugins'][] = [
+	'slug' => 'notibar',
+	'name' => 'Notibar - WordPress Notification Bar',
+	'option_name' => 'notibar_review',
+	'textdomain' => 'notibar',
+	'display_time' => 3, // after 3 days
+	'review_link' => 'https://wordpress.org/support/plugin/notibar/reviews/#new-post',
+	'display_pages' => function (){
+    if ( ! function_exists('get_current_screen') ) {
+      return false;
+    }
+		$include_pages = ["notibar_page_notibar-settings", 'notibar_page_notibar-customize'];
+		$current_screen_id = get_current_screen()->id;
+		
+		return in_array($current_screen_id, $include_pages);
+	},
+];
 
 function init() {
   Plugin::getInstance();
