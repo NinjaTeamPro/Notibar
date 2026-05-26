@@ -66,6 +66,21 @@ trait NotificationBarHandleAdmin {
 			[ $this, 'njt_nofi_renderSettings' ]
 		);
 
+		// Lite only — "Go Pro" upsell submenu (Free vs Pro table + CTA). Pro
+		// users never see it. Gated on the edition flag, not stripped, so the
+		// page code can live in both builds.
+		if ( ! ( defined( 'NJT_NOFI_IS_PRO' ) && NJT_NOFI_IS_PRO ) ) {
+			add_submenu_page(
+				'notibar-customize',
+				__( 'Go Pro', 'notibar' ),
+				__( 'Go Pro', 'notibar' ),
+				'manage_options',
+				GoProPage::PAGE_SLUG,
+				[ GoProPage::class, 'render' ]
+			);
+			add_action( 'admin_head', [ GoProPage::class, 'menuHighlightCss' ] );
+		}
+
 		// URL-hack the Customize submenu entry to deep-link into Customizer
 		// with the Notibar panel auto-focused. WP follows the entry's index-2
 		// URL when present, so the renderCustomizeStub callback never fires.

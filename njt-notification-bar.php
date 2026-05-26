@@ -24,6 +24,10 @@ define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('NJT_NOFI_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('NJT_NOFI_SITE_URL', site_url());
 
+// Single source for the Pro upgrade destination (Go Pro page, badges, notices).
+// Mirrored to the React apps via boot data (AssetLoader).
+define('NJT_NOFI_UPGRADE_URL', 'https://ninjateam.org/notibar-wordpress-notification-bar/');
+
 // Edition flag (Pro vs Lite). Defines NJT_NOFI_IS_PRO; Lite build swaps this
 // file via build-tools/pro-manifest.json. Drives locked/badged Pro UI in Lite.
 require_once __DIR__ . '/includes/edition.php';

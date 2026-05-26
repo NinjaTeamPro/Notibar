@@ -130,6 +130,7 @@ class AssetLoader {
 			'restRoot'     => esc_url_raw( rest_url( 'notibar/v1' ) ),
 			'restNonce'    => wp_create_nonce( 'wp_rest' ),
 			'isPro'        => defined( 'NJT_NOFI_IS_PRO' ) ? (bool) NJT_NOFI_IS_PRO : true,
+			'upgradeUrl'   => defined( 'NJT_NOFI_UPGRADE_URL' ) ? NJT_NOFI_UPGRADE_URL : '',
 			'defaultBar'   => Schema::defaultBar(),
 			'defaultGlobal' => Schema::defaultGlobal(),
 			'colorPresets' => [
@@ -280,6 +281,7 @@ class AssetLoader {
 			'restRoot'  => esc_url_raw( rest_url( 'notibar/v1' ) ),
 			'restNonce' => wp_create_nonce( 'wp_rest' ),
 			'isPro'     => defined( 'NJT_NOFI_IS_PRO' ) ? (bool) NJT_NOFI_IS_PRO : true,
+			'upgradeUrl' => defined( 'NJT_NOFI_UPGRADE_URL' ) ? NJT_NOFI_UPGRADE_URL : '',
 			'bars'      => json_decode( get_option( 'njt_nofi_bars', '[]' ), true ) ?: [],
 			'siteHost'  => wp_parse_url( home_url(), PHP_URL_HOST ),
 		];

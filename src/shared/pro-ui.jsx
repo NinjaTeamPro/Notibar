@@ -10,9 +10,21 @@
  */
 import { __ } from '@wordpress/i18n';
 
-// Upgrade destination. Adjust to the canonical Pro sales page if it changes.
-export const NOTIBAR_UPGRADE_URL =
+// Fallback used only if boot data omits the URL. The canonical source is the
+// PHP constant NJT_NOFI_UPGRADE_URL, mirrored to boot.upgradeUrl by AssetLoader.
+const UPGRADE_URL_FALLBACK =
 	'https://ninjateam.org/notibar-wordpress-notification-bar/';
+
+/**
+ * Resolve the Pro upgrade URL from boot data (single source = PHP constant).
+ *
+ * @return {string}
+ */
+export function upgradeUrl() {
+	const boot =
+		window.njtNotibarBoot || window.njtNotibarSettingsBoot || {};
+	return boot.upgradeUrl || UPGRADE_URL_FALLBACK;
+}
 
 /**
  * True when running the Pro edition. Reads the isPro flag emitted in boot data
@@ -50,7 +62,7 @@ export function ProUpgradeNotice( { feature } ) {
 			<span className="njt-pro-notice__text">{ feature }</span>
 			<a
 				className="njt-pro-notice__link"
-				href={ NOTIBAR_UPGRADE_URL }
+				href={ upgradeUrl() }
 				target="_blank"
 				rel="noreferrer"
 			>
