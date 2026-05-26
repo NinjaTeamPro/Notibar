@@ -70,7 +70,7 @@ export function DisplayTabCptBlock( { bar, onChange } ) {
 				/>
 			) }
 
-			<div className={ pro ? undefined : 'njt-pro-locked' }>
+			<div className={ pro ? undefined : 'njt-pro-locked' } style={{display:'flex',flexDirection:'column',gap:12}}>
 				<CptMultiSelect
 					value={ cptTypes }
 					onChange={ ( next ) => set( 'display.cptTypes', next ) }

@@ -115,8 +115,7 @@ trait NotificationBarHandleAdmin {
 
 		// Lite-only "Go Pro" action link (green). Runtime-gated on the edition
 		// flag — the link ships in both builds but only renders in Lite (Pro
-		// users have no upsell). Not @pro-stripped because @pro removes from
-		// Lite, which is the opposite of what we want here.
+		// users have no upsell).
 		if ( ! ( defined( 'NJT_NOFI_IS_PRO' ) && NJT_NOFI_IS_PRO ) ) {
 			$upgrade   = defined( 'NJT_NOFI_UPGRADE_URL' ) ? NJT_NOFI_UPGRADE_URL : '';
 			$prepend[] = '<a href="' . esc_url( $upgrade ) . '" target="_blank" rel="noopener noreferrer" style="color:#46b450;font-weight:700;">'
