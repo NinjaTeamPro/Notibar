@@ -4,11 +4,28 @@
  * Reads bars from window.njtNotibarSettingsBoot (emitted by
  * AssetLoader::enqueue_settings_app). TrackingPane self-fetches its
  * counters via /notibar/v1/stats and joins them against the bars list.
+ *
+ * Lite: the tracking REST backend is stripped, so render an upgrade teaser
+ * instead of mounting TrackingPane (which would fetch a missing endpoint).
  */
+import { __ } from '@wordpress/i18n';
 import { TrackingPane } from '../../shared/TrackingPane';
+import { isProEdition, ProUpgradeNotice } from '../../shared/pro-ui';
 
 export function TrackingTab() {
 	const boot = window.njtNotibarSettingsBoot || {};
 	const bars = Array.isArray( boot.bars ) ? boot.bars : [];
+
+	if ( ! isProEdition() ) {
+		return (
+			<ProUpgradeNotice
+				feature={ __(
+					'Advanced reports — per-bar click & dismiss tracking',
+					'notibar'
+				) }
+			/>
+		);
+	}
+
 	return <TrackingPane bars={ bars } />;
 }

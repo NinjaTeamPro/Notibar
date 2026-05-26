@@ -89,7 +89,13 @@ Yes! You can certainly use it on your own websites as well as your clients'.
 Absolutely! Notibar doesn't collect or store any personal information. So rest assured.
 
 = Is Notibar free? =
-Yes, it's completely free of charge. Notibar comes with all features that you can find in the description above.
+Yes. Notibar is free and includes everything you need to run multiple notification bars: content & styling, HTML/CSS support, mobile-specific content, 3-state dismiss, per-bar page/post display rules, and Export/Import.
+
+Notibar Pro adds advanced conversion tools on top of the free plugin:
+
+- Rotation mode (A/B testing): cycle multiple bars by sequence or random, with a custom interval and pause-on-hover
+- Targeting by custom post type (including WooCommerce products)
+- Advanced reports: per-bar click & dismiss tracking
 
 = Does Notibar support multilingual sites (WPML / Polylang)? =
 

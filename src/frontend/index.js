@@ -13,7 +13,9 @@
 
 import { filterBars } from '../shared/filter-bars';
 import { renderBarHTML } from '../shared/render-bar';
+/* @pro */
 import { startRotation } from '../shared/rotation';
+/* @endpro */
 import { installBodyPush } from '../shared/body-push';
 import { isDismissed, dismiss } from './cookies';
 import { applyThemeCompat } from './theme-compat';
@@ -102,10 +104,12 @@ function init() {
 		document.body.appendChild( slot );
 	}
 
+	/* @pro */
 	// Honour reduced-motion preference — no rotation, single render only.
 	const prefersReducedMotion = matchMedia(
 		'(prefers-reduced-motion: reduce)'
 	).matches;
+	/* @endpro */
 
 	// Build client-side context.
 	ctx.device = detectDevice();
@@ -141,15 +145,17 @@ function init() {
 
 		if ( ! survivors.length ) {
 			slot.style.display = 'none';
+			/* @pro */
 			if ( rotationCtrl ) {
 				rotationCtrl.stop();
 			}
+			/* @endpro */
 			return;
 		}
 
-		// If rotation is active, update its bar list; otherwise re-render first.
+		/* @pro */
+		// If rotation is active, restart it with the reduced survivors list.
 		if ( rotationCtrl ) {
-			// Restart rotation with the reduced survivors list.
 			rotationCtrl.stop();
 			rotationCtrl = startRotation( {
 				slot,
@@ -157,12 +163,15 @@ function init() {
 				renderFn: renderBarWithCollapsedState,
 				global: globalConfig,
 			} );
-		} else {
-			slot.innerHTML = renderBarWithCollapsedState(
-				survivors[ 0 ],
-				globalConfig
-			);
+			return;
 		}
+		/* @endpro */
+
+		// Single render — first survivor.
+		slot.innerHTML = renderBarWithCollapsedState(
+			survivors[ 0 ],
+			globalConfig
+		);
 	}
 
 	// -----------------------------------------------------------------------
@@ -206,8 +215,9 @@ function init() {
 	} );
 
 	// -----------------------------------------------------------------------
-	// Render — rotation or single.
+	// Render — rotation (Pro) or single.
 	// -----------------------------------------------------------------------
+	/* @pro */
 	const useRotation =
 		! prefersReducedMotion &&
 		globalConfig.displayMode === 'rotation' &&
@@ -220,7 +230,10 @@ function init() {
 			renderFn: renderBarWithCollapsedState,
 			global: globalConfig,
 		} );
-	} else {
+	}
+	/* @endpro */
+
+	if ( ! rotationCtrl ) {
 		slot.innerHTML = renderBarWithCollapsedState(
 			survivors[ 0 ],
 			globalConfig

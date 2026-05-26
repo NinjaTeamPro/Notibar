@@ -26,8 +26,10 @@ class Plugin {
 
   /** Plugin activated hook */
   public static function activate() {
+    // @pro
     // v3.1 — seed notibar_counters option with autoload=no. Idempotent.
     NotificationBar\EventCounter::install();
+    // @endpro
 
     $first_time_active = get_option('njt_nofi_first_time_active');
     $njt_nofi_review = get_option('njt_nofi_review');

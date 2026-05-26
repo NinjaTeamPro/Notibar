@@ -1,0 +1,12 @@
+{
+  "_doc": "Drives the Lite build (release.sh --lite). 'remove' = Pro-only whole files deleted from the Lite package. 'replace' = optional source(repo-root) -> target(staged) file swaps (currently none). Inline Pro fragments in SHARED files are handled separately by @pro/@endpro markers stripped by strip-pro.js. Keep this in lockstep with the markers: a removed file must have all its imports/usages wrapped in @pro markers, or the Lite webpack build will fail.",
+  "replace": {
+    "includes/edition.php": "build-tools/edition.lite.php"
+  },
+  "remove": [
+    "src/shared/rotation.js",
+    "includes/NotificationBar/EventCounter.php",
+    "includes/NotificationBar/TrackingRestController.php",
+    "assets/frontend/js/tracking.js"
+  ]
+}
