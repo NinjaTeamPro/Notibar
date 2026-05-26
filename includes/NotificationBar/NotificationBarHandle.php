@@ -119,6 +119,18 @@ class NotificationBarHandle {
 		// Phase 08 WPML bridge hooks here to translate per-bar string fields.
 		$bars = apply_filters( 'njt_nofi_resolve_strings', $bars );
 
+		// @pro
+		// Pro: role/login/user audience gate. Drops bars the current viewer is
+		// not allowed to see BEFORE they reach the page HTML (security +
+		// correctness). Stripped in Lite, so saved audience rules impose no
+		// restriction there. Caching caveat: logged-in users must bypass the
+		// page cache for per-role/per-user accuracy (standard WP requirement).
+		$bars = self::filterByAudience( $bars );
+		if ( empty( $bars ) ) {
+			return;
+		}
+		// @endpro
+
 		$context = $this->getRenderContext();
 
 		// Server-side pre-filter: skip enqueue entirely if no bar can show.
@@ -236,6 +248,69 @@ class NotificationBarHandle {
 			'currentObjectId'  => $object_id,
 		];
 	}
+
+	// @pro
+	/**
+	 * Drop bars whose audience rule excludes the current viewer.
+	 *
+	 * @param array $bars Bars to filter.
+	 * @return array
+	 */
+	private static function filterByAudience( array $bars ): array {
+		return array_values( array_filter( $bars, [ self::class, 'passesAudience' ] ) );
+	}
+
+	/**
+	 * Whether the current viewer satisfies a bar's audience rule.
+	 *
+	 * audience: 'all' | 'loggedin' | 'loggedout' | 'roles' | 'users'.
+	 * Empty roles/userIds lists impose no restriction (treated as "any").
+	 *
+	 * @param mixed $bar Bar array.
+	 * @return bool
+	 */
+	private static function passesAudience( $bar ): bool {
+		if ( ! is_array( $bar ) ) {
+			return false;
+		}
+		$display  = isset( $bar['display'] ) && is_array( $bar['display'] ) ? $bar['display'] : [];
+		$audience = $display['audience'] ?? 'all';
+
+		switch ( $audience ) {
+			case 'loggedin':
+				return is_user_logged_in();
+
+			case 'loggedout':
+				return ! is_user_logged_in();
+
+			case 'roles':
+				if ( ! is_user_logged_in() ) {
+					return false;
+				}
+				$roles = isset( $display['roles'] ) && is_array( $display['roles'] ) ? $display['roles'] : [];
+				if ( empty( $roles ) ) {
+					return true;
+				}
+				return (bool) array_intersect( (array) wp_get_current_user()->roles, $roles );
+
+			case 'users':
+				if ( ! is_user_logged_in() ) {
+					return false;
+				}
+				$ids = isset( $display['userIds'] ) && is_array( $display['userIds'] )
+					? array_map( 'intval', $display['userIds'] )
+					: [];
+				if ( empty( $ids ) ) {
+					return true;
+				}
+				return in_array( get_current_user_id(), $ids, true );
+
+			case 'all':
+			default:
+				return true;
+		}
+	}
+	// @endpro
 
 	/**
 	 * Server-side bar pre-filter (enabled + non-empty devices).

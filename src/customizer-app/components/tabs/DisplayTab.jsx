@@ -14,6 +14,7 @@ import { __ } from '@wordpress/i18n';
 import { updatePath } from '../../utils/update-path';
 import { AsyncPostPicker } from '../fields/AsyncPostPicker';
 import { DisplayTabCptBlock } from './DisplayTabCptBlock';
+import { DisplayTabAudienceBlock } from './DisplayTabAudienceBlock';
 
 const PAGE_LOGIC_OPTIONS = [
 	{
@@ -126,6 +127,8 @@ export function DisplayTab( { bar, onChange } ) {
 			) }
 
 			<DisplayTabCptBlock bar={ bar } onChange={ onChange } />
+
+			<DisplayTabAudienceBlock bar={ bar } onChange={ onChange } />
 		</div>
 	);
 }

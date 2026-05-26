@@ -233,6 +233,10 @@ trait SchemaSanitizers {
 			? $s['positionType']
 			: $default['positionType'];
 
+		$placement = isset( $s['placement'] ) && in_array( $s['placement'], self::ALLOWED_PLACEMENT, true )
+			? $s['placement']
+			: $default['placement'];
+
 		$font_size = max( 8, min( 72, isset( $s['fontSize'] ) ? intval( $s['fontSize'] ) : $default['fontSize'] ) );
 
 		$content_width = max( 100, min( 3000,
@@ -256,6 +260,7 @@ trait SchemaSanitizers {
 			'alignment'    => $alignment,
 			'contentWidth' => $content_width,
 			'positionType' => $position,
+			'placement'    => $placement,
 		];
 	}
 
@@ -300,6 +305,19 @@ trait SchemaSanitizers {
 			fn( $v ) => '' !== $v
 		) ) );
 
+		// Audience (role/login/user targeting). Role slugs sanitised like CPT
+		// slugs (unregistered kept, filtered at runtime). userIds reuse the
+		// positive-int list sanitizer.
+		$audience = isset( $d['audience'] ) && in_array( $d['audience'], self::ALLOWED_AUDIENCE, true )
+			? $d['audience']
+			: $default['audience'];
+
+		$raw_roles = isset( $d['roles'] ) && is_array( $d['roles'] ) ? $d['roles'] : $default['roles'];
+		$roles     = array_values( array_unique( array_filter(
+			array_map( fn( $v ) => is_string( $v ) ? sanitize_key( $v ) : '', $raw_roles ),
+			fn( $v ) => '' !== $v
+		) ) );
+
 		return [
 			'devices'   => $devices,
 			'pageLogic' => $page_logic,
@@ -309,6 +327,9 @@ trait SchemaSanitizers {
 			'cptTypes'  => $cpt_types,
 			'cptLogic'  => $cpt_logic,
 			'cptIds'    => self::sanitizeIdList( $d['cptIds'] ?? $default['cptIds'] ),
+			'audience'  => $audience,
+			'roles'     => $roles,
+			'userIds'   => self::sanitizeIdList( $d['userIds'] ?? $default['userIds'] ),
 		];
 	}
 

@@ -96,6 +96,12 @@ Notibar Pro adds advanced conversion tools on top of the free plugin:
 - Rotation mode (A/B testing): cycle multiple bars by sequence or random, with a custom interval and pause-on-hover
 - Targeting by custom post type (including WooCommerce products)
 - Advanced reports: per-bar click & dismiss tracking
+- Display a bar at the bottom of the screen
+- Conditional display by user role or specific users
+
+= Does conditional display by role/user work with page caching? =
+
+Role and user targeting (a Pro feature) is evaluated on the server, so a full-page cache that serves one cached HTML to every visitor can show the wrong bars. The standard fix — used by virtually every membership/role-aware plugin — is to **exclude logged-in users from the page cache** (most caching plugins do this by default). Logged-out visitors all correctly receive the "logged-out / everyone" set; logged-in users then get their role/user-specific bars evaluated fresh.
 
 = Does Notibar support multilingual sites (WPML / Polylang)? =
 

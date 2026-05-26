@@ -108,6 +108,11 @@ add_action( 'rest_api_init', function () {
   ( new NotificationBar\RestPostsController() )->register();
 } );
 
+// REST API — user search for the per-bar audience picker (Pro UI; admin-only).
+add_action( 'rest_api_init', function () {
+  ( new NotificationBar\RestUsersController() )->register();
+} );
+
 // @pro
 // v3.1 REST API — per-bar event tracking (POST /track, GET /stats/{id}).
 add_action( 'rest_api_init', function () {

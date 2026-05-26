@@ -46,6 +46,7 @@ export const DEFAULT_BAR = {
 		alignment: 'center',
 		contentWidth: 900,
 		positionType: 'fixed',
+		placement: 'top',
 	},
 	display: {
 		devices: [ 'desktop', 'mobile' ],
@@ -56,6 +57,9 @@ export const DEFAULT_BAR = {
 		cptTypes: [],
 		cptLogic: 'all',
 		cptIds: [],
+		audience: 'all',
+		roles: [],
+		userIds: [],
 	},
 	behavior: {
 		hideCloseButton: 'close',
