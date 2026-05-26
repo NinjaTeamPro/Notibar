@@ -47,12 +47,17 @@ VERSION=$(grep -E '^[[:space:]]*\*[[:space:]]*Version:' "$PLUGIN_FILE" | head -1
   | sed -E 's/.*Version:[[:space:]]*([0-9.]+).*/\1/')
 [[ -n "$VERSION" ]] || { echo "ERROR: could not parse Version from $PLUGIN_FILE"; exit 1; }
 
+# Package folder (the directory name inside the zip, = WP plugin slug) and zip
+# name differ by edition. Lite keeps the canonical "notibar" slug for WP.org;
+# Pro ships as a distinct "notibar-pro" plugin.
 if [[ "$EDITION" == "lite" ]]; then
+  PKG_SLUG="${SLUG}"
   ZIP_NAME="${SLUG}-lite-${VERSION}.zip"
 else
-  ZIP_NAME="${SLUG}-${VERSION}.zip"
+  PKG_SLUG="${SLUG}-pro"
+  ZIP_NAME="${SLUG}-pro-${VERSION}.zip"
 fi
-echo "==> Releasing $SLUG v$VERSION (edition: $EDITION)"
+echo "==> Releasing $PKG_SLUG v$VERSION (edition: $EDITION)"
 
 # 3. Sync readme.txt "Stable tag:" to plugin header version
 #    sed -i.bak form is portable across macOS and GNU sed
@@ -121,8 +126,8 @@ else
   SRC_ROOT="."
 fi
 
-# 7. Stage to ./release/tmp/notibar/ with exclusions
-STAGE="$RELEASE_DIR/tmp/${SLUG}"
+# 7. Stage to ./release/tmp/<pkg-slug>/ with exclusions
+STAGE="$RELEASE_DIR/tmp/${PKG_SLUG}"
 ZIP_PATH="$RELEASE_DIR/${ZIP_NAME}"
 rm -rf "$STAGE" "$ZIP_PATH"
 mkdir -p "$STAGE"
@@ -130,8 +135,9 @@ mkdir -p "$STAGE"
 echo "==> Staging files"
 rsync -a "${STAGE_EXCLUDES[@]}" "$SRC_ROOT/" "$STAGE/"
 
-# 8. Zip (root folder inside zip is "notibar/" — WP-standard, activatable as-is)
+# 8. Zip (root folder inside zip is the plugin slug — WP-standard, activatable
+#    as-is): "notibar/" for Lite, "notibar-pro/" for Pro.
 echo "==> Zipping"
-( cd "$RELEASE_DIR/tmp" && zip -rq "../${ZIP_NAME}" "${SLUG}/" )
+( cd "$RELEASE_DIR/tmp" && zip -rq "../${ZIP_NAME}" "${PKG_SLUG}/" )
 
 echo "==> Done: $ZIP_PATH"

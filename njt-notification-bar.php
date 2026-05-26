@@ -21,6 +21,7 @@ define('NJT_NOFI_VERSION', '3.0.0');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('NJT_NOFI_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('NJT_NOFI_SITE_URL', site_url());
 
 // Edition flag (Pro vs Lite). Defines NJT_NOFI_IS_PRO; Lite build swaps this

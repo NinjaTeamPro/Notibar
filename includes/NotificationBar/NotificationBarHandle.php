@@ -69,8 +69,11 @@ class NotificationBarHandle {
 
 		add_action( 'wp_enqueue_scripts', [ $this, 'njt_nofi_homeRegisterEnqueue' ] );
 
+		// Folder-agnostic — works whether the plugin ships as notibar/ (Lite)
+		// or notibar-pro/ (Pro). NJT_NOFI_PLUGIN_BASENAME is defined in the
+		// main plugin file via plugin_basename(__FILE__).
 		add_filter(
-			'plugin_action_links_notibar/njt-notification-bar.php',
+			'plugin_action_links_' . NJT_NOFI_PLUGIN_BASENAME,
 			[ $this, 'addActionLinks' ]
 		);
 	}
