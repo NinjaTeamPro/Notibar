@@ -47,10 +47,10 @@ class GoProPage {
 			[ __( 'Pause rotation on hover', 'notibar' ), false, true ],
 			[ __( 'Rotate bars by sequence or random', 'notibar' ), false, true ],
 			[ __( 'Advanced reports (Click tracking)', 'notibar' ), false, true ],
+			[ __( 'Display bar at bottom', 'notibar' ), false, true ],
+			[ __( 'Conditional display by role or user', 'notibar' ), false, true ],
 			// Coming soon (Pro).
-			[ __( 'Display bars at bottom', 'notibar' ), false, 'soon' ],
 			[ __( 'Multilingual support', 'notibar' ), false, 'soon' ],
-			[ __( 'Conditional display by roles/users', 'notibar' ), false, 'soon' ],
 		];
 	}
 
@@ -62,7 +62,7 @@ class GoProPage {
 	 */
 	private static function cell( $value ): string {
 		if ( 'soon' === $value ) {
-			return '<span class="njt-gopro-soon">' . esc_html__( 'Soon', 'notibar' ) . '</span>';
+			return '<span class="njt-gopro-soon">' . esc_html__( 'Coming soon', 'notibar' ) . '</span>';
 		}
 		if ( $value ) {
 			return '<span class="njt-gopro-yes" aria-label="' . esc_attr__( 'Included', 'notibar' ) . '">&#10003;</span>';
@@ -94,7 +94,7 @@ class GoProPage {
 					<tr>
 						<th><?php esc_html_e( 'Feature', 'notibar' ); ?></th>
 						<th class="njt-gopro-col"><?php esc_html_e( 'Free', 'notibar' ); ?></th>
-						<th class="njt-gopro-col njt-gopro-col--pro"><?php esc_html_e( 'Pro', 'notibar' ); ?></th>
+						<th class="njt-gopro-col"><?php esc_html_e( 'Pro', 'notibar' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -102,7 +102,7 @@ class GoProPage {
 						<tr>
 							<td><?php echo esc_html( $row[0] ); ?></td>
 							<td class="njt-gopro-col"><?php echo self::cell( $row[1] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cell() returns escaped HTML ?></td>
-							<td class="njt-gopro-col njt-gopro-col--pro"><?php echo self::cell( $row[2] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cell() returns escaped HTML ?></td>
+							<td class="njt-gopro-col"><?php echo self::cell( $row[2] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cell() returns escaped HTML ?></td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
@@ -128,13 +128,23 @@ class GoProPage {
 			.njt-gopro-table { max-width: 760px; margin-top: 12px; }
 			.njt-gopro-table th, .njt-gopro-table td { padding: 10px 14px; }
 			.njt-gopro-col { width: 90px; text-align: center; }
-			.njt-gopro-col--pro { background: #f6fbf7; }
+			.njt-gopro-table th.njt-gopro-col { text-align: center; }
 			.njt-gopro-yes { color: #1bb934; font-weight: 700; font-size: 16px; }
 			.njt-gopro-no { color: #c3c4c7; font-size: 16px; }
-			.njt-gopro-soon {
-				display: inline-block; font-size: 10px; font-weight: 700;
-				text-transform: uppercase; letter-spacing: .03em; color: #fff;
-				background: #2271b1; border-radius: 3px; padding: 3px 6px;
+			.njt-gopro-soon { font-size: 12px; font-style: italic; color: #646970; }
+			.njt-gopro .njt-gopro-cta.button-primary,
+			.njt-gopro .njt-gopro-cta.button-primary:hover,
+			.njt-gopro .njt-gopro-cta.button-primary:focus {
+				background: #fec900;
+				border-color: #e6b500;
+				color: #fff;
+				text-shadow: none;
+				box-shadow: none;
+			}
+			.njt-gopro .njt-gopro-cta.button-primary:hover,
+			.njt-gopro .njt-gopro-cta.button-primary:focus {
+				background: #e6b500;
+				border-color: #cca200;
 			}
 		</style>
 		<?php

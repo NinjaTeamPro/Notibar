@@ -10,8 +10,8 @@
 	line-height: 1;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: #fff;
-	background: #d63638;
+	color: #1e1e1e; // dark text — white on #FEC900 fails contrast
+	background: #fec900;
 	border-radius: 3px;
 	padding: 3px 6px;
 	vertical-align: middle;
@@ -24,8 +24,8 @@
 	flex-wrap: wrap;
 	margin: 0 0 12px;
 	padding: 8px 10px;
-	background: #fcf0f1;
-	border: 1px solid #f0c5c6;
+	background: #fef5da;
+	border: 1px solid #fec900;
 	border-radius: 4px;
 
 	&__text {
@@ -39,6 +39,7 @@
 		font-weight: 600;
 		text-decoration: none;
 		white-space: nowrap;
+		color: #1e1e1e;
 	}
 }
 
@@ -48,4 +49,11 @@
 	opacity: 0.55;
 	pointer-events: none;
 	user-select: none;
+}
+
+.njt-tracking-teaser__caption {
+	margin: 4px 0 10px;
+	font-size: 12px;
+	font-style: italic;
+	color: #646970;
 }

@@ -9,16 +9,39 @@
  * notibar_counters option. Joins counters map with the SPA's in-memory
  * bars list (passed via prop) to render bar.name for each row.
  *
+ * demo mode: when `demo` is true the component skips the REST fetch and
+ * renders sample data — used by the Lite "Go Pro" tracking teaser so users
+ * can see the report layout without a tracking backend.
+ *
  * @since 3.1.0
  */
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 
-export function TrackingPane( { bars } ) {
-	const [ state, setState ] = useState( { status: 'loading' } );
+// Sample dataset for the Lite teaser (demo mode).
+const DEMO_BARS = [
+	{ id: 'demo-1', name: 'Summer Sale Banner' },
+	{ id: 'demo-2', name: 'Free Shipping Notice' },
+	{ id: 'demo-3', name: 'Newsletter Signup' },
+];
+const DEMO_COUNTERS = {
+	'demo-1': { engagements: 842, clicks: 1284, dismissals: 173 },
+	'demo-2': { engagements: 415, clicks: 902, dismissals: 88 },
+	'demo-3': { engagements: 1267, clicks: 564, dismissals: 240 },
+};
+
+export function TrackingPane( { bars, demo = false } ) {
+	const [ state, setState ] = useState(
+		demo ? { status: 'ok', data: DEMO_COUNTERS } : { status: 'loading' }
+	);
 
 	useEffect( () => {
+		// Demo teaser — never hits the backend (which Lite does not ship).
+		if ( demo ) {
+			return undefined;
+		}
+
 		let cancelled = false;
 
 		apiFetch( { path: '/notibar/v1/stats' } )
@@ -41,7 +64,9 @@ export function TrackingPane( { bars } ) {
 		return () => {
 			cancelled = true;
 		};
-	}, [] );
+	}, [ demo ] );
+
+	const rowBars = demo ? DEMO_BARS : bars;
 
 	if ( 'loading' === state.status ) {
 		return (
@@ -67,7 +92,7 @@ export function TrackingPane( { bars } ) {
 		);
 	}
 
-	if ( ! bars || 0 === bars.length ) {
+	if ( ! rowBars || 0 === rowBars.length ) {
 		return (
 			<p className="njt-notibar-tracking-pane__status">
 				{ __( 'No notification bars configured yet.', 'notibar' ) }
@@ -98,7 +123,7 @@ export function TrackingPane( { bars } ) {
 					</tr>
 				</thead>
 				<tbody>
-					{ bars.map( ( bar ) => {
+					{ rowBars.map( ( bar ) => {
 						const row = counters[ bar.id ] || {};
 						const engagements = Number( row.engagements ) || 0;
 						const clicks = Number( row.clicks ) || 0;

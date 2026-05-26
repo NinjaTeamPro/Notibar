@@ -17,13 +17,26 @@ export function TrackingTab() {
 	const bars = Array.isArray( boot.bars ) ? boot.bars : [];
 
 	if ( ! isProEdition() ) {
+		// Show the upgrade gateway + a locked preview of the real report (sample
+		// data) so users can see what they get before upgrading.
 		return (
-			<ProUpgradeNotice
-				feature={ __(
-					'Advanced reports — per-bar click & dismiss tracking',
-					'notibar'
-				) }
-			/>
+			<div className="njt-tracking-teaser">
+				<ProUpgradeNotice
+					feature={ __(
+						'Advanced reports — per-bar click & dismiss tracking',
+						'notibar'
+					) }
+				/>
+				<p className="njt-tracking-teaser__caption">
+					{ __(
+						'Preview with sample data — upgrade to Pro to track your own bars.',
+						'notibar'
+					) }
+				</p>
+				<div className="njt-pro-locked" aria-hidden="true">
+					<TrackingPane demo />
+				</div>
+			</div>
 		);
 	}
 
