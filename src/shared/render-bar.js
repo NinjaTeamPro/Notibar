@@ -155,6 +155,12 @@ export function renderBarHTML( bar, global ) {
 	const fontSize = escapeAttr( Number( style.fontSize ) || 15 );
 	const contentWidth = escapeAttr( Number( style.contentWidth ) || 900 );
 	const positionType = escapeAttr( style.positionType || 'fixed' );
+	// Pro: top/bottom placement. Lite forces 'top' (the assignment is stripped)
+	// so a bar saved as 'bottom' under Pro never renders at the bottom in Lite.
+	let placement = 'top';
+	/* @pro */
+	placement = style.placement === 'bottom' ? 'bottom' : 'top';
+	/* @endpro */
 	const alignment = ALIGNMENT_MAP[ style.alignment ] || 'center';
 	const textAlign = TEXT_ALIGN_MAP[ style.alignment ] || 'center';
 	const barId = escapeAttr( bar.id || '' );
@@ -195,7 +201,7 @@ export function renderBarHTML( bar, global ) {
 
 	return (
 		`<div class="njt-nofi-container-content" role="status" aria-live="polite" data-bar-id="${ barId }">` +
-		`<div class="njt-nofi-container" data-position="${ positionType }">` +
+		`<div class="njt-nofi-container" data-position="${ positionType }" data-placement="${ placement }">` +
 		`<div class="${ barClass }" ` +
 		`style="--njt-bar-bg:${ bgColor };--njt-bar-color:${ textColor };">` +
 		desktopBlock +

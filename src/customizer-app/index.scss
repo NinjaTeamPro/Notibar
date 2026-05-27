@@ -7,6 +7,13 @@
 
 @import './styles/tabs';
 @import './styles/fields';
+@import '../shared/pro-ui';
+
+// Narrow Customizer panel: don't push the upgrade link to the far right
+// (the auto margin from _pro-ui suits the wide Settings page, not here).
+.njt-notibar-app .njt-pro-notice__link {
+	margin-left: 0;
+}
 
 // ------------------------------------------------------------------
 // App shell

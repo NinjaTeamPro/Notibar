@@ -126,9 +126,22 @@ class AssetLoader {
 	 * @return array
 	 */
 	private function get_boot_data(): array {
+		// Role list for the per-bar audience picker (Pro). [{slug,label}].
+		$role_names = function_exists( 'wp_roles' ) ? wp_roles()->get_names() : [];
+		$roles      = [];
+		foreach ( $role_names as $slug => $label ) {
+			$roles[] = [
+				'slug'  => $slug,
+				'label' => function_exists( 'translate_user_role' ) ? translate_user_role( $label ) : $label,
+			];
+		}
+
 		return [
 			'restRoot'     => esc_url_raw( rest_url( 'notibar/v1' ) ),
 			'restNonce'    => wp_create_nonce( 'wp_rest' ),
+			'isPro'        => defined( 'NJT_NOFI_IS_PRO' ) ? (bool) NJT_NOFI_IS_PRO : true,
+			'upgradeUrl'   => defined( 'NJT_NOFI_UPGRADE_URL' ) ? NJT_NOFI_UPGRADE_URL : '',
+			'roles'        => $roles,
 			'defaultBar'   => Schema::defaultBar(),
 			'defaultGlobal' => Schema::defaultGlobal(),
 			'colorPresets' => [
@@ -225,6 +238,7 @@ class AssetLoader {
 			$asset['version']
 		);
 
+		// @pro
 		// v3.1 — per-bar event tracking beacon. Same shouldRender() gate;
 		// no bars on the page ⇒ no script ⇒ no requests.
 		wp_enqueue_script(
@@ -241,6 +255,7 @@ class AssetLoader {
 				'endpoint' => esc_url_raw( rest_url( 'notibar/v1/track' ) ),
 			]
 		);
+		// @endpro
 	}
 
 	/**
@@ -276,6 +291,8 @@ class AssetLoader {
 		$boot_data = [
 			'restRoot'  => esc_url_raw( rest_url( 'notibar/v1' ) ),
 			'restNonce' => wp_create_nonce( 'wp_rest' ),
+			'isPro'     => defined( 'NJT_NOFI_IS_PRO' ) ? (bool) NJT_NOFI_IS_PRO : true,
+			'upgradeUrl' => defined( 'NJT_NOFI_UPGRADE_URL' ) ? NJT_NOFI_UPGRADE_URL : '',
 			'bars'      => json_decode( get_option( 'njt_nofi_bars', '[]' ), true ) ?: [],
 			'siteHost'  => wp_parse_url( home_url(), PHP_URL_HOST ),
 		];

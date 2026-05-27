@@ -4,7 +4,7 @@ Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/217
 Tags: notification bar, banner, top bar, announcement, notifications
 Requires at least: 4.0
 Requires PHP: 5.3.1
-Tested up to: 6.9
+Tested up to: 7.0
 Stable tag: 3.0.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -89,7 +89,19 @@ Yes! You can certainly use it on your own websites as well as your clients'.
 Absolutely! Notibar doesn't collect or store any personal information. So rest assured.
 
 = Is Notibar free? =
-Yes, it's completely free of charge. Notibar comes with all features that you can find in the description above.
+Yes. Notibar is free and includes everything you need to run multiple notification bars: content & styling, HTML/CSS support, mobile-specific content, 3-state dismiss, per-bar page/post display rules, and Export/Import.
+
+Notibar Pro adds advanced conversion tools on top of the free plugin:
+
+- Rotation mode (A/B testing): cycle multiple bars by sequence or random, with a custom interval and pause-on-hover
+- Targeting by custom post type (including WooCommerce products)
+- Advanced reports: per-bar click & dismiss tracking
+- Display a bar at the bottom of the screen
+- Conditional display by user role or specific users
+
+= Does conditional display by role/user work with page caching? =
+
+Role and user targeting (a Pro feature) is evaluated on the server, so a full-page cache that serves one cached HTML to every visitor can show the wrong bars. The standard fix — used by virtually every membership/role-aware plugin — is to **exclude logged-in users from the page cache** (most caching plugins do this by default). Logged-out visitors all correctly receive the "logged-out / everyone" set; logged-in users then get their role/user-specific bars evaluated fresh.
 
 = Does Notibar support multilingual sites (WPML / Polylang)? =
 
@@ -111,43 +123,6 @@ Upon activation, you will see a new **Notification Bar** menu. Simply click to c
 
 
 == Upgrade Notice ==
-
-= 3.2.0 =
-Notibar settings now persist across theme switches. On first load of v3.2.0 your existing bar list + display config are automatically copied from the active theme's settings to a site-wide store. No manual action required.
-
-= 3.0.0 =
-v3.0.0 is a major rewrite. Your existing bar settings are auto-migrated on first activation. A 30-day backup of legacy settings is kept in the `njt_nofi_v2_backup` option. No manual action required.
-
-== Changelog ==
-
-= 3.2.0 =
-- Settings are now stored at the site level (wp_options) instead of per-theme (theme_mods). Existing settings on the active theme are migrated automatically on first load. Bars and display config now persist across theme switches.
-
-= 3.1.0 =
-- New: Per-bar click and dismiss event tracking via REST endpoints `notibar/v1/track` (POST, anon) and `notibar/v1/stats/{bar_id}` (GET, admin-only)
-- New: Atomic counter storage at wp_options key `notibar_counters` (JSON shape: `{bar_id: {clicks, dismissals}}`)
-- New: Self-healing install on plugin auto-upgrade — no manual deactivate/reactivate needed
-- Requirement: MySQL/MariaDB >= 5.7 for JSON_SET support (older DBs cleanly skip tracking; plugin fully functional)
-- New: Frontend tracking beacon — clicks on primary CTA and close button fire navigator.sendBeacon to record events without blocking user
-- New: Beacon falls back to fetch keepalive on browsers without sendBeacon; ad-blockers cause graceful counter drift, no JS errors
-- New: Read-only stats display in the Customizer per-bar editor — see clicks and dismissals at a glance when editing a bar
-- New: Accessible stats live region (role=status + aria-live=polite) for screen readers
-
-= 3.0.0 =
-- Added: Multiple notification bars per site — add, reorder, duplicate, and delete bars from a single Customizer panel
-- Added: React-based Customizer editor with live Customizer preview
-- Added: 3-state close button — close permanently, collapse/toggle, or disabled
-- Added: 4-state page/post display logic — all pages, no pages, include list, or exclude list
-- Added: Rotation mode — cycles through multiple bars with pause-on-hover and `prefers-reduced-motion` support
-- Added: Per-bar dismissal cookies with configurable reopen-after-days
-- Added: WPML String Translation API integration (replaces static wpml-config.xml; silent no-op when WPML ST is absent)
-- Added: Documented Polylang stub for manual integration via pll_register_string
-- Added: Hard-cutover migration from v2.1.9 with 30-day backup snapshot (`njt_nofi_v2_backup` option)
-- Changed: CSS class `.njt-nofi-content-deskop` (typo) aliased to canonical `.njt-nofi-content-desktop`; alias kept until v3.1
-- Changed: Frontend runtime rebuilt in vanilla JS (no jQuery dependency)
-- Removed: 12 legacy Customizer controls replaced by React SPA
-- Removed: Select2 vendor bundle from admin
-- Removed: Legacy `njt_nofi_*` flat theme_mods (46 keys) — superseded by `njt_nofi_bars` JSON array
 
 = Jan 26, 2026 - Version 2.1.9 =
 - Improved: WCAG Level AA compliance

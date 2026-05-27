@@ -252,13 +252,21 @@ export function filterBars( bars, ctx ) {
 		// SKIPS pageLogic + postLogic entirely. Legacy bars (cptTypes=[]) and
 		// non-CPT contexts (page/post/archive/home) fall through to the
 		// existing else branch with byte-identical behavior.
+		// Pro: CPT targeting. In Lite this stays false (the assignment is
+		// stripped), so any saved cptTypes/cptLogic/cptIds are ignored and the
+		// bar falls through to standard page/post logic — the feature does not
+		// function even if the data was previously saved under Pro.
+		let cptClaimed = false;
+		/* @pro */
 		const cptTypes = Array.isArray( display.cptTypes )
 			? display.cptTypes
 			: [];
-		const cptClaimed =
+		cptClaimed =
 			'' !== currentCptType && cptTypes.includes( currentCptType );
+		/* @endpro */
 
 		if ( cptClaimed ) {
+			/* @pro */
 			const cptLogic = display.cptLogic || 'all';
 			const cptIds = display.cptIds || [];
 			if (
@@ -266,6 +274,7 @@ export function filterBars( bars, ctx ) {
 			) {
 				return false;
 			}
+			/* @endpro */
 		} else {
 			// Page logic
 			// `pageLogic` governs every NON-single-post context: pages, home,

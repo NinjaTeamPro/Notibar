@@ -19,12 +19,20 @@ import { __, sprintf } from '@wordpress/i18n';
 
 const MAX_IMPORT_BYTES = 10485760;
 const EXPORT_VERSION = 1;
-const SECTIONS = [ 'bars', 'global', 'tracking' ];
+const SECTIONS = [
+	'bars',
+	'global',
+	/* @pro */
+	'tracking',
+	/* @endpro */
+];
 
 const SECTION_LABELS = {
 	bars: __( 'Bars', 'notibar' ),
 	global: __( 'Global settings', 'notibar' ),
+	/* @pro */
 	tracking: __( 'Tracking counters', 'notibar' ),
+	/* @endpro */
 };
 
 function todayIso() {
@@ -44,9 +52,11 @@ function sectionCountsFromParsed( parsed ) {
 	if ( parsed.global && typeof parsed.global === 'object' ) {
 		counts.global = 1;
 	}
+	/* @pro */
 	if ( parsed.tracking && typeof parsed.tracking === 'object' ) {
 		counts.tracking = Object.keys( parsed.tracking ).length;
 	}
+	/* @endpro */
 	return counts;
 }
 
@@ -71,11 +81,11 @@ export function ExportImportTab() {
 	const boot = window.njtNotibarSettingsBoot || {};
 	const siteHost = boot.siteHost || 'site';
 
-	const [ exportSel, setExportSel ] = useState( {
-		bars: true,
-		global: true,
-		tracking: true,
-	} );
+	// Derived from SECTIONS so the Lite strip (which drops 'tracking') stays
+	// consistent without a hardcoded key list here.
+	const [ exportSel, setExportSel ] = useState( () =>
+		Object.fromEntries( SECTIONS.map( ( k ) => [ k, true ] ) )
+	);
 	const [ exportBusy, setExportBusy ] = useState( false );
 
 	const [ parsed, setParsed ] = useState( null );
@@ -131,8 +141,10 @@ export function ExportImportTab() {
 				setImportSel( {
 					bars: Array.isArray( data.bars ),
 					global: !! data.global && typeof data.global === 'object',
+					/* @pro */
 					tracking:
 						!! data.tracking && typeof data.tracking === 'object',
+					/* @endpro */
 				} );
 			} catch ( err ) {
 				setParsed( null );
@@ -161,9 +173,11 @@ export function ExportImportTab() {
 		if ( importSel.global && parsed.global ) {
 			payload.global = parsed.global;
 		}
+		/* @pro */
 		if ( importSel.tracking && parsed.tracking ) {
 			payload.tracking = parsed.tracking;
 		}
+		/* @endpro */
 		try {
 			const res = await apiFetch( {
 				path: '/notibar/v1/import',
@@ -174,14 +188,13 @@ export function ExportImportTab() {
 			setNotice( {
 				kind: 'success',
 				text: sprintf(
-					/* translators: %1$d bars, %2$s global yes/no, %3$d tracking */
+					/* translators: %1$d bars imported, %2$s global yes/no */
 					__(
-						'Imported %1$d bar(s), global=%2$s, %3$d tracking entries. Reload to see changes.',
+						'Imported %1$d bar(s), global=%2$s. Reload to see changes.',
 						'notibar'
 					),
 					r.bars || 0,
-					r.global ? 'yes' : 'no',
-					r.tracking || 0
+					r.global ? 'yes' : 'no'
 				),
 			} );
 			setConfirmOpen( false );
@@ -251,11 +264,11 @@ export function ExportImportTab() {
 					variant="secondary"
 					disabled={ exportBusy }
 					onClick={ () =>
-						handleExport( {
-							bars: true,
-							global: true,
-							tracking: true,
-						} )
+						handleExport(
+							Object.fromEntries(
+								SECTIONS.map( ( k ) => [ k, true ] )
+							)
+						)
 					}
 				>
 					{ __( 'Download backup', 'notibar' ) }

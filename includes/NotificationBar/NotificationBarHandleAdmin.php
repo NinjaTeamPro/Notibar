@@ -66,6 +66,21 @@ trait NotificationBarHandleAdmin {
 			[ $this, 'njt_nofi_renderSettings' ]
 		);
 
+		// Lite only — "Go Pro" upsell submenu (Free vs Pro table + CTA). Pro
+		// users never see it. Gated on the edition flag, not stripped, so the
+		// page code can live in both builds.
+		if ( ! ( defined( 'NJT_NOFI_IS_PRO' ) && NJT_NOFI_IS_PRO ) ) {
+			add_submenu_page(
+				'notibar-customize',
+				__( 'Go Pro', 'notibar' ),
+				__( 'Go Pro', 'notibar' ),
+				'manage_options',
+				GoProPage::PAGE_SLUG,
+				[ GoProPage::class, 'render' ]
+			);
+			add_action( 'admin_head', [ GoProPage::class, 'menuHighlightCss' ] );
+		}
+
 		// URL-hack the Customize submenu entry to deep-link into Customizer
 		// with the Notibar panel auto-focused. WP follows the entry's index-2
 		// URL when present, so the renderCustomizeStub callback never fires.
@@ -96,10 +111,18 @@ trait NotificationBarHandleAdmin {
 		$url_encode = urlencode( 'autofocus[section]' );
 		$link_url   = esc_url( admin_url( '/customize.php?' . $url_encode . '=njt_nofi_bars_section' ) );
 
-		return array_merge(
-			[ '<a href="' . $link_url . '">' . __( 'Settings', 'notibar' ) . '</a>' ],
-			$links
-		);
+		$prepend = [ '<a href="' . $link_url . '">' . __( 'Settings', 'notibar' ) . '</a>' ];
+
+		// Lite-only "Go Pro" action link (green). Runtime-gated on the edition
+		// flag — the link ships in both builds but only renders in Lite (Pro
+		// users have no upsell).
+		if ( ! ( defined( 'NJT_NOFI_IS_PRO' ) && NJT_NOFI_IS_PRO ) ) {
+			$upgrade   = defined( 'NJT_NOFI_UPGRADE_URL' ) ? NJT_NOFI_UPGRADE_URL : '';
+			$prepend[] = '<a href="' . esc_url( $upgrade ) . '" target="_blank" rel="noopener noreferrer" style="color:#46b450;font-weight:700;">'
+				. __( 'Go Pro', 'notibar' ) . '</a>';
+		}
+
+		return array_merge( $prepend, $links );
 	}
 
 	/**

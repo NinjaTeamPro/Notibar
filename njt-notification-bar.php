@@ -21,7 +21,16 @@ define('NJT_NOFI_VERSION', '3.0.0');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('NJT_NOFI_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('NJT_NOFI_SITE_URL', site_url());
+
+// Single source for the Pro upgrade destination (Go Pro page, badges, notices).
+// Mirrored to the React apps via boot data (AssetLoader).
+define('NJT_NOFI_UPGRADE_URL', 'https://ninjateam.org/notibar-wordpress-notification-bar/');
+
+// Edition flag (Pro vs Lite). Defines NJT_NOFI_IS_PRO; Lite build swaps this
+// file via build-tools/pro-manifest.json. Drives locked/badged Pro UI in Lite.
+require_once __DIR__ . '/includes/edition.php';
 
 spl_autoload_register(function ($class) {
   $prefix = __NAMESPACE__; // project-specific namespace prefix
@@ -71,9 +80,11 @@ function init() {
   Plugin::getInstance();
   I18n::loadPluginTextdomain();
 
+  // @pro
   // v3.1 — self-heal counter store on auto-upgrade (activation hook does not
   // re-fire on auto-update). Free steady-state cost via autoloaded marker.
   NotificationBar\EventCounter::maybeInstall();
+  // @endpro
 
   // v3.0 asset enqueue helper.
   NotificationBar\AssetLoader::get_instance();
@@ -97,16 +108,24 @@ add_action( 'rest_api_init', function () {
   ( new NotificationBar\RestPostsController() )->register();
 } );
 
+// REST API — user search for the per-bar audience picker (Pro UI; admin-only).
+add_action( 'rest_api_init', function () {
+  ( new NotificationBar\RestUsersController() )->register();
+} );
+
+// @pro
 // v3.1 REST API — per-bar event tracking (POST /track, GET /stats/{id}).
 add_action( 'rest_api_init', function () {
   ( new NotificationBar\TrackingRestController() )->register();
 } );
+// @endpro
 
 // v3.2 REST API — Settings page Export/Import (GET /export, POST /import).
 add_action( 'rest_api_init', function () {
   ( new NotificationBar\RestSettingsController() )->register();
 } );
 
+// @pro
 // v3.1 — prune orphan counter keys when Customizer publish removes bars.
 // Mirrors WpmlBridge::onSave diff pattern; bars are saved en bloc, no
 // incremental delete hook exists in the plugin.
@@ -115,6 +134,7 @@ add_action( 'customize_save_after', function () {
     NotificationBar\TrackingRestController::valid_bar_ids()
   );
 } );
+// @endpro
 
 // Migrations — runs at priority 5, BEFORE the main init at priority 10.
 // ORDER MATTERS: maybeRun() (v2→v3 legacy) must execute BEFORE

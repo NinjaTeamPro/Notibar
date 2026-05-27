@@ -37,11 +37,13 @@ class Schema {
 
 	const ALLOWED_ALIGNMENT = [ 'center', 'left', 'right', 'space-around' ];
 	const ALLOWED_POSITION  = [ 'fixed', 'absolute' ];
+	const ALLOWED_PLACEMENT = [ 'top', 'bottom' ];
 	const ALLOWED_DEVICES   = [ 'desktop', 'mobile' ];
 	const ALLOWED_LOGIC     = [ 'all', 'none', 'include', 'exclude' ];
 	const ALLOWED_CLOSE_BTN = [ 'close', 'toggle', 'disable' ];
 	const ALLOWED_DISP_MODE     = [ 'single', 'rotation' ];
 	const ALLOWED_ROTATION_ORDER = [ 'sequential', 'random' ];
+	const ALLOWED_AUDIENCE      = [ 'all', 'loggedin', 'loggedout', 'roles', 'users' ];
 
 	// ------------------------------------------------------------------
 	// Default values
@@ -74,6 +76,7 @@ class Schema {
 				'alignment'    => 'center',
 				'contentWidth' => 900,
 				'positionType' => 'fixed',
+				'placement'    => 'top',
 			],
 			'display' => [
 				'devices'   => [ 'desktop', 'mobile' ],
@@ -84,6 +87,9 @@ class Schema {
 				'cptTypes'  => [],
 				'cptLogic'  => 'all',
 				'cptIds'    => [],
+				'audience'  => 'all',
+				'roles'     => [],
+				'userIds'   => [],
 			],
 			'behavior' => [
 				'hideCloseButton' => 'close',

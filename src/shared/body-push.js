@@ -27,11 +27,19 @@
 
 const PUSH_POSITIONS = new Set( [ 'fixed', 'absolute' ] );
 
-function setBodyPad( px ) {
+function clearBodyPad() {
+	document.body.style.removeProperty( 'padding-top' );
+	document.body.style.removeProperty( 'padding-bottom' );
+}
+
+// Reserve space on the side the bar is pinned to: top bars push content down
+// (padding-top), bottom bars push content up (padding-bottom). The opposite
+// side is always cleared so a top↔bottom switch never leaves stale padding.
+function setBodyPad( px, side ) {
+	clearBodyPad();
 	if ( px > 0 ) {
-		document.body.style.setProperty( 'padding-top', px + 'px', 'important' );
-	} else {
-		document.body.style.removeProperty( 'padding-top' );
+		const prop = 'bottom' === side ? 'padding-bottom' : 'padding-top';
+		document.body.style.setProperty( prop, px + 'px', 'important' );
 	}
 }
 
@@ -59,7 +67,11 @@ export function installBodyPush( slot ) {
 			return;
 		}
 		// Bar height only — WP's html margin-top handles the admin-bar offset.
-		setBodyPad( currentBar.offsetHeight );
+		const side =
+			'bottom' === currentBar.getAttribute( 'data-placement' )
+				? 'bottom'
+				: 'top';
+		setBodyPad( currentBar.offsetHeight, side );
 	}
 
 	function attach( bar ) {

@@ -29,7 +29,13 @@ class RestSettingsController {
 	const MAX_IMPORT_BYTES = 10485760;
 
 	/** @var string[] Whitelist of section keys the include= param accepts. */
-	const SECTIONS = [ 'bars', 'global', 'tracking' ];
+	const SECTIONS = [
+		'bars',
+		'global',
+		// @pro
+		'tracking',
+		// @endpro
+	];
 
 	/**
 	 * Register routes on rest_api_init.
@@ -94,10 +100,12 @@ class RestSettingsController {
 			$global = json_decode( get_option( 'njt_nofi_global', '{}' ), true );
 			$payload['global'] = is_array( $global ) ? $global : new \stdClass();
 		}
+		// @pro
 		if ( in_array( 'tracking', $include, true ) ) {
 			$tracking = json_decode( get_option( 'notibar_counters', '{}' ), true );
 			$payload['tracking'] = is_array( $tracking ) ? $tracking : new \stdClass();
 		}
+		// @endpro
 
 		return new \WP_REST_Response( $payload, 200 );
 	}
@@ -173,6 +181,7 @@ class RestSettingsController {
 			$counts['global'] = true;
 		}
 
+		// @pro
 		// Tracking — no Schema sanitizer, so apply our own whitelist:
 		// keys must match EventCounter::BAR_ID_REGEX; values must be a
 		// {clicks:int,dismissals:int} shape. Anything else is dropped.
@@ -198,6 +207,7 @@ class RestSettingsController {
 			update_option( 'notibar_counters', $json );
 			$counts['tracking'] = count( $clean );
 		}
+		// @endpro
 
 		return new \WP_REST_Response( [ 'replaced' => $counts ], 200 );
 	}

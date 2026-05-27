@@ -41,6 +41,12 @@
   position: absolute;
 }
 
+/* Bottom placement (Pro) — pin to the bottom edge instead of the top. */
+.njt-nofi-container[data-placement='bottom'] {
+  top: auto;
+  bottom: 0;
+}
+
 /* ==========================================================================
    Container content — hidden until JS adds .njt-nofi-visible
    ----------------------------------------------------------------------------
@@ -95,6 +101,29 @@
 
 .njt-nofi-container-content.njt-nofi-visible .njt-nofi-notification-bar {
   animation: njt-nofi-slide-in 0.4s cubic-bezier( 0.16, 1, 0.3, 1 ) both;
+}
+
+/* Bottom placement entrance — slide UP from below instead of down from above.
+   Overrides the initial transform + the animation name; duration/easing/fill
+   carry over from the base rule above. */
+.njt-nofi-container[data-placement='bottom'] .njt-nofi-notification-bar {
+  transform: translateY( 100% );
+}
+
+@keyframes njt-nofi-slide-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY( 100% );
+  }
+  to {
+    opacity: 1;
+    transform: translateY( 0 );
+  }
+}
+
+.njt-nofi-container-content.njt-nofi-visible
+  .njt-nofi-container[data-placement='bottom'] .njt-nofi-notification-bar {
+  animation-name: njt-nofi-slide-in-bottom;
 }
 
 /* Collapsed state (toggle mode — per-bar via sessionStorage). */
@@ -231,6 +260,13 @@
   .admin-bar .njt-nofi-container[data-position='absolute'] {
     top: 46px;
   }
+}
+
+/* Bottom placement ignores the admin-bar top offset — it pins to the bottom
+   edge. Declared after the rules above so it wins at equal specificity. */
+.admin-bar .njt-nofi-container[data-placement='bottom'] {
+  top: auto;
+  bottom: 0;
 }
 
 /* ==========================================================================

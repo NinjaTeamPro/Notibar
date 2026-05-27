@@ -18,7 +18,9 @@
 
 import { renderBarHTML } from '../shared/render-bar.js';
 import { filterBars } from '../shared/filter-bars.js';
+/* @pro */
 import { startRotation } from '../shared/rotation.js';
+/* @endpro */
 import { installBodyPush } from '../shared/body-push.js';
 import { PREVIEW_STYLES } from '../shared/preview-styles.js';
 
@@ -181,6 +183,7 @@ function rerender() {
 		return;
 	}
 
+	/* @pro */
 	const isRotation = global.displayMode === 'rotation' && visible.length > 1;
 
 	if ( isRotation ) {
@@ -190,7 +193,10 @@ function rerender() {
 			renderFn: renderBarHTML,
 			global,
 		} );
-	} else {
+	}
+	/* @endpro */
+
+	if ( ! activeRotation ) {
 		renderSingle( slot, visible[ 0 ], global );
 	}
 

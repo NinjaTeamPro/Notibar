@@ -13,6 +13,7 @@ import { DEFAULT_BAR } from '../../utils/defaults';
 import { ColorPresetSwatches } from '../fields/ColorPresetSwatches';
 import { ColorFieldWithReset } from '../fields/ColorFieldWithReset';
 import { ContrastWarning } from '../fields/ContrastWarning';
+import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
 
 const ALIGNMENT_OPTIONS = [
 	{ value: 'left', label: __( 'Left', 'notibar' ) },
@@ -26,6 +27,11 @@ const POSITION_OPTIONS = [
 	{ value: 'absolute', label: __( 'Absolute', 'notibar' ) },
 ];
 
+const PLACEMENT_OPTIONS = [
+	{ value: 'top', label: __( 'Top', 'notibar' ) },
+	{ value: 'bottom', label: __( 'Bottom', 'notibar' ) },
+];
+
 /**
  * @param {Object}   props
  * @param {Object}   props.bar      Bar object.
@@ -34,6 +40,8 @@ const POSITION_OPTIONS = [
 export function StyleTab( { bar, onChange } ) {
 	const set = ( path, value ) => onChange( updatePath( bar, path, value ) );
 	const { style } = bar;
+	const pro = isProEdition();
+	const placement = style.placement || 'top';
 
 	function handlePreset( preset ) {
 		// Write all 4 colours in ONE onChange call (single Customizer dirty event).
@@ -169,6 +177,38 @@ export function StyleTab( { bar, onChange } ) {
 						</Button>
 					) ) }
 				</ButtonGroup>
+			</div>
+
+			{ /* Placement (Pro) — top/bottom of the screen */ }
+			<div className="njt-notibar-button-group-field">
+				<span className="njt-notibar-button-group-field__label">
+					{ __( 'Placement', 'notibar' ) }
+				</span>
+				{ ! pro && (
+					<ProUpgradeNotice
+						feature={ __( 'Display bar at bottom', 'notibar' ) }
+					/>
+				) }
+				<div className={ pro ? undefined : 'njt-pro-locked' }>
+					<ButtonGroup>
+						{ PLACEMENT_OPTIONS.map( ( opt ) => (
+							<Button
+								key={ opt.value }
+								variant={
+									placement === opt.value
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={ () =>
+									set( 'style.placement', opt.value )
+								}
+								size="small"
+							>
+								{ opt.label }
+							</Button>
+						) ) }
+					</ButtonGroup>
+				</div>
 			</div>
 		</div>
 	);
