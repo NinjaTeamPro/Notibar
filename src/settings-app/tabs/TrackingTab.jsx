@@ -8,9 +8,16 @@
  * Lite: the tracking REST backend is stripped, so render an upgrade teaser
  * instead of mounting TrackingPane (which would fetch a missing endpoint).
  */
+import { lazy, Suspense } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { TrackingPane } from '../../shared/TrackingPane';
 import { isProEdition, ProUpgradeNotice } from '../../shared/pro-ui';
+
+// Lazy so Chart.js ships in its own chunk — only requested when a Pro user
+// opens this tab. Lite (teaser branch) never reaches this import.
+const TrackingCharts = lazy( () =>
+	import( '../../shared/charts/tracking-charts' )
+);
 
 export function TrackingTab() {
 	const boot = window.njtNotibarSettingsBoot || {};
@@ -40,5 +47,22 @@ export function TrackingTab() {
 		);
 	}
 
-	return <TrackingPane bars={ bars } />;
+	return (
+		<>
+			<Suspense
+				fallback={
+					<p
+						className="njt-charts__status"
+						role="status"
+						aria-live="polite"
+					>
+						{ __( 'Loading charts…', 'notibar' ) }
+					</p>
+				}
+			>
+				<TrackingCharts bars={ bars } />
+			</Suspense>
+			<TrackingPane bars={ bars } />
+		</>
+	);
 }

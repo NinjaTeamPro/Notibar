@@ -1,0 +1,74 @@
+/**
+ * Tracking charts — filter bar + responsive card grid.
+ * Scoped under .njt-charts so it never leaks into other admin UI.
+ */
+.njt-charts {
+	margin: 0 0 20px;
+
+	&__status {
+		margin: 16px 0;
+		color: #646970;
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+		gap: 16px;
+
+		@media ( max-width: 782px ) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	&__card {
+		padding: 16px 20px;
+		background: #fff;
+		border: 1px solid #c3c4c7;
+		box-shadow: 0 1px 1px rgba( 0, 0, 0, 0.04 );
+
+		// Trend spans the full row; breakdown + comparison share the second row.
+		&:first-child {
+			grid-column: 1 / -1;
+		}
+	}
+
+	&__card-title {
+		margin: 0 0 4px;
+		font-size: 14px;
+	}
+
+	&__card-note {
+		margin: 0 0 12px;
+		color: #646970;
+		font-size: 12px;
+	}
+}
+
+// Fixed-height canvas wrapper so Chart.js (maintainAspectRatio:false) has a
+// box to fill and the grid rows stay even.
+.njt-chart__canvas {
+	position: relative;
+	height: 260px;
+}
+
+.njt-chart-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 16px;
+	margin: 0 0 16px;
+	padding: 12px 16px;
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+
+	&__group {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	&__label {
+		font-weight: 600;
+		color: #1d2327;
+	}
+}

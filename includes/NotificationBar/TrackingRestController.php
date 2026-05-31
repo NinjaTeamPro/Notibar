@@ -4,6 +4,7 @@
  *
  * Routes (namespace: notibar/v1):
  *   POST /track                          — anon; record click/dismiss for a bar.
+ *   GET  /stats/timeseries               — manage_options; daily grouped counts (charts).
  *   GET  /stats/(?P<bar_id>[A-Za-z0-9_-]+) — manage_options; returns {clicks, dismissals}.
  *
  * Anon POST is intentional (visitor frontend). Defense-in-depth:
@@ -36,6 +37,26 @@ class TrackingRestController {
 				'methods'             => \WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'track' ],
 				'permission_callback' => '__return_true',
+			]
+		);
+
+		// v3.2 — time-series for charts. MUST register BEFORE the dynamic
+		// /stats/(?P<bar_id>) route below: 'timeseries' matches the bar_id
+		// regex, and WP REST resolves to the first matching route in
+		// registration order, so the literal must come first.
+		register_rest_route(
+			self::NAMESPACE,
+			'/stats/timeseries',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'timeseries' ],
+				'permission_callback' => [ $this, 'admin_only' ],
+				'args'                => [
+					'from'     => [ 'sanitize_callback' => 'sanitize_text_field' ],
+					'to'       => [ 'sanitize_callback' => 'sanitize_text_field' ],
+					'bar_id'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
+					'interval' => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				],
 			]
 		);
 
@@ -116,6 +137,30 @@ class TrackingRestController {
 				[ 'status' => 500 ]
 			);
 		}
+
+		// v3.2 — additive raw event row for time-series charts. Best-effort:
+		// the aggregate above is authoritative, so a raw-insert failure is
+		// logged but does NOT fail the request. is_logged_in is a boolean
+		// flag only (no user_id, no PII).
+		//
+		// Detect logged-in visitors from the auth cookie directly rather than
+		// is_user_logged_in(): the frontend beacon (navigator.sendBeacon) cannot
+		// send an X-WP-Nonce header, and WP core resets nonce-less cookie REST
+		// requests to user 0 (rest_cookie_check_errors → wp_set_current_user(0)),
+		// so is_user_logged_in() is always false here. wp_validate_auth_cookie()
+		// cryptographically validates the logged_in cookie independent of the
+		// nonce and is page-cache safe (the cookie travels with each request).
+		//
+		// Gate on cookie presence first: guests carry no logged_in cookie, so
+		// this skips validation for them entirely — avoiding both the work and
+		// the auth_cookie_malformed action (which security plugins hook) firing
+		// on every anonymous beacon.
+		$logged_in = ! empty( $_COOKIE[ LOGGED_IN_COOKIE ] )
+			&& (bool) wp_validate_auth_cookie( '', 'logged_in' );
+		if ( ! EventLog::insert( $bar_id, $event, $logged_in ) ) {
+			error_log( 'Notibar: raw event insert failed for ' . $bar_id );
+		}
+
 		return new \WP_REST_Response( null, 204 );
 	}
 
@@ -138,6 +183,109 @@ class TrackingRestController {
 			$data = [];
 		}
 		return new \WP_REST_Response( $data, 200 );
+	}
+
+	/**
+	 * GET /stats/timeseries handler. Admin-gated.
+	 *
+	 * Params: from (Y-m-d), to (Y-m-d), bar_id (optional), interval (day only).
+	 * Defaults: to=today (UTC), from=to-30d. Range clamped to ≤366 days.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function timeseries( \WP_REST_Request $request ) {
+		$interval = (string) $request->get_param( 'interval' );
+		if ( '' === $interval ) {
+			$interval = 'day';
+		}
+		if ( 'day' !== $interval ) {
+			return new \WP_Error(
+				'notibar_invalid_interval',
+				__( 'Only interval=day is supported.', 'notibar' ),
+				[ 'status' => 400 ]
+			);
+		}
+
+		// Defaults in UTC to match stored created_at.
+		$today = current_time( 'Y-m-d', true );
+		$to    = (string) $request->get_param( 'to' );
+		$from  = (string) $request->get_param( 'from' );
+		if ( '' === $to ) {
+			$to = $today;
+		}
+		if ( '' === $from ) {
+			$from = gmdate( 'Y-m-d', strtotime( $to . ' 00:00:00 UTC' ) - 30 * DAY_IN_SECONDS );
+		}
+
+		if ( ! self::is_ymd( $from ) || ! self::is_ymd( $to ) ) {
+			return new \WP_Error(
+				'notibar_invalid_date',
+				__( 'from/to must be valid YYYY-MM-DD dates.', 'notibar' ),
+				[ 'status' => 400 ]
+			);
+		}
+
+		$from_ts = strtotime( $from . ' 00:00:00 UTC' );
+		$to_ts   = strtotime( $to . ' 00:00:00 UTC' );
+		// Defensive: strtotime() returns false on 32-bit PHP for post-2038
+		// dates. is_ymd() already rejected malformed input, but guard the
+		// arithmetic below so a false→0 cast can't silently skew the range.
+		if ( false === $from_ts || false === $to_ts ) {
+			return new \WP_Error(
+				'notibar_invalid_date',
+				__( 'from/to must be valid YYYY-MM-DD dates.', 'notibar' ),
+				[ 'status' => 400 ]
+			);
+		}
+		if ( $from_ts > $to_ts ) {
+			return new \WP_Error(
+				'notibar_invalid_range',
+				__( '`from` must not be after `to`.', 'notibar' ),
+				[ 'status' => 400 ]
+			);
+		}
+		if ( ( $to_ts - $from_ts ) > 366 * DAY_IN_SECONDS ) {
+			return new \WP_Error(
+				'notibar_range_too_large',
+				__( 'Date range must not exceed 366 days.', 'notibar' ),
+				[ 'status' => 400 ]
+			);
+		}
+
+		$bar_id = (string) $request->get_param( 'bar_id' );
+		if ( '' !== $bar_id && ! preg_match( EventCounter::BAR_ID_REGEX, $bar_id ) ) {
+			return new \WP_Error(
+				'notibar_invalid_bar_id',
+				__( 'Invalid bar_id.', 'notibar' ),
+				[ 'status' => 400 ]
+			);
+		}
+
+		// UTC datetime literals — match the created_at storage basis (no TZ conversion).
+		$start         = $from . ' 00:00:00';
+		$end_exclusive = gmdate( 'Y-m-d', $to_ts + DAY_IN_SECONDS ) . ' 00:00:00';
+		$series        = EventLog::timeseries( $start, $end_exclusive, '' !== $bar_id ? $bar_id : null );
+
+		return new \WP_REST_Response(
+			[
+				'interval' => 'day',
+				'from'     => $from,
+				'to'       => $to,
+				'bar_id'   => '' !== $bar_id ? $bar_id : null,
+				'series'   => $series,
+			],
+			200
+		);
+	}
+
+	/**
+	 * True when $date is a real calendar date in strict YYYY-MM-DD form.
+	 */
+	private static function is_ymd( string $date ): bool {
+		if ( ! preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $date, $m ) ) {
+			return false;
+		}
+		return checkdate( (int) $m[2], (int) $m[3], (int) $m[1] );
 	}
 
 	/**
