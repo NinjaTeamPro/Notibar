@@ -116,37 +116,39 @@ $GLOBALS['yay_reviews_plugins'][] = [
 	},
 ];
 
-function init() {
-  Plugin::getInstance();
-  I18n::loadPluginTextdomain();
+if ( ! function_exists( 'NjtNotificationBar\\init' ) ) {
+  function init() {
+    Plugin::getInstance();
+    I18n::loadPluginTextdomain();
 
-  // @pro
-  // v3.1 — self-heal counter store on auto-upgrade (activation hook does not
-  // re-fire on auto-update). Free steady-state cost via autoloaded marker.
-  NotificationBar\EventCounter::maybeInstall();
-  // v3.1.2 — self-heal raw event-log table on auto-upgrade. Version-stamped
-  // marker re-runs dbDelta only on schema bump; else one option read.
-  NotificationBar\EventLog::maybeInstall();
-  // v3.1.2 — bind the daily prune callback (needed every load) + self-heal the
-  // schedule on upgrade (activation hook does not re-fire on auto-update).
-  NotificationBar\TrackingCron::registerHook();
-  NotificationBar\TrackingCron::schedule();
-  // @endpro
+    // @pro
+    // v3.1 — self-heal counter store on auto-upgrade (activation hook does not
+    // re-fire on auto-update). Free steady-state cost via autoloaded marker.
+    NotificationBar\EventCounter::maybeInstall();
+    // v3.1.2 — self-heal raw event-log table on auto-upgrade. Version-stamped
+    // marker re-runs dbDelta only on schema bump; else one option read.
+    NotificationBar\EventLog::maybeInstall();
+    // v3.1.2 — bind the daily prune callback (needed every load) + self-heal the
+    // schedule on upgrade (activation hook does not re-fire on auto-update).
+    NotificationBar\TrackingCron::registerHook();
+    NotificationBar\TrackingCron::schedule();
+    // @endpro
 
-  // v3.0 asset enqueue helper.
-  NotificationBar\AssetLoader::get_instance();
+    // v3.0 asset enqueue helper.
+    NotificationBar\AssetLoader::get_instance();
 
-  // v3.0 Customizer panel/section/settings/control registration.
-  NotificationBar\WpCustomNotification::getInstance();
+    // v3.0 Customizer panel/section/settings/control registration.
+    NotificationBar\WpCustomNotification::getInstance();
 
-  // v3.0 front-end render gating + admin menu.
-  NotificationBar\NotificationBarHandle::getInstance();
+    // v3.0 front-end render gating + admin menu.
+    NotificationBar\NotificationBarHandle::getInstance();
 
-  // Phase 08: WPML String Translation bridge — registers/unregisters per-bar
-  // strings on save and resolves translations at render via filter hooks.
-  // Silent no-op when WPML + ST addon are not active (resolved decision #4).
-  // Note: WpmlBridge instantiation point — do not remove this line (phase-08 marker).
-  NotificationBar\WpmlBridge::getInstance();
+    // Phase 08: WPML String Translation bridge — registers/unregisters per-bar
+    // strings on save and resolves translations at render via filter hooks.
+    // Silent no-op when WPML + ST addon are not active (resolved decision #4).
+    // Note: WpmlBridge instantiation point — do not remove this line (phase-08 marker).
+    NotificationBar\WpmlBridge::getInstance();
+  }
 }
 add_action('plugins_loaded', 'NjtNotificationBar\\init');
 
