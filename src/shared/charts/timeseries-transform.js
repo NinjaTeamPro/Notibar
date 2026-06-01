@@ -11,7 +11,7 @@
 // applied with __() in the components).
 export const EVENT_KEYS = [ 'click', 'dismiss', 'engage' ];
 export const EVENT_COLORS = {
-	click: '#2271b1', // WP admin blue
+	click: '#3858e9', // brand accent (admin)
 	dismiss: '#d63638', // WP admin red
 	engage: '#00a32a', // WP admin green
 };

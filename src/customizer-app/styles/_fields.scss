@@ -34,12 +34,12 @@
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 
 		&:hover {
-			border-color: #2271b1;
+			border-color: #3858e9;
 			transform: scale(1.1);
 		}
 
 		&:focus-visible {
-			outline: 2px solid #2271b1;
+			outline: 2px solid #3858e9;
 			outline-offset: 2px;
 		}
 	}
@@ -93,7 +93,7 @@
 		}
 
 		&:focus-visible {
-			outline: 2px solid #2271b1;
+			outline: 2px solid #3858e9;
 			outline-offset: 2px;
 		}
 	}
@@ -218,9 +218,9 @@
 	line-height: 1.4;
 
 	&:focus {
-		border-color: #2271b1;
+		border-color: #3858e9;
 		outline: 2px solid transparent;
-		box-shadow: 0 0 0 1px #2271b1;
+		box-shadow: 0 0 0 1px #3858e9;
 	}
 
 	&:disabled {
@@ -246,9 +246,9 @@
 	line-height: 1.4;
 
 	&:focus {
-		border-color: #2271b1;
+		border-color: #3858e9;
 		outline: 2px solid transparent;
-		box-shadow: 0 0 0 1px #2271b1;
+		box-shadow: 0 0 0 1px #3858e9;
 	}
 }
 
