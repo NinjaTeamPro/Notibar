@@ -88,7 +88,7 @@ STAGE_EXCLUDES=(
   --exclude='.DS_Store'        --exclude='*.log'
   --exclude='*.bak'            --exclude='release/'
   --exclude='release.sh'       --exclude='dev.sh'
-  --exclude='setup.sh'
+  --exclude='setup.sh'         --exclude='recommended-modules/.source'
 )
 
 # 6. Build assets + choose the source root to stage from.
