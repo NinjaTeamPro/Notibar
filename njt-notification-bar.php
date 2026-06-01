@@ -32,6 +32,46 @@ define('NJT_NOFI_UPGRADE_URL', 'https://ninjateam.org/notibar-wordpress-notifica
 // file via build-tools/pro-manifest.json. Drives locked/badged Pro UI in Lite.
 require_once __DIR__ . '/includes/edition.php';
 
+// @pro
+// Pro never coexists with the free Lite edition. Both are built from the same
+// source (identical namespace, constants, hooks, Plugin Name and main file), so
+// running both at once duplicates the admin menu / REST routes / Customizer
+// panel and triggers "constant already defined" notices. Pro always wins: it
+// deactivates Lite on its own activation AND on every admin load (catching
+// both-bulk-activated or Lite-activated-after-Pro).
+//
+// Inline + WP-core functions only, on purpose: when both editions are active the
+// namespaced classes collide, so this guard must not reference any of them.
+define('NJT_NOFI_LITE_BASENAME', 'notibar/njt-notification-bar.php');
+
+function njt_nofi_kill_lite() {
+  // Do NOT self-deactivate when Pro runs from the Lite path (dev: notibar/).
+  if (NJT_NOFI_LITE_BASENAME === plugin_basename(__FILE__)) {
+    return;
+  }
+  if (!function_exists('is_plugin_active')) {
+    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+  }
+  if (is_plugin_active(NJT_NOFI_LITE_BASENAME)) {
+    deactivate_plugins(NJT_NOFI_LITE_BASENAME);
+    set_transient('njt_nofi_lite_killed', 1, MINUTE_IN_SECONDS);
+  }
+}
+
+register_activation_hook(__FILE__, __NAMESPACE__ . '\\njt_nofi_kill_lite');
+add_action('admin_init', __NAMESPACE__ . '\\njt_nofi_kill_lite', 0);
+
+add_action('admin_notices', function () {
+  if (get_transient('njt_nofi_lite_killed')) {
+    delete_transient('njt_nofi_lite_killed');
+    printf(
+      '<div class="notice notice-info is-dismissible"><p>%s</p></div>',
+      esc_html__('Notibar Lite was deactivated — Notibar Pro replaces it.', 'notibar')
+    );
+  }
+});
+// @endpro
+
 spl_autoload_register(function ($class) {
   $prefix = __NAMESPACE__; // project-specific namespace prefix
   $base_dir = __DIR__ . '/includes'; // base directory for the namespace prefix
