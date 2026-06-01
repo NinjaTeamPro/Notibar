@@ -10,12 +10,13 @@ import { Button, SelectControl } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { EVENT_KEYS } from './timeseries-transform';
 
-// 0 = today only (from === to); the rest are trailing-day windows.
-const RANGES = [ 0, 7, 30, 90 ];
+// 1 = yesterday + today (a 2-day window, so the trend can be compared);
+// the rest are trailing-day windows.
+const RANGES = [ 1, 7, 30, 90 ];
 
 const rangeLabel = ( days ) =>
-	0 === days
-		? __( 'Today', 'notibar' )
+	1 === days
+		? __( 'Today vs Yesterday', 'notibar' )
 		: sprintf(
 				/* translators: %d: number of days. */
 				__( '%d days', 'notibar' ),
