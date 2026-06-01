@@ -56,16 +56,53 @@
 }
 
 // Loading placeholder — same height as the canvas so the layout doesn't jump
-// when the real chart swaps in. Animated shimmer sweep.
+// when the real chart swaps in. Chart-shaped: rising bars + a legend row.
 .njt-chart-skeleton {
 	height: 260px;
+	padding: 16px;
 	border-radius: 6px;
-	background: linear-gradient(
-		90deg,
-		#e9eaec 25%,
-		#f3f4f5 50%,
-		#e9eaec 75%
-	);
+	background: #f6f7f7;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+// Bare/Suspense fallback (no inner structure) → a flat shimmer block.
+.njt-chart-skeleton:empty {
+	padding: 0;
+	background: linear-gradient( 90deg, #dde0e3 25%, #f1f3f5 50%, #dde0e3 75% );
+	background-size: 200% 100%;
+	animation: njt-chart-skeleton-shimmer 1.4s linear infinite;
+}
+
+.njt-chart-skeleton__bars {
+	flex: 1;
+	display: flex;
+	align-items: flex-end;
+	gap: 10px;
+}
+
+.njt-chart-skeleton__bars span {
+	flex: 1;
+	border-radius: 4px 4px 0 0;
+}
+
+.njt-chart-skeleton__legend {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+}
+
+.njt-chart-skeleton__legend span {
+	width: 64px;
+	height: 12px;
+	border-radius: 6px;
+}
+
+// Shared shimmer for the structured pieces.
+.njt-chart-skeleton__bars span,
+.njt-chart-skeleton__legend span {
+	background: linear-gradient( 90deg, #dde0e3 25%, #f1f3f5 50%, #dde0e3 75% );
 	background-size: 200% 100%;
 	animation: njt-chart-skeleton-shimmer 1.4s linear infinite;
 }
@@ -81,7 +118,9 @@
 }
 
 @media ( prefers-reduced-motion: reduce ) {
-	.njt-chart-skeleton {
+	.njt-chart-skeleton:empty,
+	.njt-chart-skeleton__bars span,
+	.njt-chart-skeleton__legend span {
 		animation: none;
 	}
 }

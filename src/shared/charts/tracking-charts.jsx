@@ -49,9 +49,27 @@ function Card( { title, note, children } ) {
 	);
 }
 
-// Shimmer placeholder shown in each card while its data loads.
+// Chart-shaped shimmer placeholder (rising bars + a legend row) so a loading
+// card clearly reads as "a chart is loading", not just an empty box.
 function ChartSkeleton() {
-	return <div className="njt-chart-skeleton" aria-hidden="true" />;
+	return (
+		<div className="njt-chart-skeleton" aria-hidden="true">
+			<div className="njt-chart-skeleton__bars">
+				<span style={ { height: '45%' } } />
+				<span style={ { height: '70%' } } />
+				<span style={ { height: '55%' } } />
+				<span style={ { height: '90%' } } />
+				<span style={ { height: '65%' } } />
+				<span style={ { height: '80%' } } />
+				<span style={ { height: '50%' } } />
+			</div>
+			<div className="njt-chart-skeleton__legend">
+				<span />
+				<span />
+				<span />
+			</div>
+		</div>
+	);
 }
 
 function NoData() {
