@@ -33,11 +33,11 @@ export const PREVIEW_STYLES = `
 }
 .njt-nofi-edit-btn:hover {
   background: #fff;
-  border-color: #2271b1;
-  color: #2271b1;
+  border-color: #3858e9;
+  color: #3858e9;
 }
 .njt-nofi-edit-btn:focus-visible {
-  outline: 2px solid #2271b1;
+  outline: 2px solid #3858e9;
   outline-offset: 1px;
 }
 .njt-nofi-edit-btn svg {

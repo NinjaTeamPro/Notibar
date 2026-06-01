@@ -10,7 +10,18 @@ import { Button, SelectControl } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { EVENT_KEYS } from './timeseries-transform';
 
-const RANGES = [ 7, 30, 90 ];
+// 1 = yesterday + today (a 2-day window, so the trend can be compared);
+// the rest are trailing-day windows.
+const RANGES = [ 1, 7, 30, 90 ];
+
+const rangeLabel = ( days ) =>
+	1 === days
+		? __( 'Today vs Yesterday', 'notibar' )
+		: sprintf(
+				/* translators: %d: number of days. */
+				__( '%d days', 'notibar' ),
+				days
+		  );
 const AUDIENCES = [ 'all', 'guest', 'member' ];
 
 const audienceLabel = ( key ) => {
@@ -78,11 +89,7 @@ export function ChartFilters( { value, onChange, bars } ) {
 						isPressed={ range === days }
 						onClick={ () => onChange( { range: days } ) }
 					>
-						{ sprintf(
-							/* translators: %d: number of days. */
-							__( '%d days', 'notibar' ),
-							days
-						) }
+						{ rangeLabel( days ) }
 					</Button>
 				) ) }
 			</div>

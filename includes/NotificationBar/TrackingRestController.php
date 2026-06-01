@@ -60,6 +60,22 @@ class TrackingRestController {
 			]
 		);
 
+		// v3.2 — per-bar grouped counts over a range (comparison chart). Also a
+		// literal route, so it must precede the dynamic /stats/(?P<bar_id>) below.
+		register_rest_route(
+			self::NAMESPACE,
+			'/stats/by-bar',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'by_bar' ],
+				'permission_callback' => [ $this, 'admin_only' ],
+				'args'                => [
+					'from' => [ 'sanitize_callback' => 'sanitize_text_field' ],
+					'to'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				],
+			]
+		);
+
 		register_rest_route(
 			self::NAMESPACE,
 			'/stats/(?P<bar_id>[A-Za-z0-9_-]+)',
@@ -206,6 +222,70 @@ class TrackingRestController {
 			);
 		}
 
+		$range = $this->resolve_range( $request );
+		if ( is_wp_error( $range ) ) {
+			return $range;
+		}
+
+		$bar_id = (string) $request->get_param( 'bar_id' );
+		if ( '' !== $bar_id && ! preg_match( EventCounter::BAR_ID_REGEX, $bar_id ) ) {
+			return new \WP_Error(
+				'notibar_invalid_bar_id',
+				__( 'Invalid bar_id.', 'notibar' ),
+				[ 'status' => 400 ]
+			);
+		}
+
+		$series = EventLog::timeseries(
+			$range['start'],
+			$range['end_exclusive'],
+			'' !== $bar_id ? $bar_id : null
+		);
+
+		return new \WP_REST_Response(
+			[
+				'interval' => 'day',
+				'from'     => $range['from'],
+				'to'       => $range['to'],
+				'bar_id'   => '' !== $bar_id ? $bar_id : null,
+				'series'   => $series,
+			],
+			200
+		);
+	}
+
+	/**
+	 * GET /stats/by-bar handler. Admin-gated.
+	 *
+	 * Per-bar grouped counts over the range — ALL bars (ignores any bar_id;
+	 * the comparison is inherently cross-bar). Audience/event filtering is
+	 * applied client-side. Defaults: to=today (UTC), from=to-30d.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function by_bar( \WP_REST_Request $request ) {
+		$range = $this->resolve_range( $request );
+		if ( is_wp_error( $range ) ) {
+			return $range;
+		}
+
+		return new \WP_REST_Response(
+			[
+				'from'   => $range['from'],
+				'to'     => $range['to'],
+				'series' => EventLog::byBar( $range['start'], $range['end_exclusive'] ),
+			],
+			200
+		);
+	}
+
+	/**
+	 * Validate from/to params and compute UTC query bounds. Shared by
+	 * timeseries() and by_bar(). Defaults to=today, from=to-30d; clamps ≤366d.
+	 *
+	 * @return array{from:string,to:string,start:string,end_exclusive:string}|\WP_Error
+	 */
+	private function resolve_range( \WP_REST_Request $request ) {
 		// Defaults in UTC to match stored created_at.
 		$today = current_time( 'Y-m-d', true );
 		$to    = (string) $request->get_param( 'to' );
@@ -252,30 +332,13 @@ class TrackingRestController {
 			);
 		}
 
-		$bar_id = (string) $request->get_param( 'bar_id' );
-		if ( '' !== $bar_id && ! preg_match( EventCounter::BAR_ID_REGEX, $bar_id ) ) {
-			return new \WP_Error(
-				'notibar_invalid_bar_id',
-				__( 'Invalid bar_id.', 'notibar' ),
-				[ 'status' => 400 ]
-			);
-		}
-
-		// UTC datetime literals — match the created_at storage basis (no TZ conversion).
-		$start         = $from . ' 00:00:00';
-		$end_exclusive = gmdate( 'Y-m-d', $to_ts + DAY_IN_SECONDS ) . ' 00:00:00';
-		$series        = EventLog::timeseries( $start, $end_exclusive, '' !== $bar_id ? $bar_id : null );
-
-		return new \WP_REST_Response(
-			[
-				'interval' => 'day',
-				'from'     => $from,
-				'to'       => $to,
-				'bar_id'   => '' !== $bar_id ? $bar_id : null,
-				'series'   => $series,
-			],
-			200
-		);
+		return [
+			'from'          => $from,
+			'to'            => $to,
+			// UTC datetime literals — match the created_at storage basis.
+			'start'         => $from . ' 00:00:00',
+			'end_exclusive' => gmdate( 'Y-m-d', $to_ts + DAY_IN_SECONDS ) . ' 00:00:00',
+		];
 	}
 
 	/**

@@ -11,7 +11,7 @@
 // applied with __() in the components).
 export const EVENT_KEYS = [ 'click', 'dismiss', 'engage' ];
 export const EVENT_COLORS = {
-	click: '#2271b1', // WP admin blue
+	click: '#3858e9', // brand accent (admin)
 	dismiss: '#d63638', // WP admin red
 	engage: '#00a32a', // WP admin green
 };
@@ -85,6 +85,35 @@ export function aggregateBreakdown( series ) {
 		}
 	} );
 	return totals;
+}
+
+/**
+ * Build a per-bar counters map from a /stats/by-bar series so the comparison
+ * chart can reuse aggregateBarComparison() (which expects the counters shape).
+ * Pass the series through applyFilters() first to honour audience/event.
+ *
+ * @param {Array} series by-bar rows: { bar_id, event, is_logged_in, count }.
+ * @return {Object} { <bar_id>: { clicks, dismissals, engagements } }.
+ */
+export function seriesToCounters( series ) {
+	const rows = Array.isArray( series ) ? series : [];
+	const keyFor = {
+		click: 'clicks',
+		dismiss: 'dismissals',
+		engage: 'engagements',
+	};
+	const map = {};
+	rows.forEach( ( r ) => {
+		const key = keyFor[ r.event ];
+		if ( ! key ) {
+			return;
+		}
+		if ( ! map[ r.bar_id ] ) {
+			map[ r.bar_id ] = { clicks: 0, dismissals: 0, engagements: 0 };
+		}
+		map[ r.bar_id ][ key ] += Number( r.count ) || 0;
+	} );
+	return map;
 }
 
 /**

@@ -85,7 +85,7 @@ export function ButtonSubForm( { label, value, onChange } ) {
 
 					<SelectControl
 						label={ __( 'Font weight', 'notibar' ) }
-						value={ value.fontWeight || 400 }
+						value={ value.fontWeight || 500 }
 						options={ FONT_WEIGHT_OPTIONS }
 						onChange={ ( v ) =>
 							set( 'fontWeight', parseInt( v, 10 ) )
