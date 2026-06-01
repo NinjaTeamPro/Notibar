@@ -4,7 +4,7 @@
  */
 import { Line } from 'react-chartjs-2';
 import { __ } from '@wordpress/i18n';
-import './chart-registry';
+import { ChartJS } from './chart-registry';
 import { aggregateTrend, EVENT_COLORS } from './timeseries-transform';
 
 const EVENT_LABELS = {
@@ -18,7 +18,31 @@ const OPTIONS = {
 	maintainAspectRatio: false,
 	interaction: { mode: 'index', intersect: false },
 	scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
-	plugins: { legend: { position: 'bottom' } },
+	plugins: {
+		legend: {
+			position: 'bottom',
+			labels: {
+				// The line's backgroundColor is a translucent area fill, so the
+				// default legend swatch looks washed out. Fill each swatch with
+				// the solid borderColor (the line color) instead — chart areas
+				// keep their translucency, only the legend box goes solid.
+				generateLabels( chart ) {
+					const labels =
+						ChartJS.defaults.plugins.legend.labels.generateLabels(
+							chart
+						);
+					labels.forEach( ( label ) => {
+						const ds = chart.data.datasets[ label.datasetIndex ];
+						if ( ds ) {
+							label.fillStyle = ds.borderColor;
+							label.strokeStyle = ds.borderColor;
+						}
+					} );
+					return labels;
+				},
+			},
+		},
+	},
 };
 
 export function TrendChart( { series } ) {
