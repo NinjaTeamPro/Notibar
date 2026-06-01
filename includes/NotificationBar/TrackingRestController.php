@@ -40,7 +40,7 @@ class TrackingRestController {
 			]
 		);
 
-		// v3.2 — time-series for charts. MUST register BEFORE the dynamic
+		// v3.1.2 — time-series for charts. MUST register BEFORE the dynamic
 		// /stats/(?P<bar_id>) route below: 'timeseries' matches the bar_id
 		// regex, and WP REST resolves to the first matching route in
 		// registration order, so the literal must come first.
@@ -60,7 +60,7 @@ class TrackingRestController {
 			]
 		);
 
-		// v3.2 — per-bar grouped counts over a range (comparison chart). Also a
+		// v3.1.2 — per-bar grouped counts over a range (comparison chart). Also a
 		// literal route, so it must precede the dynamic /stats/(?P<bar_id>) below.
 		register_rest_route(
 			self::NAMESPACE,
@@ -154,7 +154,7 @@ class TrackingRestController {
 			);
 		}
 
-		// v3.2 — additive raw event row for time-series charts. Best-effort:
+		// v3.1.2 — additive raw event row for time-series charts. Best-effort:
 		// the aggregate above is authoritative, so a raw-insert failure is
 		// logged but does NOT fail the request. is_logged_in is a boolean
 		// flag only (no user_id, no PII).
