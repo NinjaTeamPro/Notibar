@@ -82,7 +82,7 @@ function NoData() {
 export default function TrackingCharts( { bars, demo = false } ) {
 	const [ filters, setFilters ] = useState( DEFAULT_FILTERS );
 	// In demo mode (Lite locked preview) seed canned data and skip the fetches —
-	// the @pro REST endpoints don't exist in the Lite build.
+	// the pro REST endpoints don't exist in the Lite build.
 	const [ ts, setTs ] = useState(
 		demo
 			? { status: 'ok', series: DEMO_TIMESERIES }
