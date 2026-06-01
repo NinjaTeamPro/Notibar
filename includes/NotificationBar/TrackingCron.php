@@ -15,7 +15,7 @@
  *   - clear(): unschedule on deactivation.
  *
  * @package NjtNotificationBar\NotificationBar
- * @since   3.2.0
+ * @since   3.1.2
  */
 
 namespace NjtNotificationBar\NotificationBar;

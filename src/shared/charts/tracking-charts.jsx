@@ -21,6 +21,7 @@ import {
 	EVENT_KEYS,
 	seriesToCounters,
 } from './timeseries-transform';
+import { DEMO_BARS, DEMO_TIMESERIES, DEMO_BY_BAR } from './demo-data';
 
 const ymdUtc = ( date ) => date.toISOString().slice( 0, 10 );
 
@@ -78,19 +79,30 @@ function NoData() {
 	);
 }
 
-export default function TrackingCharts( { bars } ) {
+export default function TrackingCharts( { bars, demo = false } ) {
 	const [ filters, setFilters ] = useState( DEFAULT_FILTERS );
-	const [ ts, setTs ] = useState( { status: 'loading', series: [] } );
-	const [ barData, setBarData ] = useState( {
-		status: 'loading',
-		series: [],
-	} );
+	// In demo mode (Lite locked preview) seed canned data and skip the fetches —
+	// the pro REST endpoints don't exist in the Lite build.
+	const [ ts, setTs ] = useState(
+		demo
+			? { status: 'ok', series: DEMO_TIMESERIES }
+			: { status: 'loading', series: [] }
+	);
+	const [ barData, setBarData ] = useState(
+		demo
+			? { status: 'ok', series: DEMO_BY_BAR }
+			: { status: 'loading', series: [] }
+	);
+	const chartBars = demo ? DEMO_BARS : bars;
 
 	const patch = ( next ) =>
 		setFilters( ( prev ) => ( { ...prev, ...next } ) );
 
 	// Server-filtered fetch: only range + bar hit the network.
 	useEffect( () => {
+		if ( demo ) {
+			return undefined;
+		}
 		let cancelled = false;
 		setTs( ( prev ) => ( { ...prev, status: 'loading' } ) );
 
@@ -120,11 +132,14 @@ export default function TrackingCharts( { bars } ) {
 		return () => {
 			cancelled = true;
 		};
-	}, [ filters.range, filters.barId ] );
+	}, [ filters.range, filters.barId, demo ] );
 
 	// Per-bar comparison: range-filtered server-side. Deliberately ignores the
 	// bar filter (it's a cross-bar view); audience/event applied client-side.
 	useEffect( () => {
+		if ( demo ) {
+			return undefined;
+		}
 		let cancelled = false;
 		setBarData( ( prev ) => ( { ...prev, status: 'loading' } ) );
 
@@ -154,7 +169,7 @@ export default function TrackingCharts( { bars } ) {
 		return () => {
 			cancelled = true;
 		};
-	}, [ filters.range ] );
+	}, [ filters.range, demo ] );
 
 	// Client filter (audience + events) — pure, no refetch.
 	const viewSeries = useMemo(
@@ -177,7 +192,11 @@ export default function TrackingCharts( { bars } ) {
 
 	return (
 		<div className="njt-charts">
-			<ChartFilters value={ filters } onChange={ patch } bars={ bars } />
+			<ChartFilters
+				value={ filters }
+				onChange={ patch }
+				bars={ chartBars }
+			/>
 
 			{ 'error' === ts.status ? (
 				<Status>{ __( 'Chart data unavailable.', 'notibar' ) }</Status>
@@ -220,7 +239,7 @@ export default function TrackingCharts( { bars } ) {
 							( hasBarData ? (
 								<BarComparisonChart
 									counters={ barCounters }
-									bars={ bars }
+									bars={ chartBars }
 								/>
 							) : (
 								<NoData />

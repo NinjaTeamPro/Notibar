@@ -7,6 +7,44 @@
 @import '../shared/pro-ui';
 @import '../shared/charts';
 
+// All-time per-bar totals section — separated from the filtered charts above
+// with a top border, and badged so it's clearly distinct from the live filters.
+.njt-alltime {
+	margin-top: 28px;
+	padding-top: 24px;
+	border-top: 1px solid #dcdcde;
+
+	&__head {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: 14px;
+	}
+
+	&__badge {
+		padding: 2px 9px;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1.7;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+		color: #3858e9;
+		background: #eef1fe;
+		border: 1px solid #c7d0fb;
+		border-radius: 999px;
+	}
+
+	&__sub {
+		margin: 4px 0 14px;
+		color: #646970;
+		font-size: 12px;
+	}
+}
+
 .njt-notibar-export-import {
 	&__card {
 		margin: 0 0 20px;

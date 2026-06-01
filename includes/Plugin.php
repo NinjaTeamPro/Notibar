@@ -29,9 +29,9 @@ class Plugin {
     // @pro
     // v3.1 — seed notibar_counters option with autoload=no. Idempotent.
     NotificationBar\EventCounter::install();
-    // v3.2 — create raw per-event log table. Idempotent (dbDelta).
+    // v3.1.2 — create raw per-event log table. Idempotent (dbDelta).
     NotificationBar\EventLog::install();
-    // v3.2 — schedule the daily retention prune (idempotent).
+    // v3.1.2 — schedule the daily retention prune (idempotent).
     NotificationBar\TrackingCron::schedule();
     // @endpro
 
@@ -48,7 +48,7 @@ class Plugin {
   /** Plugin deactivate hook */
   public static function deactivate() {
     // @pro
-    // v3.2 — stop the daily retention prune. Raw event data is left intact.
+    // v3.1.2 — stop the daily retention prune. Raw event data is left intact.
     NotificationBar\TrackingCron::clear();
     // @endpro
   }

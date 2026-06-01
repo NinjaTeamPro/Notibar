@@ -3,7 +3,7 @@
  * Plugin Name: Notibar - WordPress Notification Bar
  * Plugin URI: https://ninjateam.org/notibar-wordpress-notification-bar
  * Description: Multiple notification bars with React-powered Customizer editor, live preview, rotation mode, and per-bar display rules.
- * Version: 3.2.0
+ * Version: 3.1.2
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: notibar
@@ -17,7 +17,7 @@ namespace NjtNotificationBar;
 defined('ABSPATH') || exit;
 
 define('NJT_NOFI_PREFIX', 'njt_nofi');
-define('NJT_NOFI_VERSION', '3.2.0');
+define('NJT_NOFI_VERSION', '3.1.2');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
@@ -84,10 +84,10 @@ function init() {
   // v3.1 — self-heal counter store on auto-upgrade (activation hook does not
   // re-fire on auto-update). Free steady-state cost via autoloaded marker.
   NotificationBar\EventCounter::maybeInstall();
-  // v3.2 — self-heal raw event-log table on auto-upgrade. Version-stamped
+  // v3.1.2 — self-heal raw event-log table on auto-upgrade. Version-stamped
   // marker re-runs dbDelta only on schema bump; else one option read.
   NotificationBar\EventLog::maybeInstall();
-  // v3.2 — bind the daily prune callback (needed every load) + self-heal the
+  // v3.1.2 — bind the daily prune callback (needed every load) + self-heal the
   // schedule on upgrade (activation hook does not re-fire on auto-update).
   NotificationBar\TrackingCron::registerHook();
   NotificationBar\TrackingCron::schedule();
@@ -127,7 +127,7 @@ add_action( 'rest_api_init', function () {
 } );
 // @endpro
 
-// v3.2 REST API — Settings page Export/Import (GET /export, POST /import).
+// v3.1.2 REST API — Settings page Export/Import (GET /export, POST /import).
 add_action( 'rest_api_init', function () {
   ( new NotificationBar\RestSettingsController() )->register();
 } );
@@ -145,7 +145,7 @@ add_action( 'customize_save_after', function () {
 
 // Migrations — runs at priority 5, BEFORE the main init at priority 10.
 // ORDER MATTERS: maybeRun() (v2→v3 legacy) must execute BEFORE
-// maybeMigrateThemeModToOption() (v3.1→v3.2 storage flip) so v2 data lands
+// maybeMigrateThemeModToOption() (v3.1→v3.1.2 storage flip) so v2 data lands
 // in theme_mod first and is then copied into wp_options.
 add_action('plugins_loaded', function () {
   $migration = NotificationBar\Migration::getInstance();
