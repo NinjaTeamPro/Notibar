@@ -223,6 +223,7 @@ class EventLog {
 			);
 		}
 
+		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- $sql is built with $wpdb->prepare(); the only interpolated token is the $wpdb->prefix table name (trusted, never user input).
 		$rows = $wpdb->get_results( $sql, ARRAY_A );
 		if ( ! is_array( $rows ) ) {
 			return [];
@@ -267,6 +268,7 @@ class EventLog {
 			$end_exclusive
 		);
 
+		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- $sql is built with $wpdb->prepare(); the only interpolated token is the $wpdb->prefix table name (trusted, never user input).
 		$rows = $wpdb->get_results( $sql, ARRAY_A );
 		if ( ! is_array( $rows ) ) {
 			return [];
