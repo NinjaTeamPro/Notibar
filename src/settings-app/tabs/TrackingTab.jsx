@@ -51,13 +51,19 @@ export function TrackingTab() {
 		<>
 			<Suspense
 				fallback={
-					<p
-						className="njt-charts__status"
+					// Skeleton while the chart chunk loads. Plain div + global
+					// class (njt-chart-skeleton lives in settings-app.css) so the
+					// fallback pulls nothing from the lazy chunk.
+					<div
+						className="njt-charts"
 						role="status"
-						aria-live="polite"
+						aria-label={ __( 'Loading charts…', 'notibar' ) }
 					>
-						{ __( 'Loading charts…', 'notibar' ) }
-					</p>
+						<div
+							className="njt-chart-skeleton"
+							aria-hidden="true"
+						/>
+					</div>
 				}
 			>
 				<TrackingCharts bars={ bars } />

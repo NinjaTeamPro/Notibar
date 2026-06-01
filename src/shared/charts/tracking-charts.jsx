@@ -49,6 +49,17 @@ function Card( { title, note, children } ) {
 	);
 }
 
+// Shimmer placeholder shown in each card while its data loads.
+function ChartSkeleton() {
+	return <div className="njt-chart-skeleton" aria-hidden="true" />;
+}
+
+function NoData() {
+	return (
+		<Status>{ __( 'No events match these filters.', 'notibar' ) }</Status>
+	);
+}
+
 export default function TrackingCharts( { bars } ) {
 	const [ filters, setFilters ] = useState( DEFAULT_FILTERS );
 	const [ ts, setTs ] = useState( { status: 'loading', series: [] } );
@@ -150,39 +161,28 @@ export default function TrackingCharts( { bars } ) {
 		<div className="njt-charts">
 			<ChartFilters value={ filters } onChange={ patch } bars={ bars } />
 
-			{ 'loading' === ts.status && (
-				<Status>{ __( 'Loading charts…', 'notibar' ) }</Status>
-			) }
-			{ 'error' === ts.status && (
+			{ 'error' === ts.status ? (
 				<Status>{ __( 'Chart data unavailable.', 'notibar' ) }</Status>
-			) }
-
-			{ 'ok' === ts.status && (
+			) : (
 				<div className="njt-charts__grid">
 					<Card title={ __( 'Trend over time', 'notibar' ) }>
-						{ hasTrend ? (
-							<TrendChart series={ viewSeries } />
-						) : (
-							<Status>
-								{ __(
-									'No events match these filters.',
-									'notibar'
-								) }
-							</Status>
-						) }
+						{ 'loading' === ts.status && <ChartSkeleton /> }
+						{ 'ok' === ts.status &&
+							( hasTrend ? (
+								<TrendChart series={ viewSeries } />
+							) : (
+								<NoData />
+							) ) }
 					</Card>
 
 					<Card title={ __( 'Event breakdown', 'notibar' ) }>
-						{ hasTrend ? (
-							<EventBreakdownChart series={ viewSeries } />
-						) : (
-							<Status>
-								{ __(
-									'No events match these filters.',
-									'notibar'
-								) }
-							</Status>
-						) }
+						{ 'loading' === ts.status && <ChartSkeleton /> }
+						{ 'ok' === ts.status &&
+							( hasTrend ? (
+								<EventBreakdownChart series={ viewSeries } />
+							) : (
+								<NoData />
+							) ) }
 					</Card>
 
 					<Card
@@ -192,9 +192,7 @@ export default function TrackingCharts( { bars } ) {
 							'notibar'
 						) }
 					>
-						{ 'loading' === barData.status && (
-							<Status>{ __( 'Loading…', 'notibar' ) }</Status>
-						) }
+						{ 'loading' === barData.status && <ChartSkeleton /> }
 						{ 'error' === barData.status && (
 							<Status>
 								{ __( 'Stats unavailable.', 'notibar' ) }
@@ -207,12 +205,7 @@ export default function TrackingCharts( { bars } ) {
 									bars={ bars }
 								/>
 							) : (
-								<Status>
-									{ __(
-										'No events match these filters.',
-										'notibar'
-									) }
-								</Status>
+								<NoData />
 							) ) }
 					</Card>
 				</div>

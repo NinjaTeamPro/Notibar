@@ -55,6 +55,37 @@
 	height: 260px;
 }
 
+// Loading placeholder — same height as the canvas so the layout doesn't jump
+// when the real chart swaps in. Animated shimmer sweep.
+.njt-chart-skeleton {
+	height: 260px;
+	border-radius: 6px;
+	background: linear-gradient(
+		90deg,
+		#e9eaec 25%,
+		#f3f4f5 50%,
+		#e9eaec 75%
+	);
+	background-size: 200% 100%;
+	animation: njt-chart-skeleton-shimmer 1.4s linear infinite;
+}
+
+@keyframes njt-chart-skeleton-shimmer {
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.njt-chart-skeleton {
+		animation: none;
+	}
+}
+
 .njt-chart-filters {
 	display: flex;
 	flex-wrap: wrap;
