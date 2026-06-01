@@ -32,6 +32,46 @@ define('NJT_NOFI_UPGRADE_URL', 'https://ninjateam.org/notibar-wordpress-notifica
 // file via build-tools/pro-manifest.json. Drives locked/badged Pro UI in Lite.
 require_once __DIR__ . '/includes/edition.php';
 
+// @pro
+// Pro never coexists with the free Lite edition. Both are built from the same
+// source (identical namespace, constants, hooks, Plugin Name and main file), so
+// running both at once duplicates the admin menu / REST routes / Customizer
+// panel and triggers "constant already defined" notices. Pro always wins: it
+// deactivates Lite on its own activation AND on every admin load (catching
+// both-bulk-activated or Lite-activated-after-Pro).
+//
+// Inline + WP-core functions only, on purpose: when both editions are active the
+// namespaced classes collide, so this guard must not reference any of them.
+define('NJT_NOFI_LITE_BASENAME', 'notibar/njt-notification-bar.php');
+
+function njt_nofi_kill_lite() {
+  // Do NOT self-deactivate when Pro runs from the Lite path (dev: notibar/).
+  if (NJT_NOFI_LITE_BASENAME === plugin_basename(__FILE__)) {
+    return;
+  }
+  if (!function_exists('is_plugin_active')) {
+    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+  }
+  if (is_plugin_active(NJT_NOFI_LITE_BASENAME)) {
+    deactivate_plugins(NJT_NOFI_LITE_BASENAME);
+    set_transient('njt_nofi_lite_killed', 1, MINUTE_IN_SECONDS);
+  }
+}
+
+register_activation_hook(__FILE__, __NAMESPACE__ . '\\njt_nofi_kill_lite');
+add_action('admin_init', __NAMESPACE__ . '\\njt_nofi_kill_lite', 0);
+
+add_action('admin_notices', function () {
+  if (get_transient('njt_nofi_lite_killed')) {
+    delete_transient('njt_nofi_lite_killed');
+    printf(
+      '<div class="notice notice-info is-dismissible"><p>%s</p></div>',
+      esc_html__('Notibar Lite was deactivated — Notibar Pro replaces it.', 'notibar')
+    );
+  }
+});
+// @endpro
+
 spl_autoload_register(function ($class) {
   $prefix = __NAMESPACE__; // project-specific namespace prefix
   $base_dir = __DIR__ . '/includes'; // base directory for the namespace prefix
@@ -76,37 +116,39 @@ $GLOBALS['yay_reviews_plugins'][] = [
 	},
 ];
 
-function init() {
-  Plugin::getInstance();
-  I18n::loadPluginTextdomain();
+if ( ! function_exists( 'NjtNotificationBar\\init' ) ) {
+  function init() {
+    Plugin::getInstance();
+    I18n::loadPluginTextdomain();
 
-  // @pro
-  // v3.1 — self-heal counter store on auto-upgrade (activation hook does not
-  // re-fire on auto-update). Free steady-state cost via autoloaded marker.
-  NotificationBar\EventCounter::maybeInstall();
-  // v3.1.2 — self-heal raw event-log table on auto-upgrade. Version-stamped
-  // marker re-runs dbDelta only on schema bump; else one option read.
-  NotificationBar\EventLog::maybeInstall();
-  // v3.1.2 — bind the daily prune callback (needed every load) + self-heal the
-  // schedule on upgrade (activation hook does not re-fire on auto-update).
-  NotificationBar\TrackingCron::registerHook();
-  NotificationBar\TrackingCron::schedule();
-  // @endpro
+    // @pro
+    // v3.1 — self-heal counter store on auto-upgrade (activation hook does not
+    // re-fire on auto-update). Free steady-state cost via autoloaded marker.
+    NotificationBar\EventCounter::maybeInstall();
+    // v3.1.2 — self-heal raw event-log table on auto-upgrade. Version-stamped
+    // marker re-runs dbDelta only on schema bump; else one option read.
+    NotificationBar\EventLog::maybeInstall();
+    // v3.1.2 — bind the daily prune callback (needed every load) + self-heal the
+    // schedule on upgrade (activation hook does not re-fire on auto-update).
+    NotificationBar\TrackingCron::registerHook();
+    NotificationBar\TrackingCron::schedule();
+    // @endpro
 
-  // v3.0 asset enqueue helper.
-  NotificationBar\AssetLoader::get_instance();
+    // v3.0 asset enqueue helper.
+    NotificationBar\AssetLoader::get_instance();
 
-  // v3.0 Customizer panel/section/settings/control registration.
-  NotificationBar\WpCustomNotification::getInstance();
+    // v3.0 Customizer panel/section/settings/control registration.
+    NotificationBar\WpCustomNotification::getInstance();
 
-  // v3.0 front-end render gating + admin menu.
-  NotificationBar\NotificationBarHandle::getInstance();
+    // v3.0 front-end render gating + admin menu.
+    NotificationBar\NotificationBarHandle::getInstance();
 
-  // Phase 08: WPML String Translation bridge — registers/unregisters per-bar
-  // strings on save and resolves translations at render via filter hooks.
-  // Silent no-op when WPML + ST addon are not active (resolved decision #4).
-  // Note: WpmlBridge instantiation point — do not remove this line (phase-08 marker).
-  NotificationBar\WpmlBridge::getInstance();
+    // Phase 08: WPML String Translation bridge — registers/unregisters per-bar
+    // strings on save and resolves translations at render via filter hooks.
+    // Silent no-op when WPML + ST addon are not active (resolved decision #4).
+    // Note: WpmlBridge instantiation point — do not remove this line (phase-08 marker).
+    NotificationBar\WpmlBridge::getInstance();
+  }
 }
 add_action('plugins_loaded', 'NjtNotificationBar\\init');
 
