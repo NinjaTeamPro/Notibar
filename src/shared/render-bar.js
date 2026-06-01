@@ -66,11 +66,17 @@ function renderButton( button, style, kind ) {
 		? escapeAttr( text )
 		: `Learn more about this notification (${ kind })`;
 
+	// btnBg also exposed as --njt-btn-bg so the CSS :focus-visible ring can use
+	// the button's own color. border-radius now lives in CSS (6px); keep only
+	// the dynamic, user-configurable bits inline.
+	// btnBgColor is sanitized to a clean hex by sanitize_hex_color() on save;
+	// escapeAttr is a second belt before it lands in the style attribute.
+	const btnBg = escapeAttr( style.btnBgColor || '#1919cf' );
 	const btnStyle = [
-		`background:${ escapeAttr( style.btnBgColor || '#1919cf' ) }`,
+		`background:${ btnBg }`,
+		`--njt-btn-bg:${ btnBg }`,
 		`color:${ escapeAttr( style.btnTextColor || '#ffffff' ) }`,
-		`font-weight:${ escapeAttr( button.fontWeight || 400 ) }`,
-		'border-radius:3px',
+		`font-weight:${ escapeAttr( button.fontWeight || 500 ) }`,
 	].join( ';' );
 
 	return (
@@ -170,7 +176,9 @@ export function renderBarHTML( bar, global ) {
 		`<div class="njt-nofi-content njt-nofi-content-desktop" ` +
 		`style="max-width:${ contentWidth }px;justify-content:${ escapeAttr(
 			alignment
-		) };text-align:${ escapeAttr( textAlign ) };font-size:${ fontSize }px;">` +
+		) };text-align:${ escapeAttr(
+			textAlign
+		) };font-size:${ fontSize }px;">` +
 		`<div class="njt-nofi-text">${ content.text || '' }</div>` +
 		renderButton( content.button, style, 'desktop' ) +
 		`</div>`;
@@ -182,9 +190,17 @@ export function renderBarHTML( bar, global ) {
 	// Schema::defaultContent populates both by default).
 	const mobileBlock = content.mobileSeparate
 		? `<div class="njt-nofi-content njt-nofi-content-mobile" ` +
-		  `style="justify-content:${ escapeAttr( alignment ) };text-align:${ escapeAttr( textAlign ) };font-size:${ fontSize }px;">` +
+		  `style="justify-content:${ escapeAttr(
+				alignment
+		  ) };text-align:${ escapeAttr(
+				textAlign
+		  ) };font-size:${ fontSize }px;">` +
 		  `<div class="njt-nofi-text">${ content.textMobile || '' }</div>` +
-		  renderButton( content.buttonMobile || content.button, style, 'mobile' ) +
+		  renderButton(
+				content.buttonMobile || content.button,
+				style,
+				'mobile'
+		  ) +
 		  `</div>`
 		: '';
 
@@ -196,7 +212,8 @@ export function renderBarHTML( bar, global ) {
 	// this to decide whether to hide the desktop block on mobile; without it,
 	// the desktop block must stay visible (otherwise the bar is blank when
 	// content.mobileSeparate is false).
-	const barClass = 'njt-nofi-notification-bar' +
+	const barClass =
+		'njt-nofi-notification-bar' +
 		( content.mobileSeparate ? ' njt-nofi-has-mobile' : '' );
 
 	return (
