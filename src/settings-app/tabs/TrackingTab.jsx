@@ -75,12 +75,12 @@ export function TrackingTab() {
 						{ __( 'Per-bar totals', 'notibar' ) }
 					</h3>
 					<span className="njt-alltime__badge">
-						{ __( 'All-time', 'notibar' ) }
+						{ __( 'All time', 'notibar' ) }
 					</span>
 				</div>
 				<p className="njt-alltime__sub">
 					{ __(
-						'Lifetime totals across all bars — independent of the filters above.',
+						'Lifetime totals across all bars, independent of the filters above.',
 						'notibar'
 					) }
 				</p>
