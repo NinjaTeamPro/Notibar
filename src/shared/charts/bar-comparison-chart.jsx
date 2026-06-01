@@ -1,7 +1,8 @@
 /**
  * BarComparisonChart — clicks/dismissals/engagements per bar (grouped bar).
- * Source: /stats lifetime counters. Always all-bars / all-time — the counters
- * store is not segmented by audience, so this chart is outside the filter bar.
+ * Fed a counters-shaped map by the parent (built from /stats/by-bar for the
+ * selected range + audience). Always all bars — it ignores the bar filter
+ * since comparing a single bar is meaningless.
  */
 import { Bar } from 'react-chartjs-2';
 import { __ } from '@wordpress/i18n';

@@ -88,6 +88,35 @@ export function aggregateBreakdown( series ) {
 }
 
 /**
+ * Build a per-bar counters map from a /stats/by-bar series so the comparison
+ * chart can reuse aggregateBarComparison() (which expects the counters shape).
+ * Pass the series through applyFilters() first to honour audience/event.
+ *
+ * @param {Array} series by-bar rows: { bar_id, event, is_logged_in, count }.
+ * @return {Object} { <bar_id>: { clicks, dismissals, engagements } }.
+ */
+export function seriesToCounters( series ) {
+	const rows = Array.isArray( series ) ? series : [];
+	const keyFor = {
+		click: 'clicks',
+		dismiss: 'dismissals',
+		engage: 'engagements',
+	};
+	const map = {};
+	rows.forEach( ( r ) => {
+		const key = keyFor[ r.event ];
+		if ( ! key ) {
+			return;
+		}
+		if ( ! map[ r.bar_id ] ) {
+			map[ r.bar_id ] = { clicks: 0, dismissals: 0, engagements: 0 };
+		}
+		map[ r.bar_id ][ key ] += Number( r.count ) || 0;
+	} );
+	return map;
+}
+
+/**
  * Per-bar lifetime totals from the aggregate counters, aligned to the bars
  * list (so charts show bar names, not ids). Always all bars / all time —
  * the counters store is not segmented by audience.

@@ -4,9 +4,9 @@
  * Default export so TrackingTab can React.lazy(() => import(...)) it, keeping
  * Chart.js in its own webpack chunk (Lite never loads it).
  *
- * Fetch strategy: range/bar are server filters → refetch /stats/timeseries on
- * change; audience/event are client filters → applyFilters() over the cached
- * series, no network. /stats (per-bar lifetime) is fetched once.
+ * Fetch strategy: range/bar → refetch /stats/timeseries (trend + breakdown);
+ * range → refetch /stats/by-bar (comparison, all bars). audience/event are
+ * client filters → applyFilters() over the cached series, no network.
  */
 import { useEffect, useMemo, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
@@ -16,7 +16,11 @@ import { ChartFilters } from './chart-filters';
 import { TrendChart } from './trend-chart';
 import { EventBreakdownChart } from './event-breakdown-chart';
 import { BarComparisonChart } from './bar-comparison-chart';
-import { applyFilters, EVENT_KEYS } from './timeseries-transform';
+import {
+	applyFilters,
+	EVENT_KEYS,
+	seriesToCounters,
+} from './timeseries-transform';
 
 const ymdUtc = ( date ) => date.toISOString().slice( 0, 10 );
 
@@ -48,9 +52,9 @@ function Card( { title, note, children } ) {
 export default function TrackingCharts( { bars } ) {
 	const [ filters, setFilters ] = useState( DEFAULT_FILTERS );
 	const [ ts, setTs ] = useState( { status: 'loading', series: [] } );
-	const [ counters, setCounters ] = useState( {
+	const [ barData, setBarData ] = useState( {
 		status: 'loading',
-		data: {},
+		series: [],
 	} );
 
 	const patch = ( next ) =>
@@ -89,27 +93,39 @@ export default function TrackingCharts( { bars } ) {
 		};
 	}, [ filters.range, filters.barId ] );
 
-	// Per-bar lifetime counters — fetched once for the comparison chart.
+	// Per-bar comparison: range-filtered server-side. Deliberately ignores the
+	// bar filter (it's a cross-bar view); audience/event applied client-side.
 	useEffect( () => {
 		let cancelled = false;
-		apiFetch( { path: '/notibar/v1/stats' } )
-			.then( ( data ) => {
+		setBarData( ( prev ) => ( { ...prev, status: 'loading' } ) );
+
+		const to = new Date();
+		const from = new Date( Date.now() - filters.range * 86400000 );
+		const path = addQueryArgs( '/notibar/v1/stats/by-bar', {
+			from: ymdUtc( from ),
+			to: ymdUtc( to ),
+		} );
+
+		apiFetch( { path } )
+			.then( ( res ) => {
 				if ( cancelled ) {
 					return;
 				}
-				setCounters( {
+				setBarData( {
 					status: 'ok',
-					data: data && 'object' === typeof data ? data : {},
+					series:
+						res && Array.isArray( res.series ) ? res.series : [],
 				} );
 			} )
 			.catch(
 				() =>
-					! cancelled && setCounters( { status: 'error', data: {} } )
+					! cancelled && setBarData( { status: 'error', series: [] } )
 			);
+
 		return () => {
 			cancelled = true;
 		};
-	}, [] );
+	}, [ filters.range ] );
 
 	// Client filter (audience + events) — pure, no refetch.
 	const viewSeries = useMemo(
@@ -117,6 +133,18 @@ export default function TrackingCharts( { bars } ) {
 		[ ts.series, filters.audience, filters.events ]
 	);
 	const hasTrend = viewSeries.length > 0;
+
+	// Comparison reuses the counters shape (via seriesToCounters) so it can
+	// share BarComparisonChart + aggregateBarComparison.
+	const barView = useMemo(
+		() => applyFilters( barData.series, filters.audience, filters.events ),
+		[ barData.series, filters.audience, filters.events ]
+	);
+	const barCounters = useMemo(
+		() => seriesToCounters( barView ),
+		[ barView ]
+	);
+	const hasBarData = barView.length > 0;
 
 	return (
 		<div className="njt-charts">
@@ -160,22 +188,32 @@ export default function TrackingCharts( { bars } ) {
 					<Card
 						title={ __( 'Per-bar comparison', 'notibar' ) }
 						note={ __(
-							'All bars, all-time totals (not affected by the filters above).',
+							'All bars, for the selected range and audience.',
 							'notibar'
 						) }
 					>
-						{ 'ok' !== counters.status ? (
-							<Status>
-								{ 'error' === counters.status
-									? __( 'Stats unavailable.', 'notibar' )
-									: __( 'Loading…', 'notibar' ) }
-							</Status>
-						) : (
-							<BarComparisonChart
-								counters={ counters.data }
-								bars={ bars }
-							/>
+						{ 'loading' === barData.status && (
+							<Status>{ __( 'Loading…', 'notibar' ) }</Status>
 						) }
+						{ 'error' === barData.status && (
+							<Status>
+								{ __( 'Stats unavailable.', 'notibar' ) }
+							</Status>
+						) }
+						{ 'ok' === barData.status &&
+							( hasBarData ? (
+								<BarComparisonChart
+									counters={ barCounters }
+									bars={ bars }
+								/>
+							) : (
+								<Status>
+									{ __(
+										'No events match these filters.',
+										'notibar'
+									) }
+								</Status>
+							) ) }
 					</Card>
 				</div>
 			) }

@@ -241,6 +241,50 @@ class EventLog {
 	}
 
 	/**
+	 * Per-bar grouped counts over a window (for the comparison chart). Read-only.
+	 * Groups by bar_id + event_type + is_logged_in (no date) across ALL bars.
+	 * Same UTC bounds contract as timeseries(); $end_exclusive is exclusive.
+	 *
+	 * @param string $start         Inclusive lower bound, UTC datetime.
+	 * @param string $end_exclusive Exclusive upper bound, UTC datetime.
+	 * @return array<int,array{bar_id:string,event:string,is_logged_in:int,count:int}>
+	 */
+	public static function byBar( string $start, string $end_exclusive ): array {
+		global $wpdb;
+
+		$table = self::tableName();
+
+		// Table name from $wpdb->prefix (trusted); values are prepared. Uses the
+		// created index for the range scan, retention-bounded.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$sql = $wpdb->prepare(
+			"SELECT bar_id, event_type, is_logged_in, COUNT(*) AS c
+			 FROM {$table}
+			 WHERE created_at >= %s AND created_at < %s
+			 GROUP BY bar_id, event_type, is_logged_in
+			 ORDER BY bar_id ASC",
+			$start,
+			$end_exclusive
+		);
+
+		$rows = $wpdb->get_results( $sql, ARRAY_A );
+		if ( ! is_array( $rows ) ) {
+			return [];
+		}
+
+		$out = [];
+		foreach ( $rows as $row ) {
+			$out[] = [
+				'bar_id'       => (string) $row['bar_id'],
+				'event'        => self::eventLabel( (int) $row['event_type'] ),
+				'is_logged_in' => (int) $row['is_logged_in'],
+				'count'        => (int) $row['c'],
+			];
+		}
+		return $out;
+	}
+
+	/**
 	 * Reverse EVENT_MAP: TINYINT enum => readable label. Unknown => 'unknown'
 	 * so consumers never receive a raw magic number.
 	 */

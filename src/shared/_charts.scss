@@ -29,8 +29,8 @@
 		border: 1px solid #c3c4c7;
 		box-shadow: 0 1px 1px rgba( 0, 0, 0, 0.04 );
 
-		// Per-bar comparison (all-time) spans the full second row, separated
-		// from the filtered trend + breakdown pair above.
+		// Per-bar comparison spans the full second row — it needs the width for
+		// multiple bars + their labels (all three charts are filter-driven).
 		&:last-child {
 			grid-column: 1 / -1;
 		}
