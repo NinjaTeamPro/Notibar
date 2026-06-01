@@ -68,7 +68,24 @@ export function TrackingTab() {
 			>
 				<TrackingCharts bars={ bars } />
 			</Suspense>
-			<TrackingPane bars={ bars } />
+
+			<section className="njt-alltime">
+				<div className="njt-alltime__head">
+					<h3 className="njt-alltime__title">
+						{ __( 'Per-bar totals', 'notibar' ) }
+					</h3>
+					<span className="njt-alltime__badge">
+						{ __( 'All-time', 'notibar' ) }
+					</span>
+				</div>
+				<p className="njt-alltime__sub">
+					{ __(
+						'Lifetime totals across all bars — independent of the filters above.',
+						'notibar'
+					) }
+				</p>
+				<TrackingPane bars={ bars } />
+			</section>
 		</>
 	);
 }
