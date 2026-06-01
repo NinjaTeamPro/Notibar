@@ -22,66 +22,78 @@
  * @since 3.1.0
  */
 ( function () {
-	var cfg = window.njtNotibarTracking;
+	const cfg = window.njtNotibarTracking;
 	if ( ! cfg || ! cfg.endpoint ) {
 		return;
 	}
 
-	var CTA_SEL   = '.njt-nofi-button-text';
-	var CLOSE_SEL = '.njt-nofi-close';
-	var BAR_SEL   = '[data-bar-id]';
+	const CTA_SEL = '.njt-nofi-button-text';
+	const CLOSE_SEL = '.njt-nofi-close';
+	const BAR_SEL = '[data-bar-id]';
 
 	function send( barId, event ) {
-		var body = JSON.stringify( { bar_id: barId, event: event } );
+		const body = JSON.stringify( { bar_id: barId, event } );
 		try {
-			var blob = new Blob( [ body ], { type: 'application/json' } );
-			if ( navigator.sendBeacon && navigator.sendBeacon( cfg.endpoint, blob ) ) {
+			const blob = new Blob( [ body ], { type: 'application/json' } );
+			if (
+				navigator.sendBeacon &&
+				navigator.sendBeacon( cfg.endpoint, blob )
+			) {
 				return;
 			}
-		} catch ( _ ) { /* Blob unavailable on very old browsers — fall through. */ }
+		} catch ( _ ) {
+			/* Blob unavailable on very old browsers — fall through. */
+		}
 
 		try {
 			fetch( cfg.endpoint, {
-				method:    'POST',
+				method: 'POST',
 				keepalive: true,
-				body:      body,
-				headers:   { 'Content-Type': 'application/json' }
+				body,
+				headers: { 'Content-Type': 'application/json' },
 			} );
-		} catch ( _ ) { /* swallow */ }
+		} catch ( _ ) {
+			/* swallow */
+		}
 	}
 
 	function dispatch( e, sel, eventName ) {
-		var hit = e.target && e.target.closest ? e.target.closest( sel ) : null;
+		const hit =
+			e.target && e.target.closest ? e.target.closest( sel ) : null;
 		if ( ! hit ) {
 			return;
 		}
-		var bar = hit.closest( BAR_SEL );
-		var id  = bar ? bar.getAttribute( 'data-bar-id' ) : null;
+		const bar = hit.closest( BAR_SEL );
+		const id = bar ? bar.getAttribute( 'data-bar-id' ) : null;
 		if ( id ) {
 			send( id, eventName );
 		}
 	}
 
-	document.addEventListener( 'click', function ( e ) {
-		dispatch( e, CTA_SEL,   'click' );
-		dispatch( e, CLOSE_SEL, 'dismiss' );
+	document.addEventListener(
+		'click',
+		function ( e ) {
+			dispatch( e, CTA_SEL, 'click' );
+			dispatch( e, CLOSE_SEL, 'dismiss' );
 
-		// Engage: click inside the bar, EXCLUDING the CTA button and close
-		// button. Three counters stay mutually exclusive — CTA hits 'click'
-		// only, close hits 'dismiss' only, everything else hits 'engage'.
-		if ( ! e.target || ! e.target.closest ) {
-			return;
-		}
-		var bar     = e.target.closest( BAR_SEL );
-		var isCTA   = e.target.closest( CTA_SEL );
-		var isClose = e.target.closest( CLOSE_SEL );
-		if ( bar && ! isCTA && ! isClose ) {
-			var id = bar.getAttribute( 'data-bar-id' );
-			if ( id ) {
-				send( id, 'engage' );
+			// Engage: click inside the bar, EXCLUDING the CTA button and close
+			// button. Three counters stay mutually exclusive — CTA hits 'click'
+			// only, close hits 'dismiss' only, everything else hits 'engage'.
+			if ( ! e.target || ! e.target.closest ) {
+				return;
 			}
-		}
-	}, true );
+			const bar = e.target.closest( BAR_SEL );
+			const isCTA = e.target.closest( CTA_SEL );
+			const isClose = e.target.closest( CLOSE_SEL );
+			if ( bar && ! isCTA && ! isClose ) {
+				const id = bar.getAttribute( 'data-bar-id' );
+				if ( id ) {
+					send( id, 'engage' );
+				}
+			}
+		},
+		true
+	);
 
 	// Engage: text copy with the active selection anchored inside the bar,
 	// but NOT inside the CTA button (mirrors the click exclusion above).
@@ -89,19 +101,19 @@
 	// bar content (coupon codes, support links, etc.) without clicking the
 	// CTA.
 	document.addEventListener( 'copy', function () {
-		var sel = window.getSelection ? window.getSelection() : null;
+		const sel = window.getSelection ? window.getSelection() : null;
 		if ( ! sel || sel.isCollapsed ) {
 			return;
 		}
-		var node  = sel.anchorNode;
-		var el    = node && node.nodeType === 3 ? node.parentElement : node;
-		var bar   = el && el.closest ? el.closest( BAR_SEL ) : null;
-		var isCTA = el && el.closest ? el.closest( CTA_SEL ) : null;
+		const node = sel.anchorNode;
+		const el = node && node.nodeType === 3 ? node.parentElement : node;
+		const bar = el && el.closest ? el.closest( BAR_SEL ) : null;
+		const isCTA = el && el.closest ? el.closest( CTA_SEL ) : null;
 		if ( bar && ! isCTA ) {
-			var id = bar.getAttribute( 'data-bar-id' );
+			const id = bar.getAttribute( 'data-bar-id' );
 			if ( id ) {
 				send( id, 'engage' );
 			}
 		}
 	} );
-}() );
+} )();

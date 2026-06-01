@@ -21,8 +21,7 @@ const UPGRADE_URL_FALLBACK =
  * @return {string}
  */
 export function upgradeUrl() {
-	const boot =
-		window.njtNotibarBoot || window.njtNotibarSettingsBoot || {};
+	const boot = window.njtNotibarBoot || window.njtNotibarSettingsBoot || {};
 	return boot.upgradeUrl || UPGRADE_URL_FALLBACK;
 }
 
@@ -34,8 +33,7 @@ export function upgradeUrl() {
  * @return {boolean}
  */
 export function isProEdition() {
-	const boot =
-		window.njtNotibarBoot || window.njtNotibarSettingsBoot || {};
+	const boot = window.njtNotibarBoot || window.njtNotibarSettingsBoot || {};
 	return boot.isPro !== false;
 }
 

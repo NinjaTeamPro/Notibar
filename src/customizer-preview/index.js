@@ -286,25 +286,29 @@ function installEditAffordance( slot ) {
 	// Capture-phase click delegate — runs before the dismiss handler so
 	// the Edit click doesn't accidentally trigger any other close/toggle
 	// listener that may match on bubble.
-	slot.addEventListener( 'click', function ( e ) {
-		const btn = e.target.closest( '.njt-nofi-edit-btn' );
-		if ( ! btn ) {
-			return;
-		}
-		e.preventDefault();
-		e.stopPropagation();
-		const barId = btn.getAttribute( 'data-bar-id' );
-		const wp = window.wp;
-		if (
-			barId &&
-			wp &&
-			wp.customize &&
-			wp.customize.preview &&
-			typeof wp.customize.preview.send === 'function'
-		) {
-			wp.customize.preview.send( 'notibar-edit-bar', { barId } );
-		}
-	}, true );
+	slot.addEventListener(
+		'click',
+		function ( e ) {
+			const btn = e.target.closest( '.njt-nofi-edit-btn' );
+			if ( ! btn ) {
+				return;
+			}
+			e.preventDefault();
+			e.stopPropagation();
+			const barId = btn.getAttribute( 'data-bar-id' );
+			const wp = window.wp;
+			if (
+				barId &&
+				wp &&
+				wp.customize &&
+				wp.customize.preview &&
+				typeof wp.customize.preview.send === 'function'
+			) {
+				wp.customize.preview.send( 'notibar-edit-bar', { barId } );
+			}
+		},
+		true
+	);
 }
 
 // ------------------------------------------------------------------

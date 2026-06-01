@@ -57,6 +57,7 @@ function walk( dir, out ) {
 
 /**
  * Remove @pro…@endpro regions from a source string.
+ * @param  src
  * @return {{ out: string, removed: number, open: boolean }}
  */
 function stripMarkers( src ) {
@@ -132,10 +133,20 @@ function main() {
 		}
 		const res = stripMarkers( src );
 		if ( res.unbalanced ) {
-			fail( `@endpro without matching @pro in ${ path.relative( targetDir, file ) }` );
+			fail(
+				`@endpro without matching @pro in ${ path.relative(
+					targetDir,
+					file
+				) }`
+			);
 		}
 		if ( res.open ) {
-			fail( `unterminated @pro region in ${ path.relative( targetDir, file ) }` );
+			fail(
+				`unterminated @pro region in ${ path.relative(
+					targetDir,
+					file
+				) }`
+			);
 		}
 		fs.writeFileSync( file, res.out );
 		filesChanged++;

@@ -58,7 +58,7 @@ export function installBodyPush( slot ) {
 		return function noop() {};
 	}
 
-	let currentBar  = null;
+	let currentBar = null;
 	let sizeObserver = null;
 
 	function sync() {

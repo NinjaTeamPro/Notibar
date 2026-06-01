@@ -125,9 +125,14 @@ export function AsyncUserPicker( { value = [], onChange } ) {
 							<button
 								type="button"
 								className="njt-notibar-post-picker__chip-remove"
-								aria-label={ `${ __( 'Remove', 'notibar' ) } ${ labelFor( id ) }` }
+								aria-label={ `${ __(
+									'Remove',
+									'notibar'
+								) } ${ labelFor( id ) }` }
 								onClick={ () =>
-									onChange( value.filter( ( v ) => v !== id ) )
+									onChange(
+										value.filter( ( v ) => v !== id )
+									)
 								}
 							>
 								&times;
