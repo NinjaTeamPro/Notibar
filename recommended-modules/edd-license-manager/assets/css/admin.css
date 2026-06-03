@@ -1,0 +1,170 @@
+/* EDD License Manager — admin License page */
+
+.njt-edd-layout {
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin-top: 16px;
+}
+
+.njt-edd-side {
+	flex: 0 0 320px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.njt-edd-card {
+	background: #fff;
+	border: 1px solid #e2e4e7;
+	border-radius: 6px;
+	padding: 18px 22px;
+	box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.04 );
+}
+
+.njt-edd-title {
+	margin: 0 0 14px;
+	font-size: 15px;
+	line-height: 1.4;
+}
+
+.njt-edd-label {
+	font-weight: 600;
+	margin: 0 0 6px;
+}
+
+.njt-edd-row {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.njt-edd-row .njt-edd-key {
+	min-width: 240px;
+}
+
+/* License key field with reveal (eye) toggle */
+.njt-edd-key-field {
+	position: relative;
+	display: inline-block;
+}
+
+.njt-edd-key-field .njt-edd-key {
+	padding-right: 36px;
+}
+
+.njt-edd-key-toggle {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 34px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: #50575e;
+	cursor: pointer;
+}
+
+.njt-edd-key-toggle:hover,
+.njt-edd-key-toggle:focus {
+	color: #135e96;
+}
+
+.njt-edd-key-toggle .dashicons {
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+}
+
+.njt-edd-badge {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 10px;
+	color: #fff;
+	font-size: 12px;
+	line-height: 1.6;
+}
+
+.njt-edd-meta th {
+	width: 130px;
+	padding: 8px 10px 8px 0;
+}
+
+.njt-edd-meta td code.njt-edd-key {
+	background: #f6f7f7;
+	padding: 2px 6px;
+	border-radius: 3px;
+}
+
+.njt-edd-extra {
+	margin-top: 14px;
+}
+
+.njt-edd-message {
+	font-weight: 600;
+}
+
+.njt-edd-side h3 {
+	margin: 0 0 8px;
+	font-size: 14px;
+}
+
+/* Numbered steps with orange markers */
+.njt-edd-steps {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: njt-step;
+}
+
+.njt-edd-steps li {
+	counter-increment: njt-step;
+	position: relative;
+	padding: 5px 0 5px 28px;
+}
+
+.njt-edd-steps li::before {
+	content: counter( njt-step );
+	position: absolute;
+	left: 0;
+	top: 5px;
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
+	text-align: center;
+	font-size: 11px;
+	font-weight: 600;
+	color: #b26a00;
+	background: #fff3e0;
+	border-radius: 50%;
+}
+
+/* Green checkmark benefits */
+.njt-edd-benefits {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.njt-edd-benefits li {
+	position: relative;
+	padding: 5px 0 5px 26px;
+}
+
+.njt-edd-benefits li::before {
+	content: "\f12a"; /* dashicons-yes-alt */
+	font-family: dashicons;
+	position: absolute;
+	left: 0;
+	top: 3px;
+	color: #46b450;
+	font-size: 18px;
+	line-height: 1;
+}

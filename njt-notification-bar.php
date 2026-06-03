@@ -116,6 +116,25 @@ $GLOBALS['yay_reviews_plugins'][] = [
 	},
 ];
 
+// @pro
+global $njt_license_plugins;
+
+if ( empty( $njt_license_plugins ) ) {
+  $njt_license_plugins = [];
+}
+$njt_license_plugins[] = [
+  'slug' => 'notibar',
+  'name' => 'Notibar - WordPress Notification Bar',
+  'file'        => __FILE__,
+  'version' => NJT_NOFI_VERSION,
+  'item_id' => 37959,
+  'store_url' => 'https://ninjateam.org',
+  'parent_slug' => 'notibar-customize',
+  'option_prefix' => 'notibar_pro',
+  'gated_pages'   => ['notibar-settings']
+];
+// @endpro
+
 if ( ! function_exists( 'NjtNotificationBar\\init' ) ) {
   function init() {
     Plugin::getInstance();
@@ -197,3 +216,12 @@ add_action('plugins_loaded', function () {
 
 register_activation_hook(__FILE__, array('NjtNotificationBar\\Plugin', 'activate'));
 register_deactivation_hook(__FILE__, array('NjtNotificationBar\\Plugin', 'deactivate'));
+
+if ( ! function_exists( 'notibar_license_usable' ) ) {
+  function notibar_license_usable() {
+    if ( ! function_exists( 'njt_edd_license_usable' ) ) {
+      return true;
+    }
+    return njt_edd_license_usable( 'notibar' );
+  }
+}

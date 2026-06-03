@@ -51,7 +51,9 @@ class WpCustomNotification {
 	 * Private constructor — wires Customizer hooks.
 	 */
 	private function __construct() {
-		add_action( 'customize_register', [ $this, 'register' ], 10 );
+		if ( \NjtNotificationBar\notibar_license_usable() ) {
+			add_action( 'customize_register', [ $this, 'register' ], 10 );
+		}
 	}
 
 	/**
