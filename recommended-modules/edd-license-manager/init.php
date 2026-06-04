@@ -20,6 +20,8 @@ class Plugin
         require __DIR__ . '/class-license-ajax.php';
         require __DIR__ . '/class-license-updater.php';
         require __DIR__ . '/class-license-guard.php';
+        require __DIR__ . '/class-license-row-notice.php';
+        require __DIR__ . '/class-license-cron.php';
         // The EDD updater vendor lib is required lazily in NjtEddLicenseUpdater::wire() (class_exists-guarded).
         \NjtEddLicenseManagerMain::get_instance()->init();
     }

@@ -261,8 +261,8 @@ class EDD_SL_Plugin_Updater {
 
 		printf(
 			'<tr class="plugin-update-tr %3$s" id="%1$s-update" data-slug="%1$s" data-plugin="%2$s">',
-			$this->slug,
-			$file,
+			esc_attr( $this->slug ),
+			esc_attr( $file ),
 			in_array( $this->name, $this->get_active_plugins(), true ) ? 'active' : 'inactive'
 		);
 
@@ -304,7 +304,7 @@ class EDD_SL_Plugin_Updater {
 			echo ' ';
 			printf(
 				/* translators: 1: opening anchor tag, do not translate 2. the new plugin version 3. closing anchor tag, do not translate. */
-				__( '%1$sView version %2$s details%3$s.', 'easy-digital-downloads' ),
+				esc_html__( '%1$sView version %2$s details%3$s.', 'easy-digital-downloads' ),
 				'<a target="_blank" class="thickbox open-plugin-details-modal" href="' . esc_url( $changelog_link ) . '">',
 				esc_html( $update_cache->response[ $this->name ]->new_version ),
 				'</a>'
@@ -312,7 +312,7 @@ class EDD_SL_Plugin_Updater {
 		} elseif ( ! empty( $changelog_link ) ) {
 			echo ' ';
 			printf(
-				__( '%1$sView version %2$s details%3$s or %4$supdate now%5$s.', 'easy-digital-downloads' ),
+				esc_html__( '%1$sView version %2$s details%3$s or %4$supdate now%5$s.', 'easy-digital-downloads' ),
 				'<a target="_blank" class="thickbox open-plugin-details-modal" href="' . esc_url( $changelog_link ) . '">',
 				esc_html( $update_cache->response[ $this->name ]->new_version ),
 				'</a>',

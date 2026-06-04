@@ -30,7 +30,8 @@ if ( ! function_exists( 'njt_edd_license_status' ) ) {
 		if ( isset( $GLOBALS['njt_license_plugins'] ) && is_array( $GLOBALS['njt_license_plugins'] ) ) {
 			foreach ( $GLOBALS['njt_license_plugins'] as $cfg ) {
 				if ( ! empty( $cfg['slug'] ) && sanitize_key( $cfg['slug'] ) === $slug ) {
-					$prefix = ! empty( $cfg['option_prefix'] ) ? $cfg['option_prefix'] : $slug;
+					// sanitize_key the explicit prefix to match normalize_config()'s write path.
+					$prefix = ! empty( $cfg['option_prefix'] ) ? sanitize_key( $cfg['option_prefix'] ) : $slug;
 					break;
 				}
 			}

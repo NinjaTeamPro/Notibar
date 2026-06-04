@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 if ( ! class_exists( 'NjtEddLicenseManagerMain' ) ) {
 	class NjtEddLicenseManagerMain {
 
-		const ASSET_VER = '1.8.1'; // asset cache-buster; bump with register.php
+		const ASSET_VER = '1.10.0'; // asset cache-buster; bump with register.php
 		private static $instance = null;
 
 		/** @var bool Guards init() so hooks register exactly once. */
@@ -33,6 +33,12 @@ if ( ! class_exists( 'NjtEddLicenseManagerMain' ) ) {
 
 		/** @var NjtEddLicenseUpdater|null */
 		private $updater = null;
+
+		/** @var NjtEddLicenseRowNotice|null */
+		private $row_notice = null;
+
+		/** @var NjtEddLicenseCron|null */
+		private $cron = null;
 
 		/** @var NjtEddLicenseGuard|null */
 		private $guard = null;
@@ -87,6 +93,14 @@ if ( ! class_exists( 'NjtEddLicenseManagerMain' ) ) {
 			// WP update integration (admin + cron) per registered plugin with a stored key.
 			$this->updater = new NjtEddLicenseUpdater( $this->client, $this->plugins );
 			$this->updater->register();
+
+			// Plugins-list row notice (activate/renew prompt while not valid).
+			$this->row_notice = new NjtEddLicenseRowNotice( $this->client, $this->plugins );
+			$this->row_notice->register();
+
+			// Daily background re-check so stored license status stays honest.
+			$this->cron = new NjtEddLicenseCron( $this->client, $this->plugins );
+			$this->cron->register();
 
 			// Gating: consumers read license state via the global helpers in functions.php
 			// (njt_edd_license_usable() / njt_edd_license_status()) — loaded at plugins_loaded:0.
@@ -161,8 +175,9 @@ if ( ! class_exists( 'NjtEddLicenseManagerMain' ) ) {
 				'option_prefix' => $slug,
 			];
 
-			$cfg         = array_merge( $defaults, $cfg ); // Consumer values override defaults.
-			$cfg['slug'] = $slug;                          // Canonical, sanitized key.
+			$cfg                  = array_merge( $defaults, $cfg ); // Consumer values override defaults.
+			$cfg['slug']          = $slug;                          // Canonical, sanitized key.
+			$cfg['option_prefix'] = sanitize_key( $cfg['option_prefix'] ); // Always a clean option key.
 
 			return $cfg;
 		}
