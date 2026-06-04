@@ -134,6 +134,7 @@ try {
     run(['git', 'clone', '--depth', '1', '--filter=blob:none', '--no-checkout', $url, $tmp], $token);
     run(['git', '-C', $tmp, 'sparse-checkout', 'init', '--cone'], $token);
     $sparse = array_map(static fn($n) => "modules/$n", $mf['include']);
+    $sparse[] = 'examples/consumer/bin';
     run(array_merge(['git', '-C', $tmp, 'sparse-checkout', 'set'], $sparse), $token);
     run(['git', '-C', $tmp, 'checkout', $mf['ref']], $token);
 
@@ -191,10 +192,36 @@ try {
         throw $e;
     }
 
-    $body = "sha=$sha\ntimestamp=" . gmdate('c') . "\nrepo={$mf['repo']}\nref={$mf['ref']}\n";
-    if (file_put_contents("$target/.source", $body) === false) {
-        throw new RuntimeException("failed to write .source file");
+    // Self-update: sync bin/ scripts from examples/consumer/bin/ so the consumer
+    // never needs to manually copy a new version of this script.
+    // Safe to overwrite the running script — PHP already has it in memory.
+    $binSrc = "$tmp/examples/consumer/bin";
+    if (is_dir($binSrc)) {
+        $binDst = "$pluginRoot/bin";
+        foreach (['pull-modules.php', 'verify-modules-sync.sh'] as $binFile) {
+            $src = "$binSrc/$binFile";
+            $dst = "$binDst/$binFile";
+            if (is_file($src) && is_file($dst)) {
+                if (!copy($src, $dst)) {
+                    error_log(PREFIX . " WARNING: could not self-update bin/$binFile");
+                } else {
+                    info("self-updated bin/$binFile");
+                }
+            }
+        }
     }
+
+    // Remove stale module dirs that are no longer in include[].
+    $keep = array_flip($mf['include']);
+    $reserved = ['.', '..', 'registry.php', 'loader.php', '.source'];
+    foreach (@scandir($target) ?: [] as $entry) {
+        if (in_array($entry, $reserved, true)) continue;
+        if (is_dir("$target/$entry") && !isset($keep[$entry])) {
+            info("removing stale module $entry");
+            rmrf("$target/$entry");
+        }
+    }
+
 
     info('Synced ' . count($mf['include']) . " modules at $sha");
     exit(0);
