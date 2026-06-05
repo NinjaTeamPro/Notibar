@@ -5,7 +5,7 @@ Tags: notification bar, banner, top bar, announcement, notifications
 Requires at least: 4.0
 Requires PHP: 5.3.1
 Tested up to: 7.0
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -107,7 +107,7 @@ Role and user targeting (a Pro feature) is evaluated on the server, so a full-pa
 
 **WPML:** Yes. Notibar v3.0+ integrates with the **WPML String Translation** addon. After you publish a bar, its text, button label, and button URL are auto-registered as translatable strings under the `notibar` domain. Translate them in **WPML → String Translation**, and the right language renders automatically on the front-end. Both WPML core and the String Translation addon must be active — without the addon, Notibar silently serves the original strings.
 
-**Polylang:** Polylang support in v3.0 is a **documented stub only** — there is no automatic per-bar string registration. If you need Polylang translation today, register each string manually with `pll_register_string()` from a child-theme or custom-plugin hook (the string names follow the pattern `bar-{id}-text`, `bar-{id}-textMobile`, `bar-{id}-buttonText`, etc., and live in the `notibar` domain). Full Polylang integration is planned for a future v3.1+ release.
+**Polylang:** Yes (since v3.1.4). Notibar auto-registers each bar's text, button label, and button URL with Polylang under the **Notibar** string group. Translate them in **Languages → Strings translations**, and the right language renders automatically on the front-end. One caveat inherent to Polylang: strings are matched by their **text value**, so two bars sharing the exact same text also share a single translation. Polylang has no API to remove a registered string, so a deleted bar's strings stop appearing once the bar is gone but any translation you already entered stays in Polylang's table until you clear it there.
 
 
 == Installation ==
@@ -123,6 +123,9 @@ Upon activation, you will see a new **Notification Bar** menu. Simply click to c
 
 
 == Upgrade Notice ==
+
+= Jun 5, 2026 - Version 3.1.4 =
+- Added: Polylang support — bar text, button labels, and button URLs are now auto-registered for translation under the Notibar string group
 
 = Jan 26, 2026 - Version 2.1.9 =
 - Improved: WCAG Level AA compliance

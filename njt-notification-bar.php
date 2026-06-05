@@ -3,7 +3,7 @@
  * Plugin Name: Notibar - WordPress Notification Bar
  * Plugin URI: https://ninjateam.org/notibar-wordpress-notification-bar
  * Description: Multiple notification bars with React-powered Customizer editor, live preview, rotation mode, and per-bar display rules.
- * Version: 3.1.3
+ * Version: 3.1.4
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: notibar
@@ -17,7 +17,7 @@ namespace NjtNotificationBar;
 defined('ABSPATH') || exit;
 
 define('NJT_NOFI_PREFIX', 'njt_nofi');
-define('NJT_NOFI_VERSION', '3.1.3');
+define('NJT_NOFI_VERSION', '3.1.4');
 
 define('NJT_NOFI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NJT_NOFI_PLUGIN_PATH', plugin_dir_path(__FILE__));
@@ -167,6 +167,12 @@ if ( ! function_exists( 'NjtNotificationBar\\init' ) ) {
     // Silent no-op when WPML + ST addon are not active (resolved decision #4).
     // Note: WpmlBridge instantiation point — do not remove this line (phase-08 marker).
     NotificationBar\WpmlBridge::getInstance();
+
+    // v3.1.4 — Polylang String Translation bridge. Registers per-bar strings on
+    // each admin load (Polylang rebuilds its registry per request) and resolves
+    // translations at render via the njt_nofi_resolve_strings filter. Silent
+    // no-op when Polylang is not active.
+    NotificationBar\PolylangBridge::getInstance();
   }
 }
 add_action('plugins_loaded', 'NjtNotificationBar\\init');
