@@ -26,7 +26,8 @@
    ========================================================================== */
 
 .njt-nofi-container {
-  z-index: 10000;
+  /* Above Divi #main-header (99999). */
+  z-index: 100001;
   width: 100%;
   top: 0;
   left: 0;
@@ -101,6 +102,20 @@
 
 .njt-nofi-container-content.njt-nofi-visible .njt-nofi-notification-bar {
   animation: njt-nofi-slide-in 0.4s cubic-bezier( 0.16, 1, 0.3, 1 ) both;
+}
+
+/* First paint — skip entrance animation to avoid layout/animation jank. */
+.njt-nofi-container-content.njt-nofi-instant.njt-nofi-visible
+  .njt-nofi-notification-bar {
+  animation: none;
+  opacity: 1;
+  transform: translateY( 0 );
+}
+
+.njt-nofi-container-content.njt-nofi-instant.njt-nofi-visible
+  .njt-nofi-container[data-placement='bottom'] .njt-nofi-notification-bar {
+  animation: none;
+  transform: translateY( 0 );
 }
 
 /* Bottom placement entrance — slide UP from below instead of down from above.
