@@ -166,7 +166,7 @@ class NotificationBarHandle {
 	 * @return void
 	 */
 	public function renderFooterOutput(): void {
-		echo '<div id="njt-notibar-slot" role="status" aria-live="polite"></div>' . "\n";
+		echo '<div id="njt-notibar-slot" role="status" aria-live="polite" style="content-visibility: visible;"></div>' . "\n";
 
 		wp_add_inline_script(
 			'njt-notibar-frontend',
