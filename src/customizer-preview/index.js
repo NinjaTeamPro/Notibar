@@ -190,7 +190,6 @@ function rerender() {
 		window.njtNotibarPreviewCtx ||
 		( window.njtNotibarData && window.njtNotibarData.ctx ) ||
 		{};
-		console.log(serverCtx);
 	const ctx = {
 		pageId: 0,
 		postId: 0,
