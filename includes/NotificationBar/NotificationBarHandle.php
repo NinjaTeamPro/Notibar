@@ -93,6 +93,18 @@ class NotificationBarHandle {
 		return $this->should_render;
 	}
 
+	/**
+	 * Render context for the Customizer preview iframe.
+	 *
+	 * Used by AssetLoader to inline theme name and page/CPT IDs for
+	 * theme-compat patches and display-rule evaluation in the preview JS.
+	 *
+	 * @return array{pageId:int,postId:int,isHome:bool,isSingleProduct:bool,theme:string,serverNow:int,serverWeekday:int,serverHHMM:string,currentCptType:string,currentObjectId:int}
+	 */
+	public function getCustomizerPreviewContext(): array {
+		return $this->getRenderContext();
+	}
+
 	// -------------------------------------------------------------------------
 	// Core render decision — runs on 'wp' hook.
 	// -------------------------------------------------------------------------

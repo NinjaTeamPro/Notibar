@@ -23,6 +23,7 @@ import { startRotation } from '../shared/rotation.js';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push.js';
 import { PREVIEW_STYLES } from '../shared/preview-styles.js';
+import { applyThemeCompat } from '../frontend/theme-compat.js';
 
 const SLOT_ID = 'njt-notibar-slot';
 const STYLE_ID = 'njt-notibar-preview-style';
@@ -108,6 +109,28 @@ function resolveDevice() {
 		: 'desktop';
 }
 
+/**
+ * Active theme display name for theme-compat dispatch (matches frontend ctx.theme).
+ *
+ * @return {string}
+ */
+function getPreviewTheme() {
+	const ctx =
+		window.njtNotibarPreviewCtx ||
+		( window.njtNotibarData && window.njtNotibarData.ctx ) ||
+		{};
+	return ctx.theme || '';
+}
+
+/**
+ * Apply legacy theme positioning patches after a bar render (parity with frontend).
+ *
+ * @param {HTMLElement} slot Preview slot element.
+ */
+function afterBarRender( slot ) {
+	applyThemeCompat( getPreviewTheme(), slot );
+}
+
 // ------------------------------------------------------------------
 // Core re-render
 // ------------------------------------------------------------------
@@ -164,7 +187,10 @@ function rerender() {
 	// CPT-targeted bars evaluate correctly in the preview iframe (the iframe
 	// IS the previewed URL — its PHP render context reflects the actual page).
 	const serverCtx =
-		( window.njtNotibarData && window.njtNotibarData.ctx ) || {};
+		window.njtNotibarPreviewCtx ||
+		( window.njtNotibarData && window.njtNotibarData.ctx ) ||
+		{};
+		console.log(serverCtx);
 	const ctx = {
 		pageId: 0,
 		postId: 0,
@@ -193,6 +219,7 @@ function rerender() {
 			renderFn: renderBarHTML,
 			global,
 		} );
+		afterBarRender( slot );
 	}
 	/* @endpro */
 
@@ -221,6 +248,8 @@ function renderSingle( slot, bar, global ) {
 		// notibar.css. Keyframes play unconditionally.
 		containerContent.classList.add( 'njt-nofi-visible' );
 	}
+
+	afterBarRender( slot );
 }
 
 /**
@@ -364,6 +393,8 @@ function init() {
 				data && typeof data.barId === 'string' ? data.barId : null;
 			scheduleRerender();
 		} );
+
+		wp.customize.preview.bind( 'device-changed', scheduleRerender );
 	}
 
 	// Initial render on preview load.
