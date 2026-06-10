@@ -184,6 +184,20 @@ class AssetLoader {
 			true
 		);
 
+		// Theme name + page context for theme-compat and CPT display gates.
+		$preview_ctx = NotificationBarHandle::getInstance()->getCustomizerPreviewContext();
+		wp_add_inline_script(
+			'njt-notibar-customizer-preview',
+			'window.njtNotibarPreviewCtx = ' . wp_json_encode(
+				[
+					'theme'           => $preview_ctx['theme'],
+					'currentCptType'  => $preview_ctx['currentCptType'],
+					'currentObjectId' => $preview_ctx['currentObjectId'],
+				]
+			) . ';',
+			'before'
+		);
+
 		// Enqueue the same frontend stylesheet inside the preview iframe so
 		// the bar renders identically to the live site. enqueue_frontend()
 		// gates on shouldRender() which can return false in the preview
