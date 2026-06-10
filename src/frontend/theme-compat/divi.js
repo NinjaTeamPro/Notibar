@@ -1,55 +1,26 @@
 /**
  * Theme-compat: Divi / Divi Child Theme for CDW Studios.
- *
- * Requires .njt-nofi-container { z-index: 100001 } in notibar.css — Divi
- * #main-header uses z-index: 99999 and will cover the bar without it.
- * Body padding: shared/body-push.js only.
+ * Ported verbatim from legacy notibar.js supportDiviTheme().
  *
  * @since 3.0.0
  */
 
 import { setStyles, hasAdminBar, barHeight } from './helpers';
 
-function desiredHeaderTopPx( slot ) {
-	return barHeight( slot ) + ( hasAdminBar() ? 32 : 0 );
-}
-
-/** Push fixed Divi header below the bar (+ WP admin bar when logged in). */
-function patchHeaderTop( slot ) {
-	const header = document.querySelector( 'header#main-header' );
-	if ( ! header ) {
-		return;
-	}
-	const px = desiredHeaderTopPx( slot );
-	const currentPx = parseFloat( getComputedStyle( header ).top ) || 0;
-	if (
-		Math.abs( currentPx - px ) < 0.5 &&
-		header.style.getPropertyPriority( 'top' ) === 'important'
-	) {
-		return;
-	}
-	header.style.setProperty( 'top', px + 'px', 'important' );
-}
-
-/** Re-apply when Divi resets #main-header top after its own init. */
-function watchHeaderTop( slot ) {
-	const header = document.querySelector( 'header#main-header' );
-	if ( ! header || typeof MutationObserver === 'undefined' ) {
-		return;
-	}
-	new MutationObserver( () => patchHeaderTop( slot ) ).observe( header, {
-		attributes: true,
-		attributeFilter: [ 'style', 'class' ],
-	} );
-}
-
 /**
  * @param {HTMLElement} slot
  * @return {void}
  */
 export function applyDivi( slot ) {
-	patchHeaderTop( slot );
-	watchHeaderTop( slot );
+	const h = barHeight( slot );
+	const adminOffset = hasAdminBar() ? 32 : 0;
+
+	setTimeout( () => {
+		setStyles( 'header#main-header', { top: h + adminOffset + 'px' } );
+	}, 1000 );
+
+	document.body.style.paddingTop = h + 'px';
+	document.body.style.position = 'relative';
 
 	const bar = slot.querySelector( '.njt-nofi-notification-bar' );
 	const isVisible = bar && bar.offsetParent !== null;

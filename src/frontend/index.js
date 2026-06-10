@@ -24,9 +24,6 @@ const COLLAPSED_CLASS = 'njt-nofi-collapsed';
 const COLLAPSED_STORAGE_PREFIX = 'njt-notibar-';
 const COLLAPSED_STORAGE_SUFFIX = '-collapsed';
 
-/** First paint on this page load — skip entrance animation to reduce CLS. */
-let isFirstPageReveal = true;
-
 function collapsedKey( barId ) {
 	return `${ COLLAPSED_STORAGE_PREFIX }${ barId }${ COLLAPSED_STORAGE_SUFFIX }`;
 }
@@ -104,12 +101,15 @@ function init() {
 		slot.id = 'njt-notibar-slot';
 		slot.setAttribute( 'role', 'status' );
 		slot.setAttribute( 'aria-live', 'polite' );
-		document.body.insertBefore( slot, document.body.firstChild );
+		document.body.appendChild( slot );
 	}
 
+	/* @pro */
+	// Honour reduced-motion preference — no rotation, single render only.
 	const prefersReducedMotion = matchMedia(
 		'(prefers-reduced-motion: reduce)'
 	).matches;
+	/* @endpro */
 
 	// Build client-side context.
 	ctx.device = detectDevice();
@@ -240,23 +240,23 @@ function init() {
 		);
 	}
 
+	// Reveal — class triggers the @keyframes njt-nofi-slide-in animation
+	// on the bar (slide-down + fade-in). Keyframes play unconditionally
+	// when the rule matches, so no rAF / reflow dance needed.
 	const containerContent = slot.querySelector(
 		'.njt-nofi-container-content'
 	);
-	if ( containerContent && ( prefersReducedMotion || isFirstPageReveal ) ) {
-		containerContent.classList.add( 'njt-nofi-instant' );
-	}
-	isFirstPageReveal = false;
-
-	// Reserve layout space before reveal — bar height is measurable while hidden.
-	installBodyPush( slot );
-
-	// Theme-compat after body-push (Divi needs real bar height).
-	applyThemeCompat( ctx.theme, slot );
-
 	if ( containerContent ) {
 		containerContent.classList.add( 'njt-nofi-visible' );
 	}
+
+	// Theme-compat patches.
+	applyThemeCompat( ctx.theme, slot );
+
+	// v3 — push body down by bar height so site header isn't covered by a
+	// fixed/absolute-positioned bar. ResizeObserver re-syncs on rotation,
+	// collapse-toggle, dismiss, and responsive breakpoint changes.
+	installBodyPush( slot );
 
 	// Emit custom event so themes/plugins can hook post-render.
 	slot.dispatchEvent(
@@ -264,12 +264,4 @@ function init() {
 	);
 }
 
-function boot() {
-	if ( document.readyState === 'loading' ) {
-		document.addEventListener( 'DOMContentLoaded', init );
-	} else {
-		init();
-	}
-}
-
-boot();
+document.addEventListener( 'DOMContentLoaded', init );
