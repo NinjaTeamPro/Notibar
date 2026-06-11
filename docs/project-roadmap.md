@@ -12,7 +12,7 @@ Runs on WordPress 4.0–7.0, PHP 5.3.1+. Ships in two editions (Lite / Pro) from
 
 ## Version History (from git)
 
-### v3.1.2 — current (commits through 2026-06-01)
+### v3.1.2 — current (commits through 2026-06-11)
 
 - Pro auto-deactivates Lite when both active (`njt_nofi_kill_lite()`)
 - EventLog custom table + time-series analytics API (`/stats/timeseries`, `/stats/by-bar`)
@@ -23,6 +23,8 @@ Runs on WordPress 4.0–7.0, PHP 5.3.1+. Ships in two editions (Lite / Pro) from
 - Export/import via `RestSettingsController`
 - Fix: silence Plugin Check `UnescapedDBParameter` on stats reads
 - Exclude `.source` from release zips
+- Essentials theme compat rewrite (CSS margin approach) — completed 2026-06-11
+- Brandy theme compat shim (CSS top override, shared factory) — completed 2026-06-11
 
 ### v3.1 line (2026-05-30 → 2026-05-31)
 

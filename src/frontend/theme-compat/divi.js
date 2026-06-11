@@ -1,47 +1,53 @@
 /**
  * Theme-compat: Divi / Divi Child Theme for CDW Studios.
- * Ported verbatim from legacy notibar.js supportDiviTheme().
+ * Ported from legacy notibar.js supportDiviTheme(), made placement-aware:
+ * header offsets only apply for a visible top-placed bar. Body padding is
+ * owned exclusively by installBodyPush().
+ *
+ * Admin-bar offset is measured live (32px desktop / 46px ≤782px) — the old
+ * hardcoded 32 left the header 14px short on mobile. Theme Builder section
+ * offsets derive from the same measurement plus Divi's own 30px stacking
+ * gap (legacy literals 32/62/66/96 assumed a 32px admin bar + 34px bar).
  *
  * @since 3.0.0
  */
 
-import { setStyles, hasAdminBar, barHeight } from './helpers';
+import { setStyles, hasTopBar, barHeight, adminBarHeight } from './helpers';
 
 /**
  * @param {HTMLElement} slot
- * @return {void}
+ * @return {Function} sync callback — dispatcher re-runs it on bar swaps.
  */
 export function applyDivi( slot ) {
-	const h = barHeight( slot );
-	const adminOffset = hasAdminBar() ? 32 : 0;
+	function sync() {
+		const topBar = hasTopBar( slot );
+		const h = topBar ? barHeight( slot ) : 0;
+		const adminOffset = adminBarHeight();
 
-	setTimeout( () => {
-		setStyles( 'header#main-header', { top: h + adminOffset + 'px' } );
-	}, 1000 );
+		// Empty string clears the inline override so Divi's own stylesheet
+		// position applies when no top bar is active (bottom placement,
+		// dismissed, or rotated out).
+		setStyles( 'header#main-header', {
+			top: topBar ? h + adminOffset + 'px' : '',
+		} );
 
-	document.body.style.paddingTop = h + 'px';
-	document.body.style.position = 'relative';
-
-	const bar = slot.querySelector( '.njt-nofi-notification-bar' );
-	const isVisible = bar && bar.offsetParent !== null;
-
-	if ( hasAdminBar() ) {
-		setStyles( '.et_pb_section_0_tb_header', { top: '32px' } );
-		setStyles( '.et_pb_section_1_tb_header', { top: '62px' } );
+		// Theme Builder header sections: section_0 sits below the admin bar
+		// (plus the bar in sticky mode); section_1 stacks 30px (Divi's own
+		// gap) below section_0.
+		const base = adminOffset;
+		const sticky = adminOffset + ( topBar ? h : 0 );
+		setStyles( '.et_pb_section_0_tb_header', { top: base + 'px' } );
+		setStyles( '.et_pb_section_1_tb_header', { top: base + 30 + 'px' } );
 		setStyles( '.et_pb_section_0_tb_header.et_pb_sticky--top', {
-			top: isVisible ? '66px' : '32px',
+			top: sticky + 'px',
 		} );
 		setStyles( '.et_pb_section_1_tb_header.et_pb_sticky--top', {
-			top: isVisible ? '96px' : '62px',
-		} );
-	} else {
-		setStyles( '.et_pb_section_0_tb_header', { top: '0px' } );
-		setStyles( '.et_pb_section_1_tb_header', { top: '30px' } );
-		setStyles( '.et_pb_section_0_tb_header.et_pb_sticky--top', {
-			top: isVisible ? '34px' : '0px',
-		} );
-		setStyles( '.et_pb_section_1_tb_header.et_pb_sticky--top', {
-			top: isVisible ? '64px' : '30px',
+			top: sticky + 30 + 'px',
 		} );
 	}
+
+	// Delay the first pass so Divi's own header JS has positioned things.
+	setTimeout( sync, 100 );
+
+	return sync;
 }

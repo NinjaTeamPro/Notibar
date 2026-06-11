@@ -80,6 +80,10 @@ if (global.displayMode === 'rotation' && survivors.length > 1 && !prefersReduced
 
 `applyThemeCompat(themeName, slot)` dispatches by `wp_get_theme()->get('Name')` to one of 11 legacy positioning patches (Divi, Essentials, Nayma, Konte, Enfold, Uncode, Uptime Child, Themify Ultra, Salient, Radiate Child, AccessPress Parallax Pro Child) — ported 1:1 from v2.1.9. Helpers in `theme-compat/helpers.js` (`setStyles`, `barHeight`, `hasAdminBar`).
 
+**Essentials (pixfort) shim** (`essentials.js`, v3.1.4+): Avoids race condition with pixfort-core's per-scroll-tick inline `top` rewrites by owning a persistent `<style id="njt-nofi-essentials-compat">` element. Rule `.pix-header.is-scroll, .pix-header.pix-mobile-sticky { margin-top: <barHeight>px !important }` applies only while a visible top-placed bar exists; emptied otherwise. Margin-top composes additively into pixfort's sticky accumulator, no admin-bar offset needed (pixfort folds `#wpadminbar` into its own calc). Shim returns a `sync()` callback for dispatcher to re-run on bar slot mutations.
+
+**Brandy (YayCommerce FSE) shim** (`brandy.js`, v3.1.5+): Brandy's sticky header (`.is-stickying .sticky-part`) is positioned purely by CSS using `top: var(--wp-adminbar-height)`. The shim injects `top: calc(var(--wp-adminbar-height, 0px) + <barHeight>px) !important` via the shared `makeBarOffsetStyleSync()` factory in `helpers.js` (also used by Essentials). Rule present only while a visible top-placed bar is active; the 0px fallback ensures the calc is valid when the admin-bar var is unset. Keeps admin-bar handling composable with the theme's own CSS.
+
 ## Frontend Assets
 
 - `assets/frontend/css/notibar.css` (~351 lines): z-index 10000, `njt-nofi-slide-in` keyframe, `data-position`/`data-placement` rules, desktop/mobile media queries, admin-bar `top:32px/46px` overrides, CSS custom props.

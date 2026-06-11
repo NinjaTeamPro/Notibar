@@ -1,12 +1,15 @@
 /**
- * Theme-compat: Enfold + Uncode.
- * Ported verbatim from legacy notibar.js supportEnfoldTheme() / supportUncodeTheme().
+ * Theme-compat: Enfold.
+ * Ported from legacy notibar.js supportEnfoldTheme(), made placement-aware.
+ *
+ * The legacy Uncode shim (supportUncodeTheme) was removed: it only wrote
+ * body padding-top, which is owned exclusively by installBodyPush().
  *
  * @since 3.0.0
  */
 /* eslint-env browser */
 
-import { setStyles, hasAdminBar, barHeight } from './helpers';
+import { setStyles, hasTopBar, barHeight, adminBarHeight } from './helpers';
 
 /**
  * Enfold — absolute-position header offset with transparency check.
@@ -23,8 +26,6 @@ export function applyEnfold( slot ) {
 		return;
 	}
 
-	const h = barHeight( slot );
-
 	setTimeout( () => {
 		const header = document.querySelector(
 			'body header.av_header_border_disabled'
@@ -33,48 +34,27 @@ export function applyEnfold( slot ) {
 			header &&
 			! header.classList.contains( 'av_header_transparency' )
 		) {
-			header.style.top = hasAdminBar() ? '32px' : '0';
+			header.style.top = adminBarHeight() + 'px';
 		}
 	}, 500 );
 
 	window.addEventListener( 'wheel', function ( event ) {
-		if ( event.deltaY > 0 ) {
+		// Placement/height re-read per event — rotation can swap bars.
+		// Downward scroll, bottom placement, and dismissed all resolve to
+		// the theme-native header position (admin-bar offset only).
+		if ( event.deltaY > 0 || ! hasTopBar( slot ) ) {
 			setStyles( 'body header.av_header_border_disabled', {
-				top: hasAdminBar() ? '32px' : '0',
+				top: adminBarHeight() + 'px',
 			} );
-		} else {
-			const hasTransp = !! document.querySelector(
-				'header.av_header_transparency'
-			);
-			if ( hasAdminBar() ) {
-				setStyles( 'body header.av_header_border_disabled', {
-					top: ( hasTransp ? 32 + h : 32 ) + 'px',
-				} );
-			} else {
-				setStyles( 'body header.av_header_border_disabled', {
-					top: hasTransp ? h + 'px' : '0',
-				} );
-			}
+			return;
 		}
-	} );
-}
 
-/**
- * Uncode — body padding-top delay hack.
- *
- * @param {HTMLElement} slot
- * @return {void}
- */
-export function applyUncode( slot ) {
-	const h = barHeight( slot );
-
-	setTimeout( () => {
-		document.body.style.paddingTop = h + 'px';
-	}, 1500 );
-
-	window.addEventListener( 'wheel', function () {
-		setTimeout( () => {
-			document.body.style.paddingTop = h + 'px';
-		}, 1000 );
+		const hasTransp = !! document.querySelector(
+			'header.av_header_transparency'
+		);
+		setStyles( 'body header.av_header_border_disabled', {
+			top:
+				adminBarHeight() + ( hasTransp ? barHeight( slot ) : 0 ) + 'px',
+		} );
 	} );
 }

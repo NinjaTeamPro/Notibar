@@ -10,7 +10,7 @@ Notibar is a WordPress plugin with a **React-powered admin UI** and **vanilla JS
 - **4 React apps** (Customizer panel, preview, settings, charts)
 - **5 REST controllers** (posts, users, settings, tracking, export/import)
 - **Custom DB table** for event tracking (Pro)
-- **11 theme compatibility patches** built-in
+- **12 theme compatibility patches** built-in
 
 ---
 
@@ -258,11 +258,12 @@ Notibar is a WordPress plugin with a **React-powered admin UI** and **vanilla JS
 | File | Themes | Responsibility | Lines |
 |------|--------|---|---|
 | **divi.js** | Divi, Divi Child | Position overrides | ~30 |
-| **essentials.js** | Essentials (Elementor) | Position overrides | ~30 |
+| **essentials.js** | Essentials (pixfort) | CSS margin-top sync for sticky header | ~44 |
+| **brandy.js** | Brandy (YayCommerce FSE) | CSS top override via `makeBarOffsetStyleSync` factory | ~37 |
 | **nayma-konte.js** | Nayma, Konte | Position overrides | ~40 |
 | **enfold-uncode.js** | Enfold, Uncode | Position overrides | ~40 |
 | **misc-themes.js** | Uptime Child, Themify Ultra, Salient, Radiate Child, AccessPress Parallax Pro | Collective patches | ~80 |
-| **helpers.js** | Utility functions | `setStyles()`, `barHeight()`, `hasAdminBar()` | ~50 |
+| **helpers.js** | Utility functions | `setStyles()`, `barHeight()`, `hasAdminBar()`, `makeBarOffsetStyleSync()` factory | ~136 |
 
 ---
 

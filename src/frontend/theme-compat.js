@@ -5,21 +5,34 @@
  * Each callback receives the #njt-notibar-slot element and patches
  * header/nav positioning to accommodate the notification bar.
  *
- * All 11 legacy theme hacks are retained per resolved decision #6:
- *   Divi, Essentials, Nayma, Konte, Enfold, Uncode,
+ * Legacy theme hacks retained per resolved decision #6:
+ *   Divi, Essentials, Nayma, Konte, Enfold,
  *   Uptime Child, Themify Ultra, Salient, Radiate Child,
  *   AccessPress Parallax Pro Child.
+ * The Uncode shim was removed: it only wrote body padding-top, which is now
+ * owned exclusively by installBodyPush() (whose !important inline write wins
+ * over the shim's plain write anyway).
+ *
+ * A callback may return a sync() function — the dispatcher re-runs it on
+ * slot childList mutations so placement-dependent offsets stay correct when
+ * rotation swaps in a bar with a different placement, or dismiss empties
+ * the slot.
+ *
+ * Shared by the frontend AND customizer-preview bundles — keep shims free
+ * of heavy imports or they bloat both.
  *
  * Registry keys are theme display Names (e.g. "Divi", "Salient") to match
  * legacy v2.1.9 1:1. PHP passes wp_get_theme()->get('Name') as ctx.theme.
  *
  * @since 3.0.0
  */
+/* eslint-env browser */
 
+import { applyBrandy } from './theme-compat/brandy';
 import { applyDivi } from './theme-compat/divi';
 import { applyEssentials } from './theme-compat/essentials';
 import { applyNayma, applyKonte } from './theme-compat/nayma-konte';
-import { applyEnfold, applyUncode } from './theme-compat/enfold-uncode';
+import { applyEnfold } from './theme-compat/enfold-uncode';
 import {
 	applyUptimeChild,
 	applyThemifyUltra,
@@ -31,7 +44,7 @@ import {
 /**
  * Map of theme stylesheet slug → compat callback.
  *
- * @type {Object.<string, function(HTMLElement): void>}
+ * @type {Object.<string, function(HTMLElement): (Function|void)>}
  */
 const THEME_FIXES = {
 	// 1. Divi
@@ -46,18 +59,18 @@ const THEME_FIXES = {
 	Konte: applyKonte,
 	// 6. Enfold
 	Enfold: applyEnfold,
-	// 7. Uncode
-	Uncode: applyUncode,
-	// 8. Uptime Child
+	// 7. Uptime Child
 	'Uptime Child': applyUptimeChild,
-	// 9. Themify Ultra
+	// 8. Themify Ultra
 	'Themify Ultra': applyThemifyUltra,
-	// 10. Salient
+	// 9. Salient
 	Salient: applySalient,
-	// 11. Radiate Child
+	// 10. Radiate Child
 	'Radiate Child': applyRadiateChild,
-	// 12. AccessPress Parallax Pro Child
+	// 11. AccessPress Parallax Pro Child
 	'AccessPress Parallax Pro Child': applyAccessPressParallax,
+	// 12. Brandy (YayCommerce FSE theme) — v3.1.5+
+	Brandy: applyBrandy,
 };
 
 /**
@@ -71,7 +84,38 @@ const THEME_FIXES = {
  */
 export function applyThemeCompat( themeSlug, slot ) {
 	const fix = THEME_FIXES[ themeSlug ];
-	if ( typeof fix === 'function' ) {
-		fix( slot );
+	if ( typeof fix !== 'function' ) {
+		return;
 	}
+	const sync = fix( slot );
+	if (
+		typeof sync !== 'function' ||
+		typeof MutationObserver === 'undefined'
+	) {
+		return;
+	}
+	// Rotation and dismiss both swap the slot's direct children; re-syncing
+	// there keeps one-shot offsets correct for mixed top/bottom placements.
+	// No subtree — deep mutations (e.g. content edits) can't change placement
+	// and would only fire redundant syncs.
+	new MutationObserver( sync ).observe( slot, { childList: true } );
+
+	// The admin bar flips 32↔46px at the 782px breakpoint (and bar height
+	// can change at responsive breakpoints) with no DOM mutation — re-sync
+	// on resize so measured offsets stay current.
+	window.addEventListener( 'resize', sync, { passive: true } );
+
+	// Absolute bars scroll out of the viewport, flipping hasTopBar() with
+	// no DOM mutation — re-sync on scroll, but only for absolute bars so
+	// fixed bars (the common case) pay one attribute read per tick at most.
+	window.addEventListener(
+		'scroll',
+		function () {
+			const bar = slot.querySelector( '.njt-nofi-container' );
+			if ( bar && 'absolute' === bar.getAttribute( 'data-position' ) ) {
+				sync();
+			}
+		},
+		{ passive: true }
+	);
 }

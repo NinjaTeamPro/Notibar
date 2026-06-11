@@ -17,6 +17,7 @@ import { renderBarHTML } from '../shared/render-bar';
 import { startRotation } from '../shared/rotation';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push';
+import { installMobileAdminBarOffset } from '../shared/mobile-admin-bar-offset';
 import { isDismissed, dismiss } from './cookies';
 import { applyThemeCompat } from './theme-compat';
 
@@ -144,6 +145,10 @@ function init() {
 		);
 
 		if ( ! survivors.length ) {
+			// Remove the bar element (not just hide the slot) — body-push's
+			// MutationObserver only watches childList, so a display change
+			// alone would leave the body padding in place.
+			slot.innerHTML = '';
 			slot.style.display = 'none';
 			/* @pro */
 			if ( rotationCtrl ) {
@@ -257,6 +262,10 @@ function init() {
 	// fixed/absolute-positioned bar. ResizeObserver re-syncs on rotation,
 	// collapse-toggle, dismiss, and responsive breakpoint changes.
 	installBodyPush( slot );
+
+	// ≤600px + admin bar: WP's admin bar is position:absolute there and
+	// scrolls away — clamp the fixed bar's top to follow it (46 → 0).
+	installMobileAdminBarOffset( slot );
 
 	// Emit custom event so themes/plugins can hook post-render.
 	slot.dispatchEvent(

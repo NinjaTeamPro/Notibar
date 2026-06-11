@@ -22,6 +22,7 @@ import { filterBars } from '../shared/filter-bars.js';
 import { startRotation } from '../shared/rotation.js';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push.js';
+import { applyThemeCompat } from '../frontend/theme-compat.js';
 import { PREVIEW_STYLES } from '../shared/preview-styles.js';
 
 const SLOT_ID = 'njt-notibar-slot';
@@ -368,6 +369,16 @@ function init() {
 
 	// Initial render on preview load.
 	rerender();
+
+	// Theme-compat (header offsets etc.) — called ONCE, after the initial
+	// render, exactly like the frontend: shims attach window listeners, so
+	// re-applying per rerender would stack them. The dispatcher's
+	// MutationObserver re-runs each shim's sync() on every innerHTML swap.
+	// ctx.theme comes from the minimal njtNotibarData inlined by
+	// AssetLoader::enqueue_customizer_preview().
+	const serverCtx =
+		( window.njtNotibarData && window.njtNotibarData.ctx ) || {};
+	applyThemeCompat( serverCtx.theme || '', slot );
 }
 
 // Use `customize-preview` ready event so postMessage transport is wired.

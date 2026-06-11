@@ -278,6 +278,12 @@
   }
 }
 
+/* ≤600px: WP core switches #wpadminbar to position:absolute, so it scrolls
+   away with the page while a fixed bar stays pinned at top:46px behind a
+   dead gap. The static 46px above is kept as the correct PRE-SCROLL state;
+   mobile-admin-bar-offset.js clamps the fixed bar's inline top to
+   max(0, adminBarHeight - scrollY) as the user scrolls. */
+
 /* Bottom placement ignores the admin-bar top offset — it pins to the bottom
    edge. Declared after the rules above so it wins at equal specificity. */
 .admin-bar .njt-nofi-container[data-placement='bottom'] {

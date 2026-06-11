@@ -6,7 +6,13 @@
  */
 /* eslint-env browser */
 
-import { setStyles, hasAdminBar, barHeight, isSlotHidden } from './helpers';
+import {
+	setStyles,
+	hasAdminBar,
+	hasTopBar,
+	barHeight,
+	adminBarHeight,
+} from './helpers';
 
 /**
  * Nayma — fixed-header scroll offset.
@@ -21,7 +27,8 @@ export function applyNayma( slot ) {
 	}
 
 	window.addEventListener( 'wheel', function ( event ) {
-		let h = barHeight( slot );
+		// 0 when bottom-placed/dismissed → native header position.
+		let h = hasTopBar( slot ) ? barHeight( slot ) : 0;
 		// v3: collapsed state lives on .njt-nofi-container-content via
 		// .njt-nofi-collapsed (was .njt-nofi-toggle-close on the bar in v2).
 		const content = slot.querySelector( '.njt-nofi-container-content' );
@@ -30,13 +37,9 @@ export function applyNayma( slot ) {
 		}
 
 		if ( event.deltaY < 0 ) {
-			if ( hasAdminBar() ) {
-				setStyles( 'body header .fixed-header', {
-					top: h + 32 + 'px',
-				} );
-			} else {
-				setStyles( 'body header .fixed-header', { top: h + 'px' } );
-			}
+			setStyles( 'body header .fixed-header', {
+				top: h + adminBarHeight() + 'px',
+			} );
 		}
 	} );
 }
@@ -54,32 +57,29 @@ export function applyKonte( slot ) {
 	}
 
 	window.addEventListener( 'wheel', function ( event ) {
-		const h = barHeight( slot );
-		const dismissed = isSlotHidden( slot );
+		// Bottom-placed bars take the same path as dismissed ones: the
+		// sticky header keeps its theme-native top.
+		if ( ! hasTopBar( slot ) ) {
+			const isSticky = !! document.querySelector(
+				'body header#masthead.header-sticky--normal.sticky'
+			);
+			setStyles( 'body header#masthead.header-sticky--normal', {
+				top: isSticky ? adminBarHeight() + 'px' : '0',
+			} );
+			return;
+		}
 
-		if ( dismissed ) {
-			if ( hasAdminBar() ) {
-				const isSticky = !! document.querySelector(
-					'body header#masthead.header-sticky--normal.sticky'
-				);
-				setStyles( 'body header#masthead.header-sticky--normal', {
-					top: isSticky ? '32px' : '0',
-				} );
-			} else {
-				setStyles( 'body header#masthead.header-sticky--normal', {
-					top: '0',
-				} );
-			}
-		} else if ( event.deltaY < 0 ) {
+		const h = barHeight( slot );
+		if ( event.deltaY < 0 ) {
 			setStyles( 'body header#masthead.header-sticky--normal.sticky', {
-				top: ( hasAdminBar() ? h + 32 : h ) + 'px',
+				top: h + adminBarHeight() + 'px',
 			} );
 		} else if ( hasAdminBar() ) {
 			const isSticky = !! document.querySelector(
 				'body header#masthead.header-sticky--normal.sticky'
 			);
 			setStyles( 'body header#masthead.header-sticky--normal', {
-				top: ( isSticky ? h + 32 : h ) + 'px',
+				top: ( isSticky ? h + adminBarHeight() : h ) + 'px',
 			} );
 		} else {
 			setStyles( 'body header#masthead.header-sticky--normal.sticky', {

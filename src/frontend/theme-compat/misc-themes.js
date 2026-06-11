@@ -2,9 +2,10 @@
  * Theme-compat: Uptime Child, Themify Ultra, Salient,
  *               Radiate Child, AccessPress Parallax Pro Child.
  *
- * Ported verbatim from legacy notibar.js:
- *  supportUptimeChildTheme / supportThemifyUltraTheme /
- *  supportSalient / supportRadiateChild / supportAccessPressParallaxTheme.
+ * Ported from legacy notibar.js, made placement-aware: header offsets only
+ * apply while a visible TOP-placed bar is active (hasTopBar); otherwise
+ * offsets reset to theme-native values. Body padding is owned exclusively
+ * by installBodyPush().
  *
  * @since 3.0.0
  */
@@ -14,8 +15,9 @@ import {
 	setStyles,
 	setStylesAll,
 	hasAdminBar,
+	hasTopBar,
 	barHeight,
-	isSlotHidden,
+	adminBarHeight,
 } from './helpers';
 
 /**
@@ -30,12 +32,9 @@ export function applyUptimeChild( slot ) {
 		return;
 	}
 
-	const h = barHeight( slot );
-
 	window.addEventListener( 'wheel', function ( event ) {
-		if ( isSlotHidden( slot ) ) {
-			return;
-		}
+		// 0 when bottom-placed/dismissed → resets navbar to native position.
+		const h = hasTopBar( slot ) ? barHeight( slot ) : 0;
 		if ( event.deltaY < 0 ) {
 			setStyles( '.navbar.scrolled', { top: h + 'px' } );
 		} else {
@@ -52,12 +51,12 @@ export function applyUptimeChild( slot ) {
  * @return {void}
  */
 export function applyThemifyUltra( slot ) {
-	const bar = slot.querySelector( '.njt-nofi-notification-bar' );
-	const isBarVisible = bar && bar.offsetParent !== null;
-	const offset = hasAdminBar() ? 56 : 32;
-
 	window.addEventListener( 'wheel', function () {
-		if ( isBarVisible ) {
+		// Legacy used 56 with admin bar (32px bar + 24px theme padding) and
+		// 32 without — computed per event so the admin-bar component tracks
+		// the responsive 32↔46 flip.
+		const offset = hasAdminBar() ? adminBarHeight() + 24 : 32;
+		if ( hasTopBar( slot ) ) {
 			setStylesAll(
 				'#headerwrap.tf_box.tf_w, #headerwrap.tf_box.tf_w.fixed-header',
 				{ top: offset + 'px' }
@@ -72,59 +71,77 @@ export function applyThemifyUltra( slot ) {
  * Salient — header#top top offset.
  *
  * @param {HTMLElement} slot
- * @return {void}
+ * @return {Function} sync callback — dispatcher re-runs it on bar swaps.
  */
 export function applySalient( slot ) {
-	const bar = slot.querySelector( '.njt-nofi-notification-bar' );
-	if ( bar && bar.offsetParent !== null ) {
-		setStyles( 'header#top', { top: barHeight( slot ) + 'px' } );
+	function sync() {
+		// Empty string clears the inline override → theme-native position.
+		setStyles( 'header#top', {
+			top: hasTopBar( slot ) ? barHeight( slot ) + 'px' : '',
+		} );
 	}
+
+	sync();
+
+	return sync;
 }
 
 /**
- * Radiate Child — .header-wrap top offset + body padding reset.
+ * Radiate Child — .header-wrap top offset.
  *
  * @param {HTMLElement} slot
- * @return {void}
+ * @return {Function} sync callback — dispatcher re-runs it on bar swaps.
  */
 export function applyRadiateChild( slot ) {
-	const h = barHeight( slot );
-	const paddingOffset = h + ( hasAdminBar() ? 32 : 0 );
-
-	setTimeout( () => {
+	function sync() {
+		if ( ! hasTopBar( slot ) ) {
+			setStyles( 'body .header-wrap', { top: '' } );
+			return;
+		}
+		const paddingOffset = barHeight( slot ) + adminBarHeight();
 		setStyles( 'body .header-wrap', { top: paddingOffset + 'px' } );
-		document.body.style.paddingTop = '0';
-	}, 1000 );
+	}
 
-	window.addEventListener( 'wheel', function () {
-		setStyles( 'body .header-wrap', { top: paddingOffset + 'px' } );
-	} );
+	setTimeout( sync, 100 );
+	window.addEventListener( 'wheel', sync );
+
+	return sync;
 }
 
 /**
  * AccessPress Parallax Pro Child — masthead + menu-fix top offsets.
  *
  * @param {HTMLElement} slot
- * @return {void}
+ * @return {Function} sync callback — dispatcher re-runs it on bar swaps.
  */
 export function applyAccessPressParallax( slot ) {
-	const h = barHeight( slot );
-
-	setTimeout( () => {
+	function sync() {
+		if ( ! hasTopBar( slot ) ) {
+			setStyles( 'header#masthead', { top: '' } );
+			setStyles( '#main-header.menu-fix', { top: '' } );
+			return;
+		}
+		const h = barHeight( slot );
 		setStyles( 'header#masthead', {
-			top: ( hasAdminBar() ? h + 32 : h ) + 'px',
+			top: h + adminBarHeight() + 'px',
 		} );
-	}, 1000 );
+	}
+
+	setTimeout( sync, 100 );
 
 	let lastScrollTop = 0;
 	window.addEventListener( 'scroll', function () {
-		if ( isSlotHidden( slot ) ) {
+		if ( ! hasTopBar( slot ) ) {
 			return;
 		}
 		const st = window.scrollY || document.documentElement.scrollTop;
 		if ( st >= lastScrollTop ) {
-			setStyles( '#main-header.menu-fix', { top: h + 'px' } );
+			setStyles( '#main-header.menu-fix', {
+				top: barHeight( slot ) + 'px',
+			} );
 		}
 		lastScrollTop = st;
 	} );
+
+	return sync;
 }
