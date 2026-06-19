@@ -160,6 +160,7 @@ function init() {
 
 		/* @pro */
 		// If rotation is active, restart it with the reduced survivors list.
+		// Preserve the reduced-motion autoplay decision across the restart.
 		if ( rotationCtrl ) {
 			rotationCtrl.stop();
 			rotationCtrl = startRotation( {
@@ -167,6 +168,7 @@ function init() {
 				bars: survivors,
 				renderFn: renderBarWithCollapsedState,
 				global: globalConfig,
+				autoplay: ! prefersReducedMotion,
 			} );
 			return;
 		}
@@ -216,17 +218,54 @@ function init() {
 			if ( barId ) {
 				handleToggle( barId );
 			}
+			return;
+		}
+
+		/* @pro */
+		// Manual prev/next arrows — only act when the rotation controller is
+		// live (it owns the index + timer-reset logic).
+		if ( e.target.closest( '.njt-nofi-nav-prev' ) && rotationCtrl ) {
+			rotationCtrl.prev();
+			return;
+		}
+		if ( e.target.closest( '.njt-nofi-nav-next' ) && rotationCtrl ) {
+			rotationCtrl.next();
+		}
+		/* @endpro */
+	} );
+
+	/* @pro */
+	// Keyboard nav — scoped to focus within the slot. keydown only reaches this
+	// listener when a focusable descendant (CTA link, close/toggle, or an arrow)
+	// is focused. No document-level listener: page scroll, form inputs, and
+	// other carousels are never hijacked. ArrowLeft/Right have no native action
+	// on the focused controls, so preventDefault on just those two is safe.
+	slot.addEventListener( 'keydown', function ( e ) {
+		if ( ! rotationCtrl ) {
+			return;
+		}
+		if ( e.key === 'ArrowLeft' ) {
+			e.preventDefault();
+			rotationCtrl.prev();
+		} else if ( e.key === 'ArrowRight' ) {
+			e.preventDefault();
+			rotationCtrl.next();
 		}
 	} );
+	/* @endpro */
 
 	// -----------------------------------------------------------------------
 	// Render — rotation (Pro) or single.
 	// -----------------------------------------------------------------------
 	/* @pro */
-	const useRotation =
-		! prefersReducedMotion &&
-		globalConfig.displayMode === 'rotation' &&
-		survivors.length > 1;
+	// Rotation engine runs when display mode is rotation with >1 survivor.
+	// Under prefers-reduced-motion we still start it so manual arrows/keyboard
+	// work, but with autoplay disabled. When arrows are also off there is
+	// nothing interactive to show, so we fall through to a single render.
+	const arrowsOn = globalConfig.rotationShowArrows !== false;
+	const isRotation =
+		globalConfig.displayMode === 'rotation' && survivors.length > 1;
+	const useRotation = isRotation && ( ! prefersReducedMotion || arrowsOn );
 
 	if ( useRotation ) {
 		rotationCtrl = startRotation( {
@@ -234,6 +273,7 @@ function init() {
 			bars: survivors,
 			renderFn: renderBarWithCollapsedState,
 			global: globalConfig,
+			autoplay: ! prefersReducedMotion,
 		} );
 	}
 	/* @endpro */

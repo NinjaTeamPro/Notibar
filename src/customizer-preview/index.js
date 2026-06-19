@@ -232,6 +232,18 @@ function renderSingle( slot, bar, global ) {
  */
 function wireDismissDelegate( slot ) {
 	slot.onclick = function ( e ) {
+		/* @pro */
+		// Manual prev/next arrows — mirror the live frontend so admins can
+		// test navigation while editing. Only act when rotation is live.
+		if ( e.target.closest( '.njt-nofi-nav-prev' ) && activeRotation ) {
+			activeRotation.prev();
+			return;
+		}
+		if ( e.target.closest( '.njt-nofi-nav-next' ) && activeRotation ) {
+			activeRotation.next();
+			return;
+		}
+		/* @endpro */
 		const btn = e.target.closest( '.njt-nofi-close, .njt-nofi-toggle' );
 		if ( ! btn ) {
 			return;

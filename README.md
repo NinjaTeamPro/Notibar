@@ -19,7 +19,7 @@ Notibar lets you create and manage **multiple notification bars** independently 
 - **Per-bar display rules**: all pages, none, or specific include/exclude lists
 - **Device-aware content**: desktop & mobile with separate text/buttons
 - **Flexible close button**: disable, toggle (collapse), or close permanently
-- **Rotation mode**: cycle through bars with pause-on-hover, respects `prefers-reduced-motion`
+- **Rotation mode** (Pro): cycle through bars with pause-on-hover; manual prev/next arrows + keyboard nav; respects `prefers-reduced-motion`
 - **Scheduling**: date ranges, daily time windows, specific days of week
 - **Advanced targeting** (Pro): CPT types, roles, user lists, audience segments
 - **Event tracking** (Pro): track clicks, dismissals, engagement with analytics
@@ -56,7 +56,7 @@ For more examples and use cases, see [docs/project-overview-pdr.md](./docs/proje
 
 - **Storage**: `wp_options` keys `njt_nofi_bars` (JSON array) + `njt_nofi_global` (JSON)
 - **Bar object**: id, name, enabled, content (text, button, mobile variants), style (colors, size, position), display rules, behavior (close action, reopen days), schedule
-- **Global config**: display mode (single/rotation), rotation interval & pause-on-hover
+- **Global config**: display mode (single/rotation), rotation interval, pause-on-hover & show-arrows (Pro)
 
 ### Bootstrap & Hooks
 
@@ -129,6 +129,7 @@ notibar/
 │       ├── filter-bars.js            Core filtering logic
 │       ├── render-bar.js             HTML generation & escaping
 │       ├── rotation.js               Rotation (Pro)
+│       ├── nav-controls.js           Prev/next arrow markup + injection (Pro)
 │       ├── body-push.js              ResizeObserver layout adjust
 │       ├── charts/                   Analytics (Pro)
 │       ├── escape-utils.js           Text escaping

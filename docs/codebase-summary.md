@@ -225,6 +225,7 @@ Notibar is a WordPress plugin with a **React-powered admin UI** and **vanilla JS
 | **filter-bars.js** | `filterBars(bars, ctx)` — apply all display rules; core filtering | ~250 |
 | **render-bar.js** | `renderBarHTML(bar, global)` — generate HTML; CSS custom props; escaping | ~200 |
 | **rotation.js** | `startRotation(bars, global)` — cycle bars; pause-on-hover (Pro) | ~150 |
+| **nav-controls.js** | `buildNavControls(global)` — build & inject prev/next arrow markup (Pro) | ~80 |
 | **body-push.js** | `installBodyPush(slot)` — ResizeObserver syncs body padding | ~80 |
 | **escape-utils.js** | `escapeText()`, `escapeAttr()`, `decodeBasicEntities()` | ~70 |
 | **pro-ui.jsx** | `ProBadge`, `ProUpgradeNotice`, `isProEdition` export | ~80 |
@@ -441,6 +442,7 @@ src/
    ├─ filter-bars.js (core filtering)
    ├─ render-bar.js (HTML generation)
    ├─ rotation.js (Pro)
+   ├─ nav-controls.js (Pro)
    ├─ body-push.js
    ├─ escape-utils.js
    ├─ pro-ui.jsx

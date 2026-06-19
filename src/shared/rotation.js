@@ -14,6 +14,8 @@
  * @since 3.0.0
  */
 
+import { injectNavControls } from './nav-controls';
+
 // eslint-disable-next-line jsdoc/check-line-alignment
 /**
  * Start a rotation cycle on the given slot element.
@@ -24,8 +26,12 @@
  * @param {Function}    options.renderFn      renderBarHTML(bar, global) function.
  * @param {Object}      options.global        Global config object.
  * @param {number}      [options.intervalSec] Override rotationIntervalSeconds.
+ * @param {boolean}     [options.autoplay]    Defaults true; false starts the
+ *                                            cycle without the auto-advance
+ *                                            timer (manual arrows/keys only).
  *
- * @return {{ stop: Function }} Cleanup handle. Call stop() before re-rendering.
+ * @return {{ stop: Function, next: Function, prev: Function }} Control handle.
+ *         stop() before re-rendering; next()/prev() step bars manually.
  */
 /**
  * Compute the next bar index based on rotation order setting.
@@ -51,13 +57,26 @@ export function nextIndex( current, count, order ) {
 	return ( current + 1 ) % count;
 }
 
-export function startRotation( { slot, bars, renderFn, global, intervalSec } ) {
+export function startRotation( {
+	slot,
+	bars,
+	renderFn,
+	global,
+	intervalSec,
+	autoplay,
+} ) {
 	let index = 0;
 	let paused = false;
 	let timerId = null;
 
 	const delay = ( intervalSec || global.rotationIntervalSeconds || 5 ) * 1000;
 	const pauseOnHover = global.rotationPauseOnHover !== false;
+	// Autoplay defaults on; callers pass autoplay:false to honour
+	// prefers-reduced-motion (arrows still work, just no auto-advance).
+	const useAutoplay = autoplay !== false;
+	// Arrows: enabled by default, only meaningful with more than one bar.
+	// Neutral identifier keeps the Lite-strip "zero rotation" invariant intact.
+	const showArrows = global.rotationShowArrows !== false && bars.length > 1;
 
 	function revealNewBar() {
 		const containerContent = slot.querySelector(
@@ -72,13 +91,59 @@ export function startRotation( { slot, bars, renderFn, global, intervalSec } ) {
 		containerContent.classList.add( 'njt-nofi-visible' );
 	}
 
+	// Render bar at `i`, reveal it, then (re)inject the nav arrows. Arrows are
+	// re-applied after every swap because slot.innerHTML replaces the whole
+	// container-content; clicks are delegated upstream so re-injection leaks
+	// no listeners. The innerHTML swap replaces .njt-nofi-container, so
+	// body-push correctly re-attaches to the new bar. The subsequent arrow
+	// injection mutates inside that same .njt-nofi-container, so body-push's
+	// re-attach guard no-ops on it, and absolutely-positioned arrows don't
+	// change container height — so the ResizeObserver stays quiet too.
+	// `dir` ('next' | 'prev' | undefined): set only for manual navigation, where
+	// it tags the container-content so CSS plays a horizontal carousel slide in
+	// that direction. Initial render + auto-advance pass no dir → the existing
+	// vertical slide-down entrance.
+	function render( i, dir ) {
+		index = i;
+		slot.innerHTML = renderFn( bars[ index ], global );
+		if ( dir ) {
+			const cc = slot.querySelector( '.njt-nofi-container-content' );
+			if ( cc ) {
+				cc.classList.add(
+					'prev' === dir
+						? 'njt-nofi-nav-slide-prev'
+						: 'njt-nofi-nav-slide-next'
+				);
+			}
+		}
+		revealNewBar();
+		injectNavControls( slot, { showArrows } );
+	}
+
+	function resetTimer() {
+		if ( timerId !== null ) {
+			clearInterval( timerId );
+			timerId = null;
+		}
+		if ( useAutoplay ) {
+			timerId = setInterval( advance, delay );
+		}
+	}
+
 	function advance() {
 		if ( paused ) {
 			return;
 		}
-		index = nextIndex( index, bars.length, global.rotationOrder );
-		slot.innerHTML = renderFn( bars[ index ], global );
-		revealNewBar();
+		render( nextIndex( index, bars.length, global.rotationOrder ) );
+	}
+
+	// Manual navigation is always sequential cyclic (wraps), independent of
+	// global.rotationOrder — random prev/next would be meaningless for a user.
+	// Each manual move resets the autoplay timer so the chosen bar is not
+	// immediately advanced past.
+	function goTo( i, dir ) {
+		render( ( i + bars.length ) % bars.length, dir );
+		resetTimer();
 	}
 
 	function pause() {
@@ -97,11 +162,11 @@ export function startRotation( { slot, bars, renderFn, global, intervalSec } ) {
 		}
 	}
 
-	// Render first bar immediately (caller may have already done this).
-	slot.innerHTML = renderFn( bars[ 0 ], global );
-	revealNewBar();
+	// Initial render (caller may have already painted the first bar; this keeps
+	// the controller authoritative and ensures arrows are injected).
+	render( 0 );
 
-	timerId = setInterval( advance, delay );
+	resetTimer();
 
 	if ( pauseOnHover ) {
 		slot.addEventListener( 'mouseenter', pause );
@@ -124,6 +189,12 @@ export function startRotation( { slot, bars, renderFn, global, intervalSec } ) {
 				'visibilitychange',
 				onVisibilityChange
 			);
+		},
+		next() {
+			goTo( index + 1, 'next' );
+		},
+		prev() {
+			goTo( index - 1, 'prev' );
 		},
 	};
 }

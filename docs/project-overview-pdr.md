@@ -86,7 +86,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 **Audience**: Agencies, high-traffic sites, marketers needing analytics & advanced targeting.
 
 **Additions over Lite**:
-- **Rotation mode**: Cycle through bars with pause-on-hover; sequential or random; respects `prefers-reduced-motion`
+- **Rotation mode**: Cycle through bars with pause-on-hover, manual prev/next arrows & keyboard nav; respects `prefers-reduced-motion`
 - **Event tracking**: Track clicks, dismissals, engagement per bar; lifetime counters + time-series table
 - **Analytics dashboard**: Charts (trend, breakdown by event type, per-bar comparison); filter by date range, bar, audience, event type
 - **Audience targeting**: Restrict to logged-in, logged-out, specific roles, specific user IDs
@@ -115,7 +115,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 | WPML integration | ✓ | ✓ | Per-bar string registration |
 | Theme compat patches | ✓ | ✓ | 11 built-in themes |
 | Export/Import | ✓* | ✓ | *Lite: UI preview only; no import |
-| **Rotation mode** | | ✓ | Cycle bars; pause-on-hover |
+| **Rotation mode** | | ✓ | Cycle bars; pause-on-hover; manual prev/next arrows & keyboard nav |
 | **Event tracking** | | ✓ | Click, dismiss, engage |
 | **Analytics dashboard** | | ✓ | Charts, filters, time-series |
 | **Audience targeting** | | ✓ | Roles, user lists, logged-in/out |

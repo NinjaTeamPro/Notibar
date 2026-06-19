@@ -24,6 +24,7 @@ This document is split for readability. See:
 - **Bootstrap**: `njt-notification-bar.php` (PSR-4 autoloader, `NjtNotificationBar\` namespace) → migrations at `plugins_loaded` pri 5, core init at pri 10.
 - **Data**: `njt_nofi_bars` + `njt_nofi_global` JSON options. Pro tracking adds `notibar_counters` option + `{prefix}notibar_events` table.
 - **Render gate**: `NotificationBarHandle` (frontend) + `NotificationBarHandleAdmin` trait (menu); shared render logic in `src/shared/`.
+- **Rotation nav** (Pro): Arrows injected post-render by `nav-controls.js` when displayMode=rotation, global rotationShowArrows=true, and ≥2 surviving bars. Supports click + keyboard (ArrowLeft/Right).
 - **Editions**: `NJT_NOFI_IS_PRO` constant; Lite produced by `build-tools/strip-pro.js` + `pro-manifest.json`.
 
 ## Related Docs

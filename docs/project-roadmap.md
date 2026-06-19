@@ -25,6 +25,7 @@ Runs on WordPress 4.0–7.0, PHP 5.3.1+. Ships in two editions (Lite / Pro) from
 - Exclude `.source` from release zips
 - Essentials theme compat rewrite (CSS margin approach) — completed 2026-06-11
 - Brandy theme compat shim (CSS top override, shared factory) — completed 2026-06-11
+- Manual prev/next navigation arrows + keyboard nav for rotation mode (Pro); global rotationShowArrows toggle
 
 ### v3.1 line (2026-05-30 → 2026-05-31)
 
