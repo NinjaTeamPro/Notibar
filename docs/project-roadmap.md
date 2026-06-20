@@ -26,6 +26,7 @@ Runs on WordPress 4.0–7.0, PHP 5.3.1+. Ships in two editions (Lite / Pro) from
 - Essentials theme compat rewrite (CSS margin approach) — completed 2026-06-11
 - Brandy theme compat shim (CSS top override, shared factory) — completed 2026-06-11
 - Manual prev/next navigation arrows + keyboard nav for rotation mode (Pro); global rotationShowArrows toggle
+- **Public bar registration API**: `njt_nofi_register_bar()` + `njt_nofi_register_bars` filter (CORE); 3rd-party bars inherit all native features (rendering, scheduling, targeting, dismissal, rotation)
 
 ### v3.1 line (2026-05-30 → 2026-05-31)
 

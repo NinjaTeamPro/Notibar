@@ -397,6 +397,29 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 
 ---
 
+## Public API for 3rd-Party Integrations
+
+Notibar provides a stable public API (both Lite & Pro) for plugins and themes to inject custom notification bars without modifying Notibar's configuration.
+
+**Core entry point**: `njt_nofi_register_bar( array $bar ): void`
+- Call on `init` or earlier. Declare a bar with an id (charset [A-Za-z0-9_-]); missing fields inherit defaults.
+- Bars without valid id are silently skipped.
+
+**Filter hook**: `apply_filters( 'njt_nofi_register_bars', array $injected ): array`
+- Additive-only; seeded with empty array. Integrators append bar objects.
+- Native bars are never exposed; filter receives only injected bars.
+
+**Guarantees**:
+- Injected bars obey identical Lite/Pro gating as native bars (Pro-only fields inert in Lite).
+- Display rules are cache-safe; targeting via `display` object, not PHP conditionals.
+- On id collision, native bars take precedence.
+- Injected bars are code-owned: not editable in Customizer, not shown in preview, not in export/import.
+- Render order: injected bars appear after native bars.
+
+See [../README.md#integration--hooks-for-developers](../README.md#integration--hooks-for-developers) for examples.
+
+---
+
 ## Technical Decisions
 
 1. **PSR-4 Namespace**: Isolates from other plugins; single constant edition flag prevents collisions

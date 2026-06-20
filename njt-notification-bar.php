@@ -93,6 +93,10 @@ spl_autoload_register(function ($class) {
   }
 });
 
+// Public procedural API for 3rd-party bar registration (njt_nofi_register_bar).
+// Required after the autoloader so the helper can resolve BarRegistry lazily.
+require_once __DIR__ . '/includes/bar-registry-api.php';
+
 // Recommeneded-modules module loader (gracefully no-op if recommeneded-modules/ hasn't been synced yet).
 if ( file_exists( __DIR__ . '/recommended-modules/loader.php' ) ) {
 	require_once __DIR__ . '/recommended-modules/loader.php';

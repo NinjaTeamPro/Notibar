@@ -88,7 +88,10 @@ notibar/
 │   ├── Plugin.php                    Main singleton
 │   ├── I18n.php                      Text domain loading
 │   ├── edition.php                   NJT_NOFI_IS_PRO constant
+│   ├── bar-registry-api.php          njt_nofi_register_bar() global helper
 │   ├── NotificationBar/
+│   │   ├── BarRegistry.php           Registry/merge/normalize 3rd-party bars
+│   │   ├── Schema.php                Data structure & defaults (+ sanitizeExternalBar)
 │   │   ├── Schema.php                Data structure & defaults
 │   │   ├── SchemaSanitizers.php      Field sanitization (trait)
 │   │   ├── AssetLoader.php           JS/CSS enqueue + boot data
@@ -250,6 +253,66 @@ npm run format         # Auto-format src/
 - **Language path**: `/i18n/languages/`
 - **WPML**: Registers 6 strings per bar (text, textMobile, button text/URL, buttonMobile text/URL) on customize save
 - **Polylang**: Stub (full integration deferred; Polylang lacks per-string unregister API)
+
+---
+
+## Integration / Hooks for Developers
+
+Plugins and themes can inject custom notification bars into Notibar's render pipeline. Injected bars inherit all native Notibar features: rendering, scheduling, display rules, dismissal, rotation, and navigation arrows.
+
+### Declaring Bars via PHP
+
+Call `njt_nofi_register_bar()` on the `init` hook or earlier:
+
+```php
+add_action( 'init', function () {
+    njt_nofi_register_bar( [
+        'id'      => 'acme-sale-2026',
+        'content' => [
+            'text'   => 'Big summer sale!',
+            'button' => [
+                'enabled' => true,
+                'text'    => 'Shop Now',
+                'url'     => '/sale'
+            ]
+        ],
+        'style' => [
+            'bgColor'    => '#111111',
+            'textColor'  => '#ffffff'
+        ],
+        'display' => [
+            'pageLogic' => 'include',
+            'pageIds'   => [ 12, 45 ]
+        ]
+    ] );
+} );
+```
+
+**Parameters**:
+- `id` (required, string): Stable unique identifier; charset [A-Za-z0-9_-]. Bars without a valid id are skipped.
+- Other fields (optional): `content`, `style`, `display`, `behavior`, `schedule`. Missing fields are filled from plugin defaults.
+
+### Filter Hook
+
+Add bars via the `njt_nofi_register_bars` filter (additive-only, receives empty array):
+
+```php
+add_filter( 'njt_nofi_register_bars', function ( array $bars ) {
+    $bars[] = [
+        'id'      => 'my-bar',
+        'content' => [ 'text' => 'Hello world' ]
+    ];
+    return $bars;
+} );
+```
+
+### Guarantees
+
+- **Native bars protected**: Admin-created bars cannot be removed or altered by 3rd parties. On id collision, native bars take precedence.
+- **Edition parity**: Injected bars obey identical Lite/Pro gating as native bars. Pro-only fields (bottom placement, CPT/audience targeting, rotation) are active only in Pro, inert in Lite. No Pro bypass.
+- **Cache-safe**: Targeting via the bar's own `display` rules, not PHP conditionals.
+- **Code-owned**: Declared bars are not editable in Customizer, not shown in Customizer preview, not included in export/import.
+- **Render order**: Injected bars render after native bars.
 
 ---
 
