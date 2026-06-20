@@ -5,6 +5,7 @@
   },
   "remove": [
     "src/shared/rotation.js",
+    "src/shared/nav-controls.js",
     "includes/NotificationBar/EventCounter.php",
     "includes/NotificationBar/TrackingRestController.php",
     "assets/frontend/js/tracking.js"

@@ -34,20 +34,22 @@ Notibar is a WordPress plugin with a **React-powered admin UI** and **vanilla JS
 
 ### `/includes` — Backend (PHP)
 
-**Root classes** (singleton services):
+**Root classes & API** (singleton services + helper):
 
 | File | Class | Responsibility | Lines |
 |------|-------|-----------------|-------|
 | **Plugin.php** | `Plugin` | Singleton; activate/deactivate hooks | ~50 |
 | **I18n.php** | `I18n` | Text domain loading | ~25 |
 | **edition.php** | constant | Define `NJT_NOFI_IS_PRO` (true in source) | ~5 |
+| **bar-registry-api.php** | `njt_nofi_register_bar()` | Global helper for 3rd-party bars (CORE) | ~30 |
 
 **Core data & schema** (`/includes/NotificationBar/`):
 
 | File | Class | Responsibility | Lines |
 |------|-------|-----------------|-------|
-| **Schema.php** | `Schema` | Default bar/global objects, enum constants | ~150 |
+| **Schema.php** | `Schema` | Default bar/global objects, enum constants, sanitizeExternalBar() | ~150 |
 | **SchemaSanitizers.php** | `SchemaSanitizers` (trait) | Field validation/sanitization callbacks | ~350 |
+| **BarRegistry.php** | `BarRegistry` | Registry/merge/normalize 3rd-party bars (CORE) | ~150 |
 
 **Asset management & customization**:
 
@@ -225,6 +227,7 @@ Notibar is a WordPress plugin with a **React-powered admin UI** and **vanilla JS
 | **filter-bars.js** | `filterBars(bars, ctx)` — apply all display rules; core filtering | ~250 |
 | **render-bar.js** | `renderBarHTML(bar, global)` — generate HTML; CSS custom props; escaping | ~200 |
 | **rotation.js** | `startRotation(bars, global)` — cycle bars; pause-on-hover (Pro) | ~150 |
+| **nav-controls.js** | `buildNavControls(global)` — build & inject prev/next arrow markup (Pro) | ~80 |
 | **body-push.js** | `installBodyPush(slot)` — ResizeObserver syncs body padding | ~80 |
 | **escape-utils.js** | `escapeText()`, `escapeAttr()`, `decodeBasicEntities()` | ~70 |
 | **pro-ui.jsx** | `ProBadge`, `ProUpgradeNotice`, `isProEdition` export | ~80 |
@@ -398,7 +401,9 @@ Notibar is a WordPress plugin with a **React-powered admin UI** and **vanilla JS
 njt-notification-bar.php (main)
 ├─ includes/Plugin.php
 ├─ includes/I18n.php
+├─ includes/bar-registry-api.php
 ├─ includes/NotificationBar/
+│  ├─ BarRegistry.php
 │  ├─ Schema.php + SchemaSanitizers.php (trait)
 │  ├─ AssetLoader.php
 │  │  └─ (enqueues 4 React bundles + tracking.js)
@@ -441,6 +446,7 @@ src/
    ├─ filter-bars.js (core filtering)
    ├─ render-bar.js (HTML generation)
    ├─ rotation.js (Pro)
+   ├─ nav-controls.js (Pro)
    ├─ body-push.js
    ├─ escape-utils.js
    ├─ pro-ui.jsx

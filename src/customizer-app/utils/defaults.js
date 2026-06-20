@@ -95,6 +95,7 @@ export const DEFAULT_GLOBAL = {
 	rotationIntervalSeconds: 5,
 	rotationPauseOnHover: true,
 	rotationOrder: 'sequential',
+	rotationShowArrows: true,
 };
 
 // ------------------------------------------------------------------

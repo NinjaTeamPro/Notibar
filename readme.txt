@@ -5,7 +5,7 @@ Tags: notification bar, banner, top bar, announcement, notifications
 Requires at least: 4.0
 Requires PHP: 5.3.1
 Tested up to: 7.0
-Stable tag: 3.1.4
+Stable tag: 3.1.5
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 

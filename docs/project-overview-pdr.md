@@ -86,7 +86,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 **Audience**: Agencies, high-traffic sites, marketers needing analytics & advanced targeting.
 
 **Additions over Lite**:
-- **Rotation mode**: Cycle through bars with pause-on-hover; sequential or random; respects `prefers-reduced-motion`
+- **Rotation mode**: Cycle through bars with pause-on-hover, manual prev/next arrows & keyboard nav; respects `prefers-reduced-motion`
 - **Event tracking**: Track clicks, dismissals, engagement per bar; lifetime counters + time-series table
 - **Analytics dashboard**: Charts (trend, breakdown by event type, per-bar comparison); filter by date range, bar, audience, event type
 - **Audience targeting**: Restrict to logged-in, logged-out, specific roles, specific user IDs
@@ -115,7 +115,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 | WPML integration | ✓ | ✓ | Per-bar string registration |
 | Theme compat patches | ✓ | ✓ | 11 built-in themes |
 | Export/Import | ✓* | ✓ | *Lite: UI preview only; no import |
-| **Rotation mode** | | ✓ | Cycle bars; pause-on-hover |
+| **Rotation mode** | | ✓ | Cycle bars; pause-on-hover; manual prev/next arrows & keyboard nav |
 | **Event tracking** | | ✓ | Click, dismiss, engage |
 | **Analytics dashboard** | | ✓ | Charts, filters, time-series |
 | **Audience targeting** | | ✓ | Roles, user lists, logged-in/out |
@@ -394,6 +394,29 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - A/B testing (rotation is manual)
 - Multi-language editorial UI (only English admin)
 - Gutenberg block (Customizer panel only)
+
+---
+
+## Public API for 3rd-Party Integrations
+
+Notibar provides a stable public API (both Lite & Pro) for plugins and themes to inject custom notification bars without modifying Notibar's configuration.
+
+**Core entry point**: `njt_nofi_register_bar( array $bar ): void`
+- Call on `init` or earlier. Declare a bar with an id (charset [A-Za-z0-9_-]); missing fields inherit defaults.
+- Bars without valid id are silently skipped.
+
+**Filter hook**: `apply_filters( 'njt_nofi_register_bars', array $injected ): array`
+- Additive-only; seeded with empty array. Integrators append bar objects.
+- Native bars are never exposed; filter receives only injected bars.
+
+**Guarantees**:
+- Injected bars obey identical Lite/Pro gating as native bars (Pro-only fields inert in Lite).
+- Display rules are cache-safe; targeting via `display` object, not PHP conditionals.
+- On id collision, native bars take precedence.
+- Injected bars are code-owned: not editable in Customizer, not shown in preview, not in export/import.
+- Render order: injected bars appear after native bars.
+
+See [../README.md#integration--hooks-for-developers](../README.md#integration--hooks-for-developers) for examples.
 
 ---
 

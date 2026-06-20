@@ -88,6 +88,18 @@ export function GlobalSettingsPane( { value, onChange } ) {
 							}
 						/>
 
+						<ToggleControl
+							label={ __( 'Show navigation arrows', 'notibar' ) }
+							help={ __(
+								'Let visitors step between bars with prev/next arrows.',
+								'notibar'
+							) }
+							checked={ value.rotationShowArrows ?? true }
+							onChange={ ( val ) =>
+								set( 'rotationShowArrows', val )
+							}
+						/>
+
 						<RadioControl
 							label={ __( 'Rotation order', 'notibar' ) }
 							selected={ value.rotationOrder ?? 'sequential' }
