@@ -94,6 +94,9 @@ STAGE_EXCLUDES=(
 
 # 6. Build assets + choose the source root to stage from.
 if [[ "$EDITION" == "lite" ]]; then
+  STAGE_EXCLUDES+=(
+    --exclude='recommended-modules/edd-license-manager'
+  )
   LITE_ROOT="$RELEASE_DIR/tmp/lite-root"
   rm -rf "$LITE_ROOT"
   mkdir -p "$LITE_ROOT"
@@ -135,6 +138,18 @@ mkdir -p "$STAGE"
 
 echo "==> Staging files"
 rsync -a "${STAGE_EXCLUDES[@]}" "$SRC_ROOT/" "$STAGE/"
+
+# 7b. Set the WordPress "Plugin Name:" header per edition. Pro ships as
+#     "Notibar Pro - ...", Lite as "Notibar - ...". Applied to the STAGED copy
+#     so the source file and git history stay edition-neutral.
+if [[ "$EDITION" == "lite" ]]; then
+  PLUGIN_NAME="Notibar - WordPress Notification Bar"
+else
+  PLUGIN_NAME="Notibar Pro - WordPress Notification Bar"
+fi
+sed -i.bak -E "s|^([[:space:]]*\*[[:space:]]*Plugin Name:[[:space:]]*).*|\1${PLUGIN_NAME}|" "$STAGE/$PLUGIN_FILE"
+rm -f "$STAGE/${PLUGIN_FILE}.bak"
+echo "==> Set Plugin Name: ${PLUGIN_NAME}"
 
 # 8. Zip (root folder inside zip is the plugin slug — WP-standard, activatable
 #    as-is): "notibar/" for Lite, "notibar-pro/" for Pro.
