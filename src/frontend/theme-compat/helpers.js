@@ -57,24 +57,30 @@ export function adminBarHeight() {
 }
 
 /**
- * Measure the current height of the first .njt-nofi-notification-bar
- * inside the slot.
+ * Height of the top bar/stack that a theme sticky header must clear.
+ *
+ * Measures the top-pinned element (the stack wrapper in stack mode, else the
+ * lone container, via topPinnedEl).
+ *
+ * Fixed vs absolute: a FIXED bar never scrolls, so its `rect.bottom` is constant
+ * and this returns the full height (unchanged behavior). An ABSOLUTE bar/stack
+ * scrolls UP with the page — return only the height still visible below the
+ * admin bar, clamped to [0, full]. A sticky header (re-synced on scroll) then
+ * TRACKS the bar down to flush instead of holding the full offset and leaving a
+ * gap that grows with scroll. At rest (scroll 0) `rect.bottom - adminBar` equals
+ * the full height for both positions, so behavior is identical when not scrolled.
  *
  * @param {HTMLElement} slot
- * @return {number} Height in pixels (0 if bar not found).
+ * @return {number} Height in pixels (0 when no top bar is present).
  */
 export function barHeight( slot ) {
-	// Stack mode (Pro): the top wrapper holds all top-placed bars; its height is
-	// the full offset a theme sticky header must clear. Single/rotation: the
-	// lone notification bar.
-	const stackTop = slot.querySelector(
-		".njt-nofi-stack[data-placement='top']"
-	);
-	if ( stackTop ) {
-		return stackTop.offsetHeight;
+	const top = topPinnedEl( slot );
+	if ( ! top ) {
+		return 0;
 	}
-	const bar = slot.querySelector( '.njt-nofi-notification-bar' );
-	return bar ? bar.offsetHeight : 0;
+	const full = top.offsetHeight;
+	const visible = top.getBoundingClientRect().bottom - adminBarHeight();
+	return Math.max( 0, Math.min( full, visible ) );
 }
 
 /**
