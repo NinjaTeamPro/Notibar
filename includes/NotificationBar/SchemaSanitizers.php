@@ -379,6 +379,10 @@ trait SchemaSanitizers {
 			? $g['rotationOrder']
 			: $default['rotationOrder'];
 
+		$stack_position = isset( $g['stackPositionType'] ) && in_array( $g['stackPositionType'], self::ALLOWED_POSITION, true )
+			? $g['stackPositionType']
+			: $default['stackPositionType'];
+
 		return [
 			'displayMode'             => $display_mode,
 			'rotationIntervalSeconds' => $interval,
@@ -389,6 +393,7 @@ trait SchemaSanitizers {
 			'rotationShowArrows'      => isset( $g['rotationShowArrows'] )
 				? (bool) $g['rotationShowArrows']
 				: $default['rotationShowArrows'],
+			'stackPositionType'       => $stack_position,
 		];
 	}
 

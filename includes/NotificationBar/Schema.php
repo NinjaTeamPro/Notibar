@@ -41,7 +41,7 @@ class Schema {
 	const ALLOWED_DEVICES   = [ 'desktop', 'mobile' ];
 	const ALLOWED_LOGIC     = [ 'all', 'none', 'include', 'exclude' ];
 	const ALLOWED_CLOSE_BTN = [ 'close', 'toggle', 'disable' ];
-	const ALLOWED_DISP_MODE     = [ 'single', 'rotation' ];
+	const ALLOWED_DISP_MODE     = [ 'single', 'rotation', 'stack' ];
 	const ALLOWED_ROTATION_ORDER = [ 'sequential', 'random' ];
 	const ALLOWED_AUDIENCE      = [ 'all', 'loggedin', 'loggedout', 'roles', 'users' ];
 
@@ -142,6 +142,7 @@ class Schema {
 			'rotationPauseOnHover'    => true,
 			'rotationOrder'           => 'sequential',
 			'rotationShowArrows'      => true,
+			'stackPositionType'       => 'fixed',
 		];
 	}
 

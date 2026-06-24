@@ -13,10 +13,6 @@
 
 import { filterBars } from '../shared/filter-bars';
 import { renderBarHTML } from '../shared/render-bar';
-/* @pro */
-import { startRotation } from '../shared/rotation';
-import { buildStacksHTML } from '../shared/stack';
-/* @endpro */
 import { installBodyPush } from '../shared/body-push';
 import { installMobileAdminBarOffset } from '../shared/mobile-admin-bar-offset';
 import { isDismissed, dismiss } from './cookies';
@@ -106,12 +102,6 @@ function init() {
 		document.body.appendChild( slot );
 	}
 
-	/* @pro */
-	// Honour reduced-motion preference — no rotation, single render only.
-	const prefersReducedMotion = matchMedia(
-		'(prefers-reduced-motion: reduce)'
-	).matches;
-	/* @endpro */
 
 	// Build client-side context.
 	ctx.device = detectDevice();
@@ -141,20 +131,6 @@ function init() {
 		);
 	}
 
-	/* @pro */
-	const isStackMode = globalConfig.displayMode === 'stack';
-
-	// Stack mode (Pro): render every survivor at once, split top/bottom by
-	// placement. Reused by the dismissal handler to rebuild after a bar leaves.
-	function renderStack() {
-		slot.innerHTML = buildStacksHTML(
-			survivors,
-			globalConfig,
-			renderBarWithCollapsedState
-		);
-		revealBars();
-	}
-	/* @endpro */
 
 	// -----------------------------------------------------------------------
 	// Dismissal handler — called on × button click.
@@ -177,35 +153,9 @@ function init() {
 			// alone would leave the body padding in place.
 			slot.innerHTML = '';
 			slot.style.display = 'none';
-			/* @pro */
-			if ( rotationCtrl ) {
-				rotationCtrl.stop();
-			}
-			/* @endpro */
 			return;
 		}
 
-		/* @pro */
-		// If rotation is active, restart it with the reduced survivors list.
-		// Preserve the reduced-motion autoplay decision across the restart.
-		if ( rotationCtrl ) {
-			rotationCtrl.stop();
-			rotationCtrl = startRotation( {
-				slot,
-				bars: survivors,
-				renderFn: renderBarWithCollapsedState,
-				global: globalConfig,
-				autoplay: ! prefersReducedMotion,
-			} );
-			return;
-		}
-
-		// Stack mode: rebuild the stack from the reduced survivors.
-		if ( isStackMode ) {
-			renderStack();
-			return;
-		}
-		/* @endpro */
 
 		// Single render — first survivor.
 		slot.innerHTML = renderBarWithCollapsedState(
@@ -254,72 +204,14 @@ function init() {
 			return;
 		}
 
-		/* @pro */
-		// Manual prev/next arrows — only act when the rotation controller is
-		// live (it owns the index + timer-reset logic).
-		if ( e.target.closest( '.njt-nofi-nav-prev' ) && rotationCtrl ) {
-			rotationCtrl.prev();
-			return;
-		}
-		if ( e.target.closest( '.njt-nofi-nav-next' ) && rotationCtrl ) {
-			rotationCtrl.next();
-		}
-		/* @endpro */
 	} );
 
-	/* @pro */
-	// Keyboard nav — scoped to focus within the slot. keydown only reaches this
-	// listener when a focusable descendant (CTA link, close/toggle, or an arrow)
-	// is focused. No document-level listener: page scroll, form inputs, and
-	// other carousels are never hijacked. ArrowLeft/Right have no native action
-	// on the focused controls, so preventDefault on just those two is safe.
-	slot.addEventListener( 'keydown', function ( e ) {
-		if ( ! rotationCtrl ) {
-			return;
-		}
-		if ( e.key === 'ArrowLeft' ) {
-			e.preventDefault();
-			rotationCtrl.prev();
-		} else if ( e.key === 'ArrowRight' ) {
-			e.preventDefault();
-			rotationCtrl.next();
-		}
-	} );
-	/* @endpro */
 
 	// -----------------------------------------------------------------------
 	// Render — stack (Pro), rotation (Pro), or single.
 	// -----------------------------------------------------------------------
 	let stackRendered = false;
-	/* @pro */
-	// Stack mode shows every survivor at once; takes precedence over rotation
-	// (display modes are mutually exclusive).
-	if ( isStackMode ) {
-		renderStack();
-		stackRendered = true;
-	}
-	/* @endpro */
 
-	/* @pro */
-	// Rotation engine runs when display mode is rotation with >1 survivor.
-	// Under prefers-reduced-motion we still start it so manual arrows/keyboard
-	// work, but with autoplay disabled. When arrows are also off there is
-	// nothing interactive to show, so we fall through to a single render.
-	const arrowsOn = globalConfig.rotationShowArrows !== false;
-	const isRotation =
-		globalConfig.displayMode === 'rotation' && survivors.length > 1;
-	const useRotation = isRotation && ( ! prefersReducedMotion || arrowsOn );
-
-	if ( useRotation ) {
-		rotationCtrl = startRotation( {
-			slot,
-			bars: survivors,
-			renderFn: renderBarWithCollapsedState,
-			global: globalConfig,
-			autoplay: ! prefersReducedMotion,
-		} );
-	}
-	/* @endpro */
 
 	if ( ! rotationCtrl && ! stackRendered ) {
 		slot.innerHTML = renderBarWithCollapsedState(

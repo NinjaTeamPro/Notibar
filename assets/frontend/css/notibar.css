@@ -48,6 +48,67 @@
 }
 
 /* ==========================================================================
+   Stack mode (Pro) — show all matching bars at once.
+   ----------------------------------------------------------------------------
+   Each bar keeps its own full-width markup from renderBarHTML(); the wrapper
+   owns the positioning and the inner .njt-nofi-container pin is neutralized so
+   bars fall into normal flow and stack vertically (one per row). One position
+   type (data-position) applies to the whole stack; placement splits bars into
+   a top wrapper and a bottom wrapper. The bottom wrapper grows from the
+   viewport bottom upward (column-reverse) while DOM order stays list order.
+   ========================================================================== */
+
+.njt-nofi-stack {
+  z-index: 10000;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.njt-nofi-stack[data-position='fixed'] {
+  position: fixed;
+}
+
+.njt-nofi-stack[data-position='absolute'] {
+  position: absolute;
+}
+
+.njt-nofi-stack[data-placement='top'] {
+  top: 0;
+}
+
+.njt-nofi-stack[data-placement='bottom'] {
+  bottom: 0;
+  flex-direction: column-reverse;
+}
+
+/* Neutralize each bar's own fixed/absolute pin so they flow inside the wrapper
+   instead of all stacking at top:0 on top of each other. */
+.njt-nofi-stack .njt-nofi-container {
+  position: static;
+  top: auto;
+  bottom: auto;
+}
+
+/* Hairline divider between adjacent stacked bars (one per gap). The
+   adjacent-sibling combinator follows DOM order, so the divider must sit on the
+   edge that faces the previous bar in each wrapper's VISUAL order: top wrapper
+   flows normally (border-top), bottom wrapper is column-reverse (border-bottom).
+   Splitting the rule keeps exactly one hairline per gap in both directions. */
+.njt-nofi-stack[data-placement='top']
+  > .njt-nofi-container-content
+  + .njt-nofi-container-content {
+  border-top: 1px solid rgba( 0, 0, 0, 0.12 );
+}
+
+.njt-nofi-stack[data-placement='bottom']
+  > .njt-nofi-container-content
+  + .njt-nofi-container-content {
+  border-bottom: 1px solid rgba( 0, 0, 0, 0.12 );
+}
+
+/* ==========================================================================
    Container content — hidden until JS adds .njt-nofi-visible
    ----------------------------------------------------------------------------
    Switched from CSS transitions to a @keyframes animation. Transitions
@@ -441,6 +502,20 @@
 .admin-bar .njt-nofi-container[data-placement='bottom'] {
   top: auto;
   bottom: 0;
+}
+
+/* Stack mode (Pro): the top wrapper sits below the admin bar exactly like a
+   single top bar (both fixed and absolute, pre-scroll); the ≤600px scroll
+   clamp is handled by mobile-admin-bar-offset.js for the fixed case. The bottom
+   wrapper keeps bottom:0 from its base rule — no admin-bar offset needed. */
+.admin-bar .njt-nofi-stack[data-placement='top'] {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  .admin-bar .njt-nofi-stack[data-placement='top'] {
+    top: 46px;
+  }
 }
 
 /* ==========================================================================

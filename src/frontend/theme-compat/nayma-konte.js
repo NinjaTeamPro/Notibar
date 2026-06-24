@@ -12,6 +12,7 @@ import {
 	hasTopBar,
 	barHeight,
 	adminBarHeight,
+	positionedEl,
 } from './helpers';
 
 /**
@@ -21,8 +22,8 @@ import {
  * @return {void}
  */
 export function applyNayma( slot ) {
-	const container = slot.querySelector( '.njt-nofi-container' );
-	if ( ! container || getComputedStyle( container ).position !== 'fixed' ) {
+	const positioned = positionedEl( slot );
+	if ( ! positioned || getComputedStyle( positioned ).position !== 'fixed' ) {
 		return;
 	}
 
@@ -51,8 +52,8 @@ export function applyNayma( slot ) {
  * @return {void}
  */
 export function applyKonte( slot ) {
-	const container = slot.querySelector( '.njt-nofi-container' );
-	if ( ! container || getComputedStyle( container ).position !== 'fixed' ) {
+	const positioned = positionedEl( slot );
+	if ( ! positioned || getComputedStyle( positioned ).position !== 'fixed' ) {
 		return;
 	}
 

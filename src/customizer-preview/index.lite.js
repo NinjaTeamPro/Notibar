@@ -18,10 +18,6 @@
 
 import { renderBarHTML } from '../shared/render-bar.js';
 import { filterBars } from '../shared/filter-bars.js';
-/* @pro */
-import { startRotation } from '../shared/rotation.js';
-import { buildStacksHTML } from '../shared/stack.js';
-/* @endpro */
 import { installBodyPush } from '../shared/body-push.js';
 import { applyThemeCompat } from '../frontend/theme-compat.js';
 import { PREVIEW_STYLES } from '../shared/preview-styles.js';
@@ -186,27 +182,7 @@ function rerender() {
 	}
 
 	let stackRendered = false;
-	/* @pro */
-	// Stack mode: render every visible bar at once (takes precedence over
-	// rotation; display modes are mutually exclusive).
-	if ( global.displayMode === 'stack' ) {
-		renderStacks( slot, visible, global );
-		stackRendered = true;
-	}
-	/* @endpro */
 
-	/* @pro */
-	const isRotation = global.displayMode === 'rotation' && visible.length > 1;
-
-	if ( isRotation ) {
-		activeRotation = startRotation( {
-			slot,
-			bars: visible,
-			renderFn: renderBarHTML,
-			global,
-		} );
-	}
-	/* @endpro */
 
 	if ( ! activeRotation && ! stackRendered ) {
 		renderSingle( slot, visible[ 0 ], global );
@@ -235,24 +211,6 @@ function renderSingle( slot, bar, global ) {
 	}
 }
 
-/* @pro */
-/**
- * Render every visible bar at once (stack mode), split top/bottom by placement.
- * Reveals all bars so each plays the slide-in transition.
- *
- * @param {HTMLElement} slot   Slot element.
- * @param {Array}       bars   Visible bars to stack.
- * @param {Object}      global Global config (reads stackPositionType).
- */
-function renderStacks( slot, bars, global ) {
-	slot.innerHTML = buildStacksHTML( bars, global );
-	slot.querySelectorAll( '.njt-nofi-container-content' ).forEach(
-		function ( el ) {
-			el.classList.add( 'njt-nofi-visible' );
-		}
-	);
-}
-/* @endpro */
 
 /**
  * Delegate close / toggle clicks on the slot. Re-applies on every render so
@@ -262,18 +220,6 @@ function renderStacks( slot, bars, global ) {
  */
 function wireDismissDelegate( slot ) {
 	slot.onclick = function ( e ) {
-		/* @pro */
-		// Manual prev/next arrows — mirror the live frontend so admins can
-		// test navigation while editing. Only act when rotation is live.
-		if ( e.target.closest( '.njt-nofi-nav-prev' ) && activeRotation ) {
-			activeRotation.prev();
-			return;
-		}
-		if ( e.target.closest( '.njt-nofi-nav-next' ) && activeRotation ) {
-			activeRotation.next();
-			return;
-		}
-		/* @endpro */
 		const btn = e.target.closest( '.njt-nofi-close, .njt-nofi-toggle' );
 		if ( ! btn ) {
 			return;

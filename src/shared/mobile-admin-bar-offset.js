@@ -39,6 +39,15 @@ export function installMobileAdminBarOffset( slot ) {
 	const mq = window.matchMedia( MOBILE_QUERY );
 
 	function findFixedTopBar() {
+		// Stack mode (Pro): clamp the fixed top stack wrapper. An absolute stack
+		// scrolls away with the document (like an absolute single bar) so it is
+		// never clamped. The wrapper selector is inert in Lite — no stack exists.
+		const stack = slot.querySelector(
+			".njt-nofi-stack[data-placement='top'][data-position='fixed']"
+		);
+		if ( stack ) {
+			return stack;
+		}
 		const bar = slot.querySelector(
 			".njt-nofi-container[data-position='fixed']"
 		);

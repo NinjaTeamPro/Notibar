@@ -16,6 +16,10 @@ Data flows one direction in steady state (options → JSON → settings → outp
 
 ## Bootstrap Sequence
 
+### Bootstrap Includes
+
+At main-file include time (before any `plugins_loaded` callback), `njt-notification-bar.php` requires `includes/bar-registry-api.php` so the public helper `njt_nofi_register_bar()` is defined early enough for integrators to call it on `init` (or earlier). See [Third-Party Bar Registry](#third-party-bar-registry-v320) below.
+
 ### Plugin Activation
 
 ```
@@ -161,10 +165,12 @@ Pro also registers `njt_nofi_kill_lite()` on `register_activation_hook` + `admin
 
 ```javascript
 {
-  displayMode: "single",                 // single|rotation
+  displayMode: "single",                 // single|rotation|stack
   rotationIntervalSeconds: 5,            // 2–60 (Pro)
   rotationPauseOnHover: true,            // (Pro)
-  rotationOrder: "sequential"            // sequential|random (Pro)
+  rotationOrder: "sequential",           // sequential|random (Pro)
+  rotationShowArrows: true,              // manual prev/next arrows in rotation (Pro)
+  stackPositionType: "fixed"             // fixed|absolute — whole-stack position in 'stack' mode (Pro)
 }
 ```
 
@@ -196,3 +202,21 @@ CREATE TABLE {prefix}notibar_events (
 - `Migration` (+ `MigrationMapper` trait): one-shot idempotent v2.1.9→v3.0 conversion of ~30 flat `njt_nofi_*` theme_mods into one bar object + global config. Backup in option `njt_nofi_v2_backup`, auto-pruned after 30 days (cron `njt_nofi_prune_v2_backup`). Flags: `njt_nofi_migrated_to_v3`, `njt_nofi_migrated_to_options`.
 - `maybeMigrateThemeModToOption()`: v3.1→v3.1.2 storage flip (theme_mod → wp_options).
 - `uninstall.php`: removes theme_mods + options (`njt_nofi_v2_backup`, `njt_nofi_migrated_to_v3`, `njt_nofi_wpml_string_map`), user meta, and unschedules cron; multisite-aware.
+
+---
+
+## Third-Party Bar Registry (v3.2.0+)
+
+Plugins/themes inject **code-owned** bars that are never persisted to `wp_options`, never editable in the Customizer, and never exported. Two entry points, both in `BarRegistry` (`includes/NotificationBar/BarRegistry.php`):
+
+| Entry point | Mechanism |
+|-------------|-----------|
+| `njt_nofi_register_bar( array $bar )` | Procedural helper (`bar-registry-api.php`) → `BarRegistry::add()`, appends to a static `$registered` list |
+| `njt_nofi_register_bars` filter | **Additive-only**, seeded with an EMPTY array so callbacks can only add — native bars are never handed out |
+
+**Merge at render** — `NotificationBarHandle::maybeRender()` calls `BarRegistry::merge_external( $native )`:
+
+1. `collect()` merges `$registered` + filter results, normalizes each via `Schema::sanitizeExternalBar()` (fills defaults, validates, `wp_kses` text, preserves caller `id`), drops any bar with no usable `id`, and dedupes injected bars by id (last declaration wins).
+2. `merge_external()` returns `array_merge( native, injected_survivors )` — native bars first; an injected bar whose id collides with a native id is dropped (**native wins**).
+
+Injected bars then flow through the identical render/filter/schedule/dismiss/rotation pipeline as native bars, with the same Lite/Pro field gating. See [README → Integration / Hooks for Developers](../../README.md#integration--hooks-for-developers).

@@ -9,7 +9,13 @@
  */
 /* eslint-env browser */
 
-import { setStyles, hasTopBar, barHeight, adminBarHeight } from './helpers';
+import {
+	setStyles,
+	hasTopBar,
+	barHeight,
+	adminBarHeight,
+	positionedEl,
+} from './helpers';
 
 /**
  * Enfold — absolute-position header offset with transparency check.
@@ -18,10 +24,10 @@ import { setStyles, hasTopBar, barHeight, adminBarHeight } from './helpers';
  * @return {void}
  */
 export function applyEnfold( slot ) {
-	const container = slot.querySelector( '.njt-nofi-container' );
+	const positioned = positionedEl( slot );
 	if (
-		! container ||
-		getComputedStyle( container ).position !== 'absolute'
+		! positioned ||
+		getComputedStyle( positioned ).position !== 'absolute'
 	) {
 		return;
 	}
