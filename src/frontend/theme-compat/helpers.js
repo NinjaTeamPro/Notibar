@@ -64,8 +64,34 @@ export function adminBarHeight() {
  * @return {number} Height in pixels (0 if bar not found).
  */
 export function barHeight( slot ) {
+	// Stack mode (Pro): the top wrapper holds all top-placed bars; its height is
+	// the full offset a theme sticky header must clear. Single/rotation: the
+	// lone notification bar.
+	const stackTop = slot.querySelector(
+		".njt-nofi-stack[data-placement='top']"
+	);
+	if ( stackTop ) {
+		return stackTop.offsetHeight;
+	}
 	const bar = slot.querySelector( '.njt-nofi-notification-bar' );
 	return bar ? bar.offsetHeight : 0;
+}
+
+/**
+ * The floating element that carries the notibar's positioning: the stack
+ * wrapper in stack mode (the inner `.njt-nofi-container`s are forced
+ * `position:static`), else the lone `.njt-nofi-container`. Shims read its
+ * computed `position` to gate scroll fixups — in stack mode the wrapper holds
+ * the real `fixed`/`absolute` value (from `global.stackPositionType`).
+ *
+ * @param {HTMLElement} slot
+ * @return {HTMLElement|null} The positioned element, or null when none exists.
+ */
+export function positionedEl( slot ) {
+	return (
+		slot.querySelector( '.njt-nofi-stack' ) ||
+		slot.querySelector( '.njt-nofi-container' )
+	);
 }
 
 /**
@@ -80,16 +106,31 @@ export function isSlotHidden( slot ) {
 }
 
 /**
- * Read the current bar's placement from its data-placement attribute.
+ * The positioned element that is pinned to the TOP, or null when none is.
+ *
+ * Stack mode (Pro): the top stack wrapper `.njt-nofi-stack[data-placement='top']`
+ * — the inner `.njt-nofi-container`s are `position:static` inside it, so the
+ * wrapper is the authoritative positioned/measurable element. Single/rotation:
+ * the lone `.njt-nofi-container`, only when it is top-placed.
  *
  * @param {HTMLElement} slot
- * @return {'top'|'bottom'} Placement of the rendered bar ('top' default).
+ * @return {HTMLElement|null} The top-pinned element, or null.
  */
-export function barPlacement( slot ) {
-	const bar = slot.querySelector( '.njt-nofi-container' );
-	return bar && 'bottom' === bar.getAttribute( 'data-placement' )
-		? 'bottom'
-		: 'top';
+function topPinnedEl( slot ) {
+	const stackTop = slot.querySelector(
+		".njt-nofi-stack[data-placement='top']"
+	);
+	if ( stackTop ) {
+		return stackTop;
+	}
+	const container = slot.querySelector( '.njt-nofi-container' );
+	if (
+		container &&
+		'bottom' !== container.getAttribute( 'data-placement' )
+	) {
+		return container;
+	}
+	return null;
 }
 
 /**
@@ -98,38 +139,34 @@ export function barPlacement( slot ) {
  * must leave header offsets at their theme-native values.
  *
  * Re-read this per event/sync (never capture at init): rotation can swap in
- * a bar with a different placement at any time.
+ * a bar with a different placement at any time, and stack mode renders a top
+ * wrapper holding multiple bars.
  *
  * @param {HTMLElement} slot
- * @return {boolean} True when an active top-placed bar is visible.
+ * @return {boolean} True when an active top-pinned bar/stack is visible.
  */
 export function hasTopBar( slot ) {
 	if ( isSlotHidden( slot ) ) {
 		return false;
 	}
-	const bar = slot.querySelector( '.njt-nofi-notification-bar' );
-	if ( ! bar ) {
+	// The positioned, top-pinned element: the stack top wrapper in stack mode,
+	// else the lone container when it is top-placed. Rect height instead of
+	// offsetParent: position:fixed elements report a null offsetParent even
+	// when visible.
+	const top = topPinnedEl( slot );
+	if ( ! top || top.getBoundingClientRect().height === 0 ) {
 		return false;
 	}
-	// Rect height instead of offsetParent: position:fixed elements report a
-	// null offsetParent even when visible.
-	if ( bar.getBoundingClientRect().height === 0 ) {
-		return false;
-	}
-	// An absolute bar scrolls away with the document — once it has fully
-	// left the viewport, theme headers must return to their native
-	// position. Fixed bars never leave the viewport, so no scroll check.
-	// Measured on the container: it is the positioned element, so its rect
-	// is authoritative even if inner elements are offset within it.
-	const container = slot.querySelector( '.njt-nofi-container' );
+	// An absolute bar/stack scrolls away with the document — once it has fully
+	// left the viewport, theme headers must return to their native position.
+	// Fixed elements never leave the viewport, so no scroll check applies.
 	if (
-		container &&
-		'absolute' === container.getAttribute( 'data-position' ) &&
-		container.getBoundingClientRect().bottom <= 0
+		'absolute' === top.getAttribute( 'data-position' ) &&
+		top.getBoundingClientRect().bottom <= 0
 	) {
 		return false;
 	}
-	return 'top' === barPlacement( slot );
+	return true;
 }
 
 /**

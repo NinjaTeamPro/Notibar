@@ -20,6 +20,7 @@ import { renderBarHTML } from '../shared/render-bar.js';
 import { filterBars } from '../shared/filter-bars.js';
 /* @pro */
 import { startRotation } from '../shared/rotation.js';
+import { buildStacksHTML } from '../shared/stack.js';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push.js';
 import { applyThemeCompat } from '../frontend/theme-compat.js';
@@ -184,6 +185,16 @@ function rerender() {
 		return;
 	}
 
+	let stackRendered = false;
+	/* @pro */
+	// Stack mode: render every visible bar at once (takes precedence over
+	// rotation; display modes are mutually exclusive).
+	if ( global.displayMode === 'stack' ) {
+		renderStacks( slot, visible, global );
+		stackRendered = true;
+	}
+	/* @endpro */
+
 	/* @pro */
 	const isRotation = global.displayMode === 'rotation' && visible.length > 1;
 
@@ -197,7 +208,7 @@ function rerender() {
 	}
 	/* @endpro */
 
-	if ( ! activeRotation ) {
+	if ( ! activeRotation && ! stackRendered ) {
 		renderSingle( slot, visible[ 0 ], global );
 	}
 
@@ -223,6 +234,25 @@ function renderSingle( slot, bar, global ) {
 		containerContent.classList.add( 'njt-nofi-visible' );
 	}
 }
+
+/* @pro */
+/**
+ * Render every visible bar at once (stack mode), split top/bottom by placement.
+ * Reveals all bars so each plays the slide-in transition.
+ *
+ * @param {HTMLElement} slot   Slot element.
+ * @param {Array}       bars   Visible bars to stack.
+ * @param {Object}      global Global config (reads stackPositionType).
+ */
+function renderStacks( slot, bars, global ) {
+	slot.innerHTML = buildStacksHTML( bars, global );
+	slot.querySelectorAll( '.njt-nofi-container-content' ).forEach(
+		function ( el ) {
+			el.classList.add( 'njt-nofi-visible' );
+		}
+	);
+}
+/* @endpro */
 
 /**
  * Delegate close / toggle clicks on the slot. Re-applies on every render so
@@ -272,21 +302,25 @@ function injectEditButton( slot ) {
 	if ( focusedBarId ) {
 		return;
 	}
-	const cc = slot.querySelector( '.njt-nofi-container-content' );
-	if ( ! cc || cc.querySelector( '.njt-nofi-edit-btn' ) ) {
-		return;
-	}
-	const barId = cc.getAttribute( 'data-bar-id' );
-	if ( ! barId ) {
-		return;
-	}
-	const btn = document.createElement( 'button' );
-	btn.type = 'button';
-	btn.className = 'njt-nofi-edit-btn';
-	btn.setAttribute( 'data-bar-id', barId );
-	btn.setAttribute( 'aria-label', 'Edit this notification bar' );
-	btn.innerHTML = EDIT_ICON_SVG + '<span>Edit</span>';
-	cc.appendChild( btn );
+	// Inject into every rendered bar — one in single/rotation, N in stack mode.
+	slot.querySelectorAll( '.njt-nofi-container-content' ).forEach(
+		function ( cc ) {
+			if ( cc.querySelector( '.njt-nofi-edit-btn' ) ) {
+				return;
+			}
+			const barId = cc.getAttribute( 'data-bar-id' );
+			if ( ! barId ) {
+				return;
+			}
+			const btn = document.createElement( 'button' );
+			btn.type = 'button';
+			btn.className = 'njt-nofi-edit-btn';
+			btn.setAttribute( 'data-bar-id', barId );
+			btn.setAttribute( 'aria-label', 'Edit this notification bar' );
+			btn.innerHTML = EDIT_ICON_SVG + '<span>Edit</span>';
+			cc.appendChild( btn );
+		}
+	);
 }
 
 function installEditAffordance( slot ) {

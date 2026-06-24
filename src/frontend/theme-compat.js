@@ -28,6 +28,7 @@
  */
 /* eslint-env browser */
 
+import { positionedEl } from './theme-compat/helpers';
 import { applyBrandy } from './theme-compat/brandy';
 import { applyDivi } from './theme-compat/divi';
 import { applyEssentials } from './theme-compat/essentials';
@@ -108,11 +109,16 @@ export function applyThemeCompat( themeSlug, slot ) {
 	// Absolute bars scroll out of the viewport, flipping hasTopBar() with
 	// no DOM mutation — re-sync on scroll, but only for absolute bars so
 	// fixed bars (the common case) pay one attribute read per tick at most.
+	// Read the POSITIONED element (the stack wrapper in stack mode, else the
+	// container): in stack mode the inner container's data-position reflects the
+	// ignored per-bar positionType, while the wrapper carries the authoritative
+	// stackPositionType — so an absolute stack with fixed-positioned bars still
+	// re-syncs on scroll and the header returns flush once the stack scrolls away.
 	window.addEventListener(
 		'scroll',
 		function () {
-			const bar = slot.querySelector( '.njt-nofi-container' );
-			if ( bar && 'absolute' === bar.getAttribute( 'data-position' ) ) {
+			const el = positionedEl( slot );
+			if ( el && 'absolute' === el.getAttribute( 'data-position' ) ) {
 				sync();
 			}
 		},

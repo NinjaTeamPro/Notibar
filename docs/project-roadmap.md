@@ -27,6 +27,7 @@ Runs on WordPress 4.0–7.0, PHP 5.3.1+. Ships in two editions (Lite / Pro) from
 - Brandy theme compat shim (CSS top override, shared factory) — completed 2026-06-11
 - Manual prev/next navigation arrows + keyboard nav for rotation mode (Pro); global rotationShowArrows toggle
 - **Public bar registration API**: `njt_nofi_register_bar()` + `njt_nofi_register_bars` filter (CORE); 3rd-party bars inherit all native features (rendering, scheduling, targeting, dismissal, rotation)
+- **Stack display mode** (Pro): `displayMode=stack` shows all matching bars at once via `src/shared/stack.js`; split top/bottom by placement into `.njt-nofi-stack` wrappers; new global `stackPositionType` (fixed|absolute); hairline separators; bottom group reversed; two-sided `body-push`. `render-bar.js` markup reused unchanged
 
 ### v3.1 line (2026-05-30 → 2026-05-31)
 

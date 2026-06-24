@@ -17,11 +17,19 @@ import { isProEdition, ProUpgradeNotice } from '../../shared/pro-ui';
 const DISPLAY_MODE_OPTIONS = [
 	{ label: __( 'Single bar', 'notibar' ), value: 'single' },
 	{ label: __( 'Rotation', 'notibar' ), value: 'rotation' },
+	{ label: __( 'Show all bars', 'notibar' ), value: 'stack' },
 ];
 
 const ROTATION_ORDER_OPTIONS = [
 	{ label: __( 'Sequential (list order)', 'notibar' ), value: 'sequential' },
 	{ label: __( 'Random', 'notibar' ), value: 'random' },
+];
+
+// Stack mode applies ONE position type to the whole stack (per-bar positionType
+// is ignored). 'fixed' stays pinned on scroll; 'absolute' scrolls away.
+const STACK_POSITION_OPTIONS = [
+	{ label: __( 'Fixed (stays on scroll)', 'notibar' ), value: 'fixed' },
+	{ label: __( 'Scroll away with page', 'notibar' ), value: 'absolute' },
 ];
 
 /**
@@ -32,11 +40,30 @@ const ROTATION_ORDER_OPTIONS = [
 export function GlobalSettingsPane( { value, onChange } ) {
 	const pro = isProEdition();
 	const isRotation = value.displayMode === 'rotation';
+	const isStack = value.displayMode === 'stack';
 	const set = ( key, val ) => onChange( { ...value, [ key ]: val } );
 
 	// Lite shows the rotation controls as a locked teaser even though
 	// displayMode stays 'single' (the locked wrapper blocks interaction).
 	const showRotationControls = isRotation || ! pro;
+
+	let displayModeHelp;
+	if ( isRotation ) {
+		displayModeHelp = __(
+			'Bars rotate one at a time on a timer.',
+			'notibar'
+		);
+	} else if ( isStack ) {
+		displayModeHelp = __(
+			'All matching bars show at once, stacked vertically.',
+			'notibar'
+		);
+	} else {
+		displayModeHelp = __(
+			'Show one bar at a time, picked by order.',
+			'notibar'
+		);
+	}
 
 	return (
 		<div className="njt-notibar-global-settings">
@@ -48,21 +75,24 @@ export function GlobalSettingsPane( { value, onChange } ) {
 			<div className={ pro ? undefined : 'njt-pro-locked' }>
 				<RadioControl
 					label={ __( 'Display mode', 'notibar' ) }
-					help={
-						isRotation
-							? __(
-									'Bars rotate one at a time on a timer.',
-									'notibar'
-							  )
-							: __(
-									'Show one bar at a time, picked by order.',
-									'notibar'
-							  )
-					}
+					help={ displayModeHelp }
 					selected={ value.displayMode ?? 'single' }
 					options={ DISPLAY_MODE_OPTIONS }
 					onChange={ ( val ) => set( 'displayMode', val ) }
 				/>
+
+				{ isStack && (
+					<RadioControl
+						label={ __( 'Stack position', 'notibar' ) }
+						help={ __(
+							'Applies to the whole stack; individual bar position is ignored.',
+							'notibar'
+						) }
+						selected={ value.stackPositionType ?? 'fixed' }
+						options={ STACK_POSITION_OPTIONS }
+						onChange={ ( val ) => set( 'stackPositionType', val ) }
+					/>
+				) }
 
 				{ showRotationControls && (
 					<>

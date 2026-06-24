@@ -26,7 +26,8 @@ This document is split for readability. See:
 - **Bar load pipeline**: Merge native + 3rd-party bars at `NotificationBarHandle::maybeRender()`. Registry calls `njt_nofi_register_bar()` helper (from `bar-registry-api.php`) and `njt_nofi_register_bars` filter (additive-only, seeded empty). Native bars never exposed; on id collision native wins. Injected bars render after native.
 - **Render gate**: `NotificationBarHandle` (frontend) + `NotificationBarHandleAdmin` trait (menu); shared render logic in `src/shared/`.
 - **Rotation nav** (Pro): Arrows injected post-render by `nav-controls.js` when displayMode=rotation, global rotationShowArrows=true, and ≥2 surviving bars. Supports click + keyboard (ArrowLeft/Right).
-- **Editions**: `NJT_NOFI_IS_PRO` constant; Lite produced by `build-tools/strip-pro.js` + `pro-manifest.json`.
+- **Stack mode** (Pro): displayMode=stack renders ALL survivors at once via `src/shared/stack.js`. Bars split by `placement` into a top + a bottom `.njt-nofi-stack` wrapper (one position type from global `stackPositionType`); `render-bar.js` markup reused, inner container pin neutralized in CSS. `body-push` pads both sides.
+- **Editions**: `NJT_NOFI_IS_PRO` constant; Lite produced by `build-tools/strip-pro.js` + `pro-manifest.json` (now also removes `stack.js`).
 
 ## Related Docs
 

@@ -15,6 +15,7 @@ import { filterBars } from '../shared/filter-bars';
 import { renderBarHTML } from '../shared/render-bar';
 /* @pro */
 import { startRotation } from '../shared/rotation';
+import { buildStacksHTML } from '../shared/stack';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push';
 import { installMobileAdminBarOffset } from '../shared/mobile-admin-bar-offset';
@@ -129,6 +130,32 @@ function init() {
 	/** @type {{ stop: Function }|null} */
 	let rotationCtrl = null;
 
+	// Reveal every rendered bar — adds the class that triggers the
+	// @keyframes njt-nofi-slide-in animation. One match for single/rotation,
+	// N matches for stack mode.
+	function revealBars() {
+		slot.querySelectorAll( '.njt-nofi-container-content' ).forEach(
+			function ( el ) {
+				el.classList.add( 'njt-nofi-visible' );
+			}
+		);
+	}
+
+	/* @pro */
+	const isStackMode = globalConfig.displayMode === 'stack';
+
+	// Stack mode (Pro): render every survivor at once, split top/bottom by
+	// placement. Reused by the dismissal handler to rebuild after a bar leaves.
+	function renderStack() {
+		slot.innerHTML = buildStacksHTML(
+			survivors,
+			globalConfig,
+			renderBarWithCollapsedState
+		);
+		revealBars();
+	}
+	/* @endpro */
+
 	// -----------------------------------------------------------------------
 	// Dismissal handler — called on × button click.
 	// -----------------------------------------------------------------------
@@ -170,6 +197,12 @@ function init() {
 				global: globalConfig,
 				autoplay: ! prefersReducedMotion,
 			} );
+			return;
+		}
+
+		// Stack mode: rebuild the stack from the reduced survivors.
+		if ( isStackMode ) {
+			renderStack();
 			return;
 		}
 		/* @endpro */
@@ -255,8 +288,18 @@ function init() {
 	/* @endpro */
 
 	// -----------------------------------------------------------------------
-	// Render — rotation (Pro) or single.
+	// Render — stack (Pro), rotation (Pro), or single.
 	// -----------------------------------------------------------------------
+	let stackRendered = false;
+	/* @pro */
+	// Stack mode shows every survivor at once; takes precedence over rotation
+	// (display modes are mutually exclusive).
+	if ( isStackMode ) {
+		renderStack();
+		stackRendered = true;
+	}
+	/* @endpro */
+
 	/* @pro */
 	// Rotation engine runs when display mode is rotation with >1 survivor.
 	// Under prefers-reduced-motion we still start it so manual arrows/keyboard
@@ -278,7 +321,7 @@ function init() {
 	}
 	/* @endpro */
 
-	if ( ! rotationCtrl ) {
+	if ( ! rotationCtrl && ! stackRendered ) {
 		slot.innerHTML = renderBarWithCollapsedState(
 			survivors[ 0 ],
 			globalConfig
@@ -286,14 +329,10 @@ function init() {
 	}
 
 	// Reveal — class triggers the @keyframes njt-nofi-slide-in animation
-	// on the bar (slide-down + fade-in). Keyframes play unconditionally
-	// when the rule matches, so no rAF / reflow dance needed.
-	const containerContent = slot.querySelector(
-		'.njt-nofi-container-content'
-	);
-	if ( containerContent ) {
-		containerContent.classList.add( 'njt-nofi-visible' );
-	}
+	// on the bar(s) (slide-down + fade-in). Keyframes play unconditionally
+	// when the rule matches, so no rAF / reflow dance needed. (Idempotent for
+	// stack, which already revealed in renderStack.)
+	revealBars();
 
 	// Theme-compat patches.
 	applyThemeCompat( ctx.theme, slot );
