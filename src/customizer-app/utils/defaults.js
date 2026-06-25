@@ -64,6 +64,10 @@ export const DEFAULT_BAR = {
 		audience: 'all',
 		roles: [],
 		userIds: [],
+		// Country targeting (Pro). countryLogic: all|include|exclude.
+		// countries: ISO 3166-1 alpha-2 codes. Default = no restriction.
+		countryLogic: 'all',
+		countries: [],
 	},
 	behavior: {
 		hideCloseButton: 'close',

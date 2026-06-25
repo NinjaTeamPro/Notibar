@@ -198,10 +198,11 @@
 // AsyncPostPicker
 // ------------------------------------------------------------------
 
-// Audience block — space the conditional controls (role checkboxes / user
-// picker) away from the "Show this bar to" radio group above them.
+// Audience / Country blocks — space the conditional controls (role checkboxes,
+// user picker, country picker) away from the radio group above them.
 .njt-notibar-audience-block__roles,
-.njt-notibar-audience-block .njt-notibar-post-picker {
+.njt-notibar-audience-block .njt-notibar-post-picker,
+.njt-notibar-country-block .njt-notibar-post-picker {
 	margin-top: 12px;
 }
 

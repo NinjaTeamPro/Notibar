@@ -356,6 +356,22 @@ trait SchemaSanitizers {
 			fn( $v ) => '' !== $v
 		) ) );
 
+		// Country targeting (Pro). countryLogic enum like pageLogic but with its
+		// own allowed set (no 'none'). Codes normalised to uppercase ISO 3166-1
+		// alpha-2; anything not matching ^[A-Z]{2}$ is dropped. List deduped.
+		$country_logic = isset( $d['countryLogic'] ) && in_array( $d['countryLogic'], self::ALLOWED_COUNTRY_LOGIC, true )
+			? $d['countryLogic']
+			: $default['countryLogic'];
+
+		$raw_countries = isset( $d['countries'] ) && is_array( $d['countries'] ) ? $d['countries'] : $default['countries'];
+		$countries     = array_values( array_unique( array_filter(
+			array_map(
+				fn( $v ) => is_string( $v ) ? strtoupper( preg_replace( '/[^A-Za-z]/', '', $v ) ) : '',
+				$raw_countries
+			),
+			fn( $v ) => 1 === preg_match( '/^[A-Z]{2}$/', $v )
+		) ) );
+
 		return [
 			'devices'   => $devices,
 			'pageLogic' => $page_logic,
@@ -368,6 +384,8 @@ trait SchemaSanitizers {
 			'audience'  => $audience,
 			'roles'     => $roles,
 			'userIds'   => self::sanitizeIdList( $d['userIds'] ?? $default['userIds'] ),
+			'countryLogic' => $country_logic,
+			'countries'    => $countries,
 		];
 	}
 

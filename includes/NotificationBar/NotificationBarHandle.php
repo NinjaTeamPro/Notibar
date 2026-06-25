@@ -136,6 +136,16 @@ class NotificationBarHandle {
 		if ( empty( $bars ) ) {
 			return;
 		}
+
+		// Pro: per-bar country gate. Drops bars whose country rule excludes the
+		// visitor BEFORE they reach the page HTML (mirrors the audience gate).
+		// Lazy: visitor geolocation is resolved only when a surviving bar
+		// actually targets a country (see filterByCountry). Same page-cache
+		// caveat as audience — cached anonymous pages reflect the cache builder.
+		$bars = self::filterByCountry( $bars );
+		if ( empty( $bars ) ) {
+			return;
+		}
 		// @endpro
 
 		$context = $this->getRenderContext();
@@ -316,6 +326,75 @@ class NotificationBarHandle {
 			default:
 				return true;
 		}
+	}
+	// @endpro
+
+	// @pro
+	/**
+	 * Drop bars whose country rule excludes the current visitor.
+	 *
+	 * Lazy: visitor geolocation runs only when at least one bar targets a
+	 * country (countryLogic include|exclude with a non-empty list). When no bar
+	 * uses country targeting the input is returned untouched — zero geolocation
+	 * cost for the common case.
+	 *
+	 * @param array $bars Bars to filter.
+	 * @return array
+	 */
+	private static function filterByCountry( array $bars ): array {
+		$needs_country = false;
+		foreach ( $bars as $bar ) {
+			$display = isset( $bar['display'] ) && is_array( $bar['display'] ) ? $bar['display'] : [];
+			$logic   = $display['countryLogic'] ?? 'all';
+			$list    = isset( $display['countries'] ) && is_array( $display['countries'] ) ? $display['countries'] : [];
+			if ( in_array( $logic, [ 'include', 'exclude' ], true ) && ! empty( $list ) ) {
+				$needs_country = true;
+				break;
+			}
+		}
+
+		if ( ! $needs_country ) {
+			return $bars;
+		}
+
+		$country = VisitorCountry::get();
+
+		return array_values( array_filter(
+			$bars,
+			static function ( $bar ) use ( $country ) {
+				return self::passesCountry( $bar, $country );
+			}
+		) );
+	}
+
+	/**
+	 * Whether the visitor's country satisfies a bar's country rule.
+	 *
+	 * countryLogic: 'all' | 'include' | 'exclude'. An empty country list imposes
+	 * no restriction (treated as 'all'). Unknown visitor country ('') fails
+	 * 'include' (fail-closed) but passes 'exclude' (fail-open).
+	 *
+	 * @param mixed  $bar     Bar array.
+	 * @param string $country Visitor ISO-2 code, or '' if unknown.
+	 * @return bool
+	 */
+	private static function passesCountry( $bar, string $country ): bool {
+		if ( ! is_array( $bar ) ) {
+			return false;
+		}
+		$display = isset( $bar['display'] ) && is_array( $bar['display'] ) ? $bar['display'] : [];
+		$logic   = $display['countryLogic'] ?? 'all';
+		$list    = isset( $display['countries'] ) && is_array( $display['countries'] ) ? $display['countries'] : [];
+
+		if ( 'all' === $logic || empty( $list ) ) {
+			return true;
+		}
+
+		$in_list = '' !== $country && in_array( $country, $list, true );
+
+		// 'include' → show only inside the list (unknown ⇒ hidden, fail-closed).
+		// 'exclude' → hide inside the list (unknown ⇒ shown, fail-open).
+		return 'include' === $logic ? $in_list : ! $in_list;
 	}
 	// @endpro
 

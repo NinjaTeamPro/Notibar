@@ -23,6 +23,7 @@ Operates on a throwaway staging copy — never the working tree:
      assets/frontend/js/tracking.js
      includes/NotificationBar/EventCounter.php
      includes/NotificationBar/TrackingRestController.php
+     includes/NotificationBar/VisitorCountry.php   (country-targeting geolocation)
      … (EventLog, TrackingCron, RestUsersController, charts, etc.)
 4. Strip @pro … @endpro marker regions across .php/.js/.jsx/.scss/.css
 5. npm ci && npm run build   (rebuild JS bundles from the stripped tree)
@@ -44,4 +45,4 @@ package → release/notibar-pro-{VERSION}.zip   (folder: notibar-pro/)
 
 - **Lite PHP**: `if ( NJT_NOFI_IS_PRO ) { … }` blocks are dead and additionally removed at build.
 - **Lite UI**: Pro feature controls remain visible but **locked** — `<ProBadge />` / `<ProUpgradeNotice />` (`src/shared/pro-ui.jsx`), plus a "Go Pro" submenu + action link and the static `GoProPage` comparison page (slug `notibar-go-pro`).
-- **Pro-only**: rotation, tracking/analytics, CPT targeting, role/user audience, and bottom placement.
+- **Pro-only**: rotation, tracking/analytics, CPT targeting, role/user audience, country targeting (server-side gate + `VisitorCountry`), and bottom placement.
