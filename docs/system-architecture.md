@@ -22,9 +22,9 @@ This document is split for readability. See:
 ## Key Components at a Glance
 
 - **Bootstrap**: `njt-notification-bar.php` (PSR-4 autoloader, `NjtNotificationBar\` namespace) → migrations at `plugins_loaded` pri 5, core init at pri 10.
-- **Data**: `njt_nofi_bars` + `njt_nofi_global` JSON options. Pro tracking adds `notibar_counters` option + `{prefix}notibar_events` table.
+- **Data**: `njt_nofi_bars` + `njt_nofi_global` JSON options. Pro tracking adds `notibar_counters` option + `{prefix}notibar_events` table. Bar schema includes behavior.trigger { type, value } (Pro; defers reveal).
 - **Bar load pipeline**: Merge native + 3rd-party bars at `NotificationBarHandle::maybeRender()`. Registry calls `njt_nofi_register_bar()` helper (from `bar-registry-api.php`) and `njt_nofi_register_bars` filter (additive-only, seeded empty). Native bars never exposed; on id collision native wins. Injected bars render after native.
-- **Render gate**: `NotificationBarHandle` (frontend) + `NotificationBarHandleAdmin` trait (menu); shared render logic in `src/shared/`.
+- **Render gate**: `NotificationBarHandle` (frontend) + `NotificationBarHandleAdmin` trait (menu); shared render logic in `src/shared/`. Pro: Bars with active triggers (behavior.trigger.type !== 'none') split into pending pool; attachTrigger (triggers.js) one-shot listener promotes fired bars into live pool and injects into slot (childList mutation → body-push + entrance animation).
 - **Rotation nav** (Pro): Arrows injected post-render by `nav-controls.js` when displayMode=rotation, global rotationShowArrows=true, and ≥2 surviving bars. Supports click + keyboard (ArrowLeft/Right).
 - **Stack mode** (Pro): displayMode=stack renders ALL survivors at once via `src/shared/stack.js`. Bars split by `placement` into a top + a bottom `.njt-nofi-stack` wrapper (one position type from global `stackPositionType`); `render-bar.js` markup reused, inner container pin neutralized in CSS. `body-push` pads both sides.
 - **Editions**: `NJT_NOFI_IS_PRO` constant; Lite produced by `build-tools/strip-pro.js` + `pro-manifest.json` (now also removes `stack.js`).

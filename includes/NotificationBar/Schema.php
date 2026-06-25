@@ -48,6 +48,9 @@ class Schema {
 	// CTA button animation presets (Pro). Token == CSS class suffix == UI value.
 	const ALLOWED_BTN_ATTENTION = [ 'none', 'wobble', 'shake', 'bounce', 'pulse', 'swing', 'jello', 'tada', 'rubber-band', 'heartbeat', 'flash', 'blink', 'vibrate', 'pop', 'bounce-in' ];
 	const ALLOWED_BTN_HOVER     = [ 'none', 'grow', 'shrink', 'lift', 'glow', 'press', 'shadow', 'color-shift', 'slide-fill' ];
+	// Display trigger types (Pro). Defers bar reveal until a runtime condition fires.
+	// none = show immediately; scroll = after N% scrolled; time = after N seconds; click = after N document clicks.
+	const ALLOWED_TRIGGER_TYPE  = [ 'none', 'scroll', 'time', 'click' ];
 
 	// ------------------------------------------------------------------
 	// Default values
@@ -109,6 +112,10 @@ class Schema {
 			'behavior' => [
 				'hideCloseButton' => 'close',
 				'reopenAfterDays' => 1,
+				// Display trigger (Pro). Defers reveal until a runtime condition
+				// fires. value meaning per type: scroll=% (1–100), time=seconds
+				// (0–3600), click=count (1–100); none ignores value.
+				'trigger'         => [ 'type' => 'none', 'value' => 0 ],
 			],
 			'schedule' => self::defaultSchedule(),
 		];

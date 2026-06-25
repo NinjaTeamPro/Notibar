@@ -46,6 +46,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - **Display rules** (pages, posts, CPTs, user roles, specific users)
 - **Close behavior** (disable, toggle, permanent)
 - **Scheduling** (date ranges, time windows, days of week)
+- **Display trigger** (Pro) to defer reveal (scroll %, time delay, click count)
 - **Rotation mode** (Pro) for cycling through bars
 - **Event tracking** (Pro) for analytics
 
@@ -70,6 +71,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - Export/Import (UI-only; no data persistence between sites)
 
 **Locked features** (visible, badged "Go Pro"):
+- Display trigger (scroll %, time delay, click count)
 - Rotation mode
 - Event tracking & analytics
 - Audience targeting (roles, user lists)
@@ -86,6 +88,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 **Audience**: Agencies, high-traffic sites, marketers needing analytics & advanced targeting.
 
 **Additions over Lite**:
+- **Display trigger**: Defer bar reveal until scroll position (% of page), time delay (seconds), or click count is reached; withheld from initial render, promoted into live pool when trigger fires.
 - **Rotation mode**: Cycle through bars with pause-on-hover, manual prev/next arrows & keyboard nav; respects `prefers-reduced-motion`
 - **Event tracking**: Track clicks, dismissals, engagement per bar; lifetime counters + time-series table
 - **Analytics dashboard**: Charts (trend, breakdown by event type, per-bar comparison); filter by date range, bar, audience, event type
@@ -116,6 +119,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 | Theme compat patches | ✓ | ✓ | 11 built-in themes |
 | Export/Import | ✓* | ✓ | *Lite: UI preview only; no import |
 | **Rotation mode** | | ✓ | Cycle bars; pause-on-hover; manual prev/next arrows & keyboard nav |
+| **Display trigger** | | ✓ | Defer bar reveal until scroll %, time delay, or click count |
 | **Event tracking** | | ✓ | Click, dismiss, engage |
 | **Analytics dashboard** | | ✓ | Charts, filters, time-series |
 | **Audience targeting** | | ✓ | Roles, user lists, logged-in/out |
@@ -184,12 +188,19 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 
 ### FR5: Behavior
 
-**Requirement**: Control close button, dismissal cookies, reopen.
+**Requirement**: Control close button, dismissal cookies, reopen, and display trigger (Pro).
 
 - hideCloseButton: close (permanent), toggle (collapse/expand), disable (no button)
 - reopenAfterDays: 0-365 int (0 = session cookie; 1-365 = persistent)
 - Cookie: njt-notibar-{id}=1, SameSite=Lax, Max-Age based on days
 - Dismissal state persisted in sessionStorage (within one session)
+
+**Display Trigger (Pro)**:
+- trigger: { type, value } object. Types: 'none' (immediate), 'scroll' (% of page 1–100), 'time' (seconds 0–3600), 'click' (count 1–100). Default { type: 'none', value: 0 }
+- Backward compatible: existing bars default to 'none', show immediately (no behavior change)
+- Lite behavior: Customizer UI is visible but locked; frontend ignores trigger (every bar shows immediately via no-op logic)
+- Customizer preview: Triggers bypass preview (always immediate, so editors see/edit the bar without waiting)
+- Frontend: Bars with non-none triggers are withheld from initial render (pending state); when trigger fires, bar is promoted into live pool and injected into #njt-notibar-slot. Works across all display modes: single (gates survivors[0]), stack (each bar reveals on its own fire), rotation (fired bar joins pool, shown first)
 
 ### FR6: Scheduling
 

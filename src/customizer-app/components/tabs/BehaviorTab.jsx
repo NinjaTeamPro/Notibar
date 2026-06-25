@@ -5,21 +5,46 @@
  *   - hideCloseButton: 3-state RadioControl (close|toggle|disable)
  *   - reopenAfterDays: number input 0..365
  *   - schedule: master toggle + date range + day-of-week + daily window
+ *   - trigger: display trigger (Pro) — type select (none|scroll|time|click) +
+ *     conditional value input; defers the bar's reveal until the condition fires
  */
 import {
 	RadioControl,
 	BaseControl,
 	ToggleControl,
 	CheckboxControl,
+	SelectControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { updatePath } from '../../utils/update-path';
+import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
 
 const CLOSE_BUTTON_OPTIONS = [
 	{ value: 'close', label: __( '× Close button', 'notibar' ) },
 	{ value: 'toggle', label: __( 'Collapse / expand arrow', 'notibar' ) },
 	{ value: 'disable', label: __( 'No dismissal control', 'notibar' ) },
 ];
+
+// Display trigger (Pro). type chooses when the bar reveals; value is reused per
+// type with type-specific label + clamp. MIRROR: Schema.php ALLOWED_TRIGGER_TYPE
+// + sanitizeBehavior clamps. Keep tokens in lockstep with the PHP enum.
+const TRIGGER_OPTIONS = [
+	{ value: 'none', label: __( 'Show immediately', 'notibar' ) },
+	{ value: 'scroll', label: __( 'Show on scroll (% of page)', 'notibar' ) },
+	{ value: 'time', label: __( 'Show after time (seconds)', 'notibar' ) },
+	{ value: 'click', label: __( 'Show after clicks on the page', 'notibar' ) },
+];
+// Sensible default value per type, applied on type change.
+const TRIGGER_DEFAULTS = { none: 0, scroll: 50, time: 5, click: 3 };
+const TRIGGER_VALUE_META = {
+	scroll: {
+		label: __( 'Scroll percentage (%)', 'notibar' ),
+		min: 1,
+		max: 100,
+	},
+	time: { label: __( 'Delay (seconds)', 'notibar' ), min: 0, max: 3600 },
+	click: { label: __( 'Number of clicks', 'notibar' ), min: 1, max: 100 },
+};
 
 // Sun..Sat — matches Schema.php daysOfWeek convention.
 const WEEKDAY_OPTIONS = [
@@ -48,6 +73,10 @@ export function BehaviorTab( { bar, onChange } ) {
 	const useClientTime = schedule.useClientTime === true;
 
 	const isDismissalDisabled = behavior.hideCloseButton === 'disable';
+
+	const pro = isProEdition();
+	const trigger = behavior.trigger || { type: 'none', value: 0 };
+	const triggerMeta = TRIGGER_VALUE_META[ trigger.type ];
 
 	function handleDaysChange( e ) {
 		const parsed = parseInt( e.target.value, 10 );
@@ -260,6 +289,60 @@ export function BehaviorTab( { bar, onChange } ) {
 							</div>
 						) }
 					</div>
+				) }
+			</div>
+
+			{ /* Display trigger (Pro) ----------------------------------- */ }
+			<div className="njt-notibar-trigger">
+				{ ! pro && (
+					<ProUpgradeNotice
+						feature={ __( 'Display trigger', 'notibar' ) }
+					/>
+				) }
+				<SelectControl
+					label={ __( 'Trigger', 'notibar' ) }
+					help={ __(
+						'Show the bar after a visitor action, once display conditions are met.',
+						'notibar'
+					) }
+					value={ trigger.type || 'none' }
+					options={ TRIGGER_OPTIONS }
+					disabled={ ! pro }
+					onChange={ ( type ) =>
+						set( 'behavior.trigger', {
+							type,
+							value: TRIGGER_DEFAULTS[ type ],
+						} )
+					}
+				/>
+				{ trigger.type !== 'none' && triggerMeta && (
+					<BaseControl
+						label={ triggerMeta.label }
+						id="njt-trigger-value"
+					>
+						<input
+							id="njt-trigger-value"
+							type="number"
+							className="njt-notibar-number-input"
+							value={ trigger.value }
+							min={ triggerMeta.min }
+							max={ triggerMeta.max }
+							step={ 1 }
+							disabled={ ! pro }
+							onChange={ ( e ) =>
+								set( 'behavior.trigger', {
+									type: trigger.type,
+									value: Math.max(
+										triggerMeta.min,
+										Math.min(
+											triggerMeta.max,
+											parseInt( e.target.value, 10 ) || 0
+										)
+									),
+								} )
+							}
+						/>
+					</BaseControl>
 				) }
 			</div>
 		</div>

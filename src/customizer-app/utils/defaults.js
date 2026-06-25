@@ -77,6 +77,10 @@ export const DEFAULT_BAR = {
 	behavior: {
 		hideCloseButton: 'close',
 		reopenAfterDays: 1,
+		// Display trigger (Pro). Defers reveal until a runtime condition fires.
+		// value per type: scroll=% (1–100), time=seconds (0–3600), click=count
+		// (1–100); none ignores value. MIRROR: Schema.php behavior.trigger.
+		trigger: { type: 'none', value: 0 },
 	},
 	schedule: {
 		// Master toggle — schedule is fully inert until enabled.

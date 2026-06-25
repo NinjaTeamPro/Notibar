@@ -29,6 +29,9 @@ import { injectNavControls } from './nav-controls';
  * @param {boolean}     [options.autoplay]    Defaults true; false starts the
  *                                            cycle without the auto-advance
  *                                            timer (manual arrows/keys only).
+ * @param {number}      [options.startIndex]  First bar to paint (default 0).
+ *                                            Lets a trigger-promoted bar joining
+ *                                            the pool be shown immediately.
  *
  * @return {{ stop: Function, next: Function, prev: Function }} Control handle.
  *         stop() before re-rendering; next()/prev() step bars manually.
@@ -79,8 +82,9 @@ export function startRotation( {
 	global,
 	intervalSec,
 	autoplay,
+	startIndex,
 } ) {
-	let index = 0;
+	let index = startIndex || 0;
 	let paused = false;
 	let timerId = null;
 
@@ -196,8 +200,9 @@ export function startRotation( {
 	}
 
 	// Initial render (caller may have already painted the first bar; this keeps
-	// the controller authoritative and ensures arrows are injected).
-	render( 0 );
+	// the controller authoritative and ensures arrows are injected). Honour
+	// startIndex so a trigger-promoted bar joining the pool shows first.
+	render( index );
 
 	resetTimer();
 

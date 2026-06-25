@@ -7,6 +7,7 @@
     "src/shared/rotation.js",
     "src/shared/nav-controls.js",
     "src/shared/stack.js",
+    "src/shared/triggers.js",
     "includes/NotificationBar/EventCounter.php",
     "includes/NotificationBar/TrackingRestController.php",
     "includes/NotificationBar/VisitorCountry.php",

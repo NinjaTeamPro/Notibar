@@ -16,6 +16,7 @@ import { renderBarHTML } from '../shared/render-bar';
 /* @pro */
 import { startRotation } from '../shared/rotation';
 import { buildStacksHTML } from '../shared/stack';
+import { attachTrigger } from '../shared/triggers';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push';
 import { installMobileAdminBarOffset } from '../shared/mobile-admin-bar-offset';
@@ -81,6 +82,23 @@ function detectDevice() {
 }
 
 /**
+ * Whether a bar defers its reveal behind a display trigger (Pro). Lite-safe:
+ * the trigger check is stripped from the Lite build, so this always returns
+ * false there — every bar is treated as immediate (today's behavior).
+ *
+ * @param {Object} bar Bar object.
+ * @return {boolean} True when the bar has a non-"none" trigger (Pro only).
+ */
+function isPending( bar ) {
+	let pending = false;
+	/* @pro */
+	const t = bar && bar.behavior && bar.behavior.trigger;
+	pending = !! ( t && t.type && t.type !== 'none' );
+	/* @endpro */
+	return pending;
+}
+
+/**
  * Initialise the frontend notification bar runtime.
  *
  * @return {void}
@@ -127,6 +145,15 @@ function init() {
 		return;
 	}
 
+	// Split survivors into bars shown at load (immediate) and bars whose reveal
+	// is deferred behind a display trigger (pending). `live` is the set actually
+	// on screen now (⊆ survivors); promotion appends to it when a trigger fires.
+	// Lite: isPending() is always false → immediate = survivors, pending = [],
+	// live = survivors — i.e. today's behavior, no deferral.
+	const immediate = survivors.filter( ( b ) => ! isPending( b ) );
+	const pending = survivors.filter( isPending );
+	let live = immediate.slice();
+
 	/** @type {{ stop: Function }|null} */
 	let rotationCtrl = null;
 
@@ -143,16 +170,55 @@ function init() {
 
 	/* @pro */
 	const isStackMode = globalConfig.displayMode === 'stack';
+	const isRotationMode = globalConfig.displayMode === 'rotation';
+	// Arrows enabled by default; mirrors the rotation engine's own gate.
+	const arrowsOn = globalConfig.rotationShowArrows !== false;
+	// Pending bars' trigger handles, keyed by bar id, so a bar dismissed before
+	// its trigger fires can have the listener cancelled (no phantom reveal).
+	const triggerHandles = new Map();
 
-	// Stack mode (Pro): render every survivor at once, split top/bottom by
-	// placement. Reused by the dismissal handler to rebuild after a bar leaves.
+	// Stack mode (Pro): render every live bar at once, split top/bottom by
+	// placement. Reused by the dismissal handler and trigger promotion to
+	// rebuild after the live set changes.
 	function renderStack() {
 		slot.innerHTML = buildStacksHTML(
-			survivors,
+			live,
 			globalConfig,
 			renderBarWithCollapsedState
 		);
 		revealBars();
+	}
+
+	// Rotation mode (Pro): (re)start the rotation engine from the current `live`
+	// pool. focusBar (optional) is a just-promoted bar to show first via the
+	// startIndex option. Handles pool sizes 0 (nothing live yet), 1 (single
+	// render), and ≥2 (rotate, honouring the reduced-motion/arrows gate).
+	function refreshRotation( focusBar ) {
+		if ( rotationCtrl ) {
+			rotationCtrl.stop();
+			rotationCtrl = null;
+		}
+		const startIndex = focusBar
+			? Math.max( 0, live.indexOf( focusBar ) )
+			: 0;
+		if ( live.length >= 2 && ( ! prefersReducedMotion || arrowsOn ) ) {
+			rotationCtrl = startRotation( {
+				slot,
+				bars: live,
+				renderFn: renderBarWithCollapsedState,
+				global: globalConfig,
+				autoplay: ! prefersReducedMotion,
+				startIndex,
+			} );
+		} else if ( live.length >= 1 ) {
+			slot.innerHTML = renderBarWithCollapsedState(
+				live[ startIndex ] || live[ 0 ],
+				globalConfig
+			);
+			revealBars();
+		} else {
+			slot.innerHTML = ''; // nothing live yet — slot stays armed for injection
+		}
 	}
 	/* @endpro */
 
@@ -171,6 +237,17 @@ function init() {
 			( b ) => String( b.id ) !== String( barId )
 		);
 
+		/* @pro */
+		// Drop from the live pool and cancel any still-pending trigger so a bar
+		// dismissed before it fires never appears later.
+		live = live.filter( ( b ) => String( b.id ) !== String( barId ) );
+		const handle = triggerHandles.get( String( barId ) );
+		if ( handle ) {
+			handle.cancel();
+			triggerHandles.delete( String( barId ) );
+		}
+		/* @endpro */
+
 		if ( ! survivors.length ) {
 			// Remove the bar element (not just hide the slot) — body-push's
 			// MutationObserver only watches childList, so a display change
@@ -180,27 +257,21 @@ function init() {
 			/* @pro */
 			if ( rotationCtrl ) {
 				rotationCtrl.stop();
+				rotationCtrl = null;
 			}
 			/* @endpro */
 			return;
 		}
 
 		/* @pro */
-		// If rotation is active, restart it with the reduced survivors list.
-		// Preserve the reduced-motion autoplay decision across the restart.
-		if ( rotationCtrl ) {
-			rotationCtrl.stop();
-			rotationCtrl = startRotation( {
-				slot,
-				bars: survivors,
-				renderFn: renderBarWithCollapsedState,
-				global: globalConfig,
-				autoplay: ! prefersReducedMotion,
-			} );
+		// Rotation mode: restart from the reduced live pool (preserves the
+		// reduced-motion autoplay decision; single render when ≤1 live).
+		if ( isRotationMode ) {
+			refreshRotation();
 			return;
 		}
 
-		// Stack mode: rebuild the stack from the reduced survivors.
+		// Stack mode: rebuild the stack from the reduced live set.
 		if ( isStackMode ) {
 			renderStack();
 			return;
@@ -301,44 +372,66 @@ function init() {
 	/* @endpro */
 
 	// -----------------------------------------------------------------------
-	// Render — stack (Pro), rotation (Pro), or single.
+	// Initial render + pending-trigger promotion.
+	//   stack / rotation (Pro): render the immediate `live` pool now; each
+	//     pending bar attaches a trigger that injects it into `live` on fire
+	//     (stack rebuild / rotation pool-grow jumping to the fired bar).
+	//   single: the Lite-safe fallback — only survivors[0] is ever shown, gated
+	//     when it carries a trigger.
+	// In Lite every Pro-only block is stripped and pending is empty, so this
+	// reduces to "render the first survivor immediately" — today's behavior.
 	// -----------------------------------------------------------------------
-	let stackRendered = false;
+	let claimed = false;
 	/* @pro */
-	// Stack mode shows every survivor at once; takes precedence over rotation
+	// Stack mode shows every live bar at once; takes precedence over rotation
 	// (display modes are mutually exclusive).
 	if ( isStackMode ) {
-		renderStack();
-		stackRendered = true;
-	}
-	/* @endpro */
-
-	/* @pro */
-	// Rotation engine runs when display mode is rotation with >1 survivor.
-	// Under prefers-reduced-motion we still start it so manual arrows/keyboard
-	// work, but with autoplay disabled. When arrows are also off there is
-	// nothing interactive to show, so we fall through to a single render.
-	const arrowsOn = globalConfig.rotationShowArrows !== false;
-	const isRotation =
-		globalConfig.displayMode === 'rotation' && survivors.length > 1;
-	const useRotation = isRotation && ( ! prefersReducedMotion || arrowsOn );
-
-	if ( useRotation ) {
-		rotationCtrl = startRotation( {
-			slot,
-			bars: survivors,
-			renderFn: renderBarWithCollapsedState,
-			global: globalConfig,
-			autoplay: ! prefersReducedMotion,
+		renderStack(); // live = immediate (may be empty → empty stack)
+		pending.forEach( ( bar ) => {
+			const h = attachTrigger( bar, () => {
+				live.push( bar );
+				renderStack();
+			} );
+			triggerHandles.set( String( bar.id ), h );
 		} );
+		claimed = true;
+	} else if ( isRotationMode ) {
+		// Rotation over the immediate pool; reduced-motion/arrows gating lives
+		// in refreshRotation(). Each fired bar joins the pool and is shown first.
+		refreshRotation();
+		pending.forEach( ( bar ) => {
+			const h = attachTrigger( bar, () => {
+				live.push( bar );
+				refreshRotation( bar );
+			} );
+			triggerHandles.set( String( bar.id ), h );
+		} );
+		claimed = true;
 	}
 	/* @endpro */
 
-	if ( ! rotationCtrl && ! stackRendered ) {
-		slot.innerHTML = renderBarWithCollapsedState(
-			survivors[ 0 ],
-			globalConfig
-		);
+	if ( ! claimed ) {
+		// Single mode — only the first survivor is ever shown. Render it now
+		// unless it carries a trigger (Pro); the Pro block below gates that case.
+		// Two separate guards (no else) so the Lite-stripped form leaves no empty
+		// block — the immediate render stands alone.
+		const first = survivors[ 0 ];
+		if ( ! isPending( first ) ) {
+			slot.innerHTML = renderBarWithCollapsedState( first, globalConfig );
+		}
+		/* @pro */
+		if ( isPending( first ) ) {
+			const h = attachTrigger( first, () => {
+				live = [ first ];
+				slot.innerHTML = renderBarWithCollapsedState(
+					first,
+					globalConfig
+				);
+				revealBars();
+			} );
+			triggerHandles.set( String( first.id ), h );
+		}
+		/* @endpro */
 	}
 
 	// Reveal — class triggers the @keyframes njt-nofi-slide-in animation

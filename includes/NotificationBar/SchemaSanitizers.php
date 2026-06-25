@@ -447,6 +447,9 @@ trait SchemaSanitizers {
 	 *
 	 * hideCloseButton is a 3-state enum: "close" | "toggle" | "disable".
 	 * reopenAfterDays clamped 0–365.
+	 * trigger is { type, value } (Pro display trigger): type whitelisted via
+	 * ALLOWED_TRIGGER_TYPE; value clamped per type (scroll 1–100, time 0–3600,
+	 * click 1–100; none → 0). Missing/invalid → default { none, 0 }.
 	 *
 	 * @param  array $b       Raw behavior data.
 	 * @param  array $default Default behavior values.
@@ -461,9 +464,25 @@ trait SchemaSanitizers {
 			isset( $b['reopenAfterDays'] ) ? intval( $b['reopenAfterDays'] ) : $default['reopenAfterDays']
 		) );
 
+		$rawTrigger = isset( $b['trigger'] ) && is_array( $b['trigger'] ) ? $b['trigger'] : [];
+		$defTrigger = isset( $default['trigger'] ) && is_array( $default['trigger'] )
+			? $default['trigger'] : [ 'type' => 'none', 'value' => 0 ];
+
+		$tType = ( isset( $rawTrigger['type'] ) && in_array( $rawTrigger['type'], self::ALLOWED_TRIGGER_TYPE, true ) )
+			? $rawTrigger['type'] : $defTrigger['type'];
+
+		$tVal = isset( $rawTrigger['value'] ) ? intval( $rawTrigger['value'] ) : 0;
+		switch ( $tType ) {
+			case 'scroll': $tVal = max( 1, min( 100, $tVal ) ); break;   // %
+			case 'time':   $tVal = max( 0, min( 3600, $tVal ) ); break;  // seconds
+			case 'click':  $tVal = max( 1, min( 100, $tVal ) ); break;   // clicks
+			default:       $tVal = 0;                                    // none
+		}
+
 		return [
 			'hideCloseButton' => $hcb,
 			'reopenAfterDays' => $reopen,
+			'trigger'         => [ 'type' => $tType, 'value' => $tVal ],
 		];
 	}
 
