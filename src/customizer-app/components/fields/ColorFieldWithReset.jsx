@@ -10,16 +10,20 @@ import { __ } from '@wordpress/i18n';
 
 /**
  * @param {Object}   props
- * @param {string}   props.label        Field label shown above the picker.
- * @param {string}   props.value        Current hex colour value.
- * @param {Function} props.onChange     Called with new hex string.
- * @param {string}   props.defaultValue Value to reset to when Reset clicked.
+ * @param {string}   props.label         Field label shown above the picker.
+ * @param {string}   props.value         Current hex colour value.
+ * @param {Function} props.onChange      Called with new hex string.
+ * @param {string}   props.defaultValue  Value to reset to when Reset clicked.
+ * @param {boolean}  [props.enableAlpha] When true, the picker exposes an alpha
+ *                                       slider and emits 8-digit hex (#rrggbbaa)
+ *                                       for transparent colours. Default false.
  */
 export function ColorFieldWithReset( {
 	label,
 	value,
 	onChange,
 	defaultValue,
+	enableAlpha = false,
 } ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 
@@ -58,7 +62,7 @@ export function ColorFieldWithReset( {
 					<ColorPicker
 						color={ value }
 						onChange={ onChange }
-						enableAlpha={ false }
+						enableAlpha={ enableAlpha }
 					/>
 				</div>
 			) }

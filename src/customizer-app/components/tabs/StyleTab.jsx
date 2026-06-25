@@ -90,6 +90,7 @@ export function StyleTab( { bar, onChange } ) {
 					value={ style.bgColor }
 					onChange={ ( v ) => set( 'style.bgColor', v ) }
 					defaultValue={ resetBg }
+					enableAlpha
 				/>
 				<ColorFieldWithReset
 					label={ __( 'Text colour', 'notibar' ) }
@@ -111,6 +112,7 @@ export function StyleTab( { bar, onChange } ) {
 					value={ style.btnBgColor }
 					onChange={ ( v ) => set( 'style.btnBgColor', v ) }
 					defaultValue={ resetBtnBg }
+					enableAlpha
 				/>
 				<ColorFieldWithReset
 					label={ __( 'Button text colour', 'notibar' ) }
@@ -123,6 +125,16 @@ export function StyleTab( { bar, onChange } ) {
 				bg={ style.btnBgColor }
 				fg={ style.btnTextColor }
 				pairLabel={ __( 'button bg vs button text', 'notibar' ) }
+			/>
+
+			{ /* Overall opacity — fades the whole bar (bg + text + button) */ }
+			<RangeControl
+				label={ __( 'Opacity (%)', 'notibar' ) }
+				value={ style.opacity ?? 100 }
+				onChange={ ( v ) => set( 'style.opacity', v ) }
+				min={ 10 }
+				max={ 100 }
+				step={ 1 }
 			/>
 
 			{ /* Font size */ }

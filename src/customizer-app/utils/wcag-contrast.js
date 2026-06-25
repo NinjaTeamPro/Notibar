@@ -8,16 +8,26 @@
  */
 
 /**
- * Parse a 3- or 6-digit hex color into [r, g, b] in range [0, 255].
+ * Parse a 3-, 6-, or 8-digit hex color into [r, g, b] in range [0, 255].
  *
- * @param {string} hex e.g. '#ff0000' or '#f00'
+ * 8-digit hex (#rrggbbaa, emitted by the alpha-enabled colour picker) is
+ * accepted: the alpha pair is dropped and contrast is computed against the
+ * solid RGB. Contrast over a transparent fill is genuinely page-dependent, so
+ * the solid-colour figure is a deliberate, documented approximation — its
+ * purpose is only to avoid a false "unparseable → ratio 1" warning.
+ *
+ * @param {string} hex e.g. '#ff0000', '#f00', or '#ff000080'
  * @return {number[]|null} [r, g, b] or null if unparseable.
  */
 function parseHex( hex ) {
 	if ( ! hex || typeof hex !== 'string' ) {
 		return null;
 	}
-	const clean = hex.replace( /^#/, '' );
+	let clean = hex.replace( /^#/, '' );
+	// Drop the alpha byte of an 8-digit hex; luminance uses the solid RGB.
+	if ( clean.length === 8 ) {
+		clean = clean.slice( 0, 6 );
+	}
 	if ( clean.length === 3 ) {
 		const r = parseInt( clean[ 0 ] + clean[ 0 ], 16 );
 		const g = parseInt( clean[ 1 ] + clean[ 1 ], 16 );

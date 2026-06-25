@@ -325,3 +325,8 @@
 	min-height: 0;
 	overflow-y: auto;
 }
+
+.customize-control input[type="range"] {
+	width: 100% !important;
+	height: 100% !important;
+}
