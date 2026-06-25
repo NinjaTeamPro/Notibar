@@ -204,6 +204,12 @@ trait SchemaSanitizers {
 			? mb_substr( $text_norm, 0, 200 )
 			: substr( $text_norm, 0, 200 );
 
+		// action: only 'link' or 'close'. Unknown/missing falls back to the
+		// default ('link'), keeping pre-existing data backward-compatible.
+		$action = ( isset( $b['action'] ) && in_array( $b['action'], [ 'link', 'close' ], true ) )
+			? $b['action']
+			: $default['action'];
+
 		return [
 			'enabled'    => isset( $b['enabled'] ) ? (bool) $b['enabled'] : $default['enabled'],
 			'text'       => $text,
@@ -212,6 +218,7 @@ trait SchemaSanitizers {
 				: $default['url'],
 			'fontWeight' => $fw,
 			'newWindow'  => isset( $b['newWindow'] ) ? (bool) $b['newWindow'] : $default['newWindow'],
+			'action'     => $action,
 		];
 	}
 
@@ -244,15 +251,19 @@ trait SchemaSanitizers {
 		) );
 
 		return [
-			'bgColor'      => isset( $s['bgColor'] )
-				? ( sanitize_hex_color( $s['bgColor'] ) ?: $default['bgColor'] )
-				: $default['bgColor'],
+			// Background fills accept an alpha channel (8-digit hex) so the
+			// alpha-enabled colour picker can make them semi-transparent.
+			'bgColor'      => self::sanitizeHexColorMaybeAlpha(
+				$s['bgColor'] ?? null,
+				$default['bgColor']
+			),
 			'textColor'    => isset( $s['textColor'] )
 				? ( sanitize_hex_color( $s['textColor'] ) ?: $default['textColor'] )
 				: $default['textColor'],
-			'btnBgColor'   => isset( $s['btnBgColor'] )
-				? ( sanitize_hex_color( $s['btnBgColor'] ) ?: $default['btnBgColor'] )
-				: $default['btnBgColor'],
+			'btnBgColor'   => self::sanitizeHexColorMaybeAlpha(
+				$s['btnBgColor'] ?? null,
+				$default['btnBgColor']
+			),
 			'btnTextColor' => isset( $s['btnTextColor'] )
 				? ( sanitize_hex_color( $s['btnTextColor'] ) ?: $default['btnTextColor'] )
 				: $default['btnTextColor'],
@@ -261,10 +272,40 @@ trait SchemaSanitizers {
 			'contentWidth' => $content_width,
 			'positionType' => $position,
 			'placement'    => $placement,
+			// Overall bar opacity, percent. Clamped 10–100 (floor of 10 keeps the
+			// bar visible/clickable). MIRROR: defaults.js DEFAULT_BAR.style.opacity.
+			'opacity'      => max( 10, min( 100,
+				isset( $s['opacity'] ) ? intval( $s['opacity'] ) : $default['opacity']
+			) ),
 			'activePreset' => self::sanitizeActivePreset(
 				isset( $s['activePreset'] ) ? $s['activePreset'] : null
 			),
 		];
+	}
+
+	/**
+	 * Sanitize a hex colour that MAY carry an alpha channel.
+	 *
+	 * Accepts 3-, 6-, or 8-digit hex (#rgb, #rrggbb, #rrggbbaa). The alpha-enabled
+	 * colour picker emits 8-digit hex (#rrggbbaa) for transparent fills and
+	 * collapses to 6-digit when fully opaque (colord .toHex()). Unlike core
+	 * sanitize_hex_color() — which rejects the 8-digit form — this keeps the alpha
+	 * byte. The anchored pattern is the security boundary: the value lands in an
+	 * inline style attribute, so only a strict #hex shape is allowed (escapeAttr
+	 * at render is a second layer). Anything else falls back to the default.
+	 *
+	 * @param  mixed  $value    Raw colour value.
+	 * @param  string $fallback Default to use when invalid.
+	 * @return string           Validated #hex string or the fallback.
+	 */
+	private static function sanitizeHexColorMaybeAlpha( $value, string $fallback ): string {
+		if ( is_string( $value ) ) {
+			$trimmed = trim( $value );
+			if ( preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $trimmed ) ) {
+				return $trimmed;
+			}
+		}
+		return $fallback;
 	}
 
 	/**

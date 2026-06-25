@@ -54,30 +54,56 @@ function renderButton( button, style, kind ) {
 		return '';
 	}
 
+	// action: 'close' dismisses the bar; anything else (default 'link') opens a
+	// URL. Missing action stays a link, keeping pre-action data unchanged.
+	const isClose = button.action === 'close';
+
 	// Decode any pre-existing HTML entities in the stored text before the
 	// render layer re-escapes them. Defensive against legacy v2.x data
 	// migrated via wp_filter_nohtml_kses, which stored "&" as "&amp;".
 	const text = decodeBasicEntities( button.text || 'Learn more' );
-	const url = button.url || '#';
-	const newWindow = button.newWindow
-		? ' target="_blank" rel="noopener noreferrer"'
-		: '';
 	const ariaLabel = text.trim()
 		? escapeAttr( text )
 		: `Learn more about this notification (${ kind })`;
 
-	// btnBg also exposed as --njt-btn-bg so the CSS :focus-visible ring can use
-	// the button's own color. border-radius now lives in CSS (6px); keep only
-	// the dynamic, user-configurable bits inline.
-	// btnBgColor is sanitized to a clean hex by sanitize_hex_color() on save;
-	// escapeAttr is a second belt before it lands in the style attribute.
-	const btnBg = escapeAttr( style.btnBgColor || '#1919cf' );
+	// btnBgColor is a validated hex on save (3/6/8-digit; the 8-digit form carries
+	// an alpha channel from the alpha-enabled picker). escapeAttr is a second belt
+	// before it lands in the style attribute. border-radius lives in CSS (6px);
+	// only the dynamic, user-configurable bits are inline here.
+	const btnBgRaw = style.btnBgColor || '#1919cf';
+	const btnBg = escapeAttr( btnBgRaw );
+	// The :focus-visible ring (--njt-btn-bg) uses a SOLID colour: drop the alpha
+	// byte of an 8-digit hex so the outline stays fully visible even when the
+	// button fill is semi-transparent.
+	const btnBgSolid = escapeAttr(
+		/^#[0-9a-fA-F]{8}$/.test( btnBgRaw ) ? btnBgRaw.slice( 0, 7 ) : btnBgRaw
+	);
 	const btnStyle = [
 		`background:${ btnBg }`,
-		`--njt-btn-bg:${ btnBg }`,
+		`--njt-btn-bg:${ btnBgSolid }`,
 		`color:${ escapeAttr( style.btnTextColor || '#ffffff' ) }`,
 		`font-weight:${ escapeAttr( button.fontWeight || 500 ) }`,
 	].join( ';' );
+
+	// Close action: a real <button> (no href/target) carrying data-njt-action
+	// so the frontend + preview click delegates dismiss the bar. Shares the
+	// .njt-nofi-button-text class + inline style for identical appearance.
+	if ( isClose ) {
+		return (
+			`<div class="njt-nofi-button">` +
+			`<button type="button" data-njt-action="close" ` +
+			`class="njt-nofi-button-text" ` +
+			`aria-label="${ ariaLabel }" ` +
+			`style="${ btnStyle }">` +
+			escapeText( text ) +
+			`</button></div>`
+		);
+	}
+
+	const url = button.url || '#';
+	const newWindow = button.newWindow
+		? ' target="_blank" rel="noopener noreferrer"'
+		: '';
 
 	return (
 		`<div class="njt-nofi-button">` +
@@ -171,6 +197,17 @@ export function renderBarHTML( bar, global ) {
 	const textAlign = TEXT_ALIGN_MAP[ style.alignment ] || 'center';
 	const barId = escapeAttr( bar.id || '' );
 
+	// Overall bar opacity (percent → 0–1). Applied to the un-animated
+	// .njt-nofi-container layer so it does not fight the entrance opacity
+	// animations on .njt-nofi-container-content and the bar itself. Clamped
+	// 10–100; only emitted when < 100 to keep markup clean for opaque bars.
+	const opacityPct = Math.min(
+		100,
+		Math.max( 10, Number( style.opacity ) || 100 )
+	);
+	const containerOpacityAttr =
+		opacityPct < 100 ? ` style="opacity:${ opacityPct / 100 }"` : '';
+
 	// Desktop content block — always emitted.
 	const desktopBlock =
 		`<div class="njt-nofi-content njt-nofi-content-desktop" ` +
@@ -218,7 +255,7 @@ export function renderBarHTML( bar, global ) {
 
 	return (
 		`<div class="njt-nofi-container-content" role="status" aria-live="polite" data-bar-id="${ barId }">` +
-		`<div class="njt-nofi-container" data-position="${ positionType }" data-placement="${ placement }">` +
+		`<div class="njt-nofi-container" data-position="${ positionType }" data-placement="${ placement }"${ containerOpacityAttr }>` +
 		`<div class="${ barClass }" ` +
 		`style="--njt-bar-bg:${ bgColor };--njt-bar-color:${ textColor };">` +
 		desktopBlock +

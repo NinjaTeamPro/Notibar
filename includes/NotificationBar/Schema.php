@@ -78,6 +78,9 @@ class Schema {
 				'contentWidth' => 900,
 				'positionType' => 'fixed',
 				'placement'    => 'top',
+				// Overall bar opacity, percent (10–100). Fades the whole bar via CSS
+				// opacity on the un-animated container. MIRROR: defaults.js style.opacity.
+				'opacity'      => 100,
 				// Snapshot of the colour preset the user last applied to this
 				// bar, or null. Drives the "reset to preset" behaviour of the
 				// per-colour Reset buttons. Shape: { bg, text, btnBg, btnText, name? }.
@@ -238,6 +241,10 @@ class Schema {
 	/**
 	 * Return a default button definition.
 	 *
+	 * action: 'link' (open url) | 'close' (dismiss the bar). 'link' keeps the
+	 * historical behaviour and is the backward-compatible default for data that
+	 * predates this field.
+	 *
 	 * @return array
 	 */
 	private static function defaultButton(): array {
@@ -247,6 +254,7 @@ class Schema {
 			'url'        => '',
 			'fontWeight' => 500,
 			'newWindow'  => true,
+			'action'     => 'link',
 		];
 	}
 

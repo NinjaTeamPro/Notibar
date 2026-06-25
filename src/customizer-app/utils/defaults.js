@@ -21,6 +21,8 @@ const DEFAULT_BUTTON = {
 	url: '',
 	fontWeight: 500,
 	newWindow: true,
+	// 'link' opens the URL; 'close' dismisses the bar. MIRROR: Schema::defaultButton().
+	action: 'link',
 };
 
 // ------------------------------------------------------------------
@@ -47,6 +49,9 @@ export const DEFAULT_BAR = {
 		contentWidth: 900,
 		positionType: 'fixed',
 		placement: 'top',
+		// Overall bar opacity, percent (10–100). Fades the whole bar (bg + text +
+		// button) via CSS opacity on the un-animated container. MIRROR: Schema.php.
+		opacity: 100,
 		// Snapshot of the last-applied colour preset, or null. Drives the
 		// "reset to preset" behaviour of the per-colour Reset buttons.
 		// Shape: { bg, text, btnBg, btnText, name? }. Mirrors Schema.php.
