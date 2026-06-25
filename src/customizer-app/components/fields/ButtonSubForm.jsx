@@ -13,6 +13,7 @@ import {
 	SelectControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
 
 const FONT_WEIGHT_OPTIONS = [
 	{ value: 100, label: '100 — Thin' },
@@ -32,16 +33,50 @@ const ACTION_OPTIONS = [
 	{ value: 'close', label: __( 'Close bar', 'notibar' ) },
 ];
 
+// Pro CTA animations. Values match the schema whitelist + CSS class suffixes.
+const ATTENTION_OPTIONS = [
+	{ value: 'none', label: __( 'None', 'notibar' ) },
+	{ value: 'wobble', label: __( 'Wobble', 'notibar' ) },
+	{ value: 'shake', label: __( 'Shake', 'notibar' ) },
+	{ value: 'bounce', label: __( 'Bounce', 'notibar' ) },
+	{ value: 'pulse', label: __( 'Pulse', 'notibar' ) },
+	{ value: 'swing', label: __( 'Swing', 'notibar' ) },
+	{ value: 'jello', label: __( 'Jello', 'notibar' ) },
+	{ value: 'tada', label: __( 'Tada', 'notibar' ) },
+	{ value: 'rubber-band', label: __( 'Rubber Band', 'notibar' ) },
+	{ value: 'heartbeat', label: __( 'Heartbeat', 'notibar' ) },
+	{ value: 'flash', label: __( 'Flash', 'notibar' ) },
+	{ value: 'blink', label: __( 'Blink', 'notibar' ) },
+	{ value: 'vibrate', label: __( 'Vibrate', 'notibar' ) },
+	{ value: 'pop', label: __( 'Pop', 'notibar' ) },
+	{ value: 'bounce-in', label: __( 'Bounce In', 'notibar' ) },
+];
+
+const HOVER_OPTIONS = [
+	{ value: 'none', label: __( 'None', 'notibar' ) },
+	{ value: 'grow', label: __( 'Grow', 'notibar' ) },
+	{ value: 'shrink', label: __( 'Shrink', 'notibar' ) },
+	{ value: 'lift', label: __( 'Lift', 'notibar' ) },
+	{ value: 'glow', label: __( 'Glow', 'notibar' ) },
+	{ value: 'press', label: __( 'Press', 'notibar' ) },
+	{ value: 'shadow', label: __( 'Shadow', 'notibar' ) },
+	{ value: 'color-shift', label: __( 'Color Shift', 'notibar' ) },
+	{ value: 'slide-fill', label: __( 'Slide Fill', 'notibar' ) },
+];
+
 /**
  * @param {Object}   props
  * @param {string}   props.label    Section heading (e.g. "Button" or "Mobile button").
- * @param {Object}   props.value    Button object { enabled, text, url, fontWeight, newWindow, action }.
+ * @param {Object}   props.value    Button object { enabled, text, url, fontWeight, newWindow, action, attention, hover }.
  * @param {Function} props.onChange Called with updated button object.
  */
 export function ButtonSubForm( { label, value, onChange } ) {
 	function set( key, val ) {
 		onChange( { ...value, [ key ]: val } );
 	}
+
+	// Pro gate: animation controls stay visible in Lite but locked + upsell.
+	const pro = isProEdition();
 
 	const isValidUrl = ( url ) => {
 		if ( ! url ) {
@@ -121,6 +156,26 @@ export function ButtonSubForm( { label, value, onChange } ) {
 						onChange={ ( v ) =>
 							set( 'fontWeight', parseInt( v, 10 ) )
 						}
+					/>
+
+					{ ! pro && (
+						<ProUpgradeNotice
+							feature={ __( 'Button animations', 'notibar' ) }
+						/>
+					) }
+					<SelectControl
+						label={ __( 'Attention animation', 'notibar' ) }
+						value={ value.attention || 'none' }
+						options={ ATTENTION_OPTIONS }
+						disabled={ ! pro }
+						onChange={ ( v ) => set( 'attention', v ) }
+					/>
+					<SelectControl
+						label={ __( 'Hover effect', 'notibar' ) }
+						value={ value.hover || 'none' }
+						options={ HOVER_OPTIONS }
+						disabled={ ! pro }
+						onChange={ ( v ) => set( 'hover', v ) }
 					/>
 
 					{ isLink && (

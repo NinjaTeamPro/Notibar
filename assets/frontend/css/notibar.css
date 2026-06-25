@@ -262,8 +262,9 @@
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
-  /* hover/active darken via filter; bg is set inline and never animates. */
-  transition: filter 0.15s ease;
+  /* hover/active darken via filter; bg is set inline and never animates.
+     transform/box-shadow added so the Pro hover effects below can transition. */
+  transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .njt-nofi-button-text:hover {
@@ -277,6 +278,220 @@
 .njt-nofi-button-text:focus-visible {
   outline: 2px solid var( --njt-btn-bg, #1919cf );
   outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Pro CTA animations — Attention (looping) + Hover effects.
+   ----------------------------------------------------------------------------
+   Classes are emitted on .njt-nofi-button-text by render-bar.js (Pro only;
+   @pro-stripped in Lite). Token in the class == schema enum value == UI value.
+   Periodic loop trick: CSS animation-delay only delays the FIRST run, so the
+   inter-cycle rest is baked into the keyframe — motion lives in 0%–~20%, then
+   the element holds its identity transform 20%–100% over a 4s infinite loop.
+   ========================================================================== */
+
+.njt-nofi-button-text[class*='njt-nofi-anim-'] {
+  animation-duration: 4s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.njt-nofi-anim-wobble {
+  animation-name: njt-nofi-anim-wobble;
+}
+.njt-nofi-anim-shake {
+  animation-name: njt-nofi-anim-shake;
+}
+.njt-nofi-anim-bounce {
+  animation-name: njt-nofi-anim-bounce;
+}
+.njt-nofi-anim-pulse {
+  animation-name: njt-nofi-anim-pulse;
+}
+.njt-nofi-anim-swing {
+  animation-name: njt-nofi-anim-swing;
+  transform-origin: top center;
+}
+.njt-nofi-anim-jello {
+  animation-name: njt-nofi-anim-jello;
+}
+.njt-nofi-anim-tada {
+  animation-name: njt-nofi-anim-tada;
+}
+.njt-nofi-anim-rubber-band {
+  animation-name: njt-nofi-anim-rubber-band;
+}
+.njt-nofi-anim-heartbeat {
+  animation-name: njt-nofi-anim-heartbeat;
+}
+.njt-nofi-anim-flash {
+  animation-name: njt-nofi-anim-flash;
+}
+.njt-nofi-anim-blink {
+  animation-name: njt-nofi-anim-blink;
+}
+.njt-nofi-anim-vibrate {
+  animation-name: njt-nofi-anim-vibrate;
+}
+.njt-nofi-anim-pop {
+  animation-name: njt-nofi-anim-pop;
+}
+.njt-nofi-anim-bounce-in {
+  animation-name: njt-nofi-anim-bounce-in;
+}
+
+@keyframes njt-nofi-anim-wobble {
+  0%, 20%, 100% { transform: none; }
+  3% { transform: translateX( -12px ) rotate( -5deg ); }
+  6% { transform: translateX( 9px ) rotate( 3deg ); }
+  9% { transform: translateX( -7px ) rotate( -3deg ); }
+  12% { transform: translateX( 5px ) rotate( 2deg ); }
+  15% { transform: translateX( -3px ) rotate( -1deg ); }
+}
+
+@keyframes njt-nofi-anim-shake {
+  0%, 20%, 100% { transform: translateX( 0 ); }
+  3%, 9%, 15% { transform: translateX( -8px ); }
+  6%, 12% { transform: translateX( 8px ); }
+}
+
+@keyframes njt-nofi-anim-bounce {
+  0%, 20%, 100% { transform: translateY( 0 ); }
+  4% { transform: translateY( -12px ); }
+  8% { transform: translateY( 0 ); }
+  12% { transform: translateY( -6px ); }
+  16% { transform: translateY( 0 ); }
+}
+
+@keyframes njt-nofi-anim-pulse {
+  0%, 20%, 100% { transform: scale( 1 ); }
+  10% { transform: scale( 1.08 ); }
+}
+
+@keyframes njt-nofi-anim-swing {
+  0%, 20%, 100% { transform: rotate( 0 ); }
+  4% { transform: rotate( 8deg ); }
+  8% { transform: rotate( -6deg ); }
+  12% { transform: rotate( 4deg ); }
+  16% { transform: rotate( -2deg ); }
+}
+
+@keyframes njt-nofi-anim-jello {
+  0%, 20%, 100% { transform: none; }
+  3% { transform: skewX( -10deg ) skewY( -10deg ); }
+  6% { transform: skewX( 8deg ) skewY( 8deg ); }
+  9% { transform: skewX( -5deg ) skewY( -5deg ); }
+  12% { transform: skewX( 3deg ) skewY( 3deg ); }
+  15% { transform: skewX( -1deg ) skewY( -1deg ); }
+}
+
+@keyframes njt-nofi-anim-tada {
+  0%, 20%, 100% { transform: scale( 1 ) rotate( 0 ); }
+  2%, 4% { transform: scale( 0.95 ) rotate( -3deg ); }
+  6%, 10%, 14% { transform: scale( 1.1 ) rotate( 3deg ); }
+  8%, 12% { transform: scale( 1.1 ) rotate( -3deg ); }
+}
+
+@keyframes njt-nofi-anim-rubber-band {
+  0%, 20%, 100% { transform: scale3d( 1, 1, 1 ); }
+  3% { transform: scale3d( 1.25, 0.75, 1 ); }
+  6% { transform: scale3d( 0.75, 1.25, 1 ); }
+  9% { transform: scale3d( 1.15, 0.85, 1 ); }
+  12% { transform: scale3d( 0.95, 1.05, 1 ); }
+  15% { transform: scale3d( 1.05, 0.95, 1 ); }
+  18% { transform: scale3d( 1, 1, 1 ); }
+}
+
+@keyframes njt-nofi-anim-heartbeat {
+  0%, 20%, 100% { transform: scale( 1 ); }
+  3% { transform: scale( 1.15 ); }
+  6% { transform: scale( 1 ); }
+  9% { transform: scale( 1.15 ); }
+  12% { transform: scale( 1 ); }
+}
+
+/* opacity-based; reduced-motion still kills it via animation:none. */
+@keyframes njt-nofi-anim-flash {
+  0%, 20%, 100% { opacity: 1; }
+  5%, 15% { opacity: 0; }
+  10% { opacity: 1; }
+}
+
+@keyframes njt-nofi-anim-blink {
+  0%, 3%, 9%, 15%, 20%, 100% { opacity: 1; }
+  6%, 12%, 18% { opacity: 0; }
+}
+
+@keyframes njt-nofi-anim-vibrate {
+  0%, 20%, 100% { transform: translate( 0 ); }
+  2%, 6%, 10%, 14% { transform: translate( -2px, 2px ); }
+  4%, 8%, 12%, 16% { transform: translate( 2px, -2px ); }
+}
+
+@keyframes njt-nofi-anim-pop {
+  0%, 20%, 100% { transform: scale( 1 ); }
+  5% { transform: scale( 0.92 ); }
+  10% { transform: scale( 1.12 ); }
+  15% { transform: scale( 1 ); }
+}
+
+@keyframes njt-nofi-anim-bounce-in {
+  0%, 20%, 100% { transform: scale( 1 ); opacity: 1; }
+  2% { transform: scale( 0.3 ); opacity: 0; }
+  8% { transform: scale( 1.1 ); opacity: 1; }
+  12% { transform: scale( 0.9 ); }
+  16% { transform: scale( 1.03 ); }
+  18% { transform: scale( 1 ); }
+}
+
+/* Hover effects — no second color needed; --njt-btn-bg is the solid button
+   color set inline by render-bar.js. */
+.njt-nofi-hover-grow:hover {
+  transform: scale( 1.05 );
+}
+.njt-nofi-hover-shrink:hover {
+  transform: scale( 0.95 );
+}
+.njt-nofi-hover-lift:hover {
+  transform: translateY( -3px );
+  box-shadow: 0 6px 16px rgba( 0, 0, 0, 0.18 );
+}
+.njt-nofi-hover-glow:hover {
+  filter: brightness( 1.05 ) drop-shadow( 0 0 8px var( --njt-btn-bg, #1919cf ) );
+}
+.njt-nofi-hover-press:hover {
+  transform: translateY( 1px );
+}
+.njt-nofi-hover-press:active {
+  transform: translateY( 2px ) scale( 0.98 );
+}
+.njt-nofi-hover-shadow:hover {
+  box-shadow: 0 8px 20px rgba( 0, 0, 0, 0.22 );
+}
+.njt-nofi-hover-color-shift:hover {
+  filter: hue-rotate( 25deg ) brightness( 1.05 );
+}
+
+/* slide-fill: translucent overlay sweep on top (pointer-events:none so clicks
+   pass through; text stays readable through the light wash — no markup change).
+   overflow:hidden does NOT clip the :focus-visible outline (outlines are never
+   clipped by overflow), so the focus ring stays intact. */
+.njt-nofi-hover-slide-fill {
+  position: relative;
+  overflow: hidden;
+}
+.njt-nofi-hover-slide-fill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba( 255, 255, 255, 0.2 );
+  transform: translateX( -101% );
+  transition: transform 0.35s ease;
+}
+.njt-nofi-hover-slide-fill:hover::before {
+  transform: translateX( 0 );
 }
 
 /* ==========================================================================
@@ -597,5 +812,20 @@
     .njt-nofi-notification-bar {
     transform: none !important;
     animation: none !important;
+  }
+
+  /* Pro CTA animations — kill the attention loop and any hover transform/sweep. */
+  .njt-nofi-button-text[class*='njt-nofi-anim-'] {
+    animation: none !important;
+  }
+  .njt-nofi-button-text[class*='njt-nofi-hover-'] {
+    transition: none !important;
+  }
+  .njt-nofi-button-text[class*='njt-nofi-hover-']:hover,
+  .njt-nofi-button-text[class*='njt-nofi-hover-']:active {
+    transform: none !important;
+  }
+  .njt-nofi-hover-slide-fill::before {
+    display: none !important;
   }
 }

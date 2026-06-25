@@ -85,6 +85,49 @@ function renderButton( button, style, kind ) {
 		`font-weight:${ escapeAttr( button.fontWeight || 500 ) }`,
 	].join( ';' );
 
+	// Pro CTA animations: append the attention/hover classes (token == schema
+	// enum == CSS class suffix). animClasses is declared outside the Pro-only
+	// block below so the Lite build (which strips that block) keeps the empty
+	// default — no classes, no animation. Tokens are whitelisted, so direct
+	// interpolation is safe.
+	let animClasses = '';
+	/* @pro */
+	const ATTN = [
+		'wobble',
+		'shake',
+		'bounce',
+		'pulse',
+		'swing',
+		'jello',
+		'tada',
+		'rubber-band',
+		'heartbeat',
+		'flash',
+		'blink',
+		'vibrate',
+		'pop',
+		'bounce-in',
+	];
+	const HOV = [
+		'grow',
+		'shrink',
+		'lift',
+		'glow',
+		'press',
+		'shadow',
+		'color-shift',
+		'slide-fill',
+	];
+	const animParts = [];
+	if ( button.attention && ATTN.includes( button.attention ) ) {
+		animParts.push( `njt-nofi-anim-${ button.attention }` );
+	}
+	if ( button.hover && HOV.includes( button.hover ) ) {
+		animParts.push( `njt-nofi-hover-${ button.hover }` );
+	}
+	animClasses = animParts.length ? ' ' + animParts.join( ' ' ) : '';
+	/* @endpro */
+
 	// Close action: a real <button> (no href/target) carrying data-njt-action
 	// so the frontend + preview click delegates dismiss the bar. Shares the
 	// .njt-nofi-button-text class + inline style for identical appearance.
@@ -92,7 +135,7 @@ function renderButton( button, style, kind ) {
 		return (
 			`<div class="njt-nofi-button">` +
 			`<button type="button" data-njt-action="close" ` +
-			`class="njt-nofi-button-text" ` +
+			`class="njt-nofi-button-text${ animClasses }" ` +
 			`aria-label="${ ariaLabel }" ` +
 			`style="${ btnStyle }">` +
 			escapeText( text ) +
@@ -108,7 +151,7 @@ function renderButton( button, style, kind ) {
 	return (
 		`<div class="njt-nofi-button">` +
 		`<a href="${ escapeAttr( url ) }"${ newWindow } ` +
-		`class="njt-nofi-button-text" ` +
+		`class="njt-nofi-button-text${ animClasses }" ` +
 		`aria-label="${ ariaLabel }" ` +
 		`style="${ btnStyle }">` +
 		escapeText( text ) +

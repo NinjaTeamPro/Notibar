@@ -19,6 +19,7 @@ Notibar lets you create and manage **multiple notification bars** independently 
 - **Per-bar display rules**: all pages, none, or specific include/exclude lists
 - **Device-aware content**: desktop & mobile with separate text/buttons
 - **Button action**: each button opens a link or dismisses the bar (close action)
+- **Button animations** (Pro): per-button attention loop (wobble, pulse, tada, heartbeat…) + hover effect (grow, glow, slide-fill…); CSS-only, respects `prefers-reduced-motion`
 - **Flexible close button**: disable, toggle (collapse), or close permanently
 - **Rotation mode** (Pro): cycle through bars with pause-on-hover; manual prev/next arrows + keyboard nav; respects `prefers-reduced-motion`
 - **Scheduling**: date ranges, daily time windows, specific days of week
@@ -234,6 +235,7 @@ npm run format         # Auto-format src/
 - **CPT support**: Display rules by custom post type
 - **User search**: AsyncUserPicker in display rules
 - **Rotation**: Cycle through bars; pause-on-hover
+- **Button animations**: Per-button attention loop (14 presets) + hover effect (8 presets); CSS-only, reduced-motion aware
 - **Export/Import**: (both editions have this; Lite restricted to UI-only view)
 
 ---

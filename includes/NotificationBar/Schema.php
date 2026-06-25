@@ -45,6 +45,9 @@ class Schema {
 	const ALLOWED_ROTATION_ORDER = [ 'sequential', 'random' ];
 	const ALLOWED_AUDIENCE      = [ 'all', 'loggedin', 'loggedout', 'roles', 'users' ];
 	const ALLOWED_COUNTRY_LOGIC = [ 'all', 'include', 'exclude' ];
+	// CTA button animation presets (Pro). Token == CSS class suffix == UI value.
+	const ALLOWED_BTN_ATTENTION = [ 'none', 'wobble', 'shake', 'bounce', 'pulse', 'swing', 'jello', 'tada', 'rubber-band', 'heartbeat', 'flash', 'blink', 'vibrate', 'pop', 'bounce-in' ];
+	const ALLOWED_BTN_HOVER     = [ 'none', 'grow', 'shrink', 'lift', 'glow', 'press', 'shadow', 'color-shift', 'slide-fill' ];
 
 	// ------------------------------------------------------------------
 	// Default values
@@ -245,6 +248,9 @@ class Schema {
 	 * historical behaviour and is the backward-compatible default for data that
 	 * predates this field.
 	 *
+	 * attention / hover: Pro CTA animation presets, both default 'none' so bars
+	 * predating these fields render unchanged.
+	 *
 	 * @return array
 	 */
 	private static function defaultButton(): array {
@@ -255,6 +261,8 @@ class Schema {
 			'fontWeight' => 500,
 			'newWindow'  => true,
 			'action'     => 'link',
+			'attention'  => 'none',
+			'hover'      => 'none',
 		];
 	}
 

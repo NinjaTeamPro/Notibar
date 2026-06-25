@@ -210,6 +210,16 @@ trait SchemaSanitizers {
 			? $b['action']
 			: $default['action'];
 
+		// attention / hover: Pro animation presets, validated against the
+		// whitelist; unknown/missing coerces to the default ('none'). Stored in
+		// both editions (harmless); the Pro gate lives in render + UI.
+		$attention = ( isset( $b['attention'] ) && in_array( $b['attention'], self::ALLOWED_BTN_ATTENTION, true ) )
+			? $b['attention']
+			: $default['attention'];
+		$hover = ( isset( $b['hover'] ) && in_array( $b['hover'], self::ALLOWED_BTN_HOVER, true ) )
+			? $b['hover']
+			: $default['hover'];
+
 		return [
 			'enabled'    => isset( $b['enabled'] ) ? (bool) $b['enabled'] : $default['enabled'],
 			'text'       => $text,
@@ -219,6 +229,8 @@ trait SchemaSanitizers {
 			'fontWeight' => $fw,
 			'newWindow'  => isset( $b['newWindow'] ) ? (bool) $b['newWindow'] : $default['newWindow'],
 			'action'     => $action,
+			'attention'  => $attention,
+			'hover'      => $hover,
 		];
 	}
 
