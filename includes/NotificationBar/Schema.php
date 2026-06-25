@@ -44,6 +44,7 @@ class Schema {
 	const ALLOWED_DISP_MODE     = [ 'single', 'rotation', 'stack' ];
 	const ALLOWED_ROTATION_ORDER = [ 'sequential', 'random' ];
 	const ALLOWED_AUDIENCE      = [ 'all', 'loggedin', 'loggedout', 'roles', 'users' ];
+	const ALLOWED_COUNTRY_LOGIC = [ 'all', 'include', 'exclude' ];
 
 	// ------------------------------------------------------------------
 	// Default values
@@ -77,6 +78,10 @@ class Schema {
 				'contentWidth' => 900,
 				'positionType' => 'fixed',
 				'placement'    => 'top',
+				// Snapshot of the colour preset the user last applied to this
+				// bar, or null. Drives the "reset to preset" behaviour of the
+				// per-colour Reset buttons. Shape: { bg, text, btnBg, btnText, name? }.
+				'activePreset' => null,
 			],
 			'display' => [
 				'devices'   => [ 'desktop', 'mobile' ],
@@ -90,6 +95,10 @@ class Schema {
 				'audience'  => 'all',
 				'roles'     => [],
 				'userIds'   => [],
+				// Country targeting (Pro). countryLogic: all|include|exclude.
+				// countries: ISO 3166-1 alpha-2 codes. Default = no restriction.
+				'countryLogic' => 'all',
+				'countries'    => [],
 			],
 			'behavior' => [
 				'hideCloseButton' => 'close',

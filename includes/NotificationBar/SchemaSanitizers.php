@@ -261,7 +261,45 @@ trait SchemaSanitizers {
 			'contentWidth' => $content_width,
 			'positionType' => $position,
 			'placement'    => $placement,
+			'activePreset' => self::sanitizeActivePreset(
+				isset( $s['activePreset'] ) ? $s['activePreset'] : null
+			),
 		];
+	}
+
+	/**
+	 * Sanitize the active colour-preset snapshot.
+	 *
+	 * Returns a clean { bg, text, btnBg, btnText, name? } array when the four
+	 * colour channels are all present and valid hex; otherwise null (no preset).
+	 * An incomplete or malformed snapshot collapses to null so the per-colour
+	 * Reset buttons safely fall back to the global defaults.
+	 *
+	 * @param  mixed $raw Raw activePreset value.
+	 * @return array|null
+	 */
+	private static function sanitizeActivePreset( $raw ) {
+		if ( ! is_array( $raw ) ) {
+			return null;
+		}
+
+		$out = [];
+		foreach ( [ 'bg', 'text', 'btnBg', 'btnText' ] as $channel ) {
+			if ( ! isset( $raw[ $channel ] ) ) {
+				return null;
+			}
+			$hex = sanitize_hex_color( $raw[ $channel ] );
+			if ( ! $hex ) {
+				return null;
+			}
+			$out[ $channel ] = $hex;
+		}
+
+		if ( isset( $raw['name'] ) ) {
+			$out['name'] = sanitize_text_field( $raw['name'] );
+		}
+
+		return $out;
 	}
 
 	/**
@@ -318,6 +356,22 @@ trait SchemaSanitizers {
 			fn( $v ) => '' !== $v
 		) ) );
 
+		// Country targeting (Pro). countryLogic enum like pageLogic but with its
+		// own allowed set (no 'none'). Codes normalised to uppercase ISO 3166-1
+		// alpha-2; anything not matching ^[A-Z]{2}$ is dropped. List deduped.
+		$country_logic = isset( $d['countryLogic'] ) && in_array( $d['countryLogic'], self::ALLOWED_COUNTRY_LOGIC, true )
+			? $d['countryLogic']
+			: $default['countryLogic'];
+
+		$raw_countries = isset( $d['countries'] ) && is_array( $d['countries'] ) ? $d['countries'] : $default['countries'];
+		$countries     = array_values( array_unique( array_filter(
+			array_map(
+				fn( $v ) => is_string( $v ) ? strtoupper( preg_replace( '/[^A-Za-z]/', '', $v ) ) : '',
+				$raw_countries
+			),
+			fn( $v ) => 1 === preg_match( '/^[A-Z]{2}$/', $v )
+		) ) );
+
 		return [
 			'devices'   => $devices,
 			'pageLogic' => $page_logic,
@@ -330,6 +384,8 @@ trait SchemaSanitizers {
 			'audience'  => $audience,
 			'roles'     => $roles,
 			'userIds'   => self::sanitizeIdList( $d['userIds'] ?? $default['userIds'] ),
+			'countryLogic' => $country_logic,
+			'countries'    => $countries,
 		];
 	}
 

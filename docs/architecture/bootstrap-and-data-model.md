@@ -138,7 +138,10 @@ Pro also registers `njt_nofi_kill_lite()` on `register_activation_hook` + `admin
 
     audience: "all",                      // all|loggedin|loggedout|roles|users (Pro: roles/users)
     roles: ["editor", "author"],          // Pro: WP role slugs
-    userIds: [2, 3]                       // Pro: specific user IDs
+    userIds: [2, 3],                      // Pro: specific user IDs
+
+    countryLogic: "all",                  // Pro: all|include|exclude (server-side gate)
+    countries: ["VN", "US"]               // Pro: ISO 3166-1 alpha-2 codes
   },
 
   behavior: {
