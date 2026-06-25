@@ -57,6 +57,21 @@ export function nextIndex( current, count, order ) {
 	return ( current + 1 ) % count;
 }
 
+/**
+ * Resolve a bar's placement edge. Mirrors render-bar.js: anything other than an
+ * explicit 'bottom' is treated as 'top'. Used to pick the transition style —
+ * same edge ⇒ horizontal carousel slide; crossing edges (top↔bottom) ⇒ vertical
+ * slide so the incoming bar enters from its own edge.
+ *
+ * @param {Object} bar Bar object.
+ * @return {'top'|'bottom'} Placement edge.
+ */
+function placementOf( bar ) {
+	return bar && bar.style && bar.style.placement === 'bottom'
+		? 'bottom'
+		: 'top';
+}
+
 export function startRotation( {
 	slot,
 	bars,
@@ -99,10 +114,12 @@ export function startRotation( {
 	// injection mutates inside that same .njt-nofi-container, so body-push's
 	// re-attach guard no-ops on it, and absolutely-positioned arrows don't
 	// change container height — so the ResizeObserver stays quiet too.
-	// `dir` ('next' | 'prev' | undefined): set only for manual navigation, where
-	// it tags the container-content so CSS plays a horizontal carousel slide in
-	// that direction. Initial render + auto-advance pass no dir → the existing
-	// vertical slide-down entrance.
+	// `dir` ('next' | 'prev' | undefined): when set, tags the container-content so
+	// CSS plays a horizontal carousel slide in that direction. Both auto-advance
+	// and manual nav set it only when the outgoing and incoming bars share a
+	// placement edge (see advance()/goTo()); crossing top↔bottom — and the very
+	// first render — pass no dir, so the vertical slide-down/up entrance plays for
+	// the new bar's own edge.
 	function render( i, dir ) {
 		index = i;
 		slot.innerHTML = renderFn( bars[ index ], global );
@@ -134,7 +151,15 @@ export function startRotation( {
 		if ( paused ) {
 			return;
 		}
-		render( nextIndex( index, bars.length, global.rotationOrder ) );
+		const next = nextIndex( index, bars.length, global.rotationOrder );
+		// Auto-advance is forward-only, so the horizontal slide always enters from
+		// the right ('next'). Only when the outgoing and incoming bars share a
+		// placement edge; crossing top↔bottom drops the dir for a vertical entrance.
+		const dir =
+			placementOf( bars[ index ] ) === placementOf( bars[ next ] )
+				? 'next'
+				: undefined;
+		render( next, dir );
 	}
 
 	// Manual navigation is always sequential cyclic (wraps), independent of
@@ -142,7 +167,15 @@ export function startRotation( {
 	// Each manual move resets the autoplay timer so the chosen bar is not
 	// immediately advanced past.
 	function goTo( i, dir ) {
-		render( ( i + bars.length ) % bars.length, dir );
+		const target = ( i + bars.length ) % bars.length;
+		// Same placement rule as advance(): keep the requested horizontal direction
+		// only when both bars share a placement edge; crossing top↔bottom falls
+		// back to the vertical entrance for the incoming bar's edge.
+		const slideDir =
+			placementOf( bars[ index ] ) === placementOf( bars[ target ] )
+				? dir
+				: undefined;
+		render( target, slideDir );
 		resetTimer();
 	}
 
