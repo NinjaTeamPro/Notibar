@@ -77,6 +77,10 @@ class Schema {
 				'contentWidth' => 900,
 				'positionType' => 'fixed',
 				'placement'    => 'top',
+				// Snapshot of the colour preset the user last applied to this
+				// bar, or null. Drives the "reset to preset" behaviour of the
+				// per-colour Reset buttons. Shape: { bg, text, btnBg, btnText, name? }.
+				'activePreset' => null,
 			],
 			'display' => [
 				'devices'   => [ 'desktop', 'mobile' ],

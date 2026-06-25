@@ -47,6 +47,10 @@ export const DEFAULT_BAR = {
 		contentWidth: 900,
 		positionType: 'fixed',
 		placement: 'top',
+		// Snapshot of the last-applied colour preset, or null. Drives the
+		// "reset to preset" behaviour of the per-colour Reset buttons.
+		// Shape: { bg, text, btnBg, btnText, name? }. Mirrors Schema.php.
+		activePreset: null,
 	},
 	display: {
 		devices: [ 'desktop', 'mobile' ],

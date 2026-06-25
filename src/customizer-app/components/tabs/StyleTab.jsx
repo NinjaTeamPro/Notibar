@@ -42,30 +42,46 @@ export function StyleTab( { bar, onChange } ) {
 	const { style } = bar;
 	const pro = isProEdition();
 	const placement = style.placement || 'top';
+	const activePreset = style.activePreset || null;
+
+	// Per-colour Reset targets: when a preset is active, Reset restores that
+	// preset's colours; otherwise it falls back to the global defaults.
+	const resetBg = activePreset ? activePreset.bg : DEFAULT_BAR.style.bgColor;
+	const resetText = activePreset
+		? activePreset.text
+		: DEFAULT_BAR.style.textColor;
+	const resetBtnBg = activePreset
+		? activePreset.btnBg
+		: DEFAULT_BAR.style.btnBgColor;
+	const resetBtnText = activePreset
+		? activePreset.btnText
+		: DEFAULT_BAR.style.btnTextColor;
 
 	function handlePreset( preset ) {
-		// Write all 4 colours in ONE onChange call (single Customizer dirty event).
-		onChange(
-			updatePath(
-				updatePath(
-					updatePath(
-						updatePath( bar, 'style.bgColor', preset.bg ),
-						'style.textColor',
-						preset.text
-					),
-					'style.btnBgColor',
-					preset.btnBg
-				),
-				'style.btnTextColor',
-				preset.btnText
-			)
-		);
+		// Write all 4 colours AND the active-preset snapshot in ONE onChange
+		// call (single Customizer dirty event). The snapshot becomes the new
+		// Reset target and marks this swatch as selected.
+		let next = updatePath( bar, 'style.bgColor', preset.bg );
+		next = updatePath( next, 'style.textColor', preset.text );
+		next = updatePath( next, 'style.btnBgColor', preset.btnBg );
+		next = updatePath( next, 'style.btnTextColor', preset.btnText );
+		next = updatePath( next, 'style.activePreset', {
+			bg: preset.bg,
+			text: preset.text,
+			btnBg: preset.btnBg,
+			btnText: preset.btnText,
+			...( preset.name ? { name: preset.name } : {} ),
+		} );
+		onChange( next );
 	}
 
 	return (
 		<div className="njt-notibar-tab-content">
 			{ /* Color presets */ }
-			<ColorPresetSwatches onSelect={ handlePreset } />
+			<ColorPresetSwatches
+				onSelect={ handlePreset }
+				activePreset={ activePreset }
+			/>
 
 			{ /* Bar colour pair + contrast check */ }
 			<div className="njt-notibar-color-fields">
@@ -73,13 +89,13 @@ export function StyleTab( { bar, onChange } ) {
 					label={ __( 'Background colour', 'notibar' ) }
 					value={ style.bgColor }
 					onChange={ ( v ) => set( 'style.bgColor', v ) }
-					defaultValue={ DEFAULT_BAR.style.bgColor }
+					defaultValue={ resetBg }
 				/>
 				<ColorFieldWithReset
 					label={ __( 'Text colour', 'notibar' ) }
 					value={ style.textColor }
 					onChange={ ( v ) => set( 'style.textColor', v ) }
-					defaultValue={ DEFAULT_BAR.style.textColor }
+					defaultValue={ resetText }
 				/>
 			</div>
 			<ContrastWarning
@@ -94,13 +110,13 @@ export function StyleTab( { bar, onChange } ) {
 					label={ __( 'Button background', 'notibar' ) }
 					value={ style.btnBgColor }
 					onChange={ ( v ) => set( 'style.btnBgColor', v ) }
-					defaultValue={ DEFAULT_BAR.style.btnBgColor }
+					defaultValue={ resetBtnBg }
 				/>
 				<ColorFieldWithReset
 					label={ __( 'Button text colour', 'notibar' ) }
 					value={ style.btnTextColor }
 					onChange={ ( v ) => set( 'style.btnTextColor', v ) }
-					defaultValue={ DEFAULT_BAR.style.btnTextColor }
+					defaultValue={ resetBtnText }
 				/>
 			</div>
 			<ContrastWarning

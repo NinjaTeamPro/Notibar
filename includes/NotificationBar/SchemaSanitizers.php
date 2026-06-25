@@ -261,7 +261,45 @@ trait SchemaSanitizers {
 			'contentWidth' => $content_width,
 			'positionType' => $position,
 			'placement'    => $placement,
+			'activePreset' => self::sanitizeActivePreset(
+				isset( $s['activePreset'] ) ? $s['activePreset'] : null
+			),
 		];
+	}
+
+	/**
+	 * Sanitize the active colour-preset snapshot.
+	 *
+	 * Returns a clean { bg, text, btnBg, btnText, name? } array when the four
+	 * colour channels are all present and valid hex; otherwise null (no preset).
+	 * An incomplete or malformed snapshot collapses to null so the per-colour
+	 * Reset buttons safely fall back to the global defaults.
+	 *
+	 * @param  mixed $raw Raw activePreset value.
+	 * @return array|null
+	 */
+	private static function sanitizeActivePreset( $raw ) {
+		if ( ! is_array( $raw ) ) {
+			return null;
+		}
+
+		$out = [];
+		foreach ( [ 'bg', 'text', 'btnBg', 'btnText' ] as $channel ) {
+			if ( ! isset( $raw[ $channel ] ) ) {
+				return null;
+			}
+			$hex = sanitize_hex_color( $raw[ $channel ] );
+			if ( ! $hex ) {
+				return null;
+			}
+			$out[ $channel ] = $hex;
+		}
+
+		if ( isset( $raw['name'] ) ) {
+			$out['name'] = sanitize_text_field( $raw['name'] );
+		}
+
+		return $out;
 	}
 
 	/**
