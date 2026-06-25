@@ -243,7 +243,9 @@
 /* shadcn-style CTA: 6px radius, medium weight, color-darken hover/active (no
    scale), keyboard focus ring in the button's own color. bg + color +
    font-weight are set via inline style by renderBarHTML(); the inline
-   --njt-btn-bg var feeds the focus outline. */
+   --njt-btn-bg var feeds the focus outline.
+   Shared by both the link (<a>) and the close-action (<button>) variants; the
+   reset block below makes a native <button> render identically to the anchor. */
 .njt-nofi-button-text {
   display: inline-flex;
   align-items: center;
@@ -252,6 +254,14 @@
   padding: 8px 16px;
   border-radius: 6px;
   font-weight: 500;
+  /* Reset native <button> chrome so the close-action button matches the <a>. */
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
   /* hover/active darken via filter; bg is set inline and never animates. */
   transition: filter 0.15s ease;
 }

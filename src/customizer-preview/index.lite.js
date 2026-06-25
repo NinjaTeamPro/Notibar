@@ -220,7 +220,11 @@ function renderSingle( slot, bar, global ) {
  */
 function wireDismissDelegate( slot ) {
 	slot.onclick = function ( e ) {
-		const btn = e.target.closest( '.njt-nofi-close, .njt-nofi-toggle' );
+		// Include CTA buttons set to the "close" action so the preview mirrors
+		// the live dismiss behaviour when an admin clicks one.
+		const btn = e.target.closest(
+			'.njt-nofi-close, .njt-nofi-toggle, [data-njt-action="close"]'
+		);
 		if ( ! btn ) {
 			return;
 		}

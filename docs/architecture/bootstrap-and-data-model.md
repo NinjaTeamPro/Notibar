@@ -104,9 +104,10 @@ Pro also registers `njt_nofi_kill_lite()` on `register_activation_hook` + `admin
     button: {
       enabled: true,
       text: "Click me",
-      url: "https://example.com",
+      url: "https://example.com",         // used only when action = "link"
       fontWeight: 400,                    // 100–900
-      newWindow: false
+      newWindow: false,
+      action: "link"                      // "link" (open url) | "close" (dismiss bar)
     },
     buttonMobile: { /* same shape as button */ }
   },

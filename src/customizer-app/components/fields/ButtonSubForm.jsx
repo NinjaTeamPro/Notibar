@@ -2,7 +2,8 @@
  * ButtonSubForm — reusable button sub-form block.
  *
  * Renders an "Enable button" toggle, and when enabled shows:
- * text, URL, font weight (SelectControl 100-900), open-in-new-tab toggle.
+ * action (open link | close bar), text, font weight (SelectControl 100-900),
+ * plus URL + open-in-new-tab toggle when the action is "open link".
  *
  * Used for both desktop and mobile button fields in ContentTab.
  */
@@ -25,10 +26,16 @@ const FONT_WEIGHT_OPTIONS = [
 	{ value: 900, label: '900 — Black' },
 ];
 
+// Click action for the button: open a URL, or dismiss the bar.
+const ACTION_OPTIONS = [
+	{ value: 'link', label: __( 'Open link', 'notibar' ) },
+	{ value: 'close', label: __( 'Close bar', 'notibar' ) },
+];
+
 /**
  * @param {Object}   props
  * @param {string}   props.label    Section heading (e.g. "Button" or "Mobile button").
- * @param {Object}   props.value    Button object { enabled, text, url, fontWeight, newWindow }.
+ * @param {Object}   props.value    Button object { enabled, text, url, fontWeight, newWindow, action }.
  * @param {Function} props.onChange Called with updated button object.
  */
 export function ButtonSubForm( { label, value, onChange } ) {
@@ -48,6 +55,10 @@ export function ButtonSubForm( { label, value, onChange } ) {
 		}
 	};
 
+	// 'link' is the implicit default for buttons saved before the action field
+	// existed, so treat a missing action as a link.
+	const isLink = ( value.action || 'link' ) !== 'close';
+
 	return (
 		<fieldset className="njt-notibar-button-subform">
 			{ /* The toggle's label IS the section header — no separate legend.
@@ -62,26 +73,46 @@ export function ButtonSubForm( { label, value, onChange } ) {
 
 			{ value.enabled && (
 				<div className="njt-notibar-button-subform__fields">
+					<SelectControl
+						label={ __( 'Action', 'notibar' ) }
+						value={ value.action || 'link' }
+						options={ ACTION_OPTIONS }
+						onChange={ ( v ) => set( 'action', v ) }
+						help={
+							isLink
+								? undefined
+								: __(
+										'Clicking this button dismisses the bar.',
+										'notibar'
+								  )
+						}
+					/>
+
 					<TextControl
 						label={ __( 'Button text', 'notibar' ) }
 						value={ value.text || '' }
 						onChange={ ( v ) => set( 'text', v ) }
 					/>
 
-					<TextControl
-						label={ __( 'URL', 'notibar' ) }
-						value={ value.url || '' }
-						type="url"
-						onChange={ ( v ) => set( 'url', v ) }
-						help={
-							! isValidUrl( value.url )
-								? __( 'Please enter a valid URL.', 'notibar' )
-								: undefined
-						}
-						className={
-							! isValidUrl( value.url ) ? 'is-invalid' : ''
-						}
-					/>
+					{ isLink && (
+						<TextControl
+							label={ __( 'URL', 'notibar' ) }
+							value={ value.url || '' }
+							type="url"
+							onChange={ ( v ) => set( 'url', v ) }
+							help={
+								! isValidUrl( value.url )
+									? __(
+											'Please enter a valid URL.',
+											'notibar'
+									  )
+									: undefined
+							}
+							className={
+								! isValidUrl( value.url ) ? 'is-invalid' : ''
+							}
+						/>
+					) }
 
 					<SelectControl
 						label={ __( 'Font weight', 'notibar' ) }
@@ -92,11 +123,13 @@ export function ButtonSubForm( { label, value, onChange } ) {
 						}
 					/>
 
-					<ToggleControl
-						label={ __( 'Open in new tab', 'notibar' ) }
-						checked={ !! value.newWindow }
-						onChange={ ( v ) => set( 'newWindow', v ) }
-					/>
+					{ isLink && (
+						<ToggleControl
+							label={ __( 'Open in new tab', 'notibar' ) }
+							checked={ !! value.newWindow }
+							onChange={ ( v ) => set( 'newWindow', v ) }
+						/>
+					) }
 				</div>
 			) }
 		</fieldset>

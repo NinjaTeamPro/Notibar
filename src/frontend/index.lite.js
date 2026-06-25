@@ -184,6 +184,19 @@ function init() {
 	// Delegated click handler on slot.
 	// -----------------------------------------------------------------------
 	slot.addEventListener( 'click', function ( e ) {
+		// CTA button configured with the "close" action — dismiss the bar like
+		// the × control. Checked first so it wins over nav-arrow handling.
+		const closeAction = e.target.closest( '[data-njt-action="close"]' );
+		if ( closeAction ) {
+			e.preventDefault();
+			const container = closeAction.closest( '[data-bar-id]' );
+			const barId = container ? container.dataset.barId : null;
+			if ( barId ) {
+				handleDismiss( barId );
+			}
+			return;
+		}
+
 		const closeBtn = e.target.closest( '.njt-nofi-close' );
 		if ( closeBtn ) {
 			const container = closeBtn.closest( '[data-bar-id]' );

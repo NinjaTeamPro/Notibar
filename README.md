@@ -18,6 +18,7 @@ Notibar lets you create and manage **multiple notification bars** independently 
 - **Multiple bars** at once; each with independent rules
 - **Per-bar display rules**: all pages, none, or specific include/exclude lists
 - **Device-aware content**: desktop & mobile with separate text/buttons
+- **Button action**: each button opens a link or dismisses the bar (close action)
 - **Flexible close button**: disable, toggle (collapse), or close permanently
 - **Rotation mode** (Pro): cycle through bars with pause-on-hover; manual prev/next arrows + keyboard nav; respects `prefers-reduced-motion`
 - **Scheduling**: date ranges, daily time windows, specific days of week
