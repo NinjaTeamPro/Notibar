@@ -150,6 +150,14 @@ class NotificationBarHandle {
 
 		$context = $this->getRenderContext();
 
+		// Resolve dynamic content tokens ({user_first_name}, {current_date}, …)
+		// in bar text now — after WPML translation, before the bars are inlined.
+		// Pro fills values; Lite resolves each token to its fallback/empty so a
+		// raw "{token}" never reaches a visitor. Cache caveat: per-visitor tokens
+		// are baked into the page HTML — personalized pages must bypass the page
+		// cache (same requirement as the audience/country gates above).
+		$bars = DynamicContent::apply( $bars, $context );
+
 		// Server-side pre-filter: skip enqueue entirely if no bar can show.
 		if ( empty( $this->filterBarsServer( $bars ) ) ) {
 			return;

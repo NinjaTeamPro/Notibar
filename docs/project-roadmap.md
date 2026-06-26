@@ -12,7 +12,7 @@ Runs on WordPress 4.0–7.0, PHP 5.3.1+. Ships in two editions (Lite / Pro) from
 
 ## Version History (from git)
 
-### v3.1.2 — current (commits through 2026-06-25)
+### v3.1.2 — current (commits through 2026-06-26)
 
 - Pro auto-deactivates Lite when both active (`njt_nofi_kill_lite()`)
 - EventLog custom table + time-series analytics API (`/stats/timeseries`, `/stats/by-bar`)
@@ -29,6 +29,7 @@ Runs on WordPress 4.0–7.0, PHP 5.3.1+. Ships in two editions (Lite / Pro) from
 - **Public bar registration API**: `njt_nofi_register_bar()` + `njt_nofi_register_bars` filter (CORE); 3rd-party bars inherit all native features (rendering, scheduling, targeting, dismissal, rotation)
 - **Stack display mode** (Pro): `displayMode=stack` shows all matching bars at once via `src/shared/stack.js`; split top/bottom by placement into `.njt-nofi-stack` wrappers; new global `stackPositionType` (fixed|absolute); hairline separators; bottom group reversed; two-sided `body-push`. `render-bar.js` markup reused unchanged
 - **Display trigger** (Pro): Per-bar behavior.trigger { type, value } defers reveal until scroll %, time delay, or click count. Withheld from initial render (pending); promoted to live pool when trigger fires. Works across single/stack/rotation modes. Lite: UI locked, frontend no-op (shows immediately). Customizer preview bypasses triggers (always immediate).
+- **Dynamic content tokens** (Pro): Server-side {token} / {token|fallback} merge tag resolution in bar text fields. Built-ins: {user_first_name}, {current_date}, {site_name}, {recently_viewed_product}. Parser runs both editions; Pro-gated values only. Lite: UI locked, tokens degrade to fallback/empty. Extensible via `njt_nofi_dynamic_tokens` filter. Cache caveat: per-visitor tokens require full-page cache bypass.
 
 ### v3.1 line (2026-05-30 → 2026-05-31)
 

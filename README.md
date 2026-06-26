@@ -317,6 +317,30 @@ add_filter( 'njt_nofi_register_bars', function ( array $bars ) {
 - **Code-owned**: Declared bars are not editable in Customizer, not shown in Customizer preview, not included in export/import.
 - **Render order**: Injected bars render after native bars.
 
+### Dynamic Content Tokens (Pro)
+
+Notibar bars support server-side merge tags in text fields. The syntax is `{token}` or `{token|fallback}` — e.g., "Welcome back, {user_first_name|friend}!". Built-in tokens cover **visitor** (`{user_first_name}`, `{user_last_name}`, `{user_display_name}`, `{user_role}`, `{visitor_country}`), **date/time** (`{current_date}`, `{current_time}`, `{current_day}`, `{current_month}`, `{current_year}`), **site** (`{site_name}`, `{site_tagline}`, `{users_count}`, `{posts_count}`), **current post** (`{post_title}`, `{post_author}`, `{post_category}`, `{post_date}`), and **WooCommerce** (`{recently_viewed_product}`).
+
+Register custom tokens via the `njt_nofi_dynamic_tokens` filter:
+
+```php
+add_filter( 'njt_nofi_dynamic_tokens', function ( array $tokens, array $ctx ) {
+    $tokens['product_count'] = static function ( array $ctx ): string {
+        if ( ! function_exists( 'wc_get_product_count' ) ) {
+            return '';
+        }
+        return (string) wc_get_product_count();
+    };
+    return $tokens;
+}, 10, 2 );
+```
+
+**Token callback signature**: `callable( array $ctx ): string` — receives render context (pageId, postId, theme, etc.); returns the token's resolved value as a string, or empty string if unavailable. The resolver uses the returned value or the fallback (if provided).
+
+**Escaping**: HTML fields (content.text, content.textMobile) are esc_html'd; button text fields (content.button.text, content.buttonMobile.text) are not (escaped client-side at render).
+
+**Cache caveat**: If your token returns per-visitor data (e.g., current user, recently viewed), bars will be personalized → bypass full-page cache on pages that show Notibar.
+
 ---
 
 ## Compatibility

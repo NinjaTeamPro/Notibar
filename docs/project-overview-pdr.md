@@ -118,6 +118,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 | WPML integration | ✓ | ✓ | Per-bar string registration |
 | Theme compat patches | ✓ | ✓ | 11 built-in themes |
 | Export/Import | ✓* | ✓ | *Lite: UI preview only; no import |
+| **Dynamic content tokens** | ✗* | ✓ | *Lite: UI locked; {token\|fallback} parser always runs, values degrade to fallback. Built-ins span visitor, date/time, site, post, and WooCommerce categories (see FR12). Server-side resolution (WPML order preserved). Extensible via `njt_nofi_dynamic_tokens` filter. |
 | **Rotation mode** | | ✓ | Cycle bars; pause-on-hover; manual prev/next arrows & keyboard nav |
 | **Display trigger** | | ✓ | Defer bar reveal until scroll %, time delay, or click count |
 | **Event tracking** | | ✓ | Click, dismiss, engage |
@@ -261,7 +262,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - GET /stats/timeseries: time-series (daily aggregated)
 - GET /stats/by-bar: per-bar lifetime
 
-### FR10: Tracking (Pro)
+### FR11: Tracking (Pro)
 
 **Requirement**: Capture & store click, dismiss, engage events; provide analytics.
 
@@ -272,7 +273,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - **Transport**: navigator.sendBeacon (fallback fetch keepalive)
 - **Analytics UI**: TrackingCharts (lazy) with filters (date range, bar, audience, event type)
 
-### FR11: Migration
+### FR14: Migration
 
 **Requirement**: Auto-migrate from v2.x to v3.0+; migrate theme_mod to option storage (v3.1.2).
 
@@ -287,7 +288,28 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - One-time on plugins_loaded pri 5
 - Flag: njt_nofi_migrated_to_options
 
-### FR12: i18n & Translation
+### FR12: Dynamic Content Tokens (Pro)
+
+**Requirement**: Server-side merge tags for personalizing bar text with visitor/site data.
+
+**Grammar**: `{token}` or `{token|fallback}` — name = [a-z0-9_]+. Registered tokens resolve to values; unregistered passthrough untouched; empty values use fallback.
+
+**Built-in tokens** (Pro only; Lite degrades to fallback/empty). Providers live in the `DynamicContentProviders` trait. Grouped:
+- **Visitor** (per-visitor, cache-sensitive): `{user_first_name}` (display-name fallback), `{user_last_name}`, `{user_display_name}`, `{user_role}` (translated role label), `{visitor_country}` (ISO-2 code via the Pro geo resolver). Empty when logged out / geo unknown.
+- **Date & time** (site TZ, localized): `{current_date}`, `{current_time}`, `{current_day}` (weekday), `{current_month}`, `{current_year}`.
+- **Site / social proof**: `{site_name}`, `{site_tagline}`, `{users_count}` (total users), `{posts_count}` (published). Note: `{users_count}` calls uncached `count_users()` — opt-in cost, only when the token is used; consider a transient on very large sites.
+- **Current post/page** (empty off singular views): `{post_title}`, `{post_author}`, `{post_category}` (posts only), `{post_date}`.
+- **WooCommerce**: `{recently_viewed_product}` — last-viewed product name from the `woocommerce_recently_viewed` cookie; empty if WC inactive, cookie absent, or product deleted.
+
+**Resolution**: Runs server-side in `NotificationBarHandle::maybeRender()` AFTER WPML string resolution, BEFORE bars inlined into page JSON. Parser in both editions; only Pro-gated built-in VALUES.
+
+**Fields processed**: content.text, content.textMobile (HTML → esc_html'd), content.button.text, content.buttonMobile.text (plain → raw, escaped client-side).
+
+**Extensibility**: `apply_filters( 'njt_nofi_dynamic_tokens', $tokens, $ctx )` where $tokens = name => callable( array $ctx ): string. Developers register custom tokens; filter-added tokens work in any edition.
+
+**Cache caveat**: Per-visitor tokens (all visitor/user + `{visitor_country}` + `{recently_viewed_product}`) bake into page HTML → personalized pages must bypass full-page cache (same as audience/country gates). Date/site/post tokens are cache-safe.
+
+### FR13: i18n & Translation
 
 **Requirement**: Text domain loading; WPML string registration; Polylang stub.
 
@@ -367,7 +389,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 ### Release Readiness
 
 1. **Core functionality**: All FR1–FR9 implemented & tested
-2. **Pro features**: All FR10–FR11 implemented for Pro builds
+2. **Pro features**: All FR10–FR14 implemented for Pro builds
 3. **No errors**: Zero plugin check warnings; phpcs passes
 4. **Migrations**: v2→v3 and v3.1→v3.1.2 tested on real data
 5. **REST APIs**: All endpoints respond correctly; nonce validation works

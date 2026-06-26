@@ -2,7 +2,8 @@
  * ContentTab — Content tab inside BarEditor.
  *
  * Fields: bar name, text, mobile-separate toggle + conditional mobile text,
- * desktop button sub-form, conditional mobile button sub-form.
+ * desktop button sub-form, conditional mobile button sub-form. Each text field
+ * gets a DynamicTagPicker ("Insert variable") for server-side merge tags (Pro).
  */
 import {
 	TextControl,
@@ -13,6 +14,7 @@ import {
 import { __ } from '@wordpress/i18n';
 import { updatePath } from '../../utils/update-path';
 import { ButtonSubForm } from '../fields/ButtonSubForm';
+import { DynamicTagPicker } from '../fields/DynamicTagPicker';
 
 /**
  * @param {Object}   props
@@ -24,6 +26,11 @@ export function ContentTab( { bar, onChange } ) {
 
 	const { content } = bar;
 	const textEmpty = ! content.text || content.text.trim() === '';
+
+	// Curried: append a chosen token to a text field (space-separated when the
+	// field already has content). `current` is the field's value at render.
+	const insertInto = ( path, current ) => ( token ) =>
+		set( path, current ? `${ current } ${ token }` : token );
 
 	return (
 		<div className="njt-notibar-tab-content">
@@ -61,6 +68,12 @@ export function ContentTab( { bar, onChange } ) {
 				</Notice>
 			) }
 
+			{ /* Insert variable (Pro) — desktop text. Carries the notice + help. */ }
+			<DynamicTagPicker
+				withHelp
+				onInsert={ insertInto( 'content.text', content.text ) }
+			/>
+
 			{ /* Mobile separate toggle */ }
 			<ToggleControl
 				label={ __( 'Different content on mobile', 'notibar' ) }
@@ -73,13 +86,25 @@ export function ContentTab( { bar, onChange } ) {
 			/>
 
 			{ content.mobileSeparate && (
-				<TextareaControl
-					label={ __( 'Mobile text', 'notibar' ) }
-					value={ content.textMobile || '' }
-					onChange={ ( v ) => set( 'content.textMobile', v ) }
-					help={ __( 'HTML and shortcodes accepted.', 'notibar' ) }
-					rows={ 3 }
-				/>
+				<>
+					<TextareaControl
+						label={ __( 'Mobile text', 'notibar' ) }
+						value={ content.textMobile || '' }
+						onChange={ ( v ) => set( 'content.textMobile', v ) }
+						help={ __(
+							'HTML and shortcodes accepted.',
+							'notibar'
+						) }
+						rows={ 3 }
+					/>
+					{ /* Insert variable (Pro) — mobile text. */ }
+					<DynamicTagPicker
+						onInsert={ insertInto(
+							'content.textMobile',
+							content.textMobile
+						) }
+					/>
+				</>
 			) }
 
 			{ /* Desktop button — also serves mobile when mobileSeparate is off. */ }
