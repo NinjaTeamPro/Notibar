@@ -102,6 +102,25 @@ export const DEFAULT_BAR = {
 		// Day-of-week filter: 0=Sun .. 6=Sat. All days enabled by default.
 		daysOfWeek: [ 0, 1, 2, 3, 4, 5, 6 ],
 	},
+	// Countdown timer (Pro). Disabled by default; render + ticker are Pro-only.
+	// type: 'date' counts to a fixed instant (endAt, resolved server-side to an
+	// absolute epoch in site TZ); 'evergreen' counts down a per-visitor duration
+	// window persisted client-side. ui: boxes|flip|circular. units: which time
+	// units to show. MIRROR: Schema.php defaultCountdown().
+	countdown: {
+		enabled: false,
+		type: 'date',
+		endAt: '',
+		duration: 0,
+		ui: 'boxes',
+		units: [ 'days', 'hours', 'minutes', 'seconds' ],
+		// When false (default), leading zero units are hidden at display time;
+		// when true, all selected units always show. MIRROR: Schema.php.
+		showAllUnits: false,
+		// Bumped by the "Reset visitors' timers" action to re-seed evergreen
+		// windows for returning visitors. MIRROR: Schema.php defaultCountdown().
+		resetToken: 0,
+	},
 };
 
 // ------------------------------------------------------------------

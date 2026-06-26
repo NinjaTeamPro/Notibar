@@ -21,6 +21,7 @@ import { filterBars } from '../shared/filter-bars.js';
 /* @pro */
 import { startRotation } from '../shared/rotation.js';
 import { buildStacksHTML } from '../shared/stack.js';
+import { startCountdowns } from '../shared/countdown.js';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push.js';
 import { applyThemeCompat } from '../frontend/theme-compat.js';
@@ -114,6 +115,41 @@ function resolveDevice() {
 // Core re-render
 // ------------------------------------------------------------------
 
+/* @pro */
+/**
+ * Preview-only countdown shim. The server epoch resolver (CountdownResolver)
+ * runs only on the live frontend, and evergreen timers rely on localStorage —
+ * neither is meaningful while editing. So in the preview, give every enabled
+ * countdown a fresh, non-expired absolute target (and force type=date so the
+ * ticker reads data-cd-end and never touches localStorage). This keeps the
+ * timer always visible and ticking as options change, instead of rendering
+ * empty (no epoch) or vanishing (stale/expired evergreen). Browser-local time
+ * is fine here — the exact instant is irrelevant for styling.
+ *
+ * @param {Object} bar Bar object from the parsed setting JSON.
+ * @return {Object} Cloned bar with a preview-renderable countdown, or unchanged.
+ */
+function previewCountdownTarget( bar ) {
+	const cd = bar && bar.countdown;
+	if ( ! cd || ! cd.enabled ) {
+		return bar;
+	}
+	const DAY_MS = 86400 * 1000;
+	let endEpoch;
+	if ( cd.type === 'date' && cd.endAt ) {
+		// datetime-local (no zone) → browser-local; fall back if past/invalid.
+		const parsed = Date.parse( cd.endAt );
+		endEpoch = parsed && parsed > Date.now() ? parsed : Date.now() + DAY_MS;
+	} else if ( cd.type === 'evergreen' && Number( cd.duration ) > 0 ) {
+		endEpoch = Date.now() + Number( cd.duration ) * 1000;
+	} else {
+		// No usable time set yet — show a 1-day sample so the style previews.
+		endEpoch = Date.now() + DAY_MS;
+	}
+	return { ...bar, countdown: { ...cd, type: 'date', endEpoch } };
+}
+/* @endpro */
+
 /**
  * Parse the current setting values, filter bars, and update the slot DOM.
  * Stops any active rotation before starting a new one to prevent leaks.
@@ -139,6 +175,11 @@ function rerender() {
 	} catch ( e ) {
 		global = {};
 	}
+
+	/* @pro */
+	// Make countdowns always render + tick in the preview (see helper above).
+	bars = bars.map( previewCountdownTarget );
+	/* @endpro */
 
 	const slot = ensureSlot();
 
@@ -419,6 +460,12 @@ function init() {
 
 	// Initial render on preview load.
 	rerender();
+
+	/* @pro */
+	// Countdown timers (Pro) — tick live in the preview; the single interval
+	// re-hydrates elements on every debounced re-render.
+	startCountdowns( slot );
+	/* @endpro */
 
 	// Theme-compat (header offsets etc.) — called ONCE, after the initial
 	// render, exactly like the frontend: shims attach window listeners, so

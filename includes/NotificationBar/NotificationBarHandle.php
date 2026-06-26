@@ -158,6 +158,10 @@ class NotificationBarHandle {
 		// cache (same requirement as the audience/country gates above).
 		$bars = DynamicContent::apply( $bars, $context );
 
+		// Resolve fixed-date countdown targets to absolute epochs (site TZ) so
+		// every visitor counts to the same instant. Pro-only; no-op in Lite.
+		$bars = CountdownResolver::apply( $bars );
+
 		// Server-side pre-filter: skip enqueue entirely if no bar can show.
 		if ( empty( $this->filterBarsServer( $bars ) ) ) {
 			return;

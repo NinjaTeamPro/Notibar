@@ -284,7 +284,7 @@
    Pro CTA animations — Attention (looping) + Hover effects.
    ----------------------------------------------------------------------------
    Classes are emitted on .njt-nofi-button-text by render-bar.js (Pro only;
-   @pro-stripped in Lite). Token in the class == schema enum value == UI value.
+   stripped from the Lite build). Token in the class == schema enum value == UI value.
    Periodic loop trick: CSS animation-delay only delays the FIRST run, so the
    inter-cycle rest is baked into the keyframe — motion lives in 0%–~20%, then
    the element holds its identity transform 20%–100% over a 4s infinite loop.
@@ -827,5 +827,171 @@
   }
   .njt-nofi-hover-slide-fill::before {
     display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Countdown timer (Pro) — boxes / flip / circular.
+   ----------------------------------------------------------------------------
+   Markup emitted by render-bar.js renderCountdown() (stripped from the Lite
+   build), hydrated each second by src/shared/countdown.js. Inherits the bar
+   text color via currentColor; no dedicated countdown color fields in v1.
+   ========================================================================== */
+.njt-nofi-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 4px;
+  color: inherit;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Expired → hidden (the ticker adds .is-expired at zero). */
+.njt-nofi-countdown.is-expired {
+  display: none;
+}
+
+.njt-nofi-cd-unit {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+}
+
+.njt-nofi-cd-num {
+  font-weight: 700;
+  font-size: 1.15em;
+  font-variant-numeric: tabular-nums;
+}
+
+.njt-nofi-cd-label {
+  font-size: 0.62em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+}
+
+/* Boxes — bordered cell with a faint fill derived from the text color. */
+.njt-nofi-countdown--boxes .njt-nofi-cd-unit {
+  min-width: 2.4em;
+  padding: 4px 8px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: color-mix( in srgb, currentColor 12%, transparent );
+}
+
+/* Flip — filled card; digit change animates via the .is-flipping class the
+   ticker toggles (skipped under reduced-motion). */
+.njt-nofi-countdown--flip .njt-nofi-cd-unit {
+  min-width: 2.4em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: color-mix( in srgb, currentColor 16%, transparent );
+}
+.njt-nofi-countdown--flip .njt-nofi-cd-num {
+  display: inline-block;
+  transform-origin: center;
+  backface-visibility: hidden;
+}
+.njt-nofi-countdown--flip .njt-nofi-cd-num.is-flipping {
+  animation: njt-nofi-cd-flip 0.4s ease;
+}
+@keyframes njt-nofi-cd-flip {
+  0% {
+    transform: rotateX( 0deg );
+  }
+  50% {
+    transform: rotateX( -90deg );
+    opacity: 0.4;
+  }
+  100% {
+    transform: rotateX( 0deg );
+  }
+}
+
+/* Circular — an SVG ring per unit; the number is overlaid at the ring centre.
+   The ticker sets --cd-progress (0..1) per unit; the fill arc depletes as it
+   drops. Ring viewBox 0 0 36 36, r=16 → circumference ≈ 100.53. */
+.njt-nofi-countdown--circular .njt-nofi-cd-ring {
+  width: 44px;
+  height: 44px;
+  transform: rotate( -90deg );
+}
+.njt-nofi-countdown--circular .njt-nofi-cd-ring-track {
+  stroke: currentColor;
+  stroke-width: 3;
+  opacity: 0.25;
+}
+.njt-nofi-countdown--circular .njt-nofi-cd-ring-fill {
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 100.53;
+  stroke-dashoffset: calc( 100.53 * ( 1 - var( --cd-progress, 1 ) ) );
+  transition: stroke-dashoffset 0.3s linear;
+}
+.njt-nofi-countdown--circular .njt-nofi-cd-num {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85em;
+}
+.njt-nofi-countdown--circular .njt-nofi-cd-label {
+  margin-top: 2px;
+}
+
+/* Text — compact inline "2 days 3 hrs 15 mins 30 secs", no boxes/rings; words
+   stay readable, inherits bar text. */
+.njt-nofi-countdown--text {
+  gap: 7px;
+}
+.njt-nofi-countdown--text .njt-nofi-cd-unit {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 3px;
+}
+.njt-nofi-countdown--text .njt-nofi-cd-num {
+  font-size: 1em;
+  font-weight: 700;
+}
+.njt-nofi-countdown--text .njt-nofi-cd-label {
+  font-size: 0.95em;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.9;
+}
+
+/* Countdown — reduced motion: no flip, no ring tween (instant value swaps). */
+@media (prefers-reduced-motion: reduce) {
+  .njt-nofi-countdown--flip .njt-nofi-cd-num.is-flipping {
+    animation: none !important;
+  }
+  .njt-nofi-countdown--circular .njt-nofi-cd-ring-fill {
+    transition: none !important;
+  }
+}
+
+/* Countdown — mobile: tighten so the timer fits a narrow bar. */
+@media only screen and (max-width: 480px) {
+  .njt-nofi-countdown {
+    gap: 5px;
+  }
+  .njt-nofi-countdown--boxes .njt-nofi-cd-unit,
+  .njt-nofi-countdown--flip .njt-nofi-cd-unit {
+    min-width: 2em;
+    padding: 3px 5px;
+  }
+  .njt-nofi-countdown--circular .njt-nofi-cd-ring,
+  .njt-nofi-countdown--circular .njt-nofi-cd-num {
+    width: 36px;
+    height: 36px;
   }
 }

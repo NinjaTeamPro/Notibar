@@ -119,6 +119,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 | Theme compat patches | ✓ | ✓ | 11 built-in themes |
 | Export/Import | ✓* | ✓ | *Lite: UI preview only; no import |
 | **Dynamic content tokens** | ✗* | ✓ | *Lite: UI locked; {token\|fallback} parser always runs, values degrade to fallback. Built-ins span visitor, date/time, site, post, and WooCommerce categories (see FR12). Server-side resolution (WPML order preserved). Extensible via `njt_nofi_dynamic_tokens` filter. |
+| **Countdown timer** | ✗* | ✓ | *Lite: UI locked (Go-Pro notice); ticker JS stripped; fixed-date (site-TZ epoch) or evergreen (localStorage duration); boxes/flip/circular UI styles. |
 | **Rotation mode** | | ✓ | Cycle bars; pause-on-hover; manual prev/next arrows & keyboard nav |
 | **Display trigger** | | ✓ | Defer bar reveal until scroll %, time delay, or click count |
 | **Event tracking** | | ✓ | Click, dismiss, engage |
@@ -273,7 +274,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - **Transport**: navigator.sendBeacon (fallback fetch keepalive)
 - **Analytics UI**: TrackingCharts (lazy) with filters (date range, bar, audience, event type)
 
-### FR14: Migration
+### FR15: Migration
 
 **Requirement**: Auto-migrate from v2.x to v3.0+; migrate theme_mod to option storage (v3.1.2).
 
@@ -288,7 +289,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - One-time on plugins_loaded pri 5
 - Flag: njt_nofi_migrated_to_options
 
-### FR12: Dynamic Content Tokens (Pro)
+### FR16: Dynamic Content Tokens (Pro)
 
 **Requirement**: Server-side merge tags for personalizing bar text with visitor/site data.
 
@@ -309,7 +310,20 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 
 **Cache caveat**: Per-visitor tokens (all visitor/user + `{visitor_country}` + `{recently_viewed_product}`) bake into page HTML → personalized pages must bypass full-page cache (same as audience/country gates). Date/site/post tokens are cache-safe.
 
-### FR13: i18n & Translation
+### FR13: Countdown Timer (Pro)
+
+**Requirement**: Per-bar countdown to a fixed instant or evergreen per-visitor duration in one of three UI styles; hides at zero.
+
+- **Field group**: `bar.countdown` with `enabled`, `type` ('date' | 'evergreen'), `endAt` (datetime-local, type=date), `duration` (seconds, type=evergreen), `ui` ('boxes' | 'flip' | 'circular'), `units[]` (subset of ['days','hours','minutes','seconds']).
+- **Fixed-date** (type='date'): PHP resolves `endAt` in site timezone to absolute epoch (ms) inlined per bar; all visitors count to same instant regardless of browser TZ.
+- **Evergreen** (type='evergreen'): Per-visitor duration window seeded to localStorage (`njt-notibar-<barId>-cd-end`); continues across reloads (cache-safe, pure client).
+- **UI styles**: 'boxes' (static unit boxes+labels), 'flip' (flip-clock animation), 'circular' (per-unit SVG rings). Both degrade to static under `prefers-reduced-motion`.
+- **Render block**: Dedicated countdown slot between text and button (src/shared/render-bar.js, @pro-wrapped). Single slot-level ticker hydrates + updates all `.njt-nofi-countdown` elements.
+- **Expiry**: Countdown element hides (`.is-expired`); bar, text, button remain visible.
+- **Pro-gating**: Customizer UI ships in Lite but disabled with Go-Pro notice. Ticker JS (`src/shared/countdown.js`) stripped from Lite build. PHP resolver (`CountdownResolver::apply()`) gated by `NJT_NOFI_IS_PRO`.
+- **v1 limitations**: Fixed-date target same for all visitors (site TZ); per-visitor-local is future option. Expiry only hides countdown (no swap-message / hide-bar / freeze).
+
+### FR14: i18n & Translation
 
 **Requirement**: Text domain loading; WPML string registration; Polylang stub.
 

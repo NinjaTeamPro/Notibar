@@ -51,6 +51,11 @@ class Schema {
 	// Display trigger types (Pro). Defers bar reveal until a runtime condition fires.
 	// none = show immediately; scroll = after N% scrolled; time = after N seconds; click = after N document clicks.
 	const ALLOWED_TRIGGER_TYPE  = [ 'none', 'scroll', 'time', 'click' ];
+	// Countdown timer (Pro). type: date = count to a fixed instant; evergreen = per-visitor duration window.
+	// ui = visual style; unit = which time units the timer displays. Tokens == CSS suffixes == UI values.
+	const ALLOWED_CD_TYPE = [ 'date', 'evergreen' ];
+	const ALLOWED_CD_UI   = [ 'boxes', 'flip', 'circular', 'text' ];
+	const ALLOWED_CD_UNIT = [ 'days', 'hours', 'minutes', 'seconds' ];
 
 	// ------------------------------------------------------------------
 	// Default values
@@ -118,6 +123,39 @@ class Schema {
 				'trigger'         => [ 'type' => 'none', 'value' => 0 ],
 			],
 			'schedule' => self::defaultSchedule(),
+			// Countdown timer (Pro). Disabled by default; render + ticker are
+			// Pro-only. MIRROR: defaults.js DEFAULT_BAR.countdown.
+			'countdown' => self::defaultCountdown(),
+		];
+	}
+
+	/**
+	 * Return the default per-bar countdown timer config (Pro).
+	 *
+	 * type:     'date' counts down to a fixed instant (endAt, resolved in site TZ
+	 *           to an absolute epoch at render); 'evergreen' counts down a
+	 *           per-visitor duration window persisted client-side.
+	 * endAt:    "YYYY-MM-DDTHH:MM" datetime-local (type = date). Empty = inert.
+	 * duration: total seconds for the evergreen window (type = evergreen).
+	 * ui:       visual style — boxes | flip | circular.
+	 * units:    which time units to display, canonical order days..seconds.
+	 *
+	 * @return array
+	 */
+	public static function defaultCountdown(): array {
+		return [
+			'enabled'    => false,
+			'type'       => 'date',
+			'endAt'      => '',
+			'duration'   => 0,
+			'ui'         => 'boxes',
+			'units'      => [ 'days', 'hours', 'minutes', 'seconds' ],
+			// When false (default), leading units that are zero at display time
+			// are hidden (e.g. "00 days"). When true, all selected units show.
+			'showAllUnits' => false,
+			// Bumped by the "Reset visitors' timers" admin action; a change
+			// re-seeds every visitor's evergreen window on their next view.
+			'resetToken' => 0,
 		];
 	}
 

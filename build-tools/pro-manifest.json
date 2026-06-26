@@ -8,6 +8,7 @@
     "src/shared/nav-controls.js",
     "src/shared/stack.js",
     "src/shared/triggers.js",
+    "src/shared/countdown.js",
     "includes/NotificationBar/EventCounter.php",
     "includes/NotificationBar/TrackingRestController.php",
     "includes/NotificationBar/VisitorCountry.php",

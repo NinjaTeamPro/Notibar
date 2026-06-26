@@ -199,6 +199,106 @@ function renderCloseControl( mode ) {
 	return '';
 }
 
+/* @pro */
+// Countdown unit display labels. Plain strings (this shared render module is
+// vanilla, no i18n — matches the rest of render-bar.js). Whitelisted keys.
+const CD_UNIT_LABELS = {
+	days: 'Days',
+	hours: 'Hours',
+	minutes: 'Minutes',
+	seconds: 'Seconds',
+};
+
+// Compact but readable labels for the inline 'text' style (e.g. "2 days 3 hrs").
+const CD_UNIT_LABELS_TEXT = {
+	days: 'days',
+	hours: 'hrs',
+	minutes: 'mins',
+	seconds: 'secs',
+};
+
+/**
+ * Render a countdown timer block (Pro). Emits a static, pre-painted shell that
+ * the countdown.js ticker hydrates client-side. Returns '' when disabled or
+ * when there is nothing to count to (date with no resolved epoch / evergreen
+ * with no duration).
+ *
+ * Markup contract (consumed by countdown.js + notibar.css):
+ *   .njt-nofi-countdown.njt-nofi-countdown--{ui}[data-cd-type|end|duration|units]
+ *     > .njt-nofi-cd-unit[data-cd-unit] > (ring?) + .njt-nofi-cd-num + .njt-nofi-cd-label
+ *
+ * @param {Object} countdown bar.countdown config (may carry server-resolved endEpoch).
+ * @return {string} HTML string or '' when nothing to render.
+ */
+function renderCountdown( countdown ) {
+	if ( ! countdown || ! countdown.enabled ) {
+		return '';
+	}
+
+	const type = countdown.type === 'evergreen' ? 'evergreen' : 'date';
+	// endEpoch (ms) is injected server-side for type=date; duration is seconds.
+	const endEpoch = Number( countdown.endEpoch ) || 0;
+	const duration = Math.max( 0, Number( countdown.duration ) || 0 );
+
+	// Nothing to count to → render nothing (avoids a frozen "--" shell).
+	if (
+		( type === 'date' && ! endEpoch ) ||
+		( type === 'evergreen' && ! duration )
+	) {
+		return '';
+	}
+
+	const ui = [ 'boxes', 'flip', 'circular', 'text' ].includes( countdown.ui )
+		? countdown.ui
+		: 'boxes';
+
+	// 'text' uses compact lowercase labels (2 days 3 hrs …); others full words.
+	const labels = ui === 'text' ? CD_UNIT_LABELS_TEXT : CD_UNIT_LABELS;
+
+	const allUnits = [ 'days', 'hours', 'minutes', 'seconds' ];
+	const picked = Array.isArray( countdown.units )
+		? allUnits.filter( ( u ) => countdown.units.includes( u ) )
+		: [];
+	const units = picked.length ? picked : allUnits;
+
+	const cells = units
+		.map( ( u ) => {
+			const ring =
+				ui === 'circular'
+					? `<svg class="njt-nofi-cd-ring" viewBox="0 0 36 36" aria-hidden="true">` +
+					  `<circle class="njt-nofi-cd-ring-track" cx="18" cy="18" r="16" fill="none"/>` +
+					  `<circle class="njt-nofi-cd-ring-fill" cx="18" cy="18" r="16" fill="none"/>` +
+					  `</svg>`
+					: '';
+			return (
+				`<span class="njt-nofi-cd-unit" data-cd-unit="${ u }">` +
+				ring +
+				`<span class="njt-nofi-cd-num" aria-hidden="true">--</span>` +
+				`<span class="njt-nofi-cd-label">${ escapeText(
+					labels[ u ]
+				) }</span>` +
+				`</span>`
+			);
+		} )
+		.join( '' );
+
+	return (
+		`<div class="njt-nofi-countdown njt-nofi-countdown--${ ui }" ` +
+		`data-cd-type="${ type }" ` +
+		`data-cd-end="${ endEpoch || '' }" ` +
+		`data-cd-duration="${ duration }" ` +
+		`data-cd-token="${ escapeAttr(
+			Number( countdown.resetToken ) || 0
+		) }" ` +
+		`data-cd-showall="${ countdown.showAllUnits ? '1' : '' }" ` +
+		`data-cd-units="${ escapeAttr( units.join( ',' ) ) }" ` +
+		`aria-label="Countdown timer">` +
+		cells +
+		`</div>`
+	);
+}
+/* @endpro */
+
 // ------------------------------------------------------------------
 // Public API
 // ------------------------------------------------------------------
@@ -251,6 +351,14 @@ export function renderBarHTML( bar, global ) {
 	const containerOpacityAttr =
 		opacityPct < 100 ? ` style="opacity:${ opacityPct / 100 }"` : '';
 
+	// Countdown timer (Pro). Computed once; emitted into both content blocks
+	// (one visible per viewport). Declared empty so the Lite build — which
+	// strips the assignment below — renders no countdown at all.
+	let countdownHTML = '';
+	/* @pro */
+	countdownHTML = renderCountdown( bar.countdown );
+	/* @endpro */
+
 	// Desktop content block — always emitted.
 	const desktopBlock =
 		`<div class="njt-nofi-content njt-nofi-content-desktop" ` +
@@ -260,6 +368,7 @@ export function renderBarHTML( bar, global ) {
 			textAlign
 		) };font-size:${ fontSize }px;">` +
 		`<div class="njt-nofi-text">${ content.text || '' }</div>` +
+		countdownHTML +
 		renderButton( content.button, style, 'desktop' ) +
 		`</div>`;
 
@@ -276,6 +385,7 @@ export function renderBarHTML( bar, global ) {
 				textAlign
 		  ) };font-size:${ fontSize }px;">` +
 		  `<div class="njt-nofi-text">${ content.textMobile || '' }</div>` +
+		  countdownHTML +
 		  renderButton(
 				content.buttonMobile || content.button,
 				style,

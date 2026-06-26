@@ -64,6 +64,10 @@ trait SchemaSanitizers {
 				isset( $bar['schedule'] ) && is_array( $bar['schedule'] ) ? $bar['schedule'] : [],
 				$default['schedule']
 			),
+			'countdown' => self::sanitizeCountdown(
+				isset( $bar['countdown'] ) && is_array( $bar['countdown'] ) ? $bar['countdown'] : [],
+				$default['countdown']
+			),
 		];
 	}
 
@@ -483,6 +487,55 @@ trait SchemaSanitizers {
 			'hideCloseButton' => $hcb,
 			'reopenAfterDays' => $reopen,
 			'trigger'         => [ 'type' => $tType, 'value' => $tVal ],
+		];
+	}
+
+	/**
+	 * Sanitize the countdown timer sub-object (Pro).
+	 *
+	 * Runs in both editions (harmless in Lite, which never renders it). Enum
+	 * fields fall back to defaults; units are whitelisted, de-duped and forced
+	 * into canonical order, never empty; duration clamps to 0..30 days.
+	 *
+	 * MIRROR: src/customizer-app/utils/defaults.js DEFAULT_BAR.countdown.
+	 *
+	 * @param  array $c       Raw countdown data.
+	 * @param  array $default Default countdown values.
+	 * @return array
+	 */
+	private static function sanitizeCountdown( array $c, array $default ): array {
+		$type = ( isset( $c['type'] ) && in_array( $c['type'], Schema::ALLOWED_CD_TYPE, true ) )
+			? $c['type'] : $default['type'];
+
+		$ui = ( isset( $c['ui'] ) && in_array( $c['ui'], Schema::ALLOWED_CD_UI, true ) )
+			? $c['ui'] : $default['ui'];
+
+		// Whitelist units, drop dupes, re-order to the canonical days..seconds order.
+		$raw_units = isset( $c['units'] ) && is_array( $c['units'] ) ? $c['units'] : [];
+		$units     = array_values( array_filter(
+			Schema::ALLOWED_CD_UNIT,
+			static function ( $u ) use ( $raw_units ) {
+				return in_array( $u, $raw_units, true );
+			}
+		) );
+		if ( empty( $units ) ) {
+			$units = $default['units'];
+		}
+
+		// 0..2_592_000 seconds (30 days).
+		$duration = max( 0, min( 2592000,
+			isset( $c['duration'] ) ? intval( $c['duration'] ) : $default['duration']
+		) );
+
+		return [
+			'enabled'    => isset( $c['enabled'] ) ? (bool) $c['enabled'] : $default['enabled'],
+			'type'       => $type,
+			'endAt'      => self::sanitizeDateTimeLocal( isset( $c['endAt'] ) ? $c['endAt'] : '' ),
+			'duration'   => $duration,
+			'ui'         => $ui,
+			'units'      => $units,
+			'showAllUnits' => isset( $c['showAllUnits'] ) ? (bool) $c['showAllUnits'] : $default['showAllUnits'],
+			'resetToken' => max( 0, isset( $c['resetToken'] ) ? intval( $c['resetToken'] ) : $default['resetToken'] ),
 		];
 	}
 

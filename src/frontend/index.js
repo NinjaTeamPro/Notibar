@@ -17,6 +17,7 @@ import { renderBarHTML } from '../shared/render-bar';
 import { startRotation } from '../shared/rotation';
 import { buildStacksHTML } from '../shared/stack';
 import { attachTrigger } from '../shared/triggers';
+import { startCountdowns } from '../shared/countdown';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push';
 import { installMobileAdminBarOffset } from '../shared/mobile-admin-bar-offset';
@@ -439,6 +440,12 @@ function init() {
 	// when the rule matches, so no rAF / reflow dance needed. (Idempotent for
 	// stack, which already revealed in renderStack.)
 	revealBars();
+
+	/* @pro */
+	// Countdown timers (Pro) — one ticker scans the slot each second; survives
+	// rotation/dismiss/collapse re-renders and hydrates any later-injected bars.
+	startCountdowns( slot );
+	/* @endpro */
 
 	// Theme-compat patches.
 	applyThemeCompat( ctx.theme, slot );

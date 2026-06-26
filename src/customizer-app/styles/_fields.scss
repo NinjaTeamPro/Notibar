@@ -338,3 +338,56 @@
 		}
 	}
 }
+
+// ------------------------------------------------------------------
+// CountdownSubForm (Pro)
+// ------------------------------------------------------------------
+
+.njt-notibar-countdown-subform {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px 12px 8px;
+	margin: 0;
+
+	&__fields {
+		margin-top: 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		.components-base-control {
+			margin-bottom: 0;
+		}
+	}
+
+	// Evergreen duration — compact d/h/m/s inputs in a row.
+	&__duration {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	&__duration-field {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		font-size: 11px;
+		color: #666;
+		width: 80px;
+
+		.njt-notibar-number-input {
+			width: 64px;
+		}
+	}
+
+	// Unit checkboxes in a row.
+	&__units {
+		display: flex;
+		gap: 12px;
+		flex-wrap: wrap;
+
+		.components-base-control {
+			margin: 0;
+		}
+	}
+}

@@ -14,6 +14,7 @@ import {
 import { __ } from '@wordpress/i18n';
 import { updatePath } from '../../utils/update-path';
 import { ButtonSubForm } from '../fields/ButtonSubForm';
+import { CountdownSubForm } from '../fields/CountdownSubForm';
 import { DynamicTagPicker } from '../fields/DynamicTagPicker';
 
 /**
@@ -128,6 +129,12 @@ export function ContentTab( { bar, onChange } ) {
 					}
 				/>
 			) }
+
+			{ /* Countdown timer (Pro) — lives at bar.countdown (top-level). */ }
+			<CountdownSubForm
+				value={ bar.countdown }
+				onChange={ ( updated ) => set( 'countdown', updated ) }
+			/>
 		</div>
 	);
 }
