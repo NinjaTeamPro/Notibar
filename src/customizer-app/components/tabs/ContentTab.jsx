@@ -94,6 +94,18 @@ export function ContentTab( { bar, onChange } ) {
 				onChange={ ( updated ) => set( 'countdown', updated ) }
 			/>
 
+			{ /* Divider separating the shared content above from the mobile
+			     overrides below. */ }
+			<div
+				className="njt-notibar-section-divider"
+				role="separator"
+				aria-label={ __( 'Mobile', 'notibar' ) }
+			>
+				<span className="njt-notibar-section-divider__label">
+					{ __( 'Mobile', 'notibar' ) }
+				</span>
+			</div>
+
 			{ /* Mobile overrides grouped at the bottom: the toggle and every
 			     field that depends on it (mobile text + insert, mobile button). */ }
 			<ToggleControl
