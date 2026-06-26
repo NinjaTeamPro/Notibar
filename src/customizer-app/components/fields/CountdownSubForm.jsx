@@ -19,6 +19,7 @@ import {
 	CheckboxControl,
 	BaseControl,
 	Button,
+	Notice,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
@@ -26,6 +27,7 @@ import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
 const TYPE_OPTIONS = [
 	{ value: 'date', label: __( 'Fixed date & time', 'notibar' ) },
 	{ value: 'evergreen', label: __( 'Evergreen (per visitor)', 'notibar' ) },
+	{ value: 'schedule', label: __( 'When the schedule ends', 'notibar' ) },
 ];
 
 const UI_OPTIONS = [
@@ -48,10 +50,11 @@ const MAX_DURATION = 2592000; // 30 days in seconds (matches Phase 1 sanitize).
 
 /**
  * @param {Object}   props
- * @param {Object}   props.value    countdown object { enabled, type, endAt, duration, ui, units }.
- * @param {Function} props.onChange Called with the updated countdown object.
+ * @param {Object}   props.value      countdown object { enabled, type, endAt, duration, ui, units }.
+ * @param {Object}   [props.schedule] bar.schedule — read for the "schedule" type warning.
+ * @param {Function} props.onChange   Called with the updated countdown object.
  */
-export function CountdownSubForm( { value, onChange } ) {
+export function CountdownSubForm( { value, schedule, onChange } ) {
 	const cd = value || {};
 
 	function set( key, val ) {
@@ -59,7 +62,17 @@ export function CountdownSubForm( { value, onChange } ) {
 	}
 
 	const pro = isProEdition();
-	const type = cd.type === 'evergreen' ? 'evergreen' : 'date';
+	const type = [ 'evergreen', 'schedule' ].includes( cd.type )
+		? cd.type
+		: 'date';
+
+	// The "schedule" type needs an enabled schedule with a close time (End date
+	// or daily-window end); otherwise the countdown has no target.
+	const sched = schedule || {};
+	const schedDw = sched.dailyWindow || {};
+	const scheduleHasClose =
+		!! sched.enabled &&
+		( !! sched.endAt || ( !! schedDw.enabled && !! schedDw.end ) );
 
 	// Derive d/h/m/s display from the stored total-seconds duration.
 	const dur = Math.max( 0, Number( cd.duration ) || 0 );
@@ -123,18 +136,38 @@ export function CountdownSubForm( { value, onChange } ) {
 						options={ TYPE_OPTIONS }
 						disabled={ ! pro }
 						onChange={ ( v ) => set( 'type', v ) }
-						help={
-							type === 'evergreen'
-								? __(
-										'Each visitor gets their own window that continues across reloads.',
-										'notibar'
-								  )
-								: __(
-										'Counts to a fixed moment in the site timezone — the same for every visitor.',
-										'notibar'
-								  )
-						}
+						help={ ( () => {
+							if ( type === 'evergreen' ) {
+								return __(
+									'Each visitor gets their own window that continues across reloads.',
+									'notibar'
+								);
+							}
+							if ( type === 'schedule' ) {
+								return __(
+									'Counts to the soonest time this bar’s schedule closes it — its End date or daily-window end (set in the Behavior tab).',
+									'notibar'
+								);
+							}
+							return __(
+								'Counts to a fixed moment in the site timezone — the same for every visitor.',
+								'notibar'
+							);
+						} )() }
 					/>
+
+					{ type === 'schedule' && ! scheduleHasClose && (
+						<Notice
+							status="warning"
+							isDismissible={ false }
+							className="njt-notibar-inline-notice"
+						>
+							{ __(
+								'No schedule close time set. In the Behavior tab, enable Schedule and set an End date or a daily-window end.',
+								'notibar'
+							) }
+						</Notice>
+					) }
 
 					{ type === 'date' && (
 						<BaseControl

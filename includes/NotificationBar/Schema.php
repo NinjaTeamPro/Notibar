@@ -53,7 +53,7 @@ class Schema {
 	const ALLOWED_TRIGGER_TYPE  = [ 'none', 'scroll', 'time', 'click' ];
 	// Countdown timer (Pro). type: date = count to a fixed instant; evergreen = per-visitor duration window.
 	// ui = visual style; unit = which time units the timer displays. Tokens == CSS suffixes == UI values.
-	const ALLOWED_CD_TYPE = [ 'date', 'evergreen' ];
+	const ALLOWED_CD_TYPE = [ 'date', 'evergreen', 'schedule' ];
 	const ALLOWED_CD_UI   = [ 'boxes', 'flip', 'circular', 'text' ];
 	const ALLOWED_CD_UNIT = [ 'days', 'hours', 'minutes', 'seconds' ];
 

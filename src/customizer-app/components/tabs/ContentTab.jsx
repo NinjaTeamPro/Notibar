@@ -133,6 +133,7 @@ export function ContentTab( { bar, onChange } ) {
 			{ /* Countdown timer (Pro) — lives at bar.countdown (top-level). */ }
 			<CountdownSubForm
 				value={ bar.countdown }
+				schedule={ bar.schedule }
 				onChange={ ( updated ) => set( 'countdown', updated ) }
 			/>
 		</div>

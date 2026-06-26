@@ -195,6 +195,101 @@ function formatHHMM( date ) {
 	return h + ':' + m;
 }
 
+// Next local occurrence (ms) of an "HH:MM" time strictly after `from`.
+function nextHhmmMs( from, hhmm ) {
+	const [ h, m ] = hhmm.split( ':' ).map( Number );
+	const d = new Date( from.getTime() );
+	d.setHours( h, m, 0, 0 );
+	if ( d.getTime() <= from.getTime() ) {
+		d.setDate( d.getDate() + 1 );
+	}
+	return d.getTime();
+}
+
+/**
+ * Soonest upcoming moment a bar's schedule will close it, in the visitor's
+ * browser-local time. Mirrors passesSchedule (and CountdownResolver's site-TZ
+ * version): the bar is open while inside the date range, on an allowed weekday,
+ * and inside the daily window. The close is the first future boundary — End
+ * date, a daily-window end, or a day-of-week midnight — where it flips closed.
+ *
+ * Used for "schedule" countdowns set to visitor-local time (and in the
+ * Customizer preview). Returns 0 when disabled, not open now, or with no close
+ * within a 15-day horizon (an always-on schedule).
+ *
+ * @param {Object} bar Bar object (reads bar.schedule).
+ * @return {number} Epoch in ms, or 0.
+ */
+export function nextScheduleClose( bar ) {
+	const sched = bar && bar.schedule;
+	if ( ! sched || ! sched.enabled ) {
+		return 0;
+	}
+
+	const startMs = sched.startAt ? parseDateTimeLocal( sched.startAt ) : NaN;
+	const endMs = sched.endAt ? parseDateTimeLocal( sched.endAt ) : NaN;
+	const dow = Array.isArray( sched.daysOfWeek ) ? sched.daysOfWeek : [];
+	const dw = sched.dailyWindow || {};
+	const dwStart = dw.start || '';
+	const dwEnd = dw.end || '';
+	const dwOn = !! dw.enabled && ( '' !== dwStart || '' !== dwEnd );
+
+	const isOpen = ( d ) => {
+		const t = d.getTime();
+		if ( ! isNaN( startMs ) && t < startMs ) {
+			return false;
+		}
+		if ( ! isNaN( endMs ) && t >= endMs ) {
+			return false;
+		}
+		if ( dow.length > 0 && ! dow.includes( d.getDay() ) ) {
+			return false;
+		}
+		if ( dwOn && ! inDailyWindow( formatHHMM( d ), dwStart, dwEnd ) ) {
+			return false;
+		}
+		return true;
+	};
+
+	const now = new Date();
+	if ( ! isOpen( now ) ) {
+		return 0; // Not visible now — nothing to count to.
+	}
+
+	const horizon = now.getTime() + 15 * 86400000;
+	let cursor = now;
+
+	// Walk the boundaries where the state can flip closed; the first such
+	// boundary that is actually closed is the soonest close.
+	for ( let i = 0; i < 200; i++ ) {
+		const cursorMs = cursor.getTime();
+		const cands = [];
+		if ( ! isNaN( endMs ) && endMs > cursorMs ) {
+			cands.push( endMs );
+		}
+		const mid = new Date( cursorMs );
+		mid.setHours( 24, 0, 0, 0 ); // next local midnight
+		cands.push( mid.getTime() );
+		if ( dwOn && /^([01]\d|2[0-3]):[0-5]\d$/.test( dwEnd ) ) {
+			cands.push( nextHhmmMs( cursor, dwEnd ) );
+		}
+		const future = cands.filter( ( t ) => t > cursorMs );
+		if ( ! future.length ) {
+			return 0;
+		}
+		const next = Math.min( ...future );
+		if ( next > horizon ) {
+			return 0;
+		}
+		if ( ! isOpen( new Date( next ) ) ) {
+			return next;
+		}
+		cursor = new Date( next );
+	}
+
+	return 0;
+}
+
 // ------------------------------------------------------------------
 // Public API
 // ------------------------------------------------------------------

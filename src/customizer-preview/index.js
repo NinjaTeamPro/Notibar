@@ -22,6 +22,9 @@ import { filterBars } from '../shared/filter-bars.js';
 import { startRotation } from '../shared/rotation.js';
 import { buildStacksHTML } from '../shared/stack.js';
 import { startCountdowns } from '../shared/countdown.js';
+// Second filter-bars import, kept inside the Pro-only block so it strips in Lite.
+// eslint-disable-next-line no-duplicate-imports
+import { nextScheduleClose } from '../shared/filter-bars.js';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push.js';
 import { applyThemeCompat } from '../frontend/theme-compat.js';
@@ -142,6 +145,9 @@ function previewCountdownTarget( bar ) {
 		endEpoch = parsed && parsed > Date.now() ? parsed : Date.now() + DAY_MS;
 	} else if ( cd.type === 'evergreen' && Number( cd.duration ) > 0 ) {
 		endEpoch = Date.now() + Number( cd.duration ) * 1000;
+	} else if ( cd.type === 'schedule' ) {
+		const close = nextScheduleClose( bar );
+		endEpoch = close > Date.now() ? close : Date.now() + DAY_MS;
 	} else {
 		// No usable time set yet — show a 1-day sample so the style previews.
 		endEpoch = Date.now() + DAY_MS;

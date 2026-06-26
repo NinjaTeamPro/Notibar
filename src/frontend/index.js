@@ -18,6 +18,9 @@ import { startRotation } from '../shared/rotation';
 import { buildStacksHTML } from '../shared/stack';
 import { attachTrigger } from '../shared/triggers';
 import { startCountdowns } from '../shared/countdown';
+// Second filter-bars import, kept inside the Pro-only block so it strips in Lite.
+// eslint-disable-next-line no-duplicate-imports
+import { nextScheduleClose } from '../shared/filter-bars';
 /* @endpro */
 import { installBodyPush } from '../shared/body-push';
 import { installMobileAdminBarOffset } from '../shared/mobile-admin-bar-offset';
@@ -149,6 +152,20 @@ function init() {
 		slot.style.display = 'none';
 		return;
 	}
+
+	/* @pro */
+	// Resolve "schedule" countdowns that use the visitor's local time: the
+	// browser owns the visitor's clock + weekday, so the close instant is
+	// computed here (site-TZ schedules were already resolved server-side).
+	// Normalize to a fixed-instant 'date' countdown so the renderer/ticker stay
+	// schedule-agnostic; 0 (no close) → renders nothing.
+	survivors.forEach( function ( bar ) {
+		if ( bar.countdown && bar.countdown.type === 'schedule' ) {
+			bar.countdown.type = 'date';
+			bar.countdown.endEpoch = nextScheduleClose( bar );
+		}
+	} );
+	/* @endpro */
 
 	// Split survivors into bars shown at load (immediate) and bars whose reveal
 	// is deferred behind a display trigger (pending). `live` is the set actually
