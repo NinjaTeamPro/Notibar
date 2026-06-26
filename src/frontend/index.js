@@ -111,6 +111,10 @@ function init() {
 	}
 
 	const { bars = [], global: globalConfig = {}, ctx = {} } = data;
+	/* @pro */
+	// Localized countdown labels (Pro) — passed through global to the renderer.
+	globalConfig.i18n = data.i18n;
+	/* @endpro */
 	if ( ! bars.length ) {
 		return;
 	}

@@ -72,4 +72,34 @@ class CountdownResolver {
 
 		return $bars;
 	}
+
+	/**
+	 * Localized countdown labels for the active language.
+	 *
+	 * The client renderer (render-bar.js) is vanilla JS with no i18n, so the unit
+	 * labels and accessible name are translated here — under the `notibar`
+	 * textdomain, which WPML/Polylang switch per request — and inlined into
+	 * window.njtNotibarData for the renderer to read (it falls back to English
+	 * when absent). `cdUnits` = full labels (boxes/flip/circular); `cdUnitsShort`
+	 * = compact labels (text style).
+	 *
+	 * @return array{cdUnits:array,cdUnitsShort:array,cdAria:string}
+	 */
+	public static function labels(): array {
+		return [
+			'cdUnits'      => [
+				'days'    => __( 'Days', 'notibar' ),
+				'hours'   => __( 'Hours', 'notibar' ),
+				'minutes' => __( 'Minutes', 'notibar' ),
+				'seconds' => __( 'Seconds', 'notibar' ),
+			],
+			'cdUnitsShort' => [
+				'days'    => __( 'days', 'notibar' ),
+				'hours'   => __( 'hrs', 'notibar' ),
+				'minutes' => __( 'mins', 'notibar' ),
+				'seconds' => __( 'secs', 'notibar' ),
+			],
+			'cdAria'       => __( 'Countdown timer', 'notibar' ),
+		];
+	}
 }

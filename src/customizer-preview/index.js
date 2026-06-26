@@ -177,7 +177,9 @@ function rerender() {
 	}
 
 	/* @pro */
-	// Make countdowns always render + tick in the preview (see helper above).
+	// Localized countdown labels (Pro) + always-render countdowns in preview.
+	global.i18n =
+		( window.njtNotibarData && window.njtNotibarData.i18n ) || null;
 	bars = bars.map( previewCountdownTarget );
 	/* @endpro */
 

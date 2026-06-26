@@ -183,13 +183,21 @@ class NotificationBarHandle {
 	public function renderFooterOutput(): void {
 		echo '<div id="njt-notibar-slot" role="status" aria-live="polite" style="content-visibility: visible;"></div>' . "\n";
 
+		$payload = [
+			'bars'   => $this->all_bars,
+			'global' => $this->global_config,
+			'ctx'    => $this->render_context,
+		];
+
+		// Localized countdown labels (Pro only — the ticker/render are stripped
+		// in Lite). The client renderer has no i18n, so it reads these.
+		if ( defined( 'NJT_NOFI_IS_PRO' ) && NJT_NOFI_IS_PRO ) {
+			$payload['i18n'] = CountdownResolver::labels();
+		}
+
 		wp_add_inline_script(
 			'njt-notibar-frontend',
-			'window.njtNotibarData = ' . wp_json_encode( [
-				'bars'   => $this->all_bars,
-				'global' => $this->global_config,
-				'ctx'    => $this->render_context,
-			] ) . ';',
+			'window.njtNotibarData = ' . wp_json_encode( $payload ) . ';',
 			'before'
 		);
 	}

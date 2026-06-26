@@ -228,9 +228,11 @@ const CD_UNIT_LABELS_TEXT = {
  *     > .njt-nofi-cd-unit[data-cd-unit] > (ring?) + .njt-nofi-cd-num + .njt-nofi-cd-label
  *
  * @param {Object} countdown bar.countdown config (may carry server-resolved endEpoch).
+ * @param {Object} [i18n]    Localized labels from PHP (cdUnits/cdUnitsShort/cdAria);
+ *                           falls back to English when absent.
  * @return {string} HTML string or '' when nothing to render.
  */
-function renderCountdown( countdown ) {
+function renderCountdown( countdown, i18n ) {
 	if ( ! countdown || ! countdown.enabled ) {
 		return '';
 	}
@@ -252,8 +254,11 @@ function renderCountdown( countdown ) {
 		? countdown.ui
 		: 'boxes';
 
-	// 'text' uses compact lowercase labels (2 days 3 hrs …); others full words.
-	const labels = ui === 'text' ? CD_UNIT_LABELS_TEXT : CD_UNIT_LABELS;
+	// Localized labels from PHP (njtNotibarData.i18n) with English fallback.
+	// 'text' uses compact labels (2 days 3 hrs …); others use full words.
+	const fullLabels = ( i18n && i18n.cdUnits ) || CD_UNIT_LABELS;
+	const shortLabels = ( i18n && i18n.cdUnitsShort ) || CD_UNIT_LABELS_TEXT;
+	const labels = ui === 'text' ? shortLabels : fullLabels;
 
 	const allUnits = [ 'days', 'hours', 'minutes', 'seconds' ];
 	const picked = Array.isArray( countdown.units )
@@ -292,7 +297,9 @@ function renderCountdown( countdown ) {
 		) }" ` +
 		`data-cd-showall="${ countdown.showAllUnits ? '1' : '' }" ` +
 		`data-cd-units="${ escapeAttr( units.join( ',' ) ) }" ` +
-		`aria-label="Countdown timer">` +
+		`aria-label="${ escapeAttr(
+			( i18n && i18n.cdAria ) || 'Countdown timer'
+		) }">` +
 		cells +
 		`</div>`
 	);
@@ -356,7 +363,7 @@ export function renderBarHTML( bar, global ) {
 	// strips the assignment below — renders no countdown at all.
 	let countdownHTML = '';
 	/* @pro */
-	countdownHTML = renderCountdown( bar.countdown );
+	countdownHTML = renderCountdown( bar.countdown, global && global.i18n );
 	/* @endpro */
 
 	// Desktop content block — always emitted.

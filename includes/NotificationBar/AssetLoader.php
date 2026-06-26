@@ -222,12 +222,15 @@ class AssetLoader {
 		// NotificationBarHandle::maybeRender() bails inside the preview
 		// (is_customize_preview guard), so window.njtNotibarData is never
 		// inlined here. Emit the minimal ctx the preview JS needs for
-		// theme-compat (registry is keyed by theme display Name).
+		// theme-compat (registry is keyed by theme display Name), plus the
+		// localized countdown labels (Pro) so the preview matches the live site.
+		$preview_data = array( 'ctx' => array( 'theme' => wp_get_theme()->get( 'Name' ) ) );
+		if ( defined( 'NJT_NOFI_IS_PRO' ) && NJT_NOFI_IS_PRO ) {
+			$preview_data['i18n'] = CountdownResolver::labels();
+		}
 		wp_add_inline_script(
 			'njt-notibar-customizer-preview',
-			'window.njtNotibarData = window.njtNotibarData || ' . wp_json_encode(
-				array( 'ctx' => array( 'theme' => wp_get_theme()->get( 'Name' ) ) )
-			) . ';',
+			'window.njtNotibarData = window.njtNotibarData || ' . wp_json_encode( $preview_data ) . ';',
 			'before'
 		);
 
