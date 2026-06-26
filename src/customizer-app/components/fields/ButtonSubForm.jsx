@@ -11,6 +11,7 @@ import {
 	ToggleControl,
 	TextControl,
 	SelectControl,
+	BaseControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
@@ -78,6 +79,14 @@ export function ButtonSubForm( { label, value, onChange } ) {
 	// Pro gate: animation controls stay visible in Lite but locked + upsell.
 	const pro = isProEdition();
 
+	// Unique id for the reopen field — desktop + mobile sub-forms both render,
+	// so derive it from the section label to avoid duplicate DOM ids.
+	const reopenId =
+		'njt-button-reopen-' +
+		String( label || 'button' )
+			.toLowerCase()
+			.replace( /[^a-z0-9]+/g, '-' );
+
 	const isValidUrl = ( url ) => {
 		if ( ! url ) {
 			return true;
@@ -122,6 +131,46 @@ export function ButtonSubForm( { label, value, onChange } ) {
 								  )
 						}
 					/>
+
+					{ ! isLink && (
+						<BaseControl
+							label={ __( 'Reopen after (days)', 'notibar' ) }
+							help={ __(
+								'0 = never auto-reopen. Applies to this button only; the × control uses its own setting in Behavior.',
+								'notibar'
+							) }
+							id={ reopenId }
+						>
+							<input
+								id={ reopenId }
+								type="number"
+								className="njt-notibar-number-input"
+								value={
+									value.reopenAfterDays !== undefined
+										? value.reopenAfterDays
+										: 1
+								}
+								min={ 0 }
+								max={ 365 }
+								step={ 1 }
+								onChange={ ( e ) => {
+									const parsed = parseInt(
+										e.target.value,
+										10
+									);
+									if ( ! isNaN( parsed ) ) {
+										set(
+											'reopenAfterDays',
+											Math.min(
+												365,
+												Math.max( 0, parsed )
+											)
+										);
+									}
+								} }
+							/>
+						</BaseControl>
+					) }
 
 					<TextControl
 						label={ __( 'Button text', 'notibar' ) }

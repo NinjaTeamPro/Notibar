@@ -23,6 +23,8 @@ const DEFAULT_BUTTON = {
 	newWindow: true,
 	// 'link' opens the URL; 'close' dismisses the bar. MIRROR: Schema::defaultButton().
 	action: 'link',
+	// Dismissal cookie TTL when action is 'close'. MIRROR: Schema::defaultButton().
+	reopenAfterDays: 1,
 };
 
 // ------------------------------------------------------------------

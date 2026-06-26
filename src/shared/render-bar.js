@@ -127,9 +127,16 @@ function renderButton( button, style, kind ) {
 	// so the frontend + preview click delegates dismiss the bar. Shares the
 	// .njt-nofi-button-text class + inline style for identical appearance.
 	if ( isClose ) {
+		// data-njt-reopen carries this button's own reopen-after-days so the
+		// dismissal cookie TTL is independent of the × control's behavior value.
+		const reopenDays = Math.max(
+			0,
+			Math.min( 365, Number( button.reopenAfterDays ) || 0 )
+		);
 		return (
 			`<div class="njt-nofi-button">` +
 			`<button type="button" data-njt-action="close" ` +
+			`data-njt-reopen="${ reopenDays }" ` +
 			`class="njt-nofi-button-text${ animClasses }" ` +
 			`aria-label="${ ariaLabel }" ` +
 			`style="${ btnStyle }">` +

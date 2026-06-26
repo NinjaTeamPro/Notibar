@@ -247,12 +247,19 @@ function init() {
 	// -----------------------------------------------------------------------
 	// Dismissal handler — called on × button click.
 	// -----------------------------------------------------------------------
-	function handleDismiss( barId ) {
+	// reopenDaysOverride: when the dismissal came from a "close" CTA button, its
+	// own reopen-after-days wins over behavior.reopenAfterDays (the × control's).
+	function handleDismiss( barId, reopenDaysOverride ) {
 		const bar = survivors.find(
 			( b ) => String( b.id ) === String( barId )
 		);
 		if ( bar ) {
-			dismiss( barId, bar.behavior ? bar.behavior.reopenAfterDays : 0 );
+			const behaviorDays = bar.behavior
+				? bar.behavior.reopenAfterDays
+				: 0;
+			const hasOverride =
+				reopenDaysOverride !== undefined && reopenDaysOverride !== null;
+			dismiss( barId, hasOverride ? reopenDaysOverride : behaviorDays );
 		}
 
 		survivors = survivors.filter(
@@ -335,7 +342,11 @@ function init() {
 			const container = closeAction.closest( '[data-bar-id]' );
 			const barId = container ? container.dataset.barId : null;
 			if ( barId ) {
-				handleDismiss( barId );
+				// This CTA carries its own reopen TTL via data-njt-reopen.
+				const raw = closeAction.dataset.njtReopen;
+				const reopenDays =
+					raw !== undefined && raw !== '' ? Number( raw ) : undefined;
+				handleDismiss( barId, reopenDays );
 			}
 			return;
 		}

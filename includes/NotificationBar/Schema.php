@@ -317,6 +317,10 @@ class Schema {
 			'action'     => 'link',
 			'attention'  => 'none',
 			'hover'      => 'none',
+			// Reopen-after-days for a button whose action is 'close' — its own
+			// dismissal cookie TTL, independent of behavior.reopenAfterDays (which
+			// governs the × close control). 0 = never auto-reopen.
+			'reopenAfterDays' => 1,
 		];
 	}
 

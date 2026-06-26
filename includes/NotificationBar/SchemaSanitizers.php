@@ -224,6 +224,12 @@ trait SchemaSanitizers {
 			? $b['hover']
 			: $default['hover'];
 
+		// Per-button reopen-after-days (used when action is 'close'). Clamped
+		// 0–365 to mirror behavior.reopenAfterDays.
+		$reopen = max( 0, min( 365,
+			isset( $b['reopenAfterDays'] ) ? intval( $b['reopenAfterDays'] ) : $default['reopenAfterDays']
+		) );
+
 		return [
 			'enabled'    => isset( $b['enabled'] ) ? (bool) $b['enabled'] : $default['enabled'],
 			'text'       => $text,
@@ -235,6 +241,7 @@ trait SchemaSanitizers {
 			'action'     => $action,
 			'attention'  => $attention,
 			'hover'      => $hover,
+			'reopenAfterDays' => $reopen,
 		];
 	}
 
