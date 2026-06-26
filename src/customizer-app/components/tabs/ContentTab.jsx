@@ -1,9 +1,10 @@
 /**
  * ContentTab — Content tab inside BarEditor.
  *
- * Fields: bar name, text, mobile-separate toggle + conditional mobile text,
- * desktop button sub-form, conditional mobile button sub-form. Each text field
- * gets a DynamicTagPicker ("Insert variable") for server-side merge tags (Pro).
+ * Fields: bar name, text, desktop button sub-form, countdown sub-form, then the
+ * mobile overrides grouped last — the mobile-separate toggle plus its dependent
+ * mobile text and mobile button. Each text field gets a DynamicTagPicker
+ * ("Insert variable") for server-side merge tags (Pro).
  */
 import {
 	TextControl,
@@ -75,7 +76,26 @@ export function ContentTab( { bar, onChange } ) {
 				onInsert={ insertInto( 'content.text', content.text ) }
 			/>
 
-			{ /* Mobile separate toggle */ }
+			{ /* Desktop button — also serves mobile when mobileSeparate is off. */ }
+			<ButtonSubForm
+				label={
+					content.mobileSeparate
+						? __( 'Desktop button', 'notibar' )
+						: __( 'Show button', 'notibar' )
+				}
+				value={ content.button }
+				onChange={ ( updated ) => set( 'content.button', updated ) }
+			/>
+
+			{ /* Countdown timer (Pro) — lives at bar.countdown (top-level). */ }
+			<CountdownSubForm
+				value={ bar.countdown }
+				schedule={ bar.schedule }
+				onChange={ ( updated ) => set( 'countdown', updated ) }
+			/>
+
+			{ /* Mobile overrides grouped at the bottom: the toggle and every
+			     field that depends on it (mobile text + insert, mobile button). */ }
 			<ToggleControl
 				label={ __( 'Different content on mobile', 'notibar' ) }
 				checked={ !! content.mobileSeparate }
@@ -105,37 +125,16 @@ export function ContentTab( { bar, onChange } ) {
 							content.textMobile
 						) }
 					/>
+					{ /* Mobile button — only when mobileSeparate is on. */ }
+					<ButtonSubForm
+						label={ __( 'Mobile button', 'notibar' ) }
+						value={ content.buttonMobile }
+						onChange={ ( updated ) =>
+							set( 'content.buttonMobile', updated )
+						}
+					/>
 				</>
 			) }
-
-			{ /* Desktop button — also serves mobile when mobileSeparate is off. */ }
-			<ButtonSubForm
-				label={
-					content.mobileSeparate
-						? __( 'Desktop button', 'notibar' )
-						: __( 'Show button', 'notibar' )
-				}
-				value={ content.button }
-				onChange={ ( updated ) => set( 'content.button', updated ) }
-			/>
-
-			{ /* Mobile button — only when mobileSeparate is on. */ }
-			{ content.mobileSeparate && (
-				<ButtonSubForm
-					label={ __( 'Mobile button', 'notibar' ) }
-					value={ content.buttonMobile }
-					onChange={ ( updated ) =>
-						set( 'content.buttonMobile', updated )
-					}
-				/>
-			) }
-
-			{ /* Countdown timer (Pro) — lives at bar.countdown (top-level). */ }
-			<CountdownSubForm
-				value={ bar.countdown }
-				schedule={ bar.schedule }
-				onChange={ ( updated ) => set( 'countdown', updated ) }
-			/>
 		</div>
 	);
 }
