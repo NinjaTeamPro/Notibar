@@ -91,7 +91,7 @@ customizer-app/App.jsx
 BarEditor.jsx → TabPanel
 ├─ ContentTab   (text, button, mobile variants)
 ├─ DisplayTab   (devices, page/post rules, CPT, audience)
-├─ StyleTab     (colors, font size, alignment, positioning)
+├─ StyleTab     (colors, font size, layout, positioning)
 └─ BehaviorTab  (close action, reopen days, schedule)
 ```
 

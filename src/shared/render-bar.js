@@ -18,23 +18,18 @@
 
 import { escapeAttr, escapeText, decodeBasicEntities } from './escape-utils.js';
 
-// Alignment value → CSS justify-content mapping (flex child positioning).
-const ALIGNMENT_MAP = {
-	center: 'center',
-	left: 'flex-start',
-	right: 'flex-end',
-	'space-around': 'space-around',
-};
-
-// Parallel mapping for text-align — applied so multi-line text inside
-// .njt-nofi-text follows the bar's alignment setting (not just the
-// horizontal position of the text+button row).
-const TEXT_ALIGN_MAP = {
-	center: 'center',
-	left: 'left',
-	right: 'right',
-	'space-around': 'center',
-};
+// Content layouts. Arrangement is driven entirely by CSS keyed on the
+// data-layout attribute (see notibar.css); the renderer only validates the
+// value and emits it. Unknown/missing → 'centered'. MIRROR: Schema::ALLOWED_LAYOUT.
+const ALLOWED_LAYOUTS = [
+	'centered',
+	'text-left',
+	'three-zone',
+	'hero',
+	'split',
+	'content-left',
+	'content-right',
+];
 
 // ------------------------------------------------------------------
 // Internal helpers
@@ -343,8 +338,9 @@ export function renderBarHTML( bar, global ) {
 	/* @pro */
 	placement = style.placement === 'bottom' ? 'bottom' : 'top';
 	/* @endpro */
-	const alignment = ALIGNMENT_MAP[ style.alignment ] || 'center';
-	const textAlign = TEXT_ALIGN_MAP[ style.alignment ] || 'center';
+	const layout = ALLOWED_LAYOUTS.includes( style.layout )
+		? style.layout
+		: 'centered';
 	const barId = escapeAttr( bar.id || '' );
 
 	// Overall bar opacity (percent → 0–1). Applied to the un-animated
@@ -366,14 +362,12 @@ export function renderBarHTML( bar, global ) {
 	countdownHTML = renderCountdown( bar.countdown, global && global.i18n );
 	/* @endpro */
 
-	// Desktop content block — always emitted.
+	// Desktop content block — always emitted. Arrangement comes from CSS keyed
+	// on data-layout; only max-width and font-size stay inline.
 	const desktopBlock =
 		`<div class="njt-nofi-content njt-nofi-content-desktop" ` +
-		`style="max-width:${ contentWidth }px;justify-content:${ escapeAttr(
-			alignment
-		) };text-align:${ escapeAttr(
-			textAlign
-		) };font-size:${ fontSize }px;">` +
+		`data-layout="${ escapeAttr( layout ) }" ` +
+		`style="max-width:${ contentWidth }px;font-size:${ fontSize }px;">` +
 		`<div class="njt-nofi-text">${ content.text || '' }</div>` +
 		countdownHTML +
 		renderButton( content.button, style, 'desktop' ) +
@@ -386,11 +380,8 @@ export function renderBarHTML( bar, global ) {
 	// Schema::defaultContent populates both by default).
 	const mobileBlock = content.mobileSeparate
 		? `<div class="njt-nofi-content njt-nofi-content-mobile" ` +
-		  `style="justify-content:${ escapeAttr(
-				alignment
-		  ) };text-align:${ escapeAttr(
-				textAlign
-		  ) };font-size:${ fontSize }px;">` +
+		  `data-layout="${ escapeAttr( layout ) }" ` +
+		  `style="font-size:${ fontSize }px;">` +
 		  `<div class="njt-nofi-text">${ content.textMobile || '' }</div>` +
 		  countdownHTML +
 		  renderButton(

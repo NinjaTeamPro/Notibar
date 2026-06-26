@@ -206,10 +206,11 @@ trait MigrationMapper {
 		}
 
 		if ( false !== $l['njt_nofi_alignment'] ) {
-			// Legacy used 'space_around'; v3 normalises to 'space-around'.
+			// Legacy used 'space_around'; normalise, then map the old alignment
+			// to its closest layout (the field that replaced alignment in v3).
 			$al = $l['njt_nofi_alignment'] === 'space_around' ? 'space-around' : $l['njt_nofi_alignment'];
-			if ( in_array( $al, Schema::ALLOWED_ALIGNMENT, true ) ) {
-				$bar['style']['alignment'] = $al;
+			if ( isset( Schema::LEGACY_ALIGNMENT_LAYOUT[ $al ] ) ) {
+				$bar['style']['layout'] = Schema::LEGACY_ALIGNMENT_LAYOUT[ $al ];
 			}
 		}
 

@@ -118,7 +118,7 @@ Pro also registers `njt_nofi_kill_lite()` on `register_activation_hook` + `admin
     btnBgColor: "#1919cf",
     btnTextColor: "#ffffff",
     fontSize: 15,                         // 8–72 px
-    alignment: "center",                  // left|center|right|space-around
+    layout: "centered",                   // centered|text-left|three-zone|hero|split
     contentWidth: 900,                    // 100–3000 px
     positionType: "fixed",                // fixed|absolute
     placement: "top"                      // top|bottom (Pro can choose; Lite defaults to top)

@@ -626,8 +626,13 @@ const barName = escapeAttr( bar.name ); // safe for data-bar-name="..."
 --njt-btn-bg: #1919cf;
 --njt-btn-color: #ffffff;
 --njt-bar-font-size: 15px;
---njt-bar-alignment: center;
 ```
+
+**Layout attribute** on `.njt-nofi-content`:
+```html
+<div class="njt-nofi-content" data-layout="centered">...</div>
+```
+Drives CSS rules for arranging content row (text → countdown → button). Values: `centered`, `text-left`, `three-zone`, `hero`, `split`.
 
 ### Rotation (src/shared/rotation.js, Pro)
 

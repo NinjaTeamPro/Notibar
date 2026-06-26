@@ -248,9 +248,17 @@ trait SchemaSanitizers {
 	 * @return array
 	 */
 	private static function sanitizeStyle( array $s, array $default ): array {
-		$alignment = isset( $s['alignment'] ) && in_array( $s['alignment'], self::ALLOWED_ALIGNMENT, true )
-			? $s['alignment']
-			: $default['alignment'];
+		// Layout replaces the old `alignment` field. A valid `layout` wins; when
+		// it is absent (a bar saved before this change) the legacy `alignment`
+		// value is mapped to its closest layout, so old bars keep their look with
+		// no separate migration step. Anything unrecognised falls to the default.
+		if ( isset( $s['layout'] ) && in_array( $s['layout'], self::ALLOWED_LAYOUT, true ) ) {
+			$layout = $s['layout'];
+		} elseif ( isset( $s['alignment'] ) && isset( self::LEGACY_ALIGNMENT_LAYOUT[ $s['alignment'] ] ) ) {
+			$layout = self::LEGACY_ALIGNMENT_LAYOUT[ $s['alignment'] ];
+		} else {
+			$layout = $default['layout'];
+		}
 
 		$position = isset( $s['positionType'] ) && in_array( $s['positionType'], self::ALLOWED_POSITION, true )
 			? $s['positionType']
@@ -284,7 +292,7 @@ trait SchemaSanitizers {
 				? ( sanitize_hex_color( $s['btnTextColor'] ) ?: $default['btnTextColor'] )
 				: $default['btnTextColor'],
 			'fontSize'     => $font_size,
-			'alignment'    => $alignment,
+			'layout'       => $layout,
 			'contentWidth' => $content_width,
 			'positionType' => $position,
 			'placement'    => $placement,

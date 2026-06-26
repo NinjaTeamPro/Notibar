@@ -45,7 +45,7 @@ export const DEFAULT_BAR = {
 		btnBgColor: '#1919cf',
 		btnTextColor: '#ffffff',
 		fontSize: 15,
-		alignment: 'center',
+		layout: 'centered',
 		contentWidth: 900,
 		positionType: 'fixed',
 		placement: 'top',

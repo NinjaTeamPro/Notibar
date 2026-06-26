@@ -42,7 +42,7 @@ WordPress site owners need an easy, visual way to display important announcement
 Notibar provides a **React-powered Customizer panel** to visually create & manage notification bars. Each bar has:
 
 - **Independent content** (desktop/mobile text, CTA button)
-- **Flexible styling** (colors, font size, position, alignment)
+- **Flexible styling** (colors, font size, position, layout)
 - **Display rules** (pages, posts, CPTs, user roles, specific users)
 - **Close behavior** (disable, toggle, permanent)
 - **Scheduling** (date ranges, time windows, days of week)
@@ -62,7 +62,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - Create unlimited notification bars
 - React Customizer editor with live preview
 - Content: desktop/mobile text & button (URL + label)
-- Styling: colors, font size, position (fixed/absolute), alignment
+- Styling: colors, font size, position (fixed/absolute), layout
 - Display rules: pages, posts (by ID include/exclude)
 - Close actions: close, toggle, disable
 - Scheduling: date ranges, daily windows, specific weekdays
@@ -155,11 +155,11 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 
 ### FR3: Styling
 
-**Requirement**: Colors, font size, alignment, positioning, content width.
+**Requirement**: Colors, font size, layout, positioning, content width.
 
 - bgColor, textColor, btnBgColor, btnTextColor: hex color picker (sanitize_hex_color); reset to defaults
 - fontSize: 8-72 px range slider
-- alignment: left, center, right, space-around (flexbox)
+- layout: Visual thumbnail picker (LayoutPicker component); 5 options: centered (default), text-left, three-zone, hero, split
 - contentWidth: 100-3000 px slider
 - positionType: fixed or absolute toggle
 - placement (Pro): top or bottom

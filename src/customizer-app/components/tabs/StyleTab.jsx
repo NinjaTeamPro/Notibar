@@ -1,7 +1,7 @@
 /**
  * StyleTab — Style tab inside BarEditor.
  *
- * Fields: color presets, 4 × ColorFieldWithReset, font size, alignment,
+ * Fields: color presets, 4 × ColorFieldWithReset, font size, layout,
  * content width, position type. Two ContrastWarning blocks (required).
  * Each ContrastWarning is placed directly below its colour pair so the
  * warning is contextually adjacent to the controls that produced it.
@@ -13,14 +13,8 @@ import { DEFAULT_BAR } from '../../utils/defaults';
 import { ColorPresetSwatches } from '../fields/ColorPresetSwatches';
 import { ColorFieldWithReset } from '../fields/ColorFieldWithReset';
 import { ContrastWarning } from '../fields/ContrastWarning';
+import { LayoutPicker } from '../fields/LayoutPicker';
 import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
-
-const ALIGNMENT_OPTIONS = [
-	{ value: 'left', label: __( 'Left', 'notibar' ) },
-	{ value: 'center', label: __( 'Center', 'notibar' ) },
-	{ value: 'right', label: __( 'Right', 'notibar' ) },
-	{ value: 'space-around', label: __( 'Space around', 'notibar' ) },
-];
 
 const POSITION_OPTIONS = [
 	{ value: 'fixed', label: __( 'Fixed', 'notibar' ) },
@@ -147,30 +141,11 @@ export function StyleTab( { bar, onChange } ) {
 				step={ 1 }
 			/>
 
-			{ /* Alignment */ }
-			<div className="njt-notibar-button-group-field">
-				<span className="njt-notibar-button-group-field__label">
-					{ __( 'Alignment', 'notibar' ) }
-				</span>
-				<ButtonGroup>
-					{ ALIGNMENT_OPTIONS.map( ( opt ) => (
-						<Button
-							key={ opt.value }
-							variant={
-								style.alignment === opt.value
-									? 'primary'
-									: 'secondary'
-							}
-							onClick={ () =>
-								set( 'style.alignment', opt.value )
-							}
-							size="small"
-						>
-							{ opt.label }
-						</Button>
-					) ) }
-				</ButtonGroup>
-			</div>
+			{ /* Layout — visual picker replacing the old alignment control. */ }
+			<LayoutPicker
+				value={ style.layout }
+				onChange={ ( v ) => set( 'style.layout', v ) }
+			/>
 
 			{ /* Content width */ }
 			<RangeControl

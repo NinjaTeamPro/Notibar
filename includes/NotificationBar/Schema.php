@@ -35,7 +35,16 @@ class Schema {
 	// Enum allowed values (referenced by SchemaSanitizers trait too)
 	// ------------------------------------------------------------------
 
-	const ALLOWED_ALIGNMENT = [ 'center', 'left', 'right', 'space-around' ];
+	const ALLOWED_LAYOUT    = [ 'centered', 'text-left', 'three-zone', 'hero', 'split', 'content-left', 'content-right' ];
+
+	// Maps the removed `alignment` enum to its closest `layout` so bars saved
+	// before the layout picker keep their original look on first re-sanitize.
+	const LEGACY_ALIGNMENT_LAYOUT = [
+		'center'       => 'centered',
+		'left'         => 'content-left',
+		'right'        => 'content-right',
+		'space-around' => 'three-zone',
+	];
 	const ALLOWED_POSITION  = [ 'fixed', 'absolute' ];
 	const ALLOWED_PLACEMENT = [ 'top', 'bottom' ];
 	const ALLOWED_DEVICES   = [ 'desktop', 'mobile' ];
@@ -85,7 +94,7 @@ class Schema {
 				'btnBgColor'   => '#1919cf',
 				'btnTextColor' => '#ffffff',
 				'fontSize'     => 15,
-				'alignment'    => 'center',
+				'layout'       => 'centered',
 				'contentWidth' => 900,
 				'positionType' => 'fixed',
 				'placement'    => 'top',

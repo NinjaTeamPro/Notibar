@@ -155,7 +155,7 @@ Notibar is a WordPress plugin with a **React-powered admin UI** and **vanilla JS
 | **DisplayTab.jsx** | `DisplayTab` | Device, page/post rules, CPT rules (Pro), audience (Pro) | ~150 |
 | **DisplayTabAudienceBlock.jsx** | `DisplayTabAudienceBlock` | Audience picker (logged-in/out, roles, users) | ~80 |
 | **DisplayTabCptBlock.jsx** | `DisplayTabCptBlock` | CPT filtering (Pro) | ~60 |
-| **StyleTab.jsx** | `StyleTab` | Colors, font size, alignment, position type, content width | ~150 |
+| **StyleTab.jsx** | `StyleTab` | Colors, font size, layout, position type, content width | ~150 |
 | **BehaviorTab.jsx** | `BehaviorTab** | Close actions, reopen days, scheduling | ~120 |
 
 **State & hooks** (`/src/customizer-app/store/`):

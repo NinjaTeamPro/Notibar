@@ -204,7 +204,82 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  /* display set per variant below; justify-content set via inline style by renderBarHTML(). */
+  /* display set per variant below; arrangement set per layout via the
+     [data-layout] rules below (renderBarHTML emits the attribute). */
+}
+
+/* ============================================================================
+   Content layouts — driven by [data-layout] on .njt-nofi-content. Children are,
+   in DOM order: .njt-nofi-text → .njt-nofi-countdown → .njt-nofi-button.
+   margin:auto sits on text/button (never the countdown) so each layout still
+   holds when a bar has no timer. Replaces the former alignment field.
+   ========================================================================== */
+
+/* Centered — whole content group centered. */
+.njt-nofi-content[data-layout="centered"] {
+  justify-content: center;
+}
+.njt-nofi-content[data-layout="centered"] .njt-nofi-text {
+  text-align: center;
+}
+
+/* Text left — text pinned left; countdown + button cluster to the right. */
+.njt-nofi-content[data-layout="text-left"] {
+  justify-content: flex-start;
+}
+.njt-nofi-content[data-layout="text-left"] .njt-nofi-text {
+  margin-right: auto;
+  text-align: left;
+}
+
+/* Three-zone — text · countdown · button spread across the row. */
+.njt-nofi-content[data-layout="three-zone"] {
+  justify-content: space-between;
+}
+.njt-nofi-content[data-layout="three-zone"] .njt-nofi-text {
+  text-align: left;
+}
+
+/* Split — text + countdown stay left; button pushed to the right edge. */
+.njt-nofi-content[data-layout="split"] {
+  justify-content: flex-start;
+}
+.njt-nofi-content[data-layout="split"] .njt-nofi-text {
+  text-align: left;
+}
+.njt-nofi-content[data-layout="split"] .njt-nofi-button {
+  margin-left: auto;
+}
+
+/* Content left — whole group (text + countdown + button) clustered at the left. */
+.njt-nofi-content[data-layout="content-left"] {
+  justify-content: flex-start;
+}
+.njt-nofi-content[data-layout="content-left"] .njt-nofi-text {
+  text-align: left;
+}
+
+/* Content right — whole group clustered at the right edge. */
+.njt-nofi-content[data-layout="content-right"] {
+  justify-content: flex-end;
+}
+.njt-nofi-content[data-layout="content-right"] .njt-nofi-text {
+  text-align: right;
+}
+
+/* Hero — vertical stack, centered, with an emphasised (larger) countdown. */
+.njt-nofi-content[data-layout="hero"] {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.njt-nofi-content[data-layout="hero"] .njt-nofi-text {
+  text-align: center;
+}
+.njt-nofi-content[data-layout="hero"] .njt-nofi-countdown {
+  transform: scale(1.3);
+  transform-origin: center;
+  margin: 8px 0;
 }
 
 .njt-nofi-content-desktop {
