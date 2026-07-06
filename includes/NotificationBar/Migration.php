@@ -100,6 +100,9 @@ class Migration {
 		// v3 data already present (in either v3.0/3.1 theme_mod storage OR
 		// v3.1.2+ wp_options storage) = clean install or previous partial run.
 		if ( '' !== get_theme_mod( 'njt_nofi_bars', '' ) ) {
+			if ( ! get_option( self::FLAG ) ) {
+				add_option( self::FLAG, 1, '', false );
+			}
 			return;
 		}
 		if ( false !== get_option( 'njt_nofi_bars', false ) ) {
@@ -136,36 +139,48 @@ class Migration {
 	 * @return void
 	 */
 	public function maybeMigrateThemeModToOption(): void {
-		if ( get_option( self::FLAG_OPTIONS_MIGRATION ) ) {
+		$this->maybeSelfHealOptionsMigration();
+
+		$option_bars_raw = get_option( 'njt_nofi_bars', false );
+		$option_bars_str = is_string( $option_bars_raw ) ? $option_bars_raw : '';
+
+		if ( get_option( self::FLAG_OPTIONS_MIGRATION ) && $this->hasUsableBarsJson( $option_bars_str ) ) {
 			return;
 		}
 
-		// Concurrent-load guard (v2→v3.1.2 direct upgrade): defer this migration
-		// until the v2→v3 migration has VISIBLY committed FLAG_v3. Without this
-		// gate, a concurrent request could claim FLAG_OPTIONS_MIGRATION before
-		// the v3 set_theme_mod writes are visible to our read, copying empty
-		// data and locking the migration forever.
+		$bars   = $this->resolveBarsThemeMod();
+		$global = $this->resolveGlobalThemeMod();
+
+		// Defer — do not lock FLAG_OPTIONS while v2→v3 is still writing theme_mod
+		// on a concurrent request (FLAG may be set before set_theme_mod completes).
+		if ( '' === $bars && '' === $global ) {
+			return;
+		}
+
+		$this->ensureV3Flag();
+
 		if ( ! get_option( self::FLAG ) ) {
 			return;
 		}
 
-		if ( ! add_option( self::FLAG_OPTIONS_MIGRATION, 1, '', false ) ) {
+		$needs_bars   = $this->optionNeedsBarsCopy( $bars );
+		$needs_global = $this->optionNeedsGlobalCopy( $global );
+
+		if ( ! $needs_bars && ! $needs_global ) {
+			if ( $this->hasUsableBarsJson( $option_bars_str ) ) {
+				$this->markOptionsMigrationComplete();
+			}
 			return;
 		}
 
-		$bars   = get_theme_mod( 'njt_nofi_bars',   '' );
-		$global = get_theme_mod( 'njt_nofi_global', '' );
+		if ( $needs_bars ) {
+			$this->persistBarsOption( $bars );
+		}
+		if ( $needs_global ) {
+			$this->persistGlobalOption( $global );
+		}
 
-		// autoload=true for the data options — frontend reads them on every
-		// page render in NotificationBarHandle::shouldRender(). Matches the
-		// pre-existing theme_mods autoload behavior (theme_mods blob was
-		// always autoloaded as a single row).
-		if ( '' !== $bars && false === get_option( 'njt_nofi_bars', false ) ) {
-			add_option( 'njt_nofi_bars', $bars, '', true );
-		}
-		if ( '' !== $global && false === get_option( 'njt_nofi_global', false ) ) {
-			add_option( 'njt_nofi_global', $global, '', true );
-		}
+		$this->markOptionsMigrationComplete();
 	}
 
 	/** Cron callback — deletes the backup option after 30 days. */
@@ -336,6 +351,221 @@ class Migration {
 	private function schedulePrune(): void {
 		if ( ! wp_next_scheduled( self::PRUNE_HOOK ) ) {
 			wp_schedule_single_event( time() + ( 30 * DAY_IN_SECONDS ), self::PRUNE_HOOK );
+		}
+	}
+
+	// ------------------------------------------------------------------
+	// v3.1.2 theme_mod → option helpers
+	// ------------------------------------------------------------------
+
+	/**
+	 * Clear a wrongly-locked FLAG_OPTIONS when option is empty but theme_mod has data.
+	 *
+	 * @return void
+	 */
+	private function maybeSelfHealOptionsMigration(): void {
+		if ( ! get_option( self::FLAG_OPTIONS_MIGRATION ) ) {
+			return;
+		}
+
+		$option_bars = get_option( 'njt_nofi_bars', false );
+		if ( $this->hasUsableBarsJson( is_string( $option_bars ) ? $option_bars : '' ) ) {
+			return;
+		}
+
+		$theme_bars = $this->resolveBarsThemeMod();
+		if ( '' !== $theme_bars && $this->hasUsableBarsJson( $theme_bars ) ) {
+			delete_option( self::FLAG_OPTIONS_MIGRATION );
+		}
+	}
+
+	/**
+	 * @param string $raw JSON string.
+	 * @return bool
+	 */
+	private function hasUsableBarsJson( string $raw ): bool {
+		if ( '' === $raw ) {
+			return false;
+		}
+
+		$decoded = json_decode( $raw, true );
+		if ( ! is_array( $decoded ) || empty( $decoded ) ) {
+			return false;
+		}
+
+		foreach ( $decoded as $bar ) {
+			if ( is_array( $bar ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param string $raw JSON string.
+	 * @return bool
+	 */
+	private function hasUsableGlobalJson( string $raw ): bool {
+		if ( '' === $raw ) {
+			return false;
+		}
+
+		$decoded = json_decode( $raw, true );
+		return is_array( $decoded ) && ! empty( $decoded );
+	}
+
+	/**
+	 * @param string $theme_mod_bars Bars JSON from theme_mod.
+	 * @return bool
+	 */
+	private function optionNeedsBarsCopy( string $theme_mod_bars ): bool {
+		if ( '' === $theme_mod_bars || ! $this->hasUsableBarsJson( $theme_mod_bars ) ) {
+			return false;
+		}
+
+		$option_bars = get_option( 'njt_nofi_bars', false );
+		if ( false === $option_bars || ! is_string( $option_bars ) ) {
+			return true;
+		}
+
+		return ! $this->hasUsableBarsJson( $option_bars );
+	}
+
+	/**
+	 * @param string $theme_mod_global Global JSON from theme_mod.
+	 * @return bool
+	 */
+	private function optionNeedsGlobalCopy( string $theme_mod_global ): bool {
+		if ( '' === $theme_mod_global || ! $this->hasUsableGlobalJson( $theme_mod_global ) ) {
+			return false;
+		}
+
+		$option_global = get_option( 'njt_nofi_global', false );
+		if ( false === $option_global || ! is_string( $option_global ) ) {
+			return true;
+		}
+
+		return ! $this->hasUsableGlobalJson( $option_global );
+	}
+
+	/**
+	 * Active theme_mod first; scan other themes' theme_mods_* blobs when empty.
+	 *
+	 * @return string JSON string or empty.
+	 */
+	private function resolveBarsThemeMod(): string {
+		$bars = (string) get_theme_mod( 'njt_nofi_bars', '' );
+		if ( '' !== $bars && $this->hasUsableBarsJson( $bars ) ) {
+			return $bars;
+		}
+
+		return $this->findThemeModValueInInstalledThemes( 'njt_nofi_bars' );
+	}
+
+	/**
+	 * Active theme_mod first; scan other themes' theme_mods_* blobs when empty.
+	 *
+	 * @return string JSON string or empty.
+	 */
+	private function resolveGlobalThemeMod(): string {
+		$global = (string) get_theme_mod( 'njt_nofi_global', '' );
+		if ( '' !== $global && $this->hasUsableGlobalJson( $global ) ) {
+			return $global;
+		}
+
+		return $this->findThemeModValueInInstalledThemes( 'njt_nofi_global' );
+	}
+
+	/**
+	 * Search theme_mods_{stylesheet} options for a Notibar key.
+	 *
+	 * @param string $key njt_nofi_bars or njt_nofi_global.
+	 * @return string
+	 */
+	private function findThemeModValueInInstalledThemes( string $key ): string {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
+				$wpdb->esc_like( 'theme_mods_' ) . '%'
+			)
+		);
+
+		if ( ! is_array( $rows ) ) {
+			return '';
+		}
+
+		foreach ( $rows as $row ) {
+			if ( ! isset( $row->option_value ) ) {
+				continue;
+			}
+
+			$mods = maybe_unserialize( $row->option_value );
+			if ( ! is_array( $mods ) || ! isset( $mods[ $key ] ) ) {
+				continue;
+			}
+
+			$val = $mods[ $key ];
+			if ( ! is_string( $val ) || '' === $val ) {
+				continue;
+			}
+
+			if ( 'njt_nofi_bars' === $key && $this->hasUsableBarsJson( $val ) ) {
+				return $val;
+			}
+
+			if ( 'njt_nofi_global' === $key && $this->hasUsableGlobalJson( $val ) ) {
+				return $val;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * @param string $bars JSON bars string.
+	 * @return void
+	 */
+	private function persistBarsOption( string $bars ): void {
+		if ( false !== get_option( 'njt_nofi_bars', false ) ) {
+			update_option( 'njt_nofi_bars', $bars, true );
+			return;
+		}
+
+		add_option( 'njt_nofi_bars', $bars, '', true );
+	}
+
+	/**
+	 * @param string $global JSON global string.
+	 * @return void
+	 */
+	private function persistGlobalOption( string $global ): void {
+		if ( false !== get_option( 'njt_nofi_global', false ) ) {
+			update_option( 'njt_nofi_global', $global, true );
+			return;
+		}
+
+		add_option( 'njt_nofi_global', $global, '', true );
+	}
+
+	/**
+	 * @return void
+	 */
+	private function markOptionsMigrationComplete(): void {
+		if ( ! get_option( self::FLAG_OPTIONS_MIGRATION ) ) {
+			add_option( self::FLAG_OPTIONS_MIGRATION, 1, '', false );
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	private function ensureV3Flag(): void {
+		if ( ! get_option( self::FLAG ) ) {
+			add_option( self::FLAG, 1, '', false );
 		}
 	}
 }
