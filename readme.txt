@@ -5,7 +5,7 @@ Tags: notification bar, banner, top bar, announcement, notifications
 Requires at least: 4.0
 Requires PHP: 5.3.1
 Tested up to: 7.0
-Stable tag: 3.1.5
+Stable tag: 3.2.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -123,6 +123,22 @@ Upon activation, you will see a new **Notification Bar** menu. Simply click to c
 
 
 == Upgrade Notice ==
+
+= Jun 26, 2026 - Version 3.2.0 =
+- Added: Countdown timers for bars (Pro) — count down to a fixed date, an evergreen per-visitor duration, or to the moment the bar's schedule closes; choose between boxes, flip, circular, and text styles, with auto-hiding empty units and localized labels
+- Added: Dynamic content merge tags — insert variables (e.g. post title, date, site name) directly into bar text
+- Added: Display trigger (Pro) — reveal a bar only after a scroll percentage, time delay, or number of clicks
+- Added: Layout picker — replaces Alignment with 7 content layouts (Centered, Text left, Three zones, Hero, Split, All left, All right); existing bars are mapped automatically
+- Added: Button click action — each button can open a link or close the bar, with its own reopen-after-days for close buttons
+- Added: Button animations (Pro) — per-button attention and hover effects
+- Added: Bar opacity control, alpha-enabled color pickers, and custom CSS
+- Added: Stack display mode — show multiple bars at the same time
+- Added: Rotation navigation — manual prev/next arrows and a horizontal slide transition for bars sharing a placement
+- Added: Country-based display condition
+- Added: Public API for third-party bar registration
+- Improved: Theme compatibility — placement-aware shims (Essentials, Brandy) and mobile admin-bar offset fixes
+- Improved: Content tab — mobile overrides grouped at the bottom behind a labeled divider
+- Fixed: Navigation arrow styling in some themes
 
 = Jun 5, 2026 - Version 3.1.4 =
 - Added: Polylang support — bar text, button labels, and button URLs are now auto-registered for translation under the Notibar string group
