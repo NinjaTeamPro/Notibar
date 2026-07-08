@@ -33,7 +33,13 @@ if ( ! class_exists( 'NjtEddLicenseGuard' ) ) {
 		public function maybe_redirect() {
 			// sanitize_key lowercases + strips to [a-z0-9_-]; gated_pages slugs must match that form.
 			$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-			if ( '' === $page ) {
+			$post_type = isset( $_GET['post_type'] ) ? sanitize_key( wp_unslash( $_GET['post_type'] ) ) : '';
+			
+			if ( '' === $page && !empty ( $post_type ) ) {
+				$page = $post_type;
+			}
+
+			if( '' === $page ) {
 				return;
 			}
 

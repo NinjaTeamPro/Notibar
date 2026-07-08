@@ -102,7 +102,7 @@ if ( ! class_exists( 'NjtEddLicenseAdminPage' ) ) {
 
 		/** Right-hand help column: how to find the key + what activation unlocks. */
 		private function aside( array $cfg ) {
-			$dashboard = ! empty( $cfg['account_url'] ) ? $cfg['account_url'] : $cfg['store_url'];
+			$dashboard = ! empty( $cfg['account_url'] ) ? $cfg['account_url'] : 'https://ninjateam.org/dashboard/#license-keys';
 			$benefits  = [
 				__( 'Start using the Pro version', 'filebird' ),
 				__( 'Auto-update to the latest version', 'filebird' ),
