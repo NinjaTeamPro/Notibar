@@ -217,11 +217,14 @@ add_action( 'customize_save_after', function () {
 // Migrations — runs at priority 5, BEFORE the main init at priority 10.
 // ORDER MATTERS: maybeRun() (v2→v3 legacy) must execute BEFORE
 // maybeMigrateThemeModToOption() (v3.1→v3.1.2 storage flip) so v2 data lands
-// in theme_mod first and is then copied into wp_options.
+// in theme_mod first and is then copied into wp_options. maybeBackfillCptLogic()
+// (v3.0→v3.1 CPT field backfill) runs last so it sees settled storage, though
+// it independently checks both theme_mod and options either way.
 add_action('plugins_loaded', function () {
   $migration = NotificationBar\Migration::getInstance();
   $migration->maybeRun();
   $migration->maybeMigrateThemeModToOption();
+  $migration->maybeBackfillCptLogic();
 }, 5);
 
 register_activation_hook(__FILE__, array('NjtNotificationBar\\Plugin', 'activate'));

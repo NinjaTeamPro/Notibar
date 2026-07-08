@@ -255,6 +255,16 @@ trait MigrationMapper {
 			false !== $l['njt_nofi_list_display_page'] ? $l['njt_nofi_list_display_page'] : ''
 		);
 
+		// CPT logic — legacy v2.1.9 predates CPT targeting entirely, so seed
+		// it from the migrated pageLogic rather than leaving the schema's
+		// static 'none' default: a bar set to show/hide on all pages should
+		// carry that same intent onto CPT singles after upgrading.
+		if ( 'all' === $bar['display']['pageLogic'] ) {
+			$bar['display']['cptLogic'] = 'all';
+		} elseif ( 'none' === $bar['display']['pageLogic'] ) {
+			$bar['display']['cptLogic'] = 'none';
+		}
+
 		// Post logic + IDs
 		$post_raw = false !== $l['njt_nofi_logic_display_post'] ? $l['njt_nofi_logic_display_post'] : 'dis_all_post';
 		$bar['display']['postLogic'] = $this->mapLogic( $post_raw );

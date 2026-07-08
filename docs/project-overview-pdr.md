@@ -63,7 +63,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - React Customizer editor with live preview
 - Content: desktop/mobile text & button (URL + label)
 - Styling: colors, font size, position (fixed/absolute), layout
-- Display rules: pages, posts (by ID include/exclude)
+- Display rules: pages, posts (by ID include/exclude), custom post types (by type include/exclude)
 - Close actions: close, toggle, disable
 - Scheduling: date ranges, daily windows, specific weekdays
 - WPML integration (translate bar text)
@@ -75,7 +75,6 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - Rotation mode
 - Event tracking & analytics
 - Audience targeting (roles, user lists)
-- CPT-aware display rules
 - Advanced user search
 - Polylang translation (stub)
 
@@ -93,7 +92,6 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - **Event tracking**: Track clicks, dismissals, engagement per bar; lifetime counters + time-series table
 - **Analytics dashboard**: Charts (trend, breakdown by event type, per-bar comparison); filter by date range, bar, audience, event type
 - **Audience targeting**: Restrict to logged-in, logged-out, specific roles, specific user IDs
-- **CPT rules**: Display by custom post type + per-CPT ID include/exclude
 - **User search**: Async user picker for audience targeting
 - **License management**: EDD-powered license validation & auto-updates
 
@@ -112,6 +110,7 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 | Content (text, button) | ✓ | ✓ | Desktop/mobile variants |
 | Styling (colors, size, position) | ✓ | ✓ | WCAG AA contrast warning |
 | Page/post rules | ✓ | ✓ | Include/exclude by ID |
+| CPT rules | ✓ | ✓ | Custom post type filtering |
 | Device awareness | ✓ | ✓ | Desktop/mobile separate |
 | Close actions | ✓ | ✓ | close/toggle/disable |
 | Scheduling | ✓ | ✓ | Date ranges, daily windows, weekday picker |
@@ -125,7 +124,6 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 | **Event tracking** | | ✓ | Click, dismiss, engage |
 | **Analytics dashboard** | | ✓ | Charts, filters, time-series |
 | **Audience targeting** | | ✓ | Roles, user lists, logged-in/out |
-| **CPT rules** | | ✓ | Custom post type filtering |
 | **User search** | | ✓ | Async picker for users |
 | **License management** | | ✓ | Auto-updates, seat limits |
 
@@ -175,10 +173,10 @@ Notibar provides a **React-powered Customizer panel** to visually create & manag
 - pageIds: array of post IDs (synthetic tokens: 'home_page', 'wc_single_product', 'tpl:filename')
 - postLogic, postIds: same as pages
 
-**CPTs (Pro)**:
-- cptTypes: multiselect of public custom post types
-- cptLogic: all, none, include, exclude
-- cptIds: array of post IDs in selected CPTs
+**CPTs** — type-scoped; governs single CPT pages only (default `none`):
+- cptLogic: all (show on all post types), none (hide on all), include (show on selected types), exclude (hide on selected types)
+- cptTypes: multiselect of public custom post types; used only by include/exclude
+- WooCommerce products are a CPT and follow this rule (supersedes the Page-tab `wc_single_product` token on product singles)
 
 **Audience (Pro)**:
 - audience: all, loggedin, loggedout, roles, users

@@ -1,43 +1,41 @@
 /**
  * DisplayTabCptBlock — "Other post types" section of the Display tab.
  *
- * Owns the 3 CPT-bucket fields: cptTypes (multi-select), cptLogic (4-state
- * radio), cptIds (merged multi-CPT picker). Extracted into its own file so
+ * Owns 2 CPT-bucket fields: cptLogic (4-state radio) and cptTypes
+ * (multi-select). Type-scoped: the rule governs single CPT pages by post
+ * TYPE — there is no per-item picker. Extracted into its own file so
  * DisplayTab.jsx stays under the 200 LOC cap.
  *
  * Visibility rules:
- *   - CptMultiSelect: always visible.
- *   - cptLogic radio: only when cptTypes.length > 0.
- *   - Picker: only when cptTypes.length > 0 AND cptLogic ∈ {include, exclude}.
- *   - Product-precedence hint: only when 'product' is in cptTypes.
+ *   - cptLogic radio: always visible.
+ *   - CptMultiSelect: only when cptLogic ∈ {include, exclude} (all/none
+ *     apply to every CPT single and need no type selection).
  */
 import { RadioControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { updatePath } from '../../utils/update-path';
 import { CptMultiSelect } from '../fields/CptMultiSelect';
-import { AsyncPostPicker } from '../fields/AsyncPostPicker';
-import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
 
 const CPT_LOGIC_OPTIONS = [
 	{
 		value: 'all',
-		label: __( 'Display on all selected CPT instances', 'notibar' ),
+		label: __( 'Show on all post types', 'notibar' ),
 	},
 	{
 		value: 'none',
-		label: __( 'Hide on all selected CPT instances', 'notibar' ),
+		label: __( 'Hide on all post types', 'notibar' ),
 	},
 	{
 		value: 'include',
-		label: __( 'Show only on selected items', 'notibar' ),
+		label: __( 'Show on selected post types', 'notibar' ),
 	},
 	{
 		value: 'exclude',
-		label: __( 'Hide only on selected items', 'notibar' ),
+		label: __( 'Hide on selected post types', 'notibar' ),
 	},
 ];
 
-const PICKER_LOGIC = [ 'include', 'exclude' ];
+const TYPES_LOGIC = [ 'include', 'exclude' ];
 
 /**
  * @param {Object}   props
@@ -45,15 +43,11 @@ const PICKER_LOGIC = [ 'include', 'exclude' ];
  * @param {Function} props.onChange Called with updated bar.
  */
 export function DisplayTabCptBlock( { bar, onChange } ) {
-	const pro = isProEdition();
 	const set = ( path, value ) => onChange( updatePath( bar, path, value ) );
 	const { display } = bar;
 	const cptTypes = Array.isArray( display.cptTypes ) ? display.cptTypes : [];
-	const cptLogic = display.cptLogic || 'all';
-	const cptIds = Array.isArray( display.cptIds ) ? display.cptIds : [];
-	const hasTypes = cptTypes.length > 0;
-	const showPicker = hasTypes && PICKER_LOGIC.includes( cptLogic );
-	const hasProduct = hasTypes && cptTypes.includes( 'product' );
+	const cptLogic = display.cptLogic || 'none';
+	const showTypes = TYPES_LOGIC.includes( cptLogic );
 
 	return (
 		<fieldset className="njt-notibar-fieldset njt-notibar-cpt-block">
@@ -61,48 +55,21 @@ export function DisplayTabCptBlock( { bar, onChange } ) {
 				{ __( 'Other post types', 'notibar' ) }
 			</legend>
 
-			{ ! pro && (
-				<ProUpgradeNotice
-					feature={ __(
-						'Targeting by custom post type (incl. WooCommerce products)',
-						'notibar'
-					) }
-				/>
-			) }
-
 			<div
-				className={ pro ? undefined : 'njt-pro-locked' }
 				style={ { display: 'flex', flexDirection: 'column', gap: 12 } }
 			>
-				<CptMultiSelect
-					value={ cptTypes }
-					onChange={ ( next ) => set( 'display.cptTypes', next ) }
+				<RadioControl
+					label={ __( 'CPT logic', 'notibar' ) }
+					selected={ cptLogic }
+					options={ CPT_LOGIC_OPTIONS }
+					onChange={ ( v ) => set( 'display.cptLogic', v ) }
 				/>
 
-				{ hasTypes && (
-					<RadioControl
-						label={ __( 'CPT logic', 'notibar' ) }
-						selected={ cptLogic }
-						options={ CPT_LOGIC_OPTIONS }
-						onChange={ ( v ) => set( 'display.cptLogic', v ) }
+				{ showTypes && (
+					<CptMultiSelect
+						value={ cptTypes }
+						onChange={ ( next ) => set( 'display.cptTypes', next ) }
 					/>
-				) }
-
-				{ showPicker && (
-					<AsyncPostPicker
-						postType={ cptTypes }
-						value={ cptIds }
-						onChange={ ( ids ) => set( 'display.cptIds', ids ) }
-					/>
-				) }
-
-				{ hasProduct && (
-					<p className="njt-notibar-help">
-						{ __(
-							'Note: when Product is selected here, this rule overrides the page-logic "Single Product page" token for single product pages.',
-							'notibar'
-						) }
-					</p>
 				) }
 			</div>
 		</fieldset>

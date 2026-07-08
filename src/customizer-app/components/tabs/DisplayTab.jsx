@@ -20,7 +20,7 @@ import { DisplayTabCountryBlock } from './DisplayTabCountryBlock';
 const PAGE_LOGIC_OPTIONS = [
 	{
 		value: 'all',
-		label: __( 'Display on all pages', 'notibar' ),
+		label: __( 'Show on all pages', 'notibar' ),
 	},
 	{
 		value: 'none',
@@ -39,7 +39,7 @@ const PAGE_LOGIC_OPTIONS = [
 const POST_LOGIC_OPTIONS = [
 	{
 		value: 'all',
-		label: __( 'Display on all posts', 'notibar' ),
+		label: __( 'Show on all posts', 'notibar' ),
 	},
 	{
 		value: 'none',

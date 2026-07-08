@@ -18,8 +18,6 @@
  *     isPreview:       boolean,  // true inside Customizer preview iframe
  *     currentCptType:  string,   // CPT slug on single CPT (excl. page/post);
  *                                // '' on page/post/archive/home/non-singular.
- *     currentObjectId: number,   // get_queried_object_id() — populated on any
- *                                // singular; CPT branch is the only consumer.
  *   }
  *
  * @since 3.0.0
@@ -322,7 +320,6 @@ export function filterBars( bars, ctx ) {
 		dismissed = [],
 		isPreview = false,
 		currentCptType = '',
-		currentObjectId = 0,
 	} = ctx;
 
 	return bars.filter( ( bar ) => {
@@ -342,34 +339,30 @@ export function filterBars( bars, ctx ) {
 		}
 
 		// CPT branch ("Other post types") — owns single CPT instances
-		// exclusively. When the visitor is on a single CPT page AND admin
-		// opted that CPT into `cptTypes`, this branch evaluates cptLogic and
-		// SKIPS pageLogic + postLogic entirely. Legacy bars (cptTypes=[]) and
-		// non-CPT contexts (page/post/archive/home) fall through to the
-		// existing else branch with byte-identical behavior.
-		// Pro: CPT targeting. In Lite this stays false (the assignment is
-		// stripped), so any saved cptTypes/cptLogic/cptIds are ignored and the
-		// bar falls through to standard page/post logic — the feature does not
-		// function even if the data was previously saved under Pro.
-		let cptClaimed = false;
-		/* @pro */
-		const cptTypes = Array.isArray( display.cptTypes )
-			? display.cptTypes
-			: [];
-		cptClaimed =
-			'' !== currentCptType && cptTypes.includes( currentCptType );
-		/* @endpro */
+		// exclusively (currentCptType is '' on page/post/archive/home). On any
+		// single CPT page this branch decides show/hide by post TYPE via
+		// cptLogic and SKIPS pageLogic + postLogic entirely. Non-CPT contexts
+		// fall through to the else branch unchanged.
+		//
+		//   all     → show on every CPT single
+		//   none    → hide on every CPT single
+		//   include → show only when the current CPT slug ∈ cptTypes
+		//   exclude → hide only when the current CPT slug ∈ cptTypes
+		const cptClaimed = '' !== currentCptType;
 
 		if ( cptClaimed ) {
-			/* @pro */
-			const cptLogic = display.cptLogic || 'all';
-			const cptIds = display.cptIds || [];
-			if (
-				! passesLogic( cptLogic, cptIds, currentObjectId, false, false )
-			) {
+			const cptLogic = display.cptLogic || 'none';
+			const cptTypes = Array.isArray( display.cptTypes )
+				? display.cptTypes
+				: [];
+			const typeSelected = cptTypes.includes( currentCptType );
+			const showOnCpt =
+				'all' === cptLogic ||
+				( 'include' === cptLogic && typeSelected ) ||
+				( 'exclude' === cptLogic && ! typeSelected );
+			if ( ! showOnCpt ) {
 				return false;
 			}
-			/* @endpro */
 		} else {
 			// Page logic
 			// `pageLogic` governs every NON-single-post context: pages, home,

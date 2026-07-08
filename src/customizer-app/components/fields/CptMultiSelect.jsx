@@ -5,8 +5,8 @@
  * CPT list (page/post/attachment excluded) from GET /notibar/v1/cpts once
  * per SPA session via a module-level Promise cache.
  *
- * Removing a CPT does NOT touch `cptIds` — orphaned IDs persist in storage
- * so re-adding the CPT restores prior selections (decision #6).
+ * Type-scoped selector: the chosen slugs are the whole CPT rule (no per-item
+ * picker). Shown only when cptLogic is include/exclude.
  */
 import { useEffect, useState, useMemo } from '@wordpress/element';
 import { ComboboxControl } from '@wordpress/components';

@@ -133,9 +133,8 @@ Pro also registers `njt_nofi_kill_lite()` on `register_activation_hook` + `admin
     postLogic: "all",
     postIds: [10, 20],
 
-    cptTypes: ["product", "post"],        // Pro: custom post type slugs
-    cptLogic: "all",                      // Pro: apply to specific CPTs?
-    cptIds: [50, 51],                     // Pro: specific posts within selected CPTs
+    cptLogic: "none",                     // all|none|include|exclude — type-scoped, single CPT pages only (default none)
+    cptTypes: ["product", "event"],       // CPT slugs; used only by include/exclude
 
     audience: "all",                      // all|loggedin|loggedout|roles|users (Pro: roles/users)
     roles: ["editor", "author"],          // Pro: WP role slugs
