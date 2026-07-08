@@ -78,8 +78,21 @@ if ( ! class_exists( 'NjtEddLicenseAdminPage' ) ) {
 								<?php if ( ! empty( $data['expires'] ) ) : ?>
 								<tr><th scope="row"><?php esc_html_e( 'Expires', 'filebird' ); ?></th><td><?php echo esc_html( $data['expires'] ); ?></td></tr>
 								<?php endif; ?>
-								<?php if ( isset( $data['activations_left'] ) ) : // null (unlimited) hidden by isset(). ?>
-								<tr><th scope="row"><?php esc_html_e( 'Activations Left', 'filebird' ); ?></th><td><?php echo esc_html( $data['activations_left'] ); ?></td></tr>
+								<?php
+								$limit = isset( $data['license_limit'] ) ? $data['license_limit'] : null;
+								$activations_left = isset( $data['activations_left'] ) ? $data['activations_left'] : null;
+								if ( 'unlimited' === $activations_left ) {
+									$limit = 'unlimited';
+								}
+								$count = isset( $data['site_count'] ) ? $data['site_count'] : null;
+								if ( is_int( $count ) && ( 'unlimited' === $limit || is_int( $limit ) ) ) {
+									$activations_text = $count . ' / ' . ( 'unlimited' === $limit ? __( 'Unlimited', 'filebird' ) : $limit );
+								} else {
+									$activations_text = null; // insufficient/malformed data
+								}
+								?>
+								<?php if ( null !== $activations_text ) : ?>
+								<tr><th scope="row"><?php esc_html_e( 'Activations', 'filebird' ); ?></th><td><?php echo esc_html( $activations_text ); ?></td></tr>
 								<?php endif; ?>
 							</tbody></table>
 							<div class="njt-edd-row">

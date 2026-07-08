@@ -109,15 +109,28 @@ if ( ! class_exists( 'NjtEddLicenseApiClient' ) ) {
 				'success'          => isset( $d['success'] ) ? (bool) $d['success'] : false,
 				'status'           => isset( $d['license'] ) ? sanitize_text_field( $d['license'] ) : 'invalid',
 				'expires'          => isset( $d['expires'] ) ? sanitize_text_field( $d['expires'] ) : '',
-				'activations_left' => isset( $d['activations_left'] ) ? $this->int_or_null( $d['activations_left'] ) : null,
-				'license_limit'    => isset( $d['license_limit'] ) ? $this->int_or_null( $d['license_limit'] ) : null,
+				'activations_left' => isset( $d['activations_left'] ) ? $this->int_or_unlimited( $d['activations_left'] ) : null,
+				'license_limit'    => isset( $d['license_limit'] ) ? $this->int_or_unlimited( $d['license_limit'] ) : null,
+				'site_count'       => isset( $d['site_count'] ) ? $this->int_or_unlimited( $d['site_count'] ) : null,
 				'item_name'        => isset( $d['item_name'] ) ? sanitize_text_field( $d['item_name'] ) : '',
 				'error'            => isset( $d['error'] ) ? sanitize_text_field( $d['error'] ) : '',
 			];
 		}
 
-		private function int_or_null( $v ) {
-			return is_numeric( $v ) ? (int) $v : null; // EDD may send "unlimited" for unlimited seats.
+		/**
+		 * Normalize an EDD numeric-ish field. EDD sends either a real number or the literal
+		 * string "unlimited" for unbounded seats — collapsing both non-numeric cases to null
+		 * would make "unlimited" indistinguishable from "missing/malformed". Returns an int,
+		 * the string 'unlimited', or null (field absent/malformed — genuinely unknown).
+		 */
+		private function int_or_unlimited( $v ) {
+			if ( is_numeric( $v ) ) {
+				return (int) $v;
+			}
+			if ( is_string( $v ) && 'unlimited' === strtolower( trim( $v ) ) ) {
+				return 'unlimited';
+			}
+			return null;
 		}
 
 		/**
