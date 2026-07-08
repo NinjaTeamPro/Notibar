@@ -181,8 +181,7 @@ function rerender() {
 		return;
 	}
 
-	let stackRendered = false;
-
+	const stackRendered = false;
 
 	if ( ! activeRotation && ! stackRendered ) {
 		renderSingle( slot, visible[ 0 ], global );
@@ -210,7 +209,6 @@ function renderSingle( slot, bar, global ) {
 		containerContent.classList.add( 'njt-nofi-visible' );
 	}
 }
-
 
 /**
  * Delegate close / toggle clicks on the slot. Re-applies on every render so

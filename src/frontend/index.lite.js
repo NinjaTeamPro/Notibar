@@ -102,7 +102,6 @@ function init() {
 		document.body.appendChild( slot );
 	}
 
-
 	// Build client-side context.
 	ctx.device = detectDevice();
 	ctx.dismissed = bars
@@ -118,7 +117,7 @@ function init() {
 	}
 
 	/** @type {{ stop: Function }|null} */
-	let rotationCtrl = null;
+	const rotationCtrl = null;
 
 	// Reveal every rendered bar — adds the class that triggers the
 	// @keyframes njt-nofi-slide-in animation. One match for single/rotation,
@@ -130,7 +129,6 @@ function init() {
 			}
 		);
 	}
-
 
 	// -----------------------------------------------------------------------
 	// Dismissal handler — called on × button click.
@@ -155,7 +153,6 @@ function init() {
 			slot.style.display = 'none';
 			return;
 		}
-
 
 		// Single render — first survivor.
 		slot.innerHTML = renderBarWithCollapsedState(
@@ -214,17 +211,13 @@ function init() {
 			if ( barId ) {
 				handleToggle( barId );
 			}
-			return;
 		}
-
 	} );
-
 
 	// -----------------------------------------------------------------------
 	// Render — stack (Pro), rotation (Pro), or single.
 	// -----------------------------------------------------------------------
-	let stackRendered = false;
-
+	const stackRendered = false;
 
 	if ( ! rotationCtrl && ! stackRendered ) {
 		slot.innerHTML = renderBarWithCollapsedState(
