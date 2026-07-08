@@ -1,59 +1,360 @@
-#, fuzzy
+# Copyright (C) 2026 Ninja Team
+# This file is distributed under the same license as the Notibar - WordPress Notification Bar plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Notibar\n"
-"POT-Creation-Date: 2022-05-09 14:25+0700\n"
-"PO-Revision-Date: 2020-09-25 15:31+0700\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: Notibar - WordPress Notification Bar 3.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/Notibar\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.0.1\n"
-"X-Poedit-Basepath: ../..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: njt-notification-bar.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
-"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"POT-Creation-Date: 2026-07-07T04:10:16+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: notibar\n"
 
-#: includes/NotificationBar/NotificationBarHandle.php:51
-msgid "Notification Bar"
+#. Plugin Name of the plugin
+msgid "Notibar - WordPress Notification Bar"
 msgstr ""
 
-#: includes/NotificationBar/NotificationBarHandle.php:52
-#: includes/NotificationBar/WpCustomNotification.php:140
+#. Plugin URI of the plugin
+msgid "https://ninjateam.org/notibar-wordpress-notification-bar"
+msgstr ""
+
+#. Description of the plugin
+msgid "Multiple notification bars with React-powered Customizer editor, live preview, rotation mode, and per-bar display rules."
+msgstr ""
+
+#. Author of the plugin
+msgid "Ninja Team"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://ninjateam.org"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:264
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:43
+msgid "Days"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:265
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:44
+msgid "Hours"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:266
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:45
+msgid "Minutes"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:267
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:46
+msgid "Seconds"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:270
+msgid "days"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:271
+msgid "hrs"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:272
+msgid "mins"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:273
+msgid "secs"
+msgstr ""
+
+#: includes/NotificationBar/CountdownResolver.php:275
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:118
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:123
+msgid "Countdown timer"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:30
+msgid "Multiple bars / messages"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:31
+msgid "Scheduling start & end date/time"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:32
+msgid "Re-display after a specified period"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:33
+msgid "Absolute & fixed display"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:34
+msgid "Different content for mobile"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:35
+msgid "Hide or show on specific pages/posts"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:36
+msgid "Auto ON/OFF daily schedule"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:37
+msgid "One-click to duplicate"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:38
+msgid "Drag and drop to reorder bars"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:39
+msgid "Compatible with cache & lazyload"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:40
+msgid "100% mobile-responsive"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:41
+msgid "Import / Export set of bars"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:42
+msgid "HTML & CSS supported"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:44
+msgid "Hide/show on WooCommerce products & custom post types"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:45
+msgid "A/B testing (Rotation mode)"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:46
+msgid "Rotation interval in seconds"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:47
+#: src/customizer-app/components/GlobalSettingsPane.jsx:114
+msgid "Pause rotation on hover"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:48
+msgid "Rotate bars by sequence or random"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:49
+msgid "Advanced reports (Click tracking)"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:50
+#: src/customizer-app/components/tabs/StyleTab.jsx:192
+msgid "Display bar at bottom"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:51
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:59
+msgid "Conditional display by role or user"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:53
+msgid "Multilingual support"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:150
+msgid "Coming soon"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:153
+msgid "Included"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:155
+msgid "Not included"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:169
+msgid "Get Notibar Pro"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:178
+msgid "Unlock Notibar Pro"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:180
+msgid "Upgrade to Notibar Pro to rotate and A/B test bars, target by audience and product, and measure clicks, everything you need to turn announcements into conversions."
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:187
+#: includes/NotificationBar/GoProPage.php:216
+msgid "Notibar Pro"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:191
+msgid "Get all features when you upgrade to Notibar Pro."
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:198
+msgid "Fast updates"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:199
+msgid "1-1 Live Chat VIP support"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:206
+msgid "Compare Plans and Features"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:208
+msgid "Check the comparison table to see what each plan offers."
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:214
+msgid "Features"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:215
+msgid "Notibar Free"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:229
+msgid "Your current plan"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:243
+msgid "Join the website owners using Notibar Pro to put the right message in front of the right visitors, and see exactly what converts."
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:248
+msgid "Founder & Designer, Australia"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:257
+msgid "30-day Money Back Guarantee"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:268
+msgid "Need help?"
+msgstr ""
+
+#: includes/NotificationBar/GoProPage.php:270
+msgid "Chat now"
+msgstr ""
+
+#. translators: %s: wp_options key name
+#: includes/NotificationBar/Migration.php:220
+msgid "<strong>Notibar v3</strong> migrated your settings. A backup is kept for 30 days (option: <code>%s</code>)."
+msgstr ""
+
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:42
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:43
+#: includes/NotificationBar/WpCustomNotification.php:75
 msgid "Notibar"
 msgstr ""
 
-#: includes/NotificationBar/NotificationBarHandle.php:109
-msgid "Give Notibar a review"
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:53
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:54
+msgid "Customize"
 msgstr ""
 
-#: includes/NotificationBar/NotificationBarHandle.php:111
-msgid ""
-"Thank you for choosing Notibar. We hope you love it. Could you take a "
-"couple of seconds posting a nice review to share your happy experience?"
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:62
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:63
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:115
+msgid "Settings"
 msgstr ""
 
-#: includes/NotificationBar/NotificationBarHandle.php:114
-msgid "We will be forever grateful. Thank you in advance ;)"
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:75
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:76
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:123
+msgid "Go Pro"
 msgstr ""
 
-#: includes/NotificationBar/NotificationBarHandle.php:117
-msgid "Rate now"
+#: includes/NotificationBar/NotificationBarHandleAdmin.php:115
+msgid "Enter license key"
 msgstr ""
 
-#: includes/NotificationBar/NotificationBarHandle.php:118
-msgid "Later"
+#: includes/NotificationBar/RestPostsController.php:163
+#: includes/NotificationBar/RestPostsController.php:284
+#: src/customizer-app/components/fields/AsyncPostPicker.jsx:21
+msgid "Front Page"
 msgstr ""
 
-#: includes/NotificationBar/NotificationBarHandle.php:119
-msgid "Already did"
+#: includes/NotificationBar/RestPostsController.php:182
+#: includes/NotificationBar/RestPostsController.php:276
+#: src/customizer-app/components/fields/AsyncPostPicker.jsx:30
+msgid "Single Product page"
+msgstr ""
+
+#. translators: %s: page template display name.
+#: includes/NotificationBar/RestPostsController.php:206
+#: includes/NotificationBar/RestPostsController.php:266
+msgid "Template: %s"
+msgstr ""
+
+#: includes/NotificationBar/RestSettingsController.php:124
+msgid "Import file exceeds 10 MB limit."
+msgstr ""
+
+#: includes/NotificationBar/RestSettingsController.php:134
+msgid "Request body is not valid JSON."
+msgstr ""
+
+#. translators: %d: highest supported export version
+#: includes/NotificationBar/RestSettingsController.php:148
+msgid "Unsupported export version. This plugin supports up to version %d."
+msgstr ""
+
+#: includes/NotificationBar/RestSettingsController.php:163
+msgid "Failed to encode bars payload (invalid UTF-8?)."
+msgstr ""
+
+#: includes/NotificationBar/RestSettingsController.php:176
+msgid "Failed to encode global payload (invalid UTF-8?)."
+msgstr ""
+
+#: includes/NotificationBar/RestSettingsController.php:205
+msgid "Failed to encode tracking payload."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:126
+#: includes/NotificationBar/TrackingRestController.php:234
+msgid "Invalid bar_id."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:134
+msgid "Invalid event."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:142
+msgid "Unknown bar."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:152
+msgid "Counter increment failed."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:220
+msgid "Only interval=day is supported."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:303
+#: includes/NotificationBar/TrackingRestController.php:316
+msgid "from/to must be valid YYYY-MM-DD dates."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:323
+msgid "`from` must not be after `to`."
+msgstr ""
+
+#: includes/NotificationBar/TrackingRestController.php:330
+msgid "Date range must not exceed 366 days."
 msgstr ""
 
 #: includes/NotificationBar/WpCustomControlColorBg.php:16
@@ -70,185 +371,1264 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:141
-msgid "This is panel WordPress Notification Bar"
+#: njt-notification-bar.php:69
+msgid "Notibar Lite was deactivated — Notibar Pro replaces it."
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:147
-msgid "General Options"
+#: src/customizer-app/App.jsx:139
+#: src/customizer-app/components/BarList.jsx:80
+#: src/customizer-app/components/BarListItem.jsx:70
+msgid "Untitled bar"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:161
-msgid "Enable/Disable Notibar"
+#: src/customizer-app/App.jsx:148
+msgid "Back to bars"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:175
-msgid "Alignment Option"
+#: src/customizer-app/App.jsx:170
+msgid "Display Settings"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:180
-msgid "Center"
+#: src/customizer-app/App.jsx:180
+#: src/settings-app/tabs/ExportImportTab.jsx:31
+msgid "Bars"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:181
-msgid "Left"
+#: src/customizer-app/components/BarEditor.jsx:30
+msgid "Content"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:182
-msgid "Right"
+#: src/customizer-app/components/BarEditor.jsx:35
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:251
+msgid "Style"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:183
-msgid "Space around"
+#: src/customizer-app/components/BarEditor.jsx:40
+msgid "Display"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:195
-msgid "Hide/Close Button"
+#: src/customizer-app/components/BarEditor.jsx:45
+msgid "Behavior"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:200
-msgid "No button"
+#: src/customizer-app/components/BarList.jsx:80
+msgid "copy"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:201
-msgid "Toggle button"
+#: src/customizer-app/components/BarList.jsx:101
+msgid "No bars yet — add one to get started."
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:202
-msgid "Close button"
+#: src/customizer-app/components/BarList.jsx:136
+msgid "+ Add bar"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:214
-msgid "Content Width (px)"
+#. translators: %s is the bar name.
+#: src/customizer-app/components/BarListItem.jsx:74
+msgid "Delete bar \"%s\"? This cannot be undone."
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:230
-msgid "Position Type"
+#: src/customizer-app/components/BarListItem.jsx:97
+#: src/customizer-app/components/BarListItem.jsx:98
+msgid "Drag to reorder"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:238
-msgid "Content Options"
+#: src/customizer-app/components/BarListItem.jsx:108
+msgid "Click to edit"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:259
-#: includes/NotificationBar/WpCustomNotification.php:353
+#: src/customizer-app/components/BarListItem.jsx:123
+msgid "Bar actions"
+msgstr ""
+
+#: src/customizer-app/components/BarListItem.jsx:135
+msgid "Edit"
+msgstr ""
+
+#: src/customizer-app/components/BarListItem.jsx:143
+msgid "Duplicate"
+msgstr ""
+
+#: src/customizer-app/components/BarListItem.jsx:152
+msgid "Delete"
+msgstr ""
+
+#: src/customizer-app/components/EmptyState.jsx:15
+msgid "No notification bar selected. Add your first bar to get started."
+msgstr ""
+
+#: src/customizer-app/components/EmptyState.jsx:21
+msgid "Add your first bar"
+msgstr ""
+
+#: src/customizer-app/components/fields/AsyncPostPicker.jsx:184
+#: src/customizer-app/components/fields/AsyncUserPicker.jsx:128
+#: src/customizer-app/components/fields/CountryMultiSelect.jsx:59
+#: src/customizer-app/components/fields/CptMultiSelect.jsx:90
+msgid "Remove"
+msgstr ""
+
+#: src/customizer-app/components/fields/AsyncPostPicker.jsx:198
+msgid "Search and add…"
+msgstr ""
+
+#: src/customizer-app/components/fields/AsyncUserPicker.jsx:146
+msgid "Search users…"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:33
+msgid "Open link"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:34
+msgid "Close bar"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:39
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:57
+msgid "None"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:40
+msgid "Wobble"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:41
+msgid "Shake"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:42
+msgid "Bounce"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:43
+msgid "Pulse"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:44
+msgid "Swing"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:45
+msgid "Jello"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:46
+msgid "Tada"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:47
+msgid "Rubber Band"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:48
+msgid "Heartbeat"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:49
+msgid "Flash"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:50
+msgid "Blink"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:51
+msgid "Vibrate"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:52
+msgid "Pop"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:53
+msgid "Bounce In"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:58
+msgid "Grow"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:59
+msgid "Shrink"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:60
+msgid "Lift"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:61
+msgid "Glow"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:62
+msgid "Press"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:63
+msgid "Shadow"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:64
+msgid "Color Shift"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:65
+msgid "Slide Fill"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:121
+msgid "Action"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:128
+msgid "Clicking this button dismisses the bar."
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:137
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:112
+msgid "Reopen after (days)"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:138
+msgid "0 = never auto-reopen. Applies to this button only; the × control uses its own setting in Behavior."
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:176
+msgid "Button text"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:183
+msgid "URL"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:189
+msgid "Please enter a valid URL."
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:202
+msgid "Font weight"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:212
+msgid "Button animations"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:216
+msgid "Attention animation"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:223
+msgid "Hover effect"
+msgstr ""
+
+#: src/customizer-app/components/fields/ButtonSubForm.jsx:232
+msgid "Open in new tab"
+msgstr ""
+
+#: src/customizer-app/components/fields/ColorFieldWithReset.jsx:55
+msgid "Reset"
+msgstr ""
+
+#: src/customizer-app/components/fields/ColorPresetSwatches.jsx:59
+msgid "Color presets"
+msgstr ""
+
+#: src/customizer-app/components/fields/ColorPresetSwatches.jsx:67
+msgid "Preset"
+msgstr ""
+
+#: src/customizer-app/components/fields/ColorPresetSwatches.jsx:84
+msgid "Apply color preset"
+msgstr ""
+
+#. translators: 1: contrast ratio value, 2: colour pair label
+#: src/customizer-app/components/fields/ContrastWarning.jsx:30
+msgid "Contrast %1$s:1 below WCAG AA (4.5:1) (%2$s) — text may be hard to read."
+msgstr ""
+
+#. translators: 1: contrast ratio value
+#: src/customizer-app/components/fields/ContrastWarning.jsx:39
+msgid "Contrast %1$s:1 below WCAG AA (4.5:1) — text may be hard to read."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:28
+msgid "Fixed date & time"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:29
+msgid "Evergreen (per visitor)"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:30
+msgid "When the schedule ends"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:34
+msgid "Boxes"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:35
+msgid "Flip clock"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:36
+msgid "Circular"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:37
+msgid "Text (with labels)"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:127
+msgid "Show a live countdown in the bar."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:134
+msgid "Countdown to"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:141
+msgid "Each visitor gets their own window that continues across reloads."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:147
+msgid "Counts to the soonest time this bar’s schedule closes it — its End date or daily-window end (set in the Behavior tab)."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:152
+msgid "Counts to a fixed moment in the site timezone — the same for every visitor."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:165
+msgid "No schedule close time set. In the Behavior tab, enable Schedule and set an End date or a daily-window end."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:174
+msgid "End date & time"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:193
+msgid "Duration"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:195
+msgid "Window length per visitor (max 30 days)."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:228
+msgid "Restarts every visitor’s timer from the full duration on their next visit (applies after you publish)."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:241
+msgid "Reset visitors’ timers"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:263
+msgid "Show units"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:282
+msgid "Always show all selected units"
+msgstr ""
+
+#: src/customizer-app/components/fields/CountdownSubForm.jsx:289
+msgid "Off: hides leading units that are zero at load (e.g. “00 days”). On: always shows every selected unit."
+msgstr ""
+
+#: src/customizer-app/components/fields/CountryMultiSelect.jsx:73
+msgid "Select countries…"
+msgstr ""
+
+#: src/customizer-app/components/fields/CptMultiSelect.jsx:104
+msgid "Select post types…"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:18
+msgid "Visitor"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:23
+msgid "First name"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:25
+msgid "Last name"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:28
+msgid "Display name"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:30
+msgid "Role"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:31
+#: src/customizer-app/components/tabs/DisplayTabCountryBlock.jsx:47
+msgid "Country"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:35
+msgid "Date & time"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:37
+msgid "Date"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:38
+msgid "Time"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:39
+msgid "Weekday"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:40
+msgid "Month"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:41
+msgid "Year"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:45
+msgid "Site"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:47
+msgid "Site name"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:48
+msgid "Tagline"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:49
+msgid "Users count"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:50
+msgid "Posts count"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:54
+msgid "Current post"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:56
+msgid "Title"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:57
+msgid "Author"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:58
+msgid "Category"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:59
+msgid "Published date"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:63
+msgid "WooCommerce"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:68
+msgid "Recently viewed product"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:88
+msgid "Dynamic content tags"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:104
+msgid "Insert variable"
+msgstr ""
+
+#. translators: %s: token group name.
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:119
+msgid "%s (per visitor)"
+msgstr ""
+
+#: src/customizer-app/components/fields/DynamicTagPicker.jsx:146
+msgid "Insert a variable to show live values. Add a fallback with a pipe, e.g. {user_first_name|there}. Per-visitor variables should not be used on fully cached pages."
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:164
+msgid "Centered"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:165
+msgid "Text left"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:166
+msgid "Three zones"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:167
+msgid "Hero"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:168
+msgid "Split"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:169
+msgid "All left"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:170
+msgid "All right"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:186
+msgid "Layout"
+msgstr ""
+
+#: src/customizer-app/components/fields/LayoutPicker.jsx:191
+msgid "Content layout"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:18
+msgid "Single bar"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:19
+msgid "Rotation"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:20
+msgid "Show all bars"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:24
+msgid "Sequential (list order)"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:25
+msgid "Random"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:31
+msgid "Fixed (stays on scroll)"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:32
+msgid "Scroll away with page"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:52
+msgid "Bars rotate one at a time on a timer."
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:57
+msgid "All matching bars show at once, stacked vertically."
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:62
+msgid "Show one bar at a time, picked by order."
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:72
+msgid "Rotation mode & A/B testing"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:77
+msgid "Display mode"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:86
+msgid "Stack position"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:87
+msgid "Applies to the whole stack; individual bar position is ignored."
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:100
+msgid "Rotation interval (seconds)"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:122
+msgid "Show navigation arrows"
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:123
+msgid "Let visitors step between bars with prev/next arrows."
+msgstr ""
+
+#: src/customizer-app/components/GlobalSettingsPane.jsx:134
+msgid "Rotation order"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:23
+msgid "× Close button"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:24
+msgid "Collapse / expand arrow"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:25
+msgid "No dismissal control"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:32
+msgid "Show immediately"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:33
+msgid "Show on scroll (% of page)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:34
+msgid "Show after time (seconds)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:35
+msgid "Show after clicks on the page"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:41
+msgid "Scroll percentage (%)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:45
+msgid "Delay (seconds)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:46
+msgid "Number of clicks"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:51
+msgid "Sun"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:52
+msgid "Mon"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:53
+msgid "Tue"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:54
+msgid "Wed"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:55
+msgid "Thu"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:56
+msgid "Fri"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:57
+msgid "Sat"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:101
+msgid "Dismissal control"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:102
+msgid "Determines what control, if any, visitors can use to dismiss the bar."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:115
+msgid "Not applicable when dismissal disabled."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:119
+msgid "0 = never auto-reopen (cookie persists indefinitely)."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:142
+msgid "Schedule this bar"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:145
+msgid "Times use each visitor's local device clock. Best for time-of-day content; not recommended for flash sales (Start/End dates become a rolling window across timezones)."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:149
+msgid "Times use the WordPress site timezone (Settings → General)."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:162
+msgid "Use visitor's local time"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:166
+msgid "When on, the bar shows when the visitor's device clock is inside the schedule window. Absolute Start/End dates become a rolling window across timezones."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:178
+msgid "Starts on"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:179
+msgid "Leave empty to publish immediately."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:197
+msgid "Ends on"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:198
+msgid "Leave empty for no expiry."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:217
+msgid "Show on days"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:218
+msgid "Bar only renders on selected weekdays."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:242
+msgid "Limit to a daily window"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:243
+msgid "Show the bar only between these times each day. Wraps midnight if end < start (e.g. 22:00 – 02:00)."
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:256
+msgid "Start time"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:273
+msgid "End time"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:299
+msgid "Display trigger"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:303
+msgid "Trigger"
+msgstr ""
+
+#: src/customizer-app/components/tabs/BehaviorTab.jsx:304
+msgid "Show the bar after a visitor action, once display conditions are met."
+msgstr ""
+
+#: src/customizer-app/components/tabs/ContentTab.jsx:41
+msgid "Bar name"
+msgstr ""
+
+#: src/customizer-app/components/tabs/ContentTab.jsx:44
+msgid "Internal label — not shown to visitors."
+msgstr ""
+
+#: src/customizer-app/components/tabs/ContentTab.jsx:53
 msgid "Text"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:274
-#: includes/NotificationBar/WpCustomNotification.php:368
-msgid "On/Off Button"
+#: src/customizer-app/components/tabs/ContentTab.jsx:56
+#: src/customizer-app/components/tabs/ContentTab.jsx:127
+msgid "HTML and shortcodes accepted."
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:288
-#: includes/NotificationBar/WpCustomNotification.php:382
-msgid "Button Text"
+#: src/customizer-app/components/tabs/ContentTab.jsx:66
+msgid "Text is empty — bar will render empty."
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:302
-#: includes/NotificationBar/WpCustomNotification.php:396
-msgid "Button URL"
+#: src/customizer-app/components/tabs/ContentTab.jsx:83
+msgid "Desktop button"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:316
-#: includes/NotificationBar/WpCustomNotification.php:410
-msgid "Open in new window"
+#: src/customizer-app/components/tabs/ContentTab.jsx:84
+msgid "Show button"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:331
-msgid "You want different content for mobile?"
+#: src/customizer-app/components/tabs/ContentTab.jsx:102
+#: src/customizer-app/components/tabs/ContentTab.jsx:105
+#: src/customizer-app/components/tabs/DisplayTab.jsx:92
+msgid "Mobile"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:418
-msgid "Style Options"
+#: src/customizer-app/components/tabs/ContentTab.jsx:112
+msgid "Different content on mobile"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:433
-msgid "Preset Color"
+#: src/customizer-app/components/tabs/ContentTab.jsx:115
+msgid "When on, mobile visitors see separate text and button."
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:451
-msgid "Background Color"
+#: src/customizer-app/components/tabs/ContentTab.jsx:124
+msgid "Mobile text"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:469
-msgid "Text Color"
+#: src/customizer-app/components/tabs/ContentTab.jsx:142
+msgid "Mobile button"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:485
-msgid "Button Color"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:23
+msgid "Show on all pages"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:501
-msgid "Button Text Color"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:27
+msgid "Hide on all pages"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:515
-msgid "Font Size (px)"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:31
+msgid "Show only on selected pages"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:523
-msgid "Display Options"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:35
+msgid "Hide only on selected pages"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:536
-msgid "Select devices want to display"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:42
+msgid "Show on all posts"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:541
-msgid "All devices"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:46
+msgid "Hide on all posts"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:542
-msgid "Only desktop"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:50
+msgid "Show only on selected posts"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:543
-msgid "Only mobile"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:54
+msgid "Hide only on selected posts"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:555
-msgid "Homepage"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:84
+msgid "Show on devices"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:569
-msgid "Pages"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:87
+msgid "Desktop"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:583
-msgid "Posts"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:100
+msgid "Page logic"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:599
-msgid "By Pages/Posts ID"
+#: src/customizer-app/components/tabs/DisplayTab.jsx:116
+msgid "Post logic"
 msgstr ""
 
-#: includes/NotificationBar/WpCustomNotification.php:603
-msgid "Enter the Pages or Posts ID, Ex: 1,2"
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:19
+msgid "Everyone"
 msgstr ""
 
-#: includes/cross.php:125
-msgid "Recommend"
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:20
+msgid "Logged-in users"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "Notibar - WordPress Notification Bar"
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:21
+msgid "Logged-out visitors"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://ninjateam.org/notibar-wordpress-notification-bar"
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:22
+msgid "Specific roles"
 msgstr ""
 
-#. Description of the plugin/theme
-msgid ""
-"Custom notification bar for alert, promo code, marketing campaign, top "
-"banner"
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:23
+msgid "Specific users"
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "Ninja Team"
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:54
+#: src/shared/charts/chart-filters.jsx:110
+#: src/shared/charts/chart-filters.jsx:113
+msgid "Audience"
 msgstr ""
 
-#. Author URI of the plugin/theme
-msgid "https://ninjateam.org"
+#: src/customizer-app/components/tabs/DisplayTabAudienceBlock.jsx:68
+msgid "Show this bar to"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCountryBlock.jsx:20
+msgid "All countries"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCountryBlock.jsx:23
+msgid "Show only in selected countries"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCountryBlock.jsx:25
+msgid "Hide in selected countries"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCountryBlock.jsx:52
+msgid "Conditional display by country"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCountryBlock.jsx:61
+msgid "Show this bar in"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:25
+msgid "Show on all post types"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:29
+msgid "Hide on all post types"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:33
+msgid "Show on selected post types"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:37
+msgid "Hide on selected post types"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:60
+msgid "Other post types"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:65
+msgid "Targeting by custom post type (incl. WooCommerce products)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:77
+msgid "CPT logic"
+msgstr ""
+
+#: src/customizer-app/components/tabs/DisplayTabCptBlock.jsx:92
+msgid "Note: when Product is selected here, this rule overrides the page-logic \"Single Product page\" token for single product pages."
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:20
+msgid "Fixed"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:21
+msgid "Absolute"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:25
+msgid "Top"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:26
+msgid "Bottom"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:83
+msgid "Background colour"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:90
+msgid "Text colour"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:99
+msgid "bar bg vs text"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:105
+msgid "Button background"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:112
+msgid "Button text colour"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:121
+msgid "button bg vs button text"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:126
+msgid "Opacity (%)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:136
+msgid "Font size (px)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:152
+msgid "Content width (px)"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:163
+msgid "Position"
+msgstr ""
+
+#: src/customizer-app/components/tabs/StyleTab.jsx:188
+msgid "Placement"
+msgstr ""
+
+#: src/settings-app/App.jsx:13
+msgid "Tracking"
+msgstr ""
+
+#: src/settings-app/App.jsx:14
+msgid "Export / Import"
+msgstr ""
+
+#: src/settings-app/App.jsx:32
+msgid "Notibar Settings"
+msgstr ""
+
+#: src/settings-app/App.jsx:37
+msgid "Settings tabs"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:32
+msgid "Global settings"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:34
+msgid "Tracking counters"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:108
+msgid "Export failed. Check the browser console."
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:127
+msgid "File exceeds 10 MB. Refusing to load."
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:153
+msgid "File is not a valid Notibar export."
+msgstr ""
+
+#. translators: %1$d bars imported, %2$s global yes/no
+#: src/settings-app/tabs/ExportImportTab.jsx:192
+msgid "Imported %1$d bar(s), global=%2$s. Reload to see changes."
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:205
+msgid "Import failed."
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:226
+msgid "Export"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:228
+msgid "Pick which sections to include, then download the JSON file."
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:249
+msgid "Download"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:257
+msgid "Tip: download a full backup before importing."
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:274
+msgid "Download backup"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:280
+msgid "Import"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:282
+msgid "Imports REPLACE the current data for any selected section. This cannot be undone."
+msgstr ""
+
+#. translators: %s: ISO timestamp from the export file
+#: src/settings-app/tabs/ExportImportTab.jsx:297
+msgid "Exported at: %s"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:325
+msgid "Replace selected sections"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:333
+msgid "Confirm import"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:337
+msgid "The selected sections will be REPLACED. Continue?"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:347
+msgid "Cancel"
+msgstr ""
+
+#: src/settings-app/tabs/ExportImportTab.jsx:355
+msgid "Yes, replace"
+msgstr ""
+
+#: src/settings-app/tabs/TrackingTab.jsx:31
+msgid "Loading charts…"
+msgstr ""
+
+#: src/settings-app/tabs/TrackingTab.jsx:50
+msgid "Per-bar totals"
+msgstr ""
+
+#: src/settings-app/tabs/TrackingTab.jsx:53
+msgid "All time"
+msgstr ""
+
+#: src/settings-app/tabs/TrackingTab.jsx:57
+msgid "Lifetime totals across all bars, independent of the filters above."
+msgstr ""
+
+#: src/settings-app/tabs/TrackingTab.jsx:78
+msgid "Advanced reports — per-bar click & dismiss tracking"
+msgstr ""
+
+#: src/settings-app/tabs/TrackingTab.jsx:84
+msgid "Preview with sample data — upgrade to Pro to track your own bars."
+msgstr ""
+
+#: src/shared/charts/bar-comparison-chart.jsx:46
+#: src/shared/charts/chart-filters.jsx:60
+#: src/shared/TrackingPane.jsx:135
+msgid "(Untitled)"
+msgstr ""
+
+#: src/shared/charts/bar-comparison-chart.jsx:57
+#: src/shared/charts/chart-filters.jsx:41
+#: src/shared/charts/event-breakdown-chart.jsx:19
+#: src/shared/charts/trend-chart.jsx:11
+msgid "Clicks"
+msgstr ""
+
+#: src/shared/charts/bar-comparison-chart.jsx:62
+#: src/shared/charts/chart-filters.jsx:43
+#: src/shared/charts/event-breakdown-chart.jsx:20
+#: src/shared/charts/trend-chart.jsx:12
+#: src/shared/TrackingPane.jsx:118
+msgid "Dismissals"
+msgstr ""
+
+#: src/shared/charts/bar-comparison-chart.jsx:67
+#: src/shared/charts/chart-filters.jsx:45
+#: src/shared/charts/event-breakdown-chart.jsx:21
+#: src/shared/charts/trend-chart.jsx:13
+#: src/shared/TrackingPane.jsx:112
+msgid "Engagements"
+msgstr ""
+
+#: src/shared/charts/bar-comparison-chart.jsx:79
+msgid "Per-bar event comparison chart"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:19
+msgid "Today vs Yesterday"
+msgstr ""
+
+#. translators: %d: number of days.
+#: src/shared/charts/chart-filters.jsx:22
+msgid "%d days"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:30
+msgid "Guests"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:32
+msgid "Logged-in"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:34
+msgid "All visitors"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:55
+msgid "All bars"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:80
+msgid "Date range"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:83
+msgid "Range"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:99
+#: src/shared/TrackingPane.jsx:110
+msgid "Bar"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:130
+msgid "Event types"
+msgstr ""
+
+#: src/shared/charts/chart-filters.jsx:133
+msgid "Events"
+msgstr ""
+
+#: src/shared/charts/event-breakdown-chart.jsx:46
+msgid "Event type breakdown chart"
+msgstr ""
+
+#: src/shared/charts/tracking-charts.jsx:78
+msgid "No events match these filters."
+msgstr ""
+
+#: src/shared/charts/tracking-charts.jsx:202
+msgid "Chart data unavailable."
+msgstr ""
+
+#: src/shared/charts/tracking-charts.jsx:205
+msgid "Trend over time"
+msgstr ""
+
+#: src/shared/charts/tracking-charts.jsx:215
+msgid "Event breakdown"
+msgstr ""
+
+#: src/shared/charts/tracking-charts.jsx:226
+msgid "Per-bar comparison"
+msgstr ""
+
+#: src/shared/charts/tracking-charts.jsx:227
+msgid "All bars, for the selected range and audience."
+msgstr ""
+
+#: src/shared/charts/tracking-charts.jsx:235
+#: src/shared/TrackingPane.jsx:90
+msgid "Stats unavailable."
+msgstr ""
+
+#: src/shared/charts/trend-chart.jsx:74
+msgid "Daily event trend chart"
+msgstr ""
+
+#: src/shared/pro-ui.jsx:46
+msgid "PRO"
+msgstr ""
+
+#: src/shared/pro-ui.jsx:67
+msgid "Upgrade to Pro →"
+msgstr ""
+
+#: src/shared/TrackingPane.jsx:78
+msgid "Loading stats…"
+msgstr ""
+
+#: src/shared/TrackingPane.jsx:98
+msgid "No notification bars configured yet."
+msgstr ""
+
+#: src/shared/TrackingPane.jsx:115
+msgid "Button Clicks"
+msgstr ""
+
+#: src/shared/TrackingPane.jsx:121
+msgid "Total"
+msgstr ""
+
+#: src/shared/TrackingPane.jsx:158
+msgid "Engagements = clicks or text copies inside the bar that are NOT on the CTA button or the close button (background clicks, text clicks, embedded link clicks, copying coupon codes, etc.)."
+msgstr ""
+
+#: src/shared/TrackingPane.jsx:164
+msgid "Counts since plugin activation; reload to refresh."
 msgstr ""
