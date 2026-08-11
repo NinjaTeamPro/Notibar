@@ -9,6 +9,7 @@
     "src/shared/stack.js",
     "src/shared/triggers.js",
     "src/shared/countdown.js",
+    "src/shared/marquee.js",
     "includes/NotificationBar/EventCounter.php",
     "includes/NotificationBar/TrackingRestController.php",
     "includes/NotificationBar/VisitorCountry.php",

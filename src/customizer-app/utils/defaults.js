@@ -54,6 +54,22 @@ export const DEFAULT_BAR = {
 		// Overall bar opacity, percent (10–100). Fades the whole bar (bg + text +
 		// button) via CSS opacity on the un-animated container. MIRROR: Schema.php.
 		opacity: 100,
+		// Marquee content scroll (Pro). speed is px/sec (10–300), converted to an
+		// animation duration by marquee.js from the measured track width.
+		// MIRROR: Schema.php defaultBar().style.marquee.
+		// scope: 'row' scrolls the whole content row; 'text' scrolls only the
+		// text within its own container, leaving countdown + CTA static.
+		// mode: 'loop' slides in from off-screen and straight through;
+		// 'rest-then-scroll' starts at rest showing whatever fits, holds for
+		// `delay` seconds, then scrolls off and re-enters back to rest.
+		marquee: {
+			enabled: false,
+			scope: 'row',
+			mode: 'loop',
+			delay: 3,
+			speed: 60,
+			direction: 'left',
+		},
 		// Snapshot of the last-applied colour preset, or null. Drives the
 		// "reset to preset" behaviour of the per-colour Reset buttons.
 		// Shape: { bg, text, btnBg, btnText, name? }. Mirrors Schema.php.
@@ -135,6 +151,9 @@ export const DEFAULT_GLOBAL = {
 	rotationOrder: 'sequential',
 	rotationShowArrows: true,
 	stackPositionType: 'fixed',
+	// Close-all (Pro): closing any bar dismisses every other dismissible bar on
+	// the page. MIRROR: Schema.php defaultGlobal().closeAllOnDismiss.
+	closeAllOnDismiss: false,
 };
 
 // ------------------------------------------------------------------

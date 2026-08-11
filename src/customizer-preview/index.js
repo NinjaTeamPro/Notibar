@@ -22,6 +22,7 @@ import { filterBars } from '../shared/filter-bars.js';
 import { startRotation } from '../shared/rotation.js';
 import { buildStacksHTML } from '../shared/stack.js';
 import { startCountdowns } from '../shared/countdown.js';
+import { startMarquees } from '../shared/marquee.js';
 // Second filter-bars import, kept inside the Pro-only block so it strips in Lite.
 // eslint-disable-next-line no-duplicate-imports
 import { nextScheduleClose } from '../shared/filter-bars.js';
@@ -473,6 +474,10 @@ function init() {
 	// Countdown timers (Pro) — tick live in the preview; the single interval
 	// re-hydrates elements on every debounced re-render.
 	startCountdowns( slot );
+
+	// Marquee scroll (Pro) — the observer re-measures on every debounced
+	// re-render, so speed/direction changes show up live in the preview.
+	startMarquees( slot );
 	/* @endpro */
 
 	// Theme-compat (header offsets etc.) — called ONCE, after the initial

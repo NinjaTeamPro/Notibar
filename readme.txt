@@ -5,7 +5,7 @@ Tags: notification bar, banner, top bar, announcement, notifications
 Requires at least: 4.0
 Requires PHP: 5.3.1
 Tested up to: 7.0
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -123,6 +123,10 @@ Upon activation, you will see a new **Notification Bar** menu. Simply click to c
 
 
 == Upgrade Notice ==
+
+= Aug 10, 2026 - Version 3.2.2 =
+- Added: Ability to show scrolling content continuously (Pro)
+- Added: Ability to closing one bar closes them all (Pro)
 
 = Jun 26, 2026 - Version 3.2.0 =
 - Added: Countdown timers for bars (Pro) — count down to a fixed date, an evergreen per-visitor duration, or to the moment the bar's schedule closes; choose between boxes, flip, circular, and text styles, with auto-hiding empty units and localized labels

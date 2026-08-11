@@ -31,6 +31,15 @@ const ALLOWED_LAYOUTS = [
 	'content-right',
 ];
 
+/* @pro */
+// Marquee scroll direction and scope. Only referenced from the Pro-gated block
+// in renderBarHTML, so they are gated too — otherwise Lite ships unused consts.
+// MIRROR: Schema::ALLOWED_MARQUEE_DIR / ALLOWED_MARQUEE_SCOPE.
+const ALLOWED_MQ_DIR = [ 'left', 'right' ];
+const ALLOWED_MQ_SCOPE = [ 'row', 'text' ];
+const ALLOWED_MQ_MODE = [ 'loop', 'rest-then-scroll' ];
+/* @endpro */
+
 // ------------------------------------------------------------------
 // Internal helpers
 // ------------------------------------------------------------------
@@ -306,6 +315,43 @@ function renderCountdown( countdown, i18n ) {
 		`</div>`
 	);
 }
+
+/**
+ * Wrap markup in a marquee viewport + track (Pro).
+ *
+ * Single-pass scroll: ONE copy of the content travels from just off the
+ * viewport's trailing edge to just off its leading edge, then restarts. The
+ * bar is intentionally empty between passes — that is the requested behaviour,
+ * not a gap to be closed by duplicating content.
+ *
+ * Scope-agnostic by design: the caller decides what gets wrapped. In 'row'
+ * scope that is a whole .njt-nofi-content block; in 'text' scope it is just
+ * the .njt-nofi-text div, so the countdown and CTA stay outside the track and
+ * never move. The scope only reaches CSS, via the modifier class.
+ *
+ * Because nothing is cloned, the aria-live region announces the content once
+ * and there are no phantom tab stops, so no aria-hidden/inert bookkeeping is
+ * needed here.
+ *
+ * @param {string} innerHTML Markup to scroll — a content block or a text div.
+ * @param {Object} mqState   { dir, speed, scope } — already validated.
+ * @param {string} variant   'desktop' | 'mobile'.
+ *
+ * @return {string} HTML string.
+ */
+function wrapMarquee( innerHTML, mqState, variant ) {
+	return (
+		`<div class="njt-nofi-marquee njt-nofi-marquee--${ mqState.scope } ` +
+		`njt-nofi-marquee--${ variant }" ` +
+		`data-mq-dir="${ escapeAttr( mqState.dir ) }" ` +
+		`data-mq-mode="${ escapeAttr( mqState.mode ) }" ` +
+		`data-mq-delay="${ escapeAttr( mqState.delay ) }" ` +
+		`data-mq-speed="${ escapeAttr( mqState.speed ) }">` +
+		`<div class="njt-nofi-marquee-track">` +
+		innerHTML +
+		`</div></div>`
+	);
+}
 /* @endpro */
 
 // ------------------------------------------------------------------
@@ -369,13 +415,70 @@ export function renderBarHTML( bar, global ) {
 	countdownHTML = renderCountdown( bar.countdown, global && global.i18n );
 	/* @endpro */
 
+	// Marquee content scroll (Pro). Declared off so the Lite build — which
+	// strips the assignment below — never wraps the content row.
+	let mq = null;
+	/* @pro */
+	const mqCfg = style.marquee || {};
+	mq = mqCfg.enabled
+		? {
+				dir: ALLOWED_MQ_DIR.includes( mqCfg.direction )
+					? mqCfg.direction
+					: 'left',
+				scope: ALLOWED_MQ_SCOPE.includes( mqCfg.scope )
+					? mqCfg.scope
+					: 'row',
+				mode: ALLOWED_MQ_MODE.includes( mqCfg.mode )
+					? mqCfg.mode
+					: 'loop',
+				// Seconds held at rest before scrolling. Only read by the shim
+				// in rest-then-scroll mode; emitted regardless so switching
+				// mode in the customizer needs no re-render of the attribute.
+				delay: Math.min(
+					10,
+					Math.max( 0, Number( mqCfg.delay ) || 0 )
+				),
+				speed: Math.min(
+					300,
+					Math.max( 10, Number( mqCfg.speed ) || 60 )
+				),
+		  }
+		: null;
+	/* @endpro */
+
+	// In 'row' scope the track is wider than the bar by definition, so the
+	// contentWidth cap is meaningless — and being inline it would otherwise beat
+	// the stylesheet. Drop the clause rather than fight it with !important.
+	// In 'text' scope the row keeps its normal width, so the cap still applies.
+	const desktopInline =
+		mq && mq.scope === 'row'
+			? `font-size:${ fontSize }px;`
+			: `max-width:${ contentWidth }px;font-size:${ fontSize }px;`;
+
+	// Text zones. In 'text' scope each is wrapped in its own marquee before the
+	// block is assembled, so the countdown and CTA stay outside the track as
+	// ordinary static siblings. Declared unwrapped so the Lite build — which
+	// strips the wrapping below — emits the plain divs.
+	let desktopText = `<div class="njt-nofi-text">${
+		content.text || ''
+	}</div>`;
+	let mobileText = `<div class="njt-nofi-text">${
+		content.textMobile || ''
+	}</div>`;
+	/* @pro */
+	if ( mq && mq.scope === 'text' ) {
+		desktopText = wrapMarquee( desktopText, mq, 'desktop' );
+		mobileText = wrapMarquee( mobileText, mq, 'mobile' );
+	}
+	/* @endpro */
+
 	// Desktop content block — always emitted. Arrangement comes from CSS keyed
 	// on data-layout; only max-width and font-size stay inline.
 	const desktopBlock =
 		`<div class="njt-nofi-content njt-nofi-content-desktop" ` +
 		`data-layout="${ escapeAttr( layout ) }" ` +
-		`style="max-width:${ contentWidth }px;font-size:${ fontSize }px;">` +
-		`<div class="njt-nofi-text">${ content.text || '' }</div>` +
+		`style="${ desktopInline }">` +
+		desktopText +
 		countdownHTML +
 		renderButton( content.button, style, 'desktop' ) +
 		`</div>`;
@@ -389,7 +492,7 @@ export function renderBarHTML( bar, global ) {
 		? `<div class="njt-nofi-content njt-nofi-content-mobile" ` +
 		  `data-layout="${ escapeAttr( layout ) }" ` +
 		  `style="font-size:${ fontSize }px;">` +
-		  `<div class="njt-nofi-text">${ content.textMobile || '' }</div>` +
+		  mobileText +
 		  countdownHTML +
 		  renderButton(
 				content.buttonMobile || content.button,
@@ -398,6 +501,18 @@ export function renderBarHTML( bar, global ) {
 		  ) +
 		  `</div>`
 		: '';
+
+	// Row-scope wrapping happens last so the blocks above stay untouched when
+	// the feature is off — the Lite build strips this and emits them as-is.
+	// Text scope was already handled above, at the text-zone level.
+	let desktopOut = desktopBlock;
+	let mobileOut = mobileBlock;
+	/* @pro */
+	if ( mq && mq.scope === 'row' ) {
+		desktopOut = wrapMarquee( desktopBlock, mq, 'desktop' );
+		mobileOut = mobileBlock ? wrapMarquee( mobileBlock, mq, 'mobile' ) : '';
+	}
+	/* @endpro */
 
 	const closeControl = renderCloseControl(
 		behavior.hideCloseButton || 'close'
@@ -416,8 +531,8 @@ export function renderBarHTML( bar, global ) {
 		`<div class="njt-nofi-container" data-position="${ positionType }" data-placement="${ placement }"${ containerOpacityAttr }>` +
 		`<div class="${ barClass }" ` +
 		`style="--njt-bar-bg:${ bgColor };--njt-bar-color:${ textColor };">` +
-		desktopBlock +
-		mobileBlock +
+		desktopOut +
+		mobileOut +
 		closeControl +
 		`</div>` +
 		`</div>` +

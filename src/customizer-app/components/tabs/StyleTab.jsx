@@ -2,9 +2,10 @@
  * StyleTab — Style tab inside BarEditor.
  *
  * Fields: color presets, 4 × ColorFieldWithReset, font size, layout,
- * content width, position type. Two ContrastWarning blocks (required).
- * Each ContrastWarning is placed directly below its colour pair so the
- * warning is contextually adjacent to the controls that produced it.
+ * content width, position type, placement, content scroll. Two
+ * ContrastWarning blocks (required). Each ContrastWarning is placed directly
+ * below its colour pair so the warning is contextually adjacent to the
+ * controls that produced it.
  */
 import { RangeControl, ButtonGroup, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -14,6 +15,7 @@ import { ColorPresetSwatches } from '../fields/ColorPresetSwatches';
 import { ColorFieldWithReset } from '../fields/ColorFieldWithReset';
 import { ContrastWarning } from '../fields/ContrastWarning';
 import { LayoutPicker } from '../fields/LayoutPicker';
+import { MarqueeSubForm } from '../fields/MarqueeSubForm';
 import { isProEdition, ProUpgradeNotice } from '../../../shared/pro-ui';
 
 const POSITION_OPTIONS = [
@@ -37,6 +39,9 @@ export function StyleTab( { bar, onChange } ) {
 	const pro = isProEdition();
 	const placement = style.placement || 'top';
 	const activePreset = style.activePreset || null;
+	// Defaulted defensively: a bar saved before the marquee field existed has
+	// no `marquee` key until it next passes through the sanitizer.
+	const marquee = style.marquee || DEFAULT_BAR.style.marquee;
 
 	// Per-colour Reset targets: when a preset is active, Reset restores that
 	// preset's colours; otherwise it falls back to the global defaults.
@@ -213,6 +218,12 @@ export function StyleTab( { bar, onChange } ) {
 					</ButtonGroup>
 				</div>
 			</div>
+
+			{ /* Content scroll (Pro) — loops the whole content row. */ }
+			<MarqueeSubForm
+				value={ marquee }
+				onChange={ ( updated ) => set( 'style.marquee', updated ) }
+			/>
 		</div>
 	);
 }

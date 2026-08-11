@@ -18,6 +18,7 @@ import { startRotation } from '../shared/rotation';
 import { buildStacksHTML } from '../shared/stack';
 import { attachTrigger } from '../shared/triggers';
 import { startCountdowns } from '../shared/countdown';
+import { startMarquees } from '../shared/marquee';
 // Second filter-bars import, kept inside the Pro-only block so it strips in Lite.
 // eslint-disable-next-line no-duplicate-imports
 import { nextScheduleClose } from '../shared/filter-bars';
@@ -249,6 +250,8 @@ function init() {
 	// -----------------------------------------------------------------------
 	// reopenDaysOverride: when the dismissal came from a "close" CTA button, its
 	// own reopen-after-days wins over behavior.reopenAfterDays (the × control's).
+	// With closeAllOnDismiss on (Pro), one click also sweeps every other bar that
+	// is itself dismissible — see the `dropped` set below.
 	function handleDismiss( barId, reopenDaysOverride ) {
 		const bar = survivors.find(
 			( b ) => String( b.id ) === String( barId )
@@ -262,19 +265,47 @@ function init() {
 			dismiss( barId, hasOverride ? reopenDaysOverride : behaviorDays );
 		}
 
+		// Ids leaving the page in this dismissal event. Always the clicked bar;
+		// close-all adds every other live bar that is itself dismissible.
+		// Declared outside the Pro-only region below so the Lite strip leaves a
+		// single-id set — i.e. exactly the pre-close-all filter behaviour.
+		const dropped = new Set( [ String( barId ) ] );
+
+		/* @pro */
+		if ( globalConfig.closeAllOnDismiss ) {
+			survivors.forEach( function ( b ) {
+				if ( dropped.has( String( b.id ) ) ) {
+					return;
+				}
+				// 'toggle' (collapse-only) and 'disable' (no × at all) were
+				// configured as non-dismissible — another bar's × must not
+				// override that.
+				if ( ! b.behavior || b.behavior.hideCloseButton !== 'close' ) {
+					return;
+				}
+				// Each bar keeps its OWN reopenAfterDays; reopenDaysOverride
+				// (from a "close" CTA) applies only to the clicked bar.
+				dismiss( b.id, b.behavior.reopenAfterDays );
+				dropped.add( String( b.id ) );
+			} );
+		}
+		/* @endpro */
+
 		survivors = survivors.filter(
-			( b ) => String( b.id ) !== String( barId )
+			( b ) => ! dropped.has( String( b.id ) )
 		);
 
 		/* @pro */
-		// Drop from the live pool and cancel any still-pending trigger so a bar
-		// dismissed before it fires never appears later.
-		live = live.filter( ( b ) => String( b.id ) !== String( barId ) );
-		const handle = triggerHandles.get( String( barId ) );
-		if ( handle ) {
-			handle.cancel();
-			triggerHandles.delete( String( barId ) );
-		}
+		// Drop from the live pool and cancel any still-pending triggers so a bar
+		// dismissed before its trigger fires never appears later.
+		live = live.filter( ( b ) => ! dropped.has( String( b.id ) ) );
+		dropped.forEach( function ( id ) {
+			const handle = triggerHandles.get( id );
+			if ( handle ) {
+				handle.cancel();
+				triggerHandles.delete( id );
+			}
+		} );
 		/* @endpro */
 
 		if ( ! survivors.length ) {
@@ -477,6 +508,11 @@ function init() {
 	// Countdown timers (Pro) — one ticker scans the slot each second; survives
 	// rotation/dismiss/collapse re-renders and hydrates any later-injected bars.
 	startCountdowns( slot );
+
+	// Marquee scroll (Pro) — converts the px/sec setting into an animation
+	// duration from the measured item width, and re-measures marquees injected
+	// by later renders. CSS animates without it; only the speed would be off.
+	startMarquees( slot );
 	/* @endpro */
 
 	// Theme-compat patches.

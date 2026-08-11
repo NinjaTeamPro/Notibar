@@ -1,10 +1,11 @@
 /**
- * GlobalSettingsPane — display mode + rotation controls.
+ * GlobalSettingsPane — display mode, rotation, and close-all controls.
  *
  * Pro feature. In Lite (isProEdition() === false) the whole pane is shown but
  * locked with a Pro badge; displayMode stays 'single' (the engine is stripped).
  * The rotation interval/order controls are shown as a locked teaser in Lite and
- * only when displayMode === 'rotation' in Pro.
+ * only when displayMode === 'rotation' in Pro. The close-all toggle applies to
+ * every display mode, so it renders unconditionally inside the locked wrapper.
  */
 import { __ } from '@wordpress/i18n';
 import {
@@ -79,6 +80,17 @@ export function GlobalSettingsPane( { value, onChange } ) {
 					selected={ value.displayMode ?? 'single' }
 					options={ DISPLAY_MODE_OPTIONS }
 					onChange={ ( val ) => set( 'displayMode', val ) }
+					className='components-base-control'
+				/>
+
+				<ToggleControl
+					label={ __( 'Closing one bar closes them all', 'notibar' ) }
+					help={ __(
+						'When a visitor closes any bar, every other bar on the page closes too. Bars set to Collapse or No close button are not affected.',
+						'notibar'
+					) }
+					checked={ value.closeAllOnDismiss ?? false }
+					onChange={ ( val ) => set( 'closeAllOnDismiss', val ) }
 				/>
 
 				{ isStack && (
