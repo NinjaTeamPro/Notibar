@@ -102,6 +102,25 @@ if ( file_exists( __DIR__ . '/recommended-modules/loader.php' ) ) {
 	require_once __DIR__ . '/recommended-modules/loader.php';
 }
 
+// Register this plugin as the ads-toggle "consumer" for every ad module it bundles above (see
+// modules.json), so the single toggle rendered on the Settings page (AssetLoader::enqueue_ads_toggle())
+// controls all of them together. Must run after the loader.php require above (Registry class must
+// already exist), and before plugins_loaded:0 (Registry::load_winners()) so the registration isn't
+// dropped as "late". 'notibar' (this plugin's own slug, matching its text domain) is reused as the
+// consumer_slug everywhere else this toggle is wired up (AssetLoader.php).
+if ( class_exists( '\YayRecommendedModules\Registry' ) ) {
+	foreach (
+		[
+			'filebird-dashboard-widget',
+			'filebird-plugins-page-notification',
+			'filebird-sidebar-popup',
+		] as $njt_nofi_ad_slug
+	) {
+		\YayRecommendedModules\Registry::register_ads_consumer( 'notibar', $njt_nofi_ad_slug );
+	}
+	unset( $njt_nofi_ad_slug );
+}
+
 $GLOBALS['yay_reviews_plugins'][] = [
 	'slug' => 'notibar',
 	'name' => 'Notibar - WordPress Notification Bar',

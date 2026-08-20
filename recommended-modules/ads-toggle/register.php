@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) || exit;
 
 // Bump version on every init.php behavior change. Newest wins across consumers.
 \YayRecommendedModules\Registry::register(
-	'edd-license-manager',
-	'1.12.1',
-	__DIR__ . '/init.php'
+    'ads-toggle',
+    '1.0.0',
+    __DIR__ . '/init.php'
 );

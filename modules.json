@@ -8,7 +8,8 @@
     "filebird-plugins-page-notification",
     "filebird-sidebar-popup",
     "review",
-    "edd-license-manager"
+    "edd-license-manager",
+    "ads-toggle"
   ],
   "exclude_globs": [
     ".github",

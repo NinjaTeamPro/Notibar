@@ -59,7 +59,13 @@ if ( ! class_exists( 'NjtEddLicenseGuard' ) ) {
 					continue; // valid|expired → allowed.
 				}
 
-				$url = menu_page_url( $license_slug, false );
+				// menu_page_url() runs its return value through esc_url(), which turns the
+				// argument separator into &#038; — harmless in HTML, fatal here: PHP would
+				// parse the query as `#038;page`, the License page would never be detected,
+				// and the gated page would redirect to itself forever. Decode before
+				// redirecting. Only bites plugins whose parent_slug already has a query
+				// string (e.g. edit.php?post_type=…).
+				$url = html_entity_decode( (string) menu_page_url( $license_slug, false ), ENT_QUOTES );
 				if ( $url ) {
 					wp_safe_redirect( $url );
 					exit;
