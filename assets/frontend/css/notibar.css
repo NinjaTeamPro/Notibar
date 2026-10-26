@@ -691,9 +691,9 @@
 /* ==========================================================================
    Close / Toggle buttons — flex children at the right edge
    ----------------------------------------------------------------------------
-   24x24 circle, semi-opaque dark bg, sits on the right via flex (the
-   centred .njt-nofi-content uses margin:auto so the close gets pushed right
-   without needing absolute positioning).
+   24x24 circle, semi-opaque dark bg, pinned to the right edge and vertically
+   centred via absolute positioning. When toggle mode collapses the bar (0px
+   tall), the toggle turns into a tab hanging off the bar edge — see below.
    ========================================================================== */
 
 .njt-nofi-close,
@@ -710,7 +710,7 @@
   cursor: pointer;
   color: inherit;
   padding: 0;
-  transition: transform 0.5s, background 0.2s ease;
+  transition: transform 0.2s, background 0.2s ease;
   position: absolute;
   right: 10px;
   top: 50%;
@@ -734,16 +734,57 @@
   pointer-events: none;
   width: 8px;
   height: 8px;
+  transition: transform 0.3s;
 }
 
-/* When the bar is collapsed via toggle mode, rotate the arrow 45° to hint
-   the inverse "expand" action (matches v2 .njt-nofi-display-toggle icon). */
+/* Collapsed (toggle mode): the bar is 0px tall, so the toggle becomes a tab in
+   the bar's colours hanging just below the bar edge. The 45° turn (× → +, the
+   inverse "expand" hint) lives on the icon, not the button, so it never
+   replaces the button's own transform — no positional jump. margin-right:0
+   drops the nav-arrow gutter; the arrows are 0px tall and invisible here. */
 .njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-toggle {
-  transform: rotate( 45deg );
+  top: 100%;
+  transform: none;
+  width: 32px;
+  height: 24px;
+  margin-right: 0;
+  border-radius: 0 0 6px 6px;
+  background: var( --njt-bar-bg, #9af4cf );
+  color: var( --njt-bar-color, #1919cf );
+  box-shadow: 0 2px 6px rgba( 0, 0, 0, 0.15 );
+}
+
+/* In stack mode the tab overlaps the next bar, which paints later. Each bar is
+   its own stacking context (the slide-in leaves a transform on it), so the
+   collapsed BAR is lifted above its siblings — a z-index on the tab alone
+   would stay trapped inside it. */
+.njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-notification-bar {
+  z-index: 1;
+}
+
+/* Stack mode: shift the tab left of the neighbouring bar's own close/toggle
+   button, which sits in the same right-hand column. */
+.njt-nofi-stack .njt-nofi-collapsed .njt-nofi-toggle {
+  right: 44px;
 }
 
 .njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-toggle:hover {
-  transform: rotate( 45deg ) scale( 1.1 );
+  transform: none;
+  filter: brightness( 0.95 );
+}
+
+.njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-close-icon {
+  transform: rotate( 45deg );
+}
+
+/* Bottom placement — the tab hangs above the bar edge instead. */
+.njt-nofi-container-content.njt-nofi-collapsed
+  .njt-nofi-container[data-placement='bottom']
+  .njt-nofi-toggle {
+  top: auto;
+  bottom: 100%;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 -2px 6px rgba( 0, 0, 0, 0.15 );
 }
 
 /* ==========================================================================
@@ -1006,6 +1047,7 @@
 @media (prefers-reduced-motion: reduce) {
   .njt-nofi-close,
   .njt-nofi-toggle,
+  .njt-nofi-close-icon,
   .njt-nofi-button-text,
   .njt-nofi-nav {
     transition: none !important;
