@@ -95,11 +95,39 @@ export function applyThemeCompat( themeSlug, slot ) {
 	) {
 		return;
 	}
+	// Collapse/expand (toggle mode) only flips a class, so neither the slot
+	// MutationObserver nor resize/scroll fire — watch the positioned element's
+	// size instead. Also covers a collapsed bar inside a stack (the wrapper
+	// resizes) and responsive reflow.
+	let sizeObserver = null;
+	function watchSize() {
+		if ( typeof ResizeObserver === 'undefined' ) {
+			return;
+		}
+		if ( ! sizeObserver ) {
+			sizeObserver = new ResizeObserver( sync );
+		}
+		sizeObserver.disconnect();
+		const el = positionedEl( slot );
+		if ( el ) {
+			sizeObserver.observe( el );
+		}
+	}
+	watchSize();
+
 	// Rotation and dismiss both swap the slot's direct children; re-syncing
-	// there keeps one-shot offsets correct for mixed top/bottom placements.
-	// No subtree — deep mutations (e.g. content edits) can't change placement
-	// and would only fire redundant syncs.
-	new MutationObserver( sync ).observe( slot, { childList: true } );
+	// there keeps one-shot offsets correct for mixed top/bottom placements,
+	// and re-points the size observer at the new element. No subtree — deep
+	// mutations (e.g. content edits) can't change placement and would only
+	// fire redundant syncs.
+	new MutationObserver( function () {
+		sync();
+		watchSize();
+	} ).observe( slot, { childList: true } );
+
+	// barHeight() reads the bar's rect, which is short while the slide-in
+	// entrance is still translating it into view — re-measure once it lands.
+	slot.addEventListener( 'animationend', sync );
 
 	// The admin bar flips 32↔46px at the 782px breakpoint (and bar height
 	// can change at responsive breakpoints) with no DOM mutation — re-sync
