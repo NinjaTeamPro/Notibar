@@ -768,6 +768,21 @@
   right: 44px;
 }
 
+/* Collapsed bars in one stack are all 0px tall at the same edge, so their tabs
+   would land on the same spot — step each tab left by its bar's position. */
+.njt-nofi-stack > .njt-nofi-collapsed:nth-child( 2 ) .njt-nofi-toggle {
+  right: 84px;
+}
+.njt-nofi-stack > .njt-nofi-collapsed:nth-child( 3 ) .njt-nofi-toggle {
+  right: 124px;
+}
+.njt-nofi-stack > .njt-nofi-collapsed:nth-child( 4 ) .njt-nofi-toggle {
+  right: 164px;
+}
+.njt-nofi-stack > .njt-nofi-collapsed:nth-child( 5 ) .njt-nofi-toggle {
+  right: 204px;
+}
+
 /* Divi: its fixed headers (#main-header 99999, #top-header 100000) outrank the
    bar's 10000, and the collapsed tab hangs right over them — so it vanished
    under the header. Lift the bar above them only while collapsed; expanded,
