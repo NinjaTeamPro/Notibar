@@ -768,6 +768,16 @@
   right: 44px;
 }
 
+/* Divi: its fixed headers (#main-header 99999, #top-header 100000) outrank the
+   bar's 10000, and the collapsed tab hangs right over them — so it vanished
+   under the header. Lift the bar above them only while collapsed; expanded,
+   the theme-compat offset keeps the headers clear of the bar. Stack mode lifts
+   the wrapper (the positioned element) when any of its bars is collapsed. */
+.et_divi_theme .njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-container,
+.et_divi_theme .njt-nofi-stack:has( .njt-nofi-collapsed ) {
+  z-index: 100001;
+}
+
 .njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-toggle:hover {
   transform: none;
   filter: brightness( 0.95 );
