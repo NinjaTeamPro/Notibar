@@ -187,7 +187,7 @@ function renderCloseControl( mode ) {
 
 	const svgIcon =
 		`<svg class="njt-nofi-close-icon" xmlns="http://www.w3.org/2000/svg" ` +
-		`viewBox="0 0 386.667 386.667" width="14" height="14" aria-hidden="true">` +
+		`viewBox="0 0 386.667 386.667" width="8" height="8" aria-hidden="true">` +
 		`<path d="${ svgPath }" fill="currentColor"/></svg>`;
 
 	if ( mode === 'close' ) {

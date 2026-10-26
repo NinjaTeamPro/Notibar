@@ -691,7 +691,7 @@
 /* ==========================================================================
    Close / Toggle buttons — flex children at the right edge
    ----------------------------------------------------------------------------
-   25x25 circle, semi-opaque dark bg, sits on the right via flex (the
+   24x24 circle, semi-opaque dark bg, sits on the right via flex (the
    centred .njt-nofi-content uses margin:auto so the close gets pushed right
    without needing absolute positioning).
    ========================================================================== */
@@ -702,8 +702,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   border: none;
   background: #0000002e;
   border-radius: 50%;
@@ -732,8 +732,8 @@
 
 .njt-nofi-close-icon {
   pointer-events: none;
-  width: 11px;
-  height: 11px;
+  width: 8px;
+  height: 8px;
 }
 
 /* When the bar is collapsed via toggle mode, rotate the arrow 45° to hint
