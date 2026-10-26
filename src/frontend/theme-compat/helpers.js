@@ -79,7 +79,15 @@ export function barHeight( slot ) {
 		return 0;
 	}
 	const full = top.offsetHeight;
-	const visible = top.getBoundingClientRect().bottom - adminBarHeight();
+	// Subtract the admin bar's VISIBLE bottom, not its height: at ≤600px the
+	// admin bar is position:absolute and scrolls away, so subtracting the full
+	// 46px under-measures a scrolled fixed bar (60px bar → 14px) and the header
+	// slides up under it.
+	const admin = document.getElementById( 'wpadminbar' );
+	const adminBottom = admin
+		? Math.max( 0, admin.getBoundingClientRect().bottom )
+		: 0;
+	const visible = top.getBoundingClientRect().bottom - adminBottom;
 	return Math.max( 0, Math.min( full, visible ) );
 }
 
