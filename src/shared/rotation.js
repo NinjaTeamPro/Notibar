@@ -129,7 +129,10 @@ export function startRotation( {
 		slot.innerHTML = renderFn( bars[ index ], global );
 		if ( dir ) {
 			const cc = slot.querySelector( '.njt-nofi-container-content' );
-			if ( cc ) {
+			// A bar rendered collapsed (toggle mode) is 0px tall — nothing to
+			// slide, and its hanging toggle tab would sweep across the viewport
+			// unclipped — so it keeps the default entrance.
+			if ( cc && ! cc.classList.contains( 'njt-nofi-collapsed' ) ) {
 				cc.classList.add(
 					'prev' === dir
 						? 'njt-nofi-nav-slide-prev'

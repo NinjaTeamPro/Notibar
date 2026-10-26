@@ -880,9 +880,12 @@
    initial/auto renders carry no direction class, so the vertical entrance is
    untouched. animation-name override uses !important to beat the base + bottom-
    placement slide rules regardless of selector specificity.
+   The direction class stays after the slide, so a bar collapsed later (0px
+   tall) is never clipped — the clip would hide its toggle tab, and with it the
+   whole bar.
    -------------------------------------------------------------------------- */
-.njt-nofi-nav-slide-next .njt-nofi-container,
-.njt-nofi-nav-slide-prev .njt-nofi-container {
+.njt-nofi-nav-slide-next:not( .njt-nofi-collapsed ) .njt-nofi-container,
+.njt-nofi-nav-slide-prev:not( .njt-nofi-collapsed ) .njt-nofi-container {
   overflow: hidden;
 }
 
