@@ -767,7 +767,7 @@
    the bar's colours hanging just below the bar edge. The 45° turn (× → +, the
    inverse "expand" hint) lives on the icon, not the button, so it never
    replaces the button's own transform — no positional jump. margin-right:0
-   drops the nav-arrow gutter; the arrows are 0px tall and invisible here. */
+   drops the nav-arrow gutter; the arrows themselves are hidden below. */
 .njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-toggle {
   top: 100%;
   transform: none;
@@ -826,6 +826,12 @@
 
 .njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-close-icon {
   transform: rotate( 45deg );
+}
+
+/* Rotation arrows can't be used on a collapsed bar, and their 0px-tall zones
+   still let the chevron overflow onto the tab — hide them until expanded. */
+.njt-nofi-container-content.njt-nofi-collapsed .njt-nofi-nav {
+  display: none;
 }
 
 /* Bottom placement — the tab hangs above the bar edge instead. */
