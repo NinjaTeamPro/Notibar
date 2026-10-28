@@ -89,7 +89,7 @@ STAGE_EXCLUDES=(
   --exclude='*.bak'            --exclude='release/'
   --exclude='release.sh'       --exclude='dev.sh'
   --exclude='setup.sh'         --exclude='recommended-modules/.source'
-  --exclude='docs'
+  --exclude='docs'             --exclude='blueprint.json'
 )
 
 # 6. Build assets + choose the source root to stage from.
