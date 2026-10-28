@@ -51,7 +51,7 @@ if ( ! class_exists( 'NjtEddLicenseUpdater' ) ) {
 				if ( '' === $key ) {
 					continue; // No key → nothing to check.
 				}
-				$file_abs = $this->resolve_plugin_file( $cfg );
+				$file_abs = $this->client->resolve_plugin_file( $cfg );
 				if ( '' === $file_abs ) {
 					continue; // No registered main file, or it can't be located.
 				}
@@ -67,29 +67,6 @@ if ( ! class_exists( 'NjtEddLicenseUpdater' ) ) {
 					]
 				);
 			}
-		}
-
-		/**
-		 * Resolve a registered plugin's main file to an absolute path.
-		 *
-		 * The registration may pass either an absolute path (__FILE__) or a
-		 * plugin-relative basename ("slug/plugin.php"); EDD_SL_Plugin_Updater
-		 * derives the basename and slug from whatever full path it receives.
-		 * Returns '' when nothing is registered or the file can't be located.
-		 *
-		 * @param array $cfg Normalized plugin config.
-		 * @return string Absolute path, or '' on failure.
-		 */
-		private function resolve_plugin_file( $cfg ) {
-			if ( empty( $cfg['file'] ) ) {
-				return '';
-			}
-			$file     = $cfg['file'];
-			$file_abs = file_exists( $file )
-				? $file                                      // Already absolute (e.g. __FILE__).
-				: WP_PLUGIN_DIR . '/' . ltrim( $file, '/' ); // Plugin-relative basename.
-
-			return file_exists( $file_abs ) ? $file_abs : '';
 		}
 
 		/**
@@ -114,7 +91,7 @@ if ( ! class_exists( 'NjtEddLicenseUpdater' ) ) {
 				return $args;
 			}
 			foreach ( $this->plugins as $cfg ) {
-				$file_abs = $this->resolve_plugin_file( $cfg );
+				$file_abs = $this->client->resolve_plugin_file( $cfg );
 				if ( '' === $file_abs ) {
 					continue;
 				}

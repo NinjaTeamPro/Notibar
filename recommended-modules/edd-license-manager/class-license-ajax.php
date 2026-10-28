@@ -64,7 +64,9 @@ if ( ! class_exists( 'NjtEddLicenseAjax' ) ) {
 		/** Manual "Check for updates": force WP to re-query, then report latest version + changelog. */
 		public function update_check() {
 			$cfg = $this->guard_and_config();
-			delete_site_transient( 'update_plugins' ); // make WP re-run the updater filters
+			// Drop the EDD version cache + update_plugins transient so WP re-runs the updater
+			// filters with a freshly signed package URL (a stale one 401s on download).
+			$this->client->purge_update_cache( $cfg, [ $this->client->get_key( $cfg ) ] );
 			$res = $this->client->get_version( $cfg );
 			if ( is_wp_error( $res ) ) {
 				wp_send_json_error( [ 'message' => $res->get_error_message() ] );
