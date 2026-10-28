@@ -5,7 +5,7 @@ Tags: notification bar, banner, top bar, announcement, notifications
 Requires at least: 4.0
 Requires PHP: 5.3.1
 Tested up to: 7.0
-Stable tag: 3.2.2
+Stable tag: 3.2.3
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -123,6 +123,17 @@ Upon activation, you will see a new **Notification Bar** menu. Simply click to c
 
 
 == Upgrade Notice ==
+
+= Oct 26, 2026 - Version 3.2.3 =
+- Improved: Collapsed bar (toggle mode) now leaves a small tab in the bar's colors to expand it again, instead of a floating "+" button
+- Improved: Smaller close/collapse button (24px) and icon
+- Fixed: Empty gap or overlap between the bar and a sticky header after collapsing, expanding, or reloading a collapsed bar
+- Fixed: Sticky header sliding under the bar on mobile when the admin bar scrolls away
+- Fixed: Collapsed bar disappearing after rotation switches to another bar (Pro)
+- Fixed: Collapsed bars' tabs overlapping in stack mode (Pro)
+- Fixed: Divi secondary menu bar covering the notification bar, and hiding it completely on tablet and mobile
+- Fixed: Collapse tab hidden under the Divi header
+- Fixed: Theme button styles (e.g. Hello Elementor, Astra, GeneratePress, Kadence) changing the look of the close/collapse button and navigation arrows
 
 = Aug 10, 2026 - Version 3.2.2 =
 - Added: Ability to show scrolling content continuously (Pro)

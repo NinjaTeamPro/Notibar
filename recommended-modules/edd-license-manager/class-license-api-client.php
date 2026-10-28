@@ -175,17 +175,76 @@ if ( ! class_exists( 'NjtEddLicenseApiClient' ) ) {
 		public function get_data( $cfg )   { return (array) get_option( $this->data_name( $cfg ), [] ); }
 
 		public function save_license( $cfg, $key, $status, $data ) {
-			update_option( $this->key_name( $cfg ), sanitize_text_field( $key ) );
-			update_option( $this->status_name( $cfg ), sanitize_text_field( $status ) );
+			$old_key    = $this->get_key( $cfg );
+			$old_status = $this->get_status( $cfg );
+			$key        = sanitize_text_field( $key );
+			$status     = sanitize_text_field( $status );
+
+			update_option( $this->key_name( $cfg ), $key );
+			update_option( $this->status_name( $cfg ), $status );
 			update_option( $this->data_name( $cfg ), (array) $data );
+
+			// Only on change — an unchanged daily re-check keeps the 3h version cache.
+			if ( $old_key !== $key || $old_status !== $status ) {
+				$this->purge_update_cache( $cfg, [ $old_key, $key ] );
+			}
 		}
 
 		public function clear( $cfg ) {
+			$old_key = $this->get_key( $cfg );
 			// Key + data are removed; status is kept as an explicit 'invalid' so callers
 			// never have to distinguish "missing option" from "not licensed".
 			delete_option( $this->key_name( $cfg ) );
 			update_option( $this->status_name( $cfg ), 'invalid' );
 			delete_option( $this->data_name( $cfg ) );
+			$this->purge_update_cache( $cfg, [ $old_key ] );
+		}
+
+		// ---- update cache -----------------------------------------------------
+
+		/**
+		 * Drop cached update data so the next check asks the store again.
+		 *
+		 * EDD_SL_Plugin_Updater caches get_version (incl. the signed package URL) for 3h, and WP keeps
+		 * it in the update_plugins transient. If either outlives a key/status change, WP offers a
+		 * package URL the store now refuses → "Download failed. Unauthorized" (HTTP 401).
+		 *
+		 * @param array    $cfg  Normalized plugin config.
+		 * @param string[] $keys License keys whose EDD version cache should be removed.
+		 */
+		public function purge_update_cache( array $cfg, array $keys ) {
+			$file = $this->resolve_plugin_file( $cfg );
+			if ( '' !== $file ) {
+				$slug = basename( dirname( $file ) ); // Same slug EDD_SL_Plugin_Updater derives.
+				foreach ( array_unique( array_filter( $keys ) ) as $key ) {
+					// Mirrors EDD_SL_Plugin_Updater::get_cache_key() with beta = false.
+					delete_option( 'edd_sl_' . md5( serialize( $slug . $key . false ) ) );
+				}
+			}
+			delete_site_transient( 'update_plugins' );
+		}
+
+		/**
+		 * Resolve a registered plugin's main file to an absolute path.
+		 *
+		 * The registration may pass either an absolute path (__FILE__) or a
+		 * plugin-relative basename ("slug/plugin.php"); EDD_SL_Plugin_Updater
+		 * derives the basename and slug from whatever full path it receives.
+		 * Returns '' when nothing is registered or the file can't be located.
+		 *
+		 * @param array $cfg Normalized plugin config.
+		 * @return string Absolute path, or '' on failure.
+		 */
+		public function resolve_plugin_file( $cfg ) {
+			if ( empty( $cfg['file'] ) ) {
+				return '';
+			}
+			$file     = $cfg['file'];
+			$file_abs = file_exists( $file )
+				? $file                                      // Already absolute (e.g. __FILE__).
+				: WP_PLUGIN_DIR . '/' . ltrim( $file, '/' ); // Plugin-relative basename.
+
+			return file_exists( $file_abs ) ? $file_abs : '';
 		}
 	}
 }
